@@ -30,6 +30,7 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_camera		= s2::CM_ORTHO;
 
 	m_visible		= true;
+	m_editable		= true;
 }
 
 void SpriteIO::Load(const Json::Value& val, s2::Sprite* spr)
@@ -235,11 +236,13 @@ void SpriteIO::StoreInfo(Json::Value& val)
 void SpriteIO::LoadEdit(s2::Sprite* spr)
 {
 	spr->SetVisible(m_visible);
+	spr->SetEditable(m_editable);
 }
 
 void SpriteIO::StoreEdit(const s2::Sprite* spr)
 {
 	m_visible = spr->IsVisible();
+	m_editable = spr->IsEditable();
 }
 
 void SpriteIO::LoadEdit(const Json::Value& val)
@@ -249,12 +252,20 @@ void SpriteIO::LoadEdit(const Json::Value& val)
 	} else {
 		m_visible = true;
 	}
+	if (val.isMember("editable")) {
+		m_editable = val["editable"].asBool();
+	} else {
+		m_editable = true;
+	}
 }
 
 void SpriteIO::StoreEdit(Json::Value& val)
 {
 	if (!m_compress || !m_visible) {
 		val["visible"] = m_visible;
+	}
+	if (!m_compress || !m_editable) {
+		val["editable"] = m_editable;
 	}
 }
 

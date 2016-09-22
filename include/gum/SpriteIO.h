@@ -89,6 +89,7 @@ public:
 
 	// edit
 	bool				m_visible;
+	bool				m_editable;
 
 protected:
 	bool m_compress;
