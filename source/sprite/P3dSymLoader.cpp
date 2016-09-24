@@ -96,10 +96,6 @@ void P3dSymLoader::Store(p3d_emitter_cfg* cfg) const
 		memcpy(&dst.add_col_begin.r, &src.add_col_begin.r, sizeof(dst.add_col_begin));
 		memcpy(&dst.add_col_end.r, &src.add_col_end.r, sizeof(dst.add_col_end));
 
-// 		if (FilepathHelper::IsFileExist(src.bind_filepath)) {
-// 			dst.bind_ps_cfg = PSConfigMgr::Instance()->GetConfig(src.bind_filepath);
-// 		}
-
 		if (!src.filepath.empty()) {
 			dst.ud = LoadSymbol(src.filepath);
 		} else {
@@ -304,13 +300,6 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 
 	comp.filepath = comp_val["filepath"].asString();
 	comp.filepath = FilepathHelper::Absolute(dir, comp.filepath);
-
-	if (comp_val.isMember("bind ps filepath")) {
-		comp.bind_filepath = comp_val["bind ps filepath"].asString();
-		if (!comp.bind_filepath.empty()) {
-			comp.bind_filepath = FilepathHelper::Absolute(dir, comp.bind_filepath);
-		}
-	}
 
 	comp.name = comp_val["name"].asString();
 

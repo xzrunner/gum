@@ -40,7 +40,6 @@ public:
 
 		uint32_t sym_id;
 		std::string filepath;
-		std::string bind_filepath;
 
 		std::string name;
 
