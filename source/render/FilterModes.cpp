@@ -22,6 +22,8 @@ FilterModes::FilterModes()
 	m_modes.push_back(Item(s2::FM_SHOCK_WAVE, "shock wave"));
 	m_modes.push_back(Item(s2::FM_SWIRL, "swirl"));
 	m_modes.push_back(Item(s2::FM_BURNING_MAP, "burning map"));
+
+	m_modes.push_back(Item(s2::FM_COL_GRADING, "color grading"));
 }
 
 s2::FilterMode FilterModes::Name2Mode(const std::string& name) const
