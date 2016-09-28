@@ -17,6 +17,7 @@
 #include "MeshSymLoader.h"
 #include "MaskSymLoader.h"
 #include "TrailSymLoader.h"
+#include "SkeletonSymLoader.h"
 
 #include <simp/NodeFactory.h>
 #include <simp/Package.h>
@@ -35,6 +36,7 @@
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/MaskSymbol.h>
 #include <sprite2/TrailSymbol.h>
+#include <sprite2/SkeletonSymbol.h>
 
 #include <assert.h>
 
@@ -174,6 +176,14 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			TrailSymLoader loader;
 			loader.LoadJson(filepath);
 			loader.Store(sym);
+			ret = sym;
+		}
+		break;
+	case SKELETON:
+		{
+			s2::SkeletonSymbol* sym = new s2::SkeletonSymbol;
+			SkeletonSymLoader loader(sym);
+			loader.LoadJson(filepath);
 			ret = sym;
 		}
 		break;

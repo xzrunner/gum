@@ -22,6 +22,7 @@ enum SymFileType
 	MESH,
 	MASK,
 	TRAIL,
+	SKELETON,
 };
 
 SymFileType get_sym_file_type(const std::string& filepath);

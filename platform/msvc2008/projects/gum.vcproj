@@ -627,6 +627,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="14.skeleton"
+				>
+				<File
+					RelativePath="..\..\..\source\sprite\SkeletonSymLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SkeletonSymLoader.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="adapter"
