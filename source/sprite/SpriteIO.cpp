@@ -75,8 +75,8 @@ void SpriteIO::Store(Json::Value& val)
 
 void SpriteIO::LoadGeometry(s2::Sprite* spr)
 {
-	spr->SetScale(m_scale);
 	spr->SetShear(m_shear);
+	spr->SetScale(m_scale);
 	spr->SetOffset(m_offset);
 	spr->SetPosition(m_position);
 	spr->SetAngle(m_angle);
