@@ -1,11 +1,12 @@
 #include "SkeletonSymLoader.h"
 #include "FilepathHelper.h"
 #include "SpriteFactory.h"
+#include "JointCoordsIO.h"
 
 #include <sprite2/SkeletonSymbol.h>
-#include <sprite2/JointPose.h>
 #include <sprite2/Joint.h>
 #include <sprite2/Skeleton.h>
+#include <sprite2/S2_Sprite.h>
 
 #include <fstream>
 
@@ -31,7 +32,9 @@ SkeletonSymLoader::~SkeletonSymLoader()
 
 struct Joint
 {
-	s2::JointPose local, world, skin;
+	s2::LocalPose local;
+	s2::WorldPose world;
+	sm::vec2 skin;
 	int parent;
 	int idx;
 
@@ -73,28 +76,31 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 	std::vector<Joint> src_joints;
 	for (int i = 0; i < num; ++i) 
 	{
+		s2::Sprite* spr = sprs[i];
 		const Json::Value& joints_val = val["skeleton"][i]["joint"];
 		s2::Joint* dst_joint = NULL;
 		for (int j = 0, m = joints_val.size(); j < m; ++j) 
 		{
 			const Json::Value& joint_val = joints_val[j];
 			Joint src_joint;
-			LoadJointPose(joint_val["local_pose"], src_joint.local);
-			LoadJointPose(joint_val["world_pose"], src_joint.world);
-			LoadJointPose(joint_val["skin_pose"], src_joint.skin);
+			JointCoordsIO::Load(joint_val["local_pose"], src_joint.local);
+			JointCoordsIO::Load(joint_val["world_pose"], src_joint.world);
+			JointCoordsIO::Load(joint_val["skin_pose"], src_joint.skin);
 			src_joint.idx = i;
 			if (joint_val.isMember("parent")) {
 				src_joint.parent = joint_val["parent"].asInt();
 				if (!dst_joint) {
-					dst_joint = new s2::Joint(sprs[i], -src_joint.skin.trans);
-					dst_joint->SetWorldPos(src_joint.world.trans);
+					dst_joint = new s2::Joint(spr, -src_joint.skin);
+					dst_joint->SetWorldPose(src_joint.world);
 					dst_joint->SetLocalPose(src_joint.local);
 				}
 			}
 			src_joints.push_back(src_joint);
 		}
 		if (!dst_joint) {
-			dst_joint = new s2::Joint(sprs[i], sm::vec2(0, 0));
+			dst_joint = new s2::Joint(spr, sm::vec2(0, 0));
+			dst_joint->SetWorldPose(s2::WorldPose(spr->GetCenter(), spr->GetAngle()));
+			dst_joint->SetLocalPose(s2::LocalPose(0, 0));
 		}
 		joints.push_back(dst_joint);
 	}
@@ -117,14 +123,6 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 	// output
 	m_sym->SetSkeleton(new s2::Skeleton(root, joints));
 	for_each(joints.begin(), joints.end(), cu::RemoveRefFonctor<s2::Joint>());
-}
-
-void SkeletonSymLoader::LoadJointPose(const Json::Value& val, s2::JointPose& pose)
-{
-	pose.trans.x = val["trans_x"].asDouble();
-	pose.trans.y = val["trans_y"].asDouble();
-	pose.rot = val["rot"].asDouble();
-	pose.scale = val["scale"].asDouble();
 }
 
 }

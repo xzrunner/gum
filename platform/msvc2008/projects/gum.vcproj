@@ -328,22 +328,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\source\sprite\SpriteIO.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gum\SpriteIO.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\sprite\SprTransLoader.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gum\SprTransLoader.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\sprite\SymbolFactory.cpp"
 				>
 			</File>
@@ -636,6 +620,34 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\SkeletonSymLoader.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="io"
+				>
+				<File
+					RelativePath="..\..\..\source\sprite\JointCoordsIO.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\JointCoordsIO.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SpriteIO.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpriteIO.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SprTransLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SprTransLoader.h"
 					>
 				</File>
 			</Filter>

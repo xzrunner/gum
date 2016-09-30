@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace s2 { class SkeletonSymbol; class JointPose; }
+namespace s2 { class SkeletonSymbol; }
 
 namespace gum
 {
@@ -19,8 +19,6 @@ public:
 	~SkeletonSymLoader();
 
 	void LoadJson(const std::string& filepath);
-
-	static void LoadJointPose(const Json::Value& val, s2::JointPose& pose);
 
 private:
 	s2::SkeletonSymbol* m_sym;
