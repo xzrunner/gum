@@ -87,6 +87,8 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 				src_joint.parent = joint_val["parent"].asInt();
 				if (!dst_joint) {
 					dst_joint = new s2::Joint(sprs[i], -src_joint.skin.trans);
+					dst_joint->SetWorldPos(src_joint.world.trans);
+					dst_joint->SetLocalPose(src_joint.local);
 				}
 			}
 			src_joints.push_back(src_joint);
