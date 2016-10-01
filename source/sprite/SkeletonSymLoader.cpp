@@ -1,7 +1,7 @@
 #include "SkeletonSymLoader.h"
 #include "FilepathHelper.h"
 #include "SpriteFactory.h"
-#include "JointPoseIO.h"
+#include "SkeletonIO.h"
 
 #include <SM_Calc.h>
 #include <sprite2/SkeletonSymbol.h>
@@ -84,8 +84,8 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 		{
 			const Json::Value& joint_val = joints_val[j];
 			Joint src_joint;
-			JointPoseIO::Load(joint_val["world_pose"], src_joint.world);
-			JointPoseIO::Load(joint_val["skin_pose"], src_joint.skin);
+			SkeletonIO::Load(joint_val["world_pose"], src_joint.world);
+			SkeletonIO::Load(joint_val["skin_pose"], src_joint.skin);
 			src_joint.idx = i;
 			if (joint_val.isMember("parent")) {
 				src_joint.parent = joint_val["parent"].asInt();
