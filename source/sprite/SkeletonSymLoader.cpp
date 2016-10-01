@@ -36,7 +36,7 @@ struct Joint
 {
 	s2::LocalPose local;
 	s2::WorldPose world;
-	sm::vec2 skin;
+	s2::LocalPose skin;
 	int parent;
 	int idx;
 
@@ -100,7 +100,7 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 			src_joints.push_back(src_joint);
 		}
 		if (!dst_joint) {
-			dst_joint = CreateJoint(spr, sm::vec2(0, 0));
+			dst_joint = CreateJoint(spr, s2::LocalPose(0, 0));
 			dst_joint->SetWorldPose(s2::WorldPose(spr->GetCenter(), spr->GetAngle()));
 //			dst_joint->SetLocalPose(s2::LocalPose(0, 0));
 		}
@@ -122,40 +122,24 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 		root = parent;
 	}
 
-	// add layer
+	// update world
 	s2::Joint* _root = const_cast<s2::Joint*>(root);
 	std::vector<s2::Joint*> children = root->GetChildren();
-	_root->DeconnectChildren();	
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		s2::Joint* child = children[i];
-		s2::Joint* mid = CreateJoint(const_cast<s2::Sprite*>(root->GetSkinSpr()), sm::vec2(0, 0));
-//		joints.push_back(mid);
-
-// 		s2::WorldPose world = root->GetWorldPose();
-// 		world.angle = sm::get_line_angle(root->GetWorldPose().pos, child->GetWorldPose().pos);		
-// 		mid->SetWorldPose(world);
-// 		mid->SetLocalPose(s2::LocalPose(0, world.angle));
-
-		mid->ConnectChild(child);
-		_root->ConnectChild(mid);
-
 		float rot = sm::get_line_angle(root->GetWorldPose().pos, child->GetWorldPose().pos);
-//		mid->Rotate(rot);
-
-		mid->SetLocalPose(s2::LocalPose(0, rot));
-
-		std::queue<s2::Joint*> buf;
-		buf.push(mid);
-		while (!buf.empty()) {
-			s2::Joint* joint = buf.front(); buf.pop();
-			s2::WorldPose world = joint->GetWorldPose();
-			world.angle += rot;
-			joint->SetWorldPose(world);
-			const std::vector<s2::Joint*>& children = joint->GetChildren();
-			for (int i = 0, n = children.size(); i < n; ++i) {
-				buf.push(children[i]);
-			}
-		}
+ 		std::queue<s2::Joint*> buf;
+ 		buf.push(child);
+ 		while (!buf.empty()) {
+ 			s2::Joint* joint = buf.front(); buf.pop();
+ 			s2::WorldPose world = joint->GetWorldPose();
+ 			world.angle += rot;
+ 			joint->SetWorldPose(world);
+ 			const std::vector<s2::Joint*>& children = joint->GetChildren();
+ 			for (int i = 0, n = children.size(); i < n; ++i) {
+ 				buf.push(children[i]);
+ 			}
+ 		}
 	}
 
 	// update local
@@ -179,9 +163,9 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 	for_each(joints.begin(), joints.end(), cu::RemoveRefFonctor<s2::Joint>());
 }
 
-s2::Joint* SkeletonSymLoader::CreateJoint(s2::Sprite* spr, const sm::vec2& offset) const
+s2::Joint* SkeletonSymLoader::CreateJoint(s2::Sprite* spr, const s2::LocalPose& joint_pose) const
 {
-	return new s2::Joint(spr, offset);
+	return new s2::Joint(spr, joint_pose);
 }
 
 }

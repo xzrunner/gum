@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace s2 { class SkeletonSymbol; class Joint; class Sprite; }
+namespace s2 { class SkeletonSymbol; class Joint; class Sprite; class LocalPose; }
 
 namespace gum
 {
@@ -23,7 +23,7 @@ public:
 	void LoadJson(const std::string& filepath);
 
 protected:
-	virtual s2::Joint* CreateJoint(s2::Sprite* spr, const sm::vec2& offset) const;
+	virtual s2::Joint* CreateJoint(s2::Sprite* spr, const s2::LocalPose& joint_pose) const;
 
 private:
 	s2::SkeletonSymbol* m_sym;
