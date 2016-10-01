@@ -627,11 +627,11 @@
 				Name="io"
 				>
 				<File
-					RelativePath="..\..\..\source\sprite\JointCoordsIO.cpp"
+					RelativePath="..\..\..\source\sprite\JointPoseIO.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\gum\JointCoordsIO.h"
+					RelativePath="..\..\..\include\gum\JointPoseIO.h"
 					>
 				</File>
 				<File

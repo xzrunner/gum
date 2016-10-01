@@ -1,7 +1,7 @@
 #include "SkeletonSymLoader.h"
 #include "FilepathHelper.h"
 #include "SpriteFactory.h"
-#include "JointCoordsIO.h"
+#include "JointPoseIO.h"
 
 #include <SM_Calc.h>
 #include <sprite2/SkeletonSymbol.h>
@@ -34,9 +34,8 @@ SkeletonSymLoader::~SkeletonSymLoader()
 
 struct Joint
 {
-	s2::LocalPose local;
-	s2::WorldPose world;
-	s2::LocalPose skin;
+	s2::JointPose world;
+	s2::JointPose skin;
 	int parent;
 	int idx;
 
@@ -85,24 +84,21 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 		{
 			const Json::Value& joint_val = joints_val[j];
 			Joint src_joint;
-			JointCoordsIO::Load(joint_val["local_pose"], src_joint.local);
-			JointCoordsIO::Load(joint_val["world_pose"], src_joint.world);
-			JointCoordsIO::Load(joint_val["skin_pose"], src_joint.skin);
+			JointPoseIO::Load(joint_val["world_pose"], src_joint.world);
+			JointPoseIO::Load(joint_val["skin_pose"], src_joint.skin);
 			src_joint.idx = i;
 			if (joint_val.isMember("parent")) {
 				src_joint.parent = joint_val["parent"].asInt();
 				if (!dst_joint) {
 					dst_joint = CreateJoint(spr, -src_joint.skin);
 					dst_joint->SetWorldPose(src_joint.world);
-//					dst_joint->SetLocalPose(src_joint.local);
 				}
 			}
 			src_joints.push_back(src_joint);
 		}
 		if (!dst_joint) {
-			dst_joint = CreateJoint(spr, s2::LocalPose(0, 0));
-			dst_joint->SetWorldPose(s2::WorldPose(spr->GetCenter(), spr->GetAngle()));
-//			dst_joint->SetLocalPose(s2::LocalPose(0, 0));
+			dst_joint = CreateJoint(spr, s2::JointPose());
+			dst_joint->SetWorldPose(s2::JointPose(spr->GetCenter(), spr->GetAngle()));
 		}
 		joints.push_back(dst_joint);
 	}
@@ -127,13 +123,13 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 	std::vector<s2::Joint*> children = root->GetChildren();
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		s2::Joint* child = children[i];
-		float rot = sm::get_line_angle(root->GetWorldPose().pos, child->GetWorldPose().pos);
+		float rot = sm::get_line_angle(root->GetWorldPose().trans, child->GetWorldPose().trans);
  		std::queue<s2::Joint*> buf;
  		buf.push(child);
  		while (!buf.empty()) {
  			s2::Joint* joint = buf.front(); buf.pop();
- 			s2::WorldPose world = joint->GetWorldPose();
- 			world.angle += rot;
+ 			s2::JointPose world = joint->GetWorldPose();
+ 			world.rot += rot;
  			joint->SetWorldPose(world);
  			const std::vector<s2::Joint*>& children = joint->GetChildren();
  			for (int i = 0, n = children.size(); i < n; ++i) {
@@ -143,7 +139,6 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 	}
 
 	// update local
-	_root->SetLocalPose(s2::LocalPose(0, 0));
 	std::queue<s2::Joint*> buf;
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		buf.push(children[i]);
@@ -152,6 +147,8 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 		s2::Joint* joint = buf.front(); buf.pop();
 		assert(joint->GetParent());
 		joint->SetLocalPose(s2::world2local(joint->GetParent()->GetWorldPose(), joint->GetWorldPose()));
+		const s2::Sprite* skin = joint->GetSkinSpr();
+		joint->SetSkinPose(s2::world2local(joint->GetWorldPose(), s2::JointPose(skin->GetCenter(), skin->GetAngle())));
 		const std::vector<s2::Joint*>& children = joint->GetChildren();
 		for (int i = 0, n = children.size(); i < n; ++i) {
 			buf.push(children[i]);
@@ -163,7 +160,7 @@ void SkeletonSymLoader::LoadJson(const std::string& filepath)
 	for_each(joints.begin(), joints.end(), cu::RemoveRefFonctor<s2::Joint>());
 }
 
-s2::Joint* SkeletonSymLoader::CreateJoint(s2::Sprite* spr, const s2::LocalPose& joint_pose) const
+s2::Joint* SkeletonSymLoader::CreateJoint(s2::Sprite* spr, const s2::JointPose& joint_pose) const
 {
 	return new s2::Joint(spr, joint_pose);
 }
