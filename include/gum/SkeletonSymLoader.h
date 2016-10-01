@@ -3,11 +3,13 @@
 
 #include <CU_Uncopyable.h>
 
+#include <SM_Vector.h>
+
 #include <json/json.h>
 
 #include <string>
 
-namespace s2 { class SkeletonSymbol; }
+namespace s2 { class SkeletonSymbol; class Joint; class Sprite; }
 
 namespace gum
 {
@@ -19,6 +21,9 @@ public:
 	~SkeletonSymLoader();
 
 	void LoadJson(const std::string& filepath);
+
+protected:
+	virtual s2::Joint* CreateJoint(s2::Sprite* spr, const sm::vec2& offset) const;
 
 private:
 	s2::SkeletonSymbol* m_sym;
