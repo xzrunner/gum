@@ -586,6 +586,10 @@
 					RelativePath="..\..\..\include\gum\MeshSymLoader.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\include\gum\MeshType.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="12.mask"
@@ -626,6 +630,14 @@
 			<Filter
 				Name="io"
 				>
+				<File
+					RelativePath="..\..\..\source\sprite\MeshIO.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\MeshIO.h"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\source\sprite\SkeletonIO.cpp"
 					>

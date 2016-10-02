@@ -23,8 +23,6 @@ public:
 	void LoadJson(const std::string& filepath);	
 	void LoadBin(const simp::NodeMesh* node);
 
-	static void LoadMeshTransform(s2::MeshTransform& trans, const Json::Value& value);
-
 private:
 	static s2::Mesh* CreateNetworkMesh(const Json::Value& val, const s2::Symbol* sym);
 

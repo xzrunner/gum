@@ -2,6 +2,7 @@
 #include "FilepathHelper.h"
 #include "SymbolFactory.h"
 #include "JsonSerializer.h"
+#include "MeshIO.h"
 
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/Mesh.h>
@@ -103,18 +104,6 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	mesh->RemoveReference();
 }
 
-void MeshSymLoader::LoadMeshTransform(s2::MeshTransform& trans, const Json::Value& value)
-{
-	std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>& map = trans.GetMap();
-	map.clear();
-	std::vector<sm::vec2> from, to;
-	JsonSerializer::Load(value["trans"]["from"], from);
-	JsonSerializer::Load(value["trans"]["to"], to);
-	for (int i = 0, n = from.size(); i < n; ++i) {
-		map.insert(std::make_pair(from[i], to[i]));
-	}
-}
-
 s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val, 
 										   const s2::Symbol* sym)
 {
@@ -132,7 +121,7 @@ s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val,
 	shape->RemoveReference();
 
 	s2::MeshTransform trans;
-	LoadMeshTransform(trans, val);
+	MeshIO::Load(val, trans);
 	trans.StoreToMesh(mesh);
 
 	return mesh;

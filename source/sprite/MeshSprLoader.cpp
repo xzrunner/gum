@@ -2,6 +2,7 @@
 #include "MeshSymLoader.h"
 #include "FilepathHelper.h"
 #include "SymbolFactory.h"
+#include "MeshIO.h"
 
 #include <sprite2/MeshSprite.h>
 #include <sprite2/MeshSymbol.h>
@@ -35,7 +36,7 @@ void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	const Json::Value& mesh_val = val["mesh"];
 
 	s2::MeshTransform& trans = m_spr->GetMeshTrans();
-	MeshSymLoader::LoadMeshTransform(trans, mesh_val);
+	MeshIO::Load(mesh_val, trans);
 	trans.StoreToMesh(VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol())->GetMesh());
 
 	if (mesh_val.isMember("base_symbol")) {
