@@ -1,4 +1,4 @@
-#include "EasyanimLoader.h"
+#include "EasyAnimLoader.h"
 #include "SpriteFactory.h"
 #include "SprTransLoader.h"
 #include "SpriteLoader.h"
@@ -11,7 +11,7 @@
 namespace gum
 {
 
-EasyanimLoader::EasyanimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
+EasyAnimLoader::EasyAnimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 {
@@ -25,7 +25,7 @@ EasyanimLoader::EasyanimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_load
 	}
 }
 
-EasyanimLoader::~EasyanimLoader()
+EasyAnimLoader::~EasyAnimLoader()
 {
 	if (m_sym) {
 		m_sym->RemoveReference();
@@ -33,7 +33,7 @@ EasyanimLoader::~EasyanimLoader()
 	m_spr_loader->RemoveReference();
 }
 
-void EasyanimLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void EasyAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
 {
 	if (!m_sym) {
 		return;
@@ -45,7 +45,7 @@ void EasyanimLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	LoadLayers(val["layer"], dir);
 }
 
-void EasyanimLoader::LoadBin(const simp::NodeAnimation* node)
+void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 {
 	if (!m_sym) {
 		return;
@@ -78,7 +78,7 @@ void EasyanimLoader::LoadBin(const simp::NodeAnimation* node)
 	}
 }
 
-void EasyanimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
+void EasyAnimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
 {
 	int layer_n = val.size();
 	for (int layer = 0; layer < layer_n; ++layer)

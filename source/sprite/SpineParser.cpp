@@ -1,5 +1,7 @@
 #include "SpineParser.h"
 
+#include <sm_const.h>
+
 #include <fstream>
 
 #include <assert.h>
@@ -7,16 +9,8 @@
 namespace gum
 {
 
-void SpineParser::Parse(const std::string& filepath)
+void SpineParser::Parse(const Json::Value& val)
 {
-	Json::Value val;
-	Json::Reader reader;
-	std::locale::global(std::locale(""));
-	std::ifstream fin(filepath.c_str());
-	std::locale::global(std::locale("C"));
-	reader.parse(fin, val);
-	fin.close();
-
 	Clear();
 
 	ParseHeader(val["skeleton"]);
@@ -27,8 +21,8 @@ void SpineParser::Parse(const std::string& filepath)
 
 const SpineParser::SkinItem* SpineParser::QuerySkin(const Slot& slot) const
 {
-	std::map<std::string, Skin>::const_iterator itr = m_skins.find(slot.name);
-	assert(itr != m_skins.end());
+	std::map<std::string, Skin>::const_iterator itr = skins.find(slot.name);
+	assert(itr != skins.end());
 	const Skin& skin = itr->second;
 	for (int i = 0, n = skin.items.size(); i < n; ++i) {
 		const SkinItem& item = skin.items[i];
@@ -41,14 +35,14 @@ const SpineParser::SkinItem* SpineParser::QuerySkin(const Slot& slot) const
 
 void SpineParser::Clear()
 {
-	m_bones.clear();
-	m_slots.clear();
-	m_skins.clear();
+	bones.clear();
+	slots.clear();
+	skins.clear();
 }
 
 void SpineParser::ParseHeader(const Json::Value& val)
 {
-	m_img_dir = "." + val["images"].asString();
+	img_dir = "." + val["images"].asString();
 }
 
 void SpineParser::ParseBones(const Json::Value& val)
@@ -61,8 +55,8 @@ void SpineParser::ParseBones(const Json::Value& val)
 		dst.parent = src["parent"].asString();
 		dst.pos.x = src["x"].asDouble();
 		dst.pos.y = src["y"].asDouble();
-		dst.angle = src["rotation"].asDouble();
-		m_bones.insert(std::make_pair(dst.name, dst));
+		dst.angle = src["rotation"].asDouble() * SM_DEG_TO_RAD;
+		bones.insert(std::make_pair(dst.name, dst));
 	}
 }
 
@@ -75,7 +69,7 @@ void SpineParser::ParseSlots(const Json::Value& val)
 		dst.name = src["name"].asString();
 		dst.bone = src["bone"].asString();
 		dst.attachment = src["attachment"].asString();
-		m_slots.push_back(dst);
+		slots.push_back(dst);
 	}
 }
 
@@ -99,10 +93,10 @@ void SpineParser::ParseSkins(const Json::Value& val)
 			}
 			item.pos.x = src_item["x"].asDouble();
 			item.pos.y = src_item["y"].asDouble();
-			item.angle = src_item["rotation"].asDouble();
+			item.angle = src_item["rotation"].asDouble() * SM_DEG_TO_RAD;
 			skin.items.push_back(item);
 		}
-		m_skins.insert(std::make_pair(key, skin));
+		skins.insert(std::make_pair(key, skin));
 	}
 }
 

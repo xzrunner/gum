@@ -1,4 +1,4 @@
-#include "SpineLoader.h"
+#include "SpineAnimLoader.h"
 #include "SpineParser.h"
 #include "SpriteLoader.h"
 #include "FilepathHelper.h"
@@ -9,7 +9,7 @@
 namespace gum
 {
 
-SpineLoader::SpineLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
+SpineAnimLoader::SpineAnimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 {
@@ -23,7 +23,7 @@ SpineLoader::SpineLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
 	}
 }
 
-SpineLoader::~SpineLoader()
+SpineAnimLoader::~SpineAnimLoader()
 {
 	if (m_sym) {
 		m_sym->RemoveReference();
@@ -31,22 +31,21 @@ SpineLoader::~SpineLoader()
 	m_spr_loader->RemoveReference();
 }
 
-void SpineLoader::LoadJson(const std::string& filepath)
+void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
 {
 	SpineParser parser;
-	parser.Parse(filepath);
+	parser.Parse(val);
 
-	std::string img_dir = FilepathHelper::Dir(filepath);
-	img_dir = FilepathHelper::Absolute(img_dir, parser.m_img_dir);
+	std::string img_dir = FilepathHelper::Absolute(dir, parser.img_dir);
 	
 	m_sym->SetFPS(30);
 
 	s2::AnimSymbol::Layer* layer = new s2::AnimSymbol::Layer;
 	s2::AnimSymbol::Frame* frame = new s2::AnimSymbol::Frame;
 	frame->index = 1;
-	for (int i = 0, n = parser.m_slots.size(); i < n; ++i)
+	for (int i = 0, n = parser.slots.size(); i < n; ++i)
 	{
-		const SpineParser::Slot& slot = parser.m_slots[i];
+		const SpineParser::Slot& slot = parser.slots[i];
 		const SpineParser::SkinItem* item = parser.QuerySkin(slot);
 		if (!item) {
 			continue;

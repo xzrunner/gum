@@ -495,27 +495,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprite\EasyanimLoader.cpp"
+					RelativePath="..\..\..\source\sprite\EasyAnimLoader.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\gum\EasyanimLoader.h"
+					RelativePath="..\..\..\include\gum\EasyAnimLoader.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprite\SpineLoader.cpp"
+					RelativePath="..\..\..\source\sprite\SpineAnimLoader.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\gum\SpineLoader.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprite\SpineParser.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\gum\SpineParser.h"
+					RelativePath="..\..\..\include\gum\SpineAnimLoader.h"
 					>
 				</File>
 			</Filter>
@@ -643,6 +635,14 @@
 				Name="14.skeleton"
 				>
 				<File
+					RelativePath="..\..\..\source\sprite\EasySkeletonLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\EasySkeletonLoader.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprite\SkeletonSymLoader.cpp"
 					>
 				</File>
@@ -650,10 +650,26 @@
 					RelativePath="..\..\..\include\gum\SkeletonSymLoader.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SpineSkeletonLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpineSkeletonLoader.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="loader"
 				>
+				<File
+					RelativePath="..\..\..\source\sprite\JointLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\JointLoader.h"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\source\sprite\MeshIO.cpp"
 					>
@@ -668,6 +684,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\SkeletonIO.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SpineParser.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpineParser.h"
 					>
 				</File>
 				<File

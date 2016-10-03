@@ -15,11 +15,11 @@ namespace gum
 
 class SpriteLoader;
 
-class EasyanimLoader : private cu::Uncopyable
+class EasyAnimLoader : private cu::Uncopyable
 {
 public:
-	EasyanimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader = NULL);
-	~EasyanimLoader();
+	EasyAnimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader = NULL);
+	~EasyAnimLoader();
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
 	void LoadBin(const simp::NodeAnimation* node);
@@ -32,7 +32,7 @@ private:
 
 	const SpriteLoader* m_spr_loader;
 
-}; // EasyanimLoader
+}; // EasyAnimLoader
 
 }
 

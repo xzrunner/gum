@@ -1,0 +1,188 @@
+#include "SpineSkeletonLoader.h"
+#include "SpriteLoader.h"
+#include "JointLoader.h"
+#include "SpineParser.h"
+#include "FilepathHelper.h"
+
+#include <sprite2/SkeletonSymbol.h>
+#include <sprite2/S2_Sprite.h>
+#include <sprite2/Joint.h>
+#include <sprite2/Skeleton.h>
+
+#include <assert.h>
+
+namespace gum
+{
+
+SpineSkeletonLoader::SpineSkeletonLoader(s2::SkeletonSymbol* sym, 
+										 const SpriteLoader* spr_loader,
+										 const JointLoader* joint_loader)
+	: m_sym(sym)
+	, m_spr_loader(spr_loader)
+	, m_joint_loader(joint_loader)
+{
+	if (m_sym) {
+		m_sym->AddReference();
+	}
+	if (m_spr_loader) {
+		m_spr_loader->AddReference();
+	} else {
+		m_spr_loader = new SpriteLoader;
+	}
+	if (m_joint_loader) {
+		m_joint_loader->AddReference();
+	} else {
+		m_joint_loader = new JointLoader;
+	}
+}
+
+SpineSkeletonLoader::~SpineSkeletonLoader()
+{
+	if (m_sym) {
+		m_sym->RemoveReference();
+	}
+	m_spr_loader->RemoveReference();
+	m_joint_loader->RemoveReference();
+	Clear();
+}
+
+void SpineSkeletonLoader::LoadJson(const Json::Value& val, const std::string& dir)
+{
+	if (!m_sym) {
+		return;
+	}
+
+	Clear();
+
+	SpineParser parser;
+	parser.Parse(val);
+
+	m_num = parser.bones.size();
+
+	std::string img_dir = FilepathHelper::Absolute(dir, parser.img_dir);
+	LoadSprites(parser, img_dir);
+	LoadJoints(parser);
+	InitRoot();
+	InitPose(parser);
+
+	std::vector<s2::Joint*> joints;
+	joints.reserve(m_joints.size());
+	std::map<std::string, s2::Joint*>::iterator itr = m_joints.begin();
+	for ( ; itr != m_joints.end(); ++itr) {
+		joints.push_back(itr->second);
+	}
+	m_sym->SetSkeleton(new s2::Skeleton(m_root, joints));
+}
+
+void SpineSkeletonLoader::Clear()
+{
+	m_num = 0;
+
+	for (int i = 0, n = m_sprs.size(); i < n; ++i) {
+		if (m_sprs[i]) {
+			m_sprs[i]->RemoveReference();
+		}
+	}
+	m_sprs.clear();
+
+ 	std::map<std::string, s2::Joint*>::iterator itr = m_joints.begin();
+ 	for ( ; itr != m_joints.end(); ++itr) {
+ 		itr->second->RemoveReference();
+ 	}
+	m_joints.clear();
+
+	m_root = NULL;
+}
+
+void SpineSkeletonLoader::LoadSprites(const SpineParser& parser, const std::string& img_dir)
+{
+	m_sprs.reserve(m_num);
+	for (int i = 0, n = parser.slots.size(); i < n; ++i)
+	{
+		const SpineParser::Slot& slot = parser.slots[i];
+		const SpineParser::SkinItem* item = parser.QuerySkin(slot);
+		if (!item) {
+			m_sprs.push_back(NULL);
+			continue;
+		}
+		std::string filepath = FilepathHelper::Absolute(img_dir, item->name + ".png");
+		s2::Sprite* spr = m_spr_loader->Load(filepath);
+		spr->SetAngle(item->angle);
+		spr->SetPosition(item->pos);
+		m_sprs.push_back(spr);
+	}
+}
+
+void SpineSkeletonLoader::LoadJoints(const SpineParser& parser)
+{
+	for (int i = 0, n = parser.slots.size(); i < n; ++i)
+	{
+		const SpineParser::Slot& slot = parser.slots[i];
+		s2::Sprite* spr = m_sprs[i];
+		if (!spr) {
+			continue;
+		}
+		s2::JointPose pose(spr->GetPosition(), spr->GetAngle());
+		s2::Joint* joint = m_joint_loader->Create(spr, -pose);
+		m_joints.insert(std::make_pair(slot.bone, joint));
+	}
+
+	std::map<std::string, SpineParser::Bone>::const_iterator itr 
+		= parser.bones.begin();
+	for ( ; itr != parser.bones.end(); ++itr)
+	{
+		const SpineParser::Bone& bone = itr->second;
+		std::map<std::string, s2::Joint*>::iterator itr_joint 
+			= m_joints.find(bone.name);
+		if (itr_joint != m_joints.end()) {
+			continue;
+		}
+		s2::Joint* joint = m_joint_loader->Create(NULL, s2::JointPose());
+		m_joints.insert(std::make_pair(bone.name, joint));
+	}
+
+	// connect
+	itr = parser.bones.begin();
+	for ( ; itr != parser.bones.end(); ++itr)
+	{
+		const SpineParser::Bone& bone = itr->second;
+		if (bone.parent.empty()) {
+			continue;
+		}
+
+		std::map<std::string, s2::Joint*>::iterator itr_joint 
+			= m_joints.find(bone.name);
+		assert(itr_joint != m_joints.end());
+		s2::Joint* child = itr_joint->second;
+		itr_joint = m_joints.find(bone.parent);
+		assert(itr_joint != m_joints.end());
+		s2::Joint* parent = itr_joint->second;
+		parent->ConnectChild(child);
+	}
+}
+
+void SpineSkeletonLoader::InitRoot()
+{
+	assert(!m_joints.empty());
+	const s2::Joint* root = m_joints.begin()->second;
+	while (const s2::Joint* parent = root->GetParent()) {
+		root = parent;
+	}
+	m_root = const_cast<s2::Joint*>(root);
+}
+
+void SpineSkeletonLoader::InitPose(const SpineParser& parser)
+{
+	std::map<std::string, s2::Joint*>::iterator itr = m_joints.begin();
+	for ( ; itr != m_joints.end(); ++itr)
+	{
+		std::map<std::string, SpineParser::Bone>::const_iterator itr_bone 
+			= parser.bones.find(itr->first);
+		const SpineParser::Bone& src = itr_bone->second;
+		s2::Joint* dst = itr->second;
+		dst->SetLocalPose(s2::JointPose(src.pos, src.angle));
+	}
+	m_root->Update();
+}
+
+}

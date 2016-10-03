@@ -1,7 +1,7 @@
 #include "AnimSymLoader.h"
 #include "FilepathHelper.h"
-#include "EasyanimLoader.h"
-#include "SpineLoader.h"
+#include "EasyAnimLoader.h"
+#include "SpineAnimLoader.h"
 
 #include <sprite2/AnimSymbol.h>
 
@@ -45,17 +45,17 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 	fin.close();
 
 	if (val.isMember("skeleton") && val["skeleton"].isMember("spine")) {
-		SpineLoader loader(m_sym, m_spr_loader);
-		loader.LoadJson(filepath);
+		SpineAnimLoader loader(m_sym, m_spr_loader);
+		loader.LoadJson(val, dir);
 	} else {
-		EasyanimLoader loader(m_sym, m_spr_loader);
+		EasyAnimLoader loader(m_sym, m_spr_loader);
 		loader.LoadJson(val, dir);
 	}
 }
 
 void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
 {
-	EasyanimLoader loader(m_sym, m_spr_loader);
+	EasyAnimLoader loader(m_sym, m_spr_loader);
 	loader.LoadBin(node);
 }
 

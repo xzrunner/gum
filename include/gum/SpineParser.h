@@ -16,7 +16,7 @@ class SpineParser
 public:
 	SpineParser() {}
 
-	void Parse(const std::string& filepath);
+	void Parse(const Json::Value& val);
 
 public:
 	struct Bone
@@ -58,16 +58,14 @@ private:
 	void ParseSlots(const Json::Value& val);
 	void ParseSkins(const Json::Value& val);
 
-private:
-	std::string m_img_dir;
+public:
+	std::string img_dir;
 
-	std::map<std::string, Bone> m_bones;
+	std::map<std::string, Bone> bones;
 
-	std::vector<Slot> m_slots;
+	std::vector<Slot> slots;
 
-	std::map<std::string, Skin> m_skins;
-
-	friend class SpineLoader;
+	std::map<std::string, Skin> skins;
 
 }; // SpineParser
 
