@@ -3,32 +3,29 @@
 
 #include <CU_Uncopyable.h>
 
-#include <json/json.h>
-
 #include <string>
 
-namespace s2 { class AnimSymbol; class Sprite; }
+namespace s2 { class AnimSymbol; }
 namespace simp { class NodeAnimation; }
 
 namespace gum
 {
 
+class SpriteLoader;
+
 class AnimSymLoader : private cu::Uncopyable
 {
 public:
-	AnimSymLoader(s2::AnimSymbol* sym);
+	AnimSymLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader = NULL);
 	~AnimSymLoader();
 
 	void LoadJson(const std::string& filepath);
 	void LoadBin(const simp::NodeAnimation* node);
 
-	void LoadLayers(const Json::Value& value, const std::string& dir);
-
-protected:
-	virtual s2::Sprite* LoadSprite(const Json::Value& val, const std::string& dir);
-
 private:
 	s2::AnimSymbol* m_sym;
+
+	const SpriteLoader* m_spr_loader;
 
 }; // AnimSymLoader
 

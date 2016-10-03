@@ -494,6 +494,22 @@
 					RelativePath="..\..\..\include\gum\AnimSymLoader.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\EasyanimLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\EasyanimLoader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SpineLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpineLoader.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="08.particle3d"
@@ -628,7 +644,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="io"
+				Name="loader"
 				>
 				<File
 					RelativePath="..\..\..\source\sprite\MeshIO.cpp"
@@ -652,6 +668,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\SpriteIO.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SpriteLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpriteLoader.h"
 					>
 				</File>
 				<File
