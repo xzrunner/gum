@@ -23,6 +23,9 @@ public:
 	void LoadJson(const Json::Value& val, const std::string& dir);
 
 private:
+	
+
+private:
 	s2::AnimSymbol* m_sym;
 
 	const SpriteLoader* m_spr_loader;

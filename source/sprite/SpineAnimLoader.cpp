@@ -40,23 +40,26 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	
 	m_sym->SetFPS(30);
 
+	
+//	SpineSkeletonLoader loader();
+
 	s2::AnimSymbol::Layer* layer = new s2::AnimSymbol::Layer;
-	s2::AnimSymbol::Frame* frame = new s2::AnimSymbol::Frame;
-	frame->index = 1;
-	for (int i = 0, n = parser.slots.size(); i < n; ++i)
-	{
-		const SpineParser::Slot& slot = parser.slots[i];
-		const SpineParser::SkinItem* item = parser.QuerySkin(slot);
-		if (!item) {
-			continue;
-		}
-		std::string filepath = FilepathHelper::Absolute(img_dir, item->name + ".png");
-		s2::Sprite* spr = m_spr_loader->Load(filepath);
-		spr->SetAngle(item->angle);
-		spr->SetPosition(item->pos);
-		frame->sprs.push_back(spr);
-	}
-	layer->frames.push_back(frame);
+//	s2::AnimSymbol::Frame* frame = new s2::AnimSymbol::Frame;
+// 	frame->index = 1;
+// 	for (int i = 0, n = parser.slots.size(); i < n; ++i)
+// 	{
+// 		const SpineParser::Slot& slot = parser.slots[i];
+// 		const SpineParser::SkinItem* item = parser.QuerySkin(slot);
+// 		if (!item) {
+// 			continue;
+// 		}
+// 		std::string filepath = FilepathHelper::Absolute(img_dir, item->name + ".png");
+// 		s2::Sprite* spr = m_spr_loader->Load(filepath);
+// 		spr->SetAngle(item->angle);
+// 		spr->SetPosition(item->pos);
+// 		frame->sprs.push_back(spr);
+// 	}
+// 	layer->frames.push_back(frame);
 	m_sym->AddLayer(layer);
 }
 

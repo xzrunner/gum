@@ -17,6 +17,9 @@ void SpineParser::Parse(const Json::Value& val)
 	ParseBones(val["bones"]);
 	ParseSlots(val["slots"]);
 	ParseSkins(val["skins"]["default"]);
+	if (m_parse_anim) {
+		ParseAnimations(val["animations"]);
+	}
 }
 
 const SpineParser::SkinItem* SpineParser::QuerySkin(const Slot& slot) const
@@ -97,6 +100,72 @@ void SpineParser::ParseSkins(const Json::Value& val)
 			skin.items.push_back(item);
 		}
 		skins.insert(std::make_pair(key, skin));
+	}
+}
+
+void SpineParser::ParseAnimations(const Json::Value& val)
+{
+	Json::Value::Members key_anis = val.getMemberNames();
+	anims.reserve(key_anis.size());
+	for (int i = 0, n = key_anis.size(); i < n; ++i)
+	{
+		const std::string& key = key_anis[i];
+		const Json::Value& src = val[key];
+		Animation dst;
+		dst.name = key;
+		Json::Value::Members key_bones = src.getMemberNames();
+		dst.bones.reserve(key_bones.size());
+		for (int j = 0, m = key_bones.size(); j < m; ++j)
+		{
+			const std::string& key = key_bones[i];
+			AnimBone bone;
+			bone.name = key;
+			ParseAnimBond(src[key], bone);
+			dst.bones.push_back(bone);
+		}
+		anims.push_back(dst);
+	}
+}
+
+void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
+{
+	if (val.isMember("rotate"))
+	{
+		bone.rotates.reserve(val["rotate"].size());
+		for (int i = 0, n = val["rotate"].size(); i < n; ++i)
+		{
+			const Json::Value& src = val["rotate"][i];
+			Rotate dst;
+			dst.time = src["time"].asDouble();
+			dst.rot = src["angle"].asDouble();
+			bone.rotates.push_back(dst);
+		}
+	}
+	if (val.isMember("translate"))
+	{
+		bone.translates.reserve(val["translate"].size());
+		for (int i = 0, n = val["translate"].size(); i < n; ++i)
+		{
+			const Json::Value& src = val["translate"][i];
+			Translate dst;
+			dst.time = src["time"].asDouble();
+			dst.trans.x = src["x"].asDouble();
+			dst.trans.y = src["y"].asDouble();
+			bone.translates.push_back(dst);
+		}
+	}
+	if (val.isMember("scale"))
+	{
+		bone.scales.reserve(val["scale"].size());
+		for (int i = 0, n = val["scale"].size(); i < n; ++i)
+		{
+			const Json::Value& src = val["scale"][i];
+			Scale dst;
+			dst.time = src["time"].asDouble();
+			dst.scale.x = src["x"].asDouble();
+			dst.scale.y = src["y"].asDouble();
+			bone.scales.push_back(dst);
+		}
 	}
 }
 

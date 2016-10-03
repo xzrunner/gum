@@ -23,6 +23,8 @@ public:
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
 
+	void LoadParser(const SpineParser& parser, const std::string& dir);
+
 private:
 	void Clear();
 

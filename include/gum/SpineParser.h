@@ -14,7 +14,8 @@ namespace gum
 class SpineParser
 {
 public:
-	SpineParser() {}
+	SpineParser(bool parse_anim = true) 
+		: m_parse_anim(parse_anim) {}
 
 	void Parse(const Json::Value& val);
 
@@ -48,6 +49,38 @@ public:
 		std::vector<SkinItem> items;
 	};
 
+	struct Rotate
+	{
+		float time;
+		float rot;
+	};
+
+	struct Translate
+	{
+		float time;
+		sm::vec2 trans;
+	};
+
+	struct Scale
+	{
+		float time;
+		sm::vec2 scale;
+	};
+
+	struct AnimBone
+	{
+		std::string name;
+		std::vector<Rotate> rotates;
+		std::vector<Translate> translates;
+		std::vector<Scale> scales;
+	};
+
+	struct Animation
+	{
+		std::string name;
+		std::vector<AnimBone> bones;
+	};
+
 	const SkinItem* QuerySkin(const Slot& slot) const;
 
 private:
@@ -57,8 +90,13 @@ private:
 	void ParseBones(const Json::Value& val);
 	void ParseSlots(const Json::Value& val);
 	void ParseSkins(const Json::Value& val);
+	
+	void ParseAnimations(const Json::Value& val);
+	void ParseAnimBond(const Json::Value& val, AnimBone& bone);
 
 public:
+	bool m_parse_anim;
+
 	std::string img_dir;
 
 	std::map<std::string, Bone> bones;
@@ -66,6 +104,8 @@ public:
 	std::vector<Slot> slots;
 
 	std::map<std::string, Skin> skins;
+
+	std::vector<Animation> anims;
 
 }; // SpineParser
 

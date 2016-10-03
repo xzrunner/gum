@@ -52,10 +52,18 @@ void SpineSkeletonLoader::LoadJson(const Json::Value& val, const std::string& di
 		return;
 	}
 
-	Clear();
-
-	SpineParser parser;
+	SpineParser parser(false);
 	parser.Parse(val);
+	LoadParser(parser, dir);
+}
+
+void SpineSkeletonLoader::LoadParser(const SpineParser& parser, const std::string& dir)
+{
+	if (!m_sym) {
+		return;
+	}
+
+	Clear();
 
 	m_num = parser.bones.size();
 
