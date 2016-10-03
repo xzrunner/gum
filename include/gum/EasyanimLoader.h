@@ -24,6 +24,7 @@ public:
 	void LoadJson(const Json::Value& val, const std::string& dir);
 	void LoadBin(const simp::NodeAnimation* node);
 
+private:
 	void LoadLayers(const Json::Value& val, const std::string& dir);
 
 private:

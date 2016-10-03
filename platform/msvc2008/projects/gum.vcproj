@@ -510,6 +510,14 @@
 					RelativePath="..\..\..\include\gum\SpineLoader.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SpineParser.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpineParser.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="08.particle3d"
