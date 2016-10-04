@@ -188,8 +188,6 @@ void SpineSkeletonLoader::InitPose(const SpineParser& parser)
 
 void SpineSkeletonLoader::InitSkeleton(const SpineParser& parser)
 {
-	assert(m_joints.size() == parser.slots.size());
-
 	std::vector<s2::Joint*> joints;
 	joints.reserve(m_joints.size());
 	for (int i = 0, n = parser.slots.size(); i < n; ++i) 
@@ -197,9 +195,24 @@ void SpineSkeletonLoader::InitSkeleton(const SpineParser& parser)
 		std::map<std::string, s2::Joint*>::iterator itr
 			= m_joints.find(parser.slots[i].bone);
 		assert(itr != m_joints.end());
-		itr->second->SetName(itr->first);
-		joints.push_back(itr->second);
+		s2::Joint* joint = itr->second;
+		if (joint->GetName().empty()) {
+			joint->SetName("*");
+			joints.push_back(joint);
+		}
 	}
+
+	std::map<std::string, s2::Joint*>::iterator itr 
+		= m_joints.begin();
+	for ( ; itr != m_joints.end(); ++itr) 
+	{
+		s2::Joint* joint = itr->second;
+		if (joint->GetName().empty()) {
+			joints.push_back(joint);
+		}
+		joint->SetName(itr->first);
+	}
+
 	m_sym->SetSkeleton(new s2::Skeleton(m_root, joints));
 }
 

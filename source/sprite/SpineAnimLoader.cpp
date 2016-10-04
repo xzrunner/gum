@@ -67,26 +67,32 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 	m_src_anim = &parser.anims[DEFAULT_ANIM];
 
 	m_sk_sym = VI_DOWNCASTING<s2::SkeletonSymbol*>(m_sym_loader->Create(filepath, s2::SYM_SKELETON));
-	
+
 	BuildBone2PoseTable();
 
 	s2::AnimSymbol::Layer* layer = new s2::AnimSymbol::Layer;
 	
 	int bone_num = m_src_anim->bones.size();
 	m_pose_ptrs.resize(bone_num * 3, 0);
-	int next_time = 0;
+	float next_time = 0;
 	while (true)
 	{
+		float time = GetNextTime();
+		if (next_time != 0 && time == next_time) {
+			break;
+		} else {
+			next_time = time;
+		}
+
 		s2::AnimSymbol::Frame* frame = new s2::AnimSymbol::Frame;
-		frame->index = next_time + 1;
+		frame->index = static_cast<int>(next_time * FPS) + 1;
 		frame->tween = true;
 		s2::Sprite* spr = m_spr_loader->Create(m_sk_sym);
+		spr->SetName("sk");
 		LoadJointPoses(next_time, VI_DOWNCASTING<s2::SkeletonSprite*>(spr)->GetPose());
 		frame->sprs.push_back(spr);
 		layer->frames.push_back(frame);
-		if (!UpdateNextTime(next_time)) {
-			break;
-		}
+		UpdateNextTime(next_time);
 	}
 
 	m_sym->AddLayer(layer);
@@ -112,61 +118,61 @@ void SpineAnimLoader::BuildBone2PoseTable()
 	}
 }
 
-bool SpineAnimLoader::UpdateNextTime(int& next_time)
+float SpineAnimLoader::GetNextTime()
 {
-	int bone_num = m_src_anim->bones.size();
-
-	// next time
+	float next_time = FLT_MAX;
 	int ptr = 0;
+	int bone_num = m_src_anim->bones.size();
 	for (int i = 0; i < bone_num; ++i)
 	{
 		const SpineParser::AnimBone& src_bone = m_src_anim->bones[i];
 		// rotate
-		int time = int(src_bone.rotates[m_pose_ptrs[ptr++]].time * FPS);
-		if (time < next_time) next_time = time;
+		if (!src_bone.rotates.empty()) 
+		{
+			int idx = m_pose_ptrs[ptr];
+			if (idx < src_bone.rotates.size() - 1) 
+			{
+				float time = src_bone.rotates[idx + 1].time;
+				if (time < next_time) {
+					next_time = time;
+				}
+			}
+		}
+		++ptr;
 		// translate
-		time = int(src_bone.translates[m_pose_ptrs[ptr++]].time * FPS);
-		if (time < next_time) next_time = time;			
+		if (!src_bone.translates.empty()) 
+		{
+			int idx = m_pose_ptrs[ptr];
+			if (idx < src_bone.translates.size() - 1) 
+			{
+				float time = src_bone.translates[idx + 1].time;
+				if (time < next_time) {
+					next_time = time;
+				}
+			}
+		}
+		++ptr;
 		// scale
-		time = int(src_bone.scales[m_pose_ptrs[ptr++]].time * FPS);
-		if (time < next_time) next_time = time;
+		if (!src_bone.scales.empty()) 
+		{
+			int idx = m_pose_ptrs[ptr];
+			if (idx < src_bone.scales.size() - 1) 
+			{
+				float time = src_bone.scales[idx + 1].time;
+				if (time < next_time) {
+					next_time = time;
+				}
+			}
+		}
+		++ptr;
 	}
-
-	// update
-	bool dirty = false;
-	ptr = 0;
-	for (int i = 0; i < bone_num; ++i)
-	{
-		const SpineParser::AnimBone& src_bone = m_src_anim->bones[i];
-		// rotate
-		int idx = m_pose_ptrs[ptr++];
-		int time = int(src_bone.rotates[idx].time / FPS);
-		if (time == next_time && idx < src_bone.rotates.size() - 1) {
-			++m_pose_ptrs[ptr - 1];
-			dirty = true;
-		}
-		// translate
-		idx = m_pose_ptrs[ptr++];
-		time = int(src_bone.translates[idx].time * FPS);
-		if (time == next_time && idx < src_bone.translates.size() - 1) {
-			++m_pose_ptrs[ptr - 1];
-			dirty = true;
-		}
-		// scale 
-		idx = m_pose_ptrs[ptr++];
-		time = int(src_bone.scales[idx].time * FPS);
-		if (time == next_time && idx < src_bone.scales.size() - 1) {
-			++m_pose_ptrs[ptr - 1];
-			dirty = true;
-		}
-	}
-
-	return dirty;
+	return next_time;
 }
 
-void SpineAnimLoader::LoadJointPoses(int next_time, s2::SkeletonPose& sk_pose)
+void SpineAnimLoader::LoadJointPoses(float next_time, s2::SkeletonPose& sk_pose)
 {
-	float time = next_time * FPS;
+	const std::vector<s2::Joint*>& joints = m_sk_sym->GetSkeleton()->GetAllJoints();
+
 	int ptr = 0;
 	int bone_num = m_src_anim->bones.size();
 	for (int i = 0; i < bone_num; ++i)
@@ -176,51 +182,95 @@ void SpineAnimLoader::LoadJointPoses(int next_time, s2::SkeletonPose& sk_pose)
 
 		// rotate
 		int idx = m_pose_ptrs[ptr++];
-		if (idx < src_bone.rotates.size() - 1) {
+		if (src_bone.rotates.empty()) {
+			;
+		} else if (idx == src_bone.rotates.size() - 1) {
+			pose.rot = src_bone.rotates[idx].rot;
+		} else if (next_time >= src_bone.rotates[idx].time) {
 			float t0 = src_bone.rotates[idx].time,
 				  t1 = src_bone.rotates[idx + 1].time;
-			if (time >= t0) 
-			{
-				assert(time <= t1);
-				float v0 = src_bone.rotates[idx].rot,
-					  v1 = src_bone.rotates[idx + 1].rot;
-				pose.rot = (time - t0) * (v1 - v0) / (t1 - t0) + v0;
-			}
-		} else {
-			pose.rot = src_bone.rotates[idx].rot;
+			assert(next_time <= t1);
+			float v0 = src_bone.rotates[idx].rot,
+				  v1 = src_bone.rotates[idx + 1].rot;
+			pose.rot = (next_time - t0) * (v1 - v0) / (t1 - t0) + v0;			
 		}
 		// translate
 		idx = m_pose_ptrs[ptr++];
-		if (idx < src_bone.translates.size() - 1) {
+		if (src_bone.translates.empty()) {
+			;
+		} else if (idx == src_bone.translates.size() - 1) {
+			pose.trans = src_bone.translates[idx].trans;
+		} else if (next_time >= src_bone.translates[idx].time) {
 			float t0 = src_bone.translates[idx].time,
 				  t1 = src_bone.translates[idx + 1].time;
-			if (time > t0) 
-			{
-				assert(time <= t1);
-				sm::vec2 v0 = src_bone.translates[idx].trans,
-					     v1 = src_bone.translates[idx + 1].trans;
-				pose.trans = (v1 - v0) * (time - t0) / (t1 - t0) + v0;
-			}
-		} else {
-			pose.trans = src_bone.translates[idx].trans;
+			assert(next_time <= t1);
+			sm::vec2 v0 = src_bone.translates[idx].trans,
+				     v1 = src_bone.translates[idx + 1].trans;
+			pose.trans = (v1 - v0) * (next_time - t0) / (t1 - t0) + v0;
 		}
-		// scale
-		idx = m_pose_ptrs[ptr++];
-		if (idx < src_bone.scales.size() - 1) {
-			float t0 = src_bone.scales[idx].time,
-				  t1 = src_bone.scales[idx + 1].time;
-			if (time > t0) 
-			{
-				assert(time <= t1);
-				sm::vec2 v0 = src_bone.scales[idx].scale,
-					     v1 = src_bone.scales[idx + 1].scale;
-				pose.trans = (v1 - v0) * (time - t0) / (t1 - t0) + v0;
-			}
-		} else {
-			pose.trans = src_bone.scales[idx].scale;
+ 		// scale
+ 		idx = m_pose_ptrs[ptr++];
+		if (src_bone.scales.empty()) {
+			;
+		} else if (idx == src_bone.scales.size() - 1) {
+//			pose.scale = src_bone.scales[idx].scale;
+		} else if (next_time >= src_bone.scales[idx].time) {
+ 			float t0 = src_bone.scales[idx].time,
+ 				  t1 = src_bone.scales[idx + 1].time;
+ 			assert(next_time <= t1);
+ 			sm::vec2 v0 = src_bone.scales[idx].scale,
+ 				     v1 = src_bone.scales[idx + 1].scale;
+//			pose.scale = (v1 - v0) * (next_time - t0) / (t1 - t0) + v0;
 		}
 
-		sk_pose.SetJointPose(m_bone2pose[i], pose);
+		idx = m_bone2pose[i];
+		const s2::JointPose& base = joints[idx]->GetLocalPose();
+		pose.trans += base.trans;
+		pose.rot += base.rot;
+		sk_pose.SetJointPose(idx, pose);
+	}
+}
+
+void SpineAnimLoader::UpdateNextTime(float next_time)
+{
+	int ptr = 0;
+	int bone_num = m_src_anim->bones.size();
+	for (int i = 0; i < bone_num; ++i)
+	{
+		const SpineParser::AnimBone& src_bone = m_src_anim->bones[i];
+		// rotate
+		if (!src_bone.rotates.empty()) 
+		{
+			int idx = m_pose_ptrs[ptr];
+			if (idx < src_bone.rotates.size() - 1) {
+				if (src_bone.rotates[idx + 1].time <= next_time) {
+					++m_pose_ptrs[ptr];
+				}
+			}
+		}
+		++ptr;
+		// translate
+		if (!src_bone.translates.empty()) 
+		{
+			int idx = m_pose_ptrs[ptr];
+			if (idx < src_bone.translates.size() - 1) {
+				if (src_bone.translates[idx + 1].time <= next_time) {
+					++m_pose_ptrs[ptr];
+				}
+			}
+		}
+		++ptr;
+		// scale
+		if (!src_bone.scales.empty()) 
+		{
+			int idx = m_pose_ptrs[ptr];
+			if (idx < src_bone.scales.size() - 1) {
+				if (src_bone.scales[idx + 1].time <= next_time) {
+					++m_pose_ptrs[ptr];
+				}
+			}
+		}
+		++ptr;
 	}
 }
 

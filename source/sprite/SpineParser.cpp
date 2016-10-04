@@ -137,7 +137,7 @@ void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
 			const Json::Value& src = val["rotate"][i];
 			Rotate dst;
 			dst.time = src["time"].asDouble();
-			dst.rot = src["angle"].asDouble();
+			dst.rot = src["angle"].asDouble() * SM_DEG_TO_RAD;
 			bone.rotates.push_back(dst);
 		}
 	}

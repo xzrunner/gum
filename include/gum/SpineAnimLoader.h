@@ -4,6 +4,7 @@
 #include "SpineParser.h"
 
 #include <CU_Uncopyable.h>
+#include <sprite2/JointPose.h>
 
 #include <json/json.h>
 
@@ -30,9 +31,9 @@ public:
 private:
 	void BuildBone2PoseTable();
 
-	bool UpdateNextTime(int& next_time);
-
-	void LoadJointPoses(int next_time, s2::SkeletonPose& sk_pose);
+	float GetNextTime();
+	void LoadJointPoses(float next_time, s2::SkeletonPose& sk_pose);
+	void UpdateNextTime(float next_time);
 
 private:
 	s2::AnimSymbol* m_sym;
