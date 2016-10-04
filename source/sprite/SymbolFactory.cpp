@@ -50,7 +50,7 @@ SymbolFactory::SymbolFactory()
 {
 }
 
-s2::Symbol* SymbolFactory::Create(const std::string& filepath) const
+s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 {
 	std::string fixed_path = filepath;
 	StringHelper::ToLower(fixed_path);
@@ -64,7 +64,9 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath) const
 
 	s2::Symbol* ret = NULL;
 
-	s2::SymType type = s2::SymType(SymbolFile::Instance()->Type(fixed_path));
+	if (type == s2::SYM_UNKNOWN) {
+		type = SymbolFile::Instance()->Type(fixed_path);
+	}
 	switch (type)
 	{
 	case s2::SYM_IMAGE:

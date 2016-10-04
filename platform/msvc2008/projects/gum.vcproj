@@ -663,14 +663,6 @@
 				Name="loader"
 				>
 				<File
-					RelativePath="..\..\..\source\sprite\JointLoader.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\gum\JointLoader.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\sprite\MeshIO.cpp"
 					>
 				</File>
@@ -703,14 +695,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprite\SpriteLoader.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\gum\SpriteLoader.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\sprite\SprTransLoader.cpp"
 					>
 				</File>
@@ -718,6 +702,34 @@
 					RelativePath="..\..\..\include\gum\SprTransLoader.h"
 					>
 				</File>
+				<Filter
+					Name="cb"
+					>
+					<File
+						RelativePath="..\..\..\source\sprite\JointLoader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\gum\JointLoader.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprite\SpriteLoader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\gum\SpriteLoader.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprite\SymbolLoader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\gum\SymbolLoader.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

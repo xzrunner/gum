@@ -11,12 +11,14 @@ namespace simp { class NodeAnimation; }
 namespace gum
 {
 
+class SymbolLoader;
 class SpriteLoader;
 
 class AnimSymLoader : private cu::Uncopyable
 {
 public:
-	AnimSymLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader = NULL);
+	AnimSymLoader(s2::AnimSymbol* sym, const SymbolLoader* sym_loader = NULL,
+		const SpriteLoader* spr_loader = NULL);
 	~AnimSymLoader();
 
 	void LoadJson(const std::string& filepath);
@@ -25,6 +27,7 @@ public:
 private:
 	s2::AnimSymbol* m_sym;
 
+	const SymbolLoader* m_sym_loader;
 	const SpriteLoader* m_spr_loader;
 
 }; // AnimSymLoader

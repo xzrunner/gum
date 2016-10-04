@@ -114,7 +114,7 @@ void SpineSkeletonLoader::LoadSprites(const SpineParser& parser, const std::stri
 			continue;
 		}
 		std::string filepath = FilepathHelper::Absolute(img_dir, item->name + ".png");
-		s2::Sprite* spr = m_spr_loader->Load(filepath);
+		s2::Sprite* spr = m_spr_loader->Create(filepath);
 		spr->SetAngle(item->angle);
 		spr->SetPosition(item->pos);
 		m_sprs.push_back(spr);

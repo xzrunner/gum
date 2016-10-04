@@ -4,14 +4,19 @@
 namespace gum
 {
 
-s2::Sprite* SpriteLoader::Load(const Json::Value& val, const std::string& dir) const
+s2::Sprite* SpriteLoader::Create(s2::Symbol* sym) const
 {
-	return SpriteFactory::Instance()->Create(val, dir);
+	return SpriteFactory::Instance()->Create(sym);
 }
 
-s2::Sprite* SpriteLoader::Load(const std::string& filepath) const
+s2::Sprite* SpriteLoader::Create(const std::string& filepath) const
 {
 	return SpriteFactory::Instance()->Create(filepath);
+}
+
+s2::Sprite* SpriteLoader::Create(const Json::Value& val, const std::string& dir) const
+{
+	return SpriteFactory::Instance()->Create(val, dir);
 }
 
 }

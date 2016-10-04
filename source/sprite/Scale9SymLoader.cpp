@@ -61,43 +61,43 @@ void Scale9SymLoader::LoadJson(const std::string& filepath)
 	switch (type)
 	{
 	case s2::S9_9GRID:
-		grids[s2::S9_DOWN_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_DOWN_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_DOWN_RIGHT]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_RIGHT]		= m_spr_loader->Load(spr_val[idx++], dir);
+		grids[s2::S9_DOWN_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_DOWN_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_DOWN_RIGHT]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
 		break;
 	case s2::S9_9GRID_HOLLOW:
-		grids[s2::S9_DOWN_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_DOWN_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_DOWN_RIGHT]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_RIGHT]		= m_spr_loader->Load(spr_val[idx++], dir);
+		grids[s2::S9_DOWN_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_DOWN_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_DOWN_RIGHT]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
 		break;
 	case s2::S9_3GRID_HORI:
-		grids[s2::S9_MID_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Load(spr_val[idx++], dir);
+		grids[s2::S9_MID_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
 		break;
 	case s2::S9_3GRID_VERT:
-		grids[s2::S9_DOWN_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
+		grids[s2::S9_DOWN_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
 		break;
 	case s2::S9_6GRID_UPPER:
-		grids[s2::S9_MID_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_LEFT]		= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Load(spr_val[idx++], dir);
-		grids[s2::S9_TOP_RIGHT]		= m_spr_loader->Load(spr_val[idx++], dir);
+		grids[s2::S9_MID_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_MID_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_LEFT]		= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
+		grids[s2::S9_TOP_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
 		break;
 	}
 

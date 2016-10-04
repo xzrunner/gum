@@ -5,7 +5,7 @@
 
 #include <json/json.h>
 
-namespace s2 { class Sprite; }
+namespace s2 { class Sprite; class Symbol; }
 
 namespace gum
 {
@@ -13,8 +13,9 @@ namespace gum
 class SpriteLoader : public cu::RefCountObj
 {
 public:
-	virtual s2::Sprite* Load(const Json::Value& val, const std::string& dir) const;
-	virtual s2::Sprite* Load(const std::string& filepath) const;
+	virtual s2::Sprite* Create(s2::Symbol* sym) const;	
+	virtual s2::Sprite* Create(const std::string& filepath) const;
+	virtual s2::Sprite* Create(const Json::Value& val, const std::string& dir) const;
 
 }; // SpriteLoader
 

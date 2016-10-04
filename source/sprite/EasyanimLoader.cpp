@@ -99,7 +99,7 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
 			for (int actor = 0; actor < actor_n; ++actor)
 			{
 				const Json::Value& actor_val = frame_val["actor"][actor];
-				s2::Sprite* spr = m_spr_loader->Load(actor_val, dir);
+				s2::Sprite* spr = m_spr_loader->Create(actor_val, dir);
 				dst_frame->sprs.push_back(spr);
 			}
 			dst_layer->frames.push_back(dst_frame);

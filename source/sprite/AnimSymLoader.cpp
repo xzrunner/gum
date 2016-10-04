@@ -12,9 +12,12 @@
 namespace gum
 {
 
-AnimSymLoader::AnimSymLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
+AnimSymLoader::AnimSymLoader(s2::AnimSymbol* sym, 
+							 const SymbolLoader* sym_loader,
+							 const SpriteLoader* spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
+	, m_sym_loader(sym_loader)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -45,8 +48,8 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 	fin.close();
 
 	if (val.isMember("skeleton") && val["skeleton"].isMember("spine")) {
-		SpineAnimLoader loader(m_sym, m_spr_loader);
-		loader.LoadJson(val, dir);
+		SpineAnimLoader loader(m_sym, m_sym_loader, m_spr_loader);
+		loader.LoadJson(val, dir, filepath);
 	} else {
 		EasyAnimLoader loader(m_sym, m_spr_loader);
 		loader.LoadJson(val, dir);

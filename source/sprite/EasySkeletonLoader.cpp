@@ -90,7 +90,7 @@ void EasySkeletonLoader::LoadSprites(const Json::Value& val, const std::string& 
 {
 	m_sprs.reserve(m_num);
 	for (int i = 0; i < m_num; ++i) {
-		m_sprs.push_back(m_spr_loader->Load(val[i], dir));
+		m_sprs.push_back(m_spr_loader->Create(val[i], dir));
 	}
 }
 

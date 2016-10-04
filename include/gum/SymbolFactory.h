@@ -3,6 +3,8 @@
 
 #include <CU_Singleton.h>
 
+#include <sprite2/SymType.h>
+
 #include <string>
 #include <map>
 
@@ -20,7 +22,7 @@ public:
 	 *  @brief
 	 *    raw, json res
 	 */		
-	s2::Symbol* Create(const std::string& filepath) const;
+	s2::Symbol* Create(const std::string& filepath, int type = s2::SYM_UNKNOWN) const;
 
 	/**
 	 *  @brief
