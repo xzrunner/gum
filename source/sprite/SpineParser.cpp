@@ -113,14 +113,14 @@ void SpineParser::ParseAnimations(const Json::Value& val)
 		const Json::Value& src = val[key];
 		Animation dst;
 		dst.name = key;
-		Json::Value::Members key_bones = src.getMemberNames();
+		Json::Value::Members key_bones = src["bones"].getMemberNames();
 		dst.bones.reserve(key_bones.size());
 		for (int j = 0, m = key_bones.size(); j < m; ++j)
 		{
-			const std::string& key = key_bones[i];
+			const std::string& key = key_bones[j];
 			AnimBone bone;
 			bone.name = key;
-			ParseAnimBond(src[key], bone);
+			ParseAnimBond(src["bones"][key], bone);
 			dst.bones.push_back(bone);
 		}
 		anims.push_back(dst);
