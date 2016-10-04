@@ -205,9 +205,8 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 
 s2::Sprite* Scale9SymLoader::LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror)
 {
-	SymFileType type;
-	s2::Symbol* sym = SymbolFactory::Instance()->Create(sym_id, &type);
-	s2::Sprite* spr = SpriteFactory::Instance()->Create(sym, type);
+	s2::Symbol* sym = SymbolFactory::Instance()->Create(sym_id);
+	s2::Sprite* spr = SpriteFactory::Instance()->Create(sym);
 	float angle = dir * SM_PI / 2;
 	spr->SetAngle(angle);
 	bool xmirror = mirror & 0x1,

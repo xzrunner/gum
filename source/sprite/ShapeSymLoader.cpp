@@ -1,7 +1,6 @@
 #include "ShapeSymLoader.h"
 #include "FilepathHelper.h"
 #include "ShapeType.h"
-#include "SymFileType.h"
 #include "SymbolFactory.h"
 #include "ImageSymbol.h"
 #include "Image.h"
@@ -11,6 +10,7 @@
 #include <sprite2/PolygonShape.h>
 #include <sprite2/ColorPolygon.h>
 #include <sprite2/TexturePolygon.h>
+#include <sprite2/SymType.h>
 #include <simp/NodeShape.h>
 #include <simp/from_int.h>
 
@@ -87,9 +87,8 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 		{
 			s2::PolygonShape* polygon = new s2::PolygonShape(vertices);
 
-			SymFileType type;
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->color, &type);
-			assert(type == IMAGE);
+			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->color);
+			assert(sym->Type() == s2::SYM_IMAGE);
 			gum::ImageSymbol* tex_sym = VI_DOWNCASTING<gum::ImageSymbol*>(sym);
 			s2::Polygon* poly = new s2::TexturePolygon(tex_sym);
 			tex_sym->RemoveReference();

@@ -1,6 +1,6 @@
 #include "SymbolFactory.h"
 #include "StringHelper.h"
-#include "SymFileType.h"
+#include "SymbolFile.h"
 
 #include "ImageSymbol.h"
 #include "ImageSymLoader.h"
@@ -37,6 +37,7 @@
 #include <sprite2/MaskSymbol.h>
 #include <sprite2/TrailSymbol.h>
 #include <sprite2/SkeletonSymbol.h>
+#include <sprite2/SymType.h>
 
 #include <assert.h>
 
@@ -49,31 +50,24 @@ SymbolFactory::SymbolFactory()
 {
 }
 
-s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _type) const
+s2::Symbol* SymbolFactory::Create(const std::string& filepath) const
 {
 	std::string fixed_path = filepath;
 	StringHelper::ToLower(fixed_path);
 
-	std::map<std::string, Node>::const_iterator itr 
+	std::map<std::string, s2::Symbol*>::const_iterator itr 
 		= m_path_cache.find(fixed_path);
 	if (itr != m_path_cache.end()) {
-		const Node& node = itr->second;
-		node.sym->AddReference();
-		if (_type) {
-			*_type = node.type;
-		}
-		return node.sym;
-	}
-
-	SymFileType type = get_sym_file_type(fixed_path);
-	if (_type) {
-		*_type = type;
+		itr->second->AddReference();
+		return itr->second;
 	}
 
 	s2::Symbol* ret = NULL;
+
+	s2::SymType type = s2::SymType(SymbolFile::Instance()->Type(fixed_path));
 	switch (type)
 	{
-	case IMAGE:
+	case s2::SYM_IMAGE:
 		{
 			ImageSymbol* sym = new ImageSymbol;
 			ImageSymLoader loader(sym);
@@ -81,7 +75,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case SCALE9:
+	case s2::SYM_SCALE9:
 		{
 			s2::Scale9Symbol* sym = new s2::Scale9Symbol();
 			Scale9SymLoader loader(sym);
@@ -89,7 +83,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case ICON:
+	case s2::SYM_ICON:
 		{
 			s2::IconSymbol* sym = new s2::IconSymbol();
 			IconSymLoader loader(sym);
@@ -97,7 +91,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case TEXTURE:
+	case s2::SYM_TEXTURE:
 		{
 			s2::TextureSymbol* sym = new s2::TextureSymbol;
 			TextureSymLoader loader(sym);
@@ -105,7 +99,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case TEXTBOX:
+	case s2::SYM_TEXTBOX:
 		{
 			TextboxSymbol* sym = new TextboxSymbol();
 			TextboxLoader loader(sym->GetTextbox());
@@ -120,7 +114,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case COMPLEX:
+	case s2::SYM_COMPLEX:
 		{
 			s2::ComplexSymbol* sym = new s2::ComplexSymbol();
 			ComplexSymLoader loader(sym);
@@ -128,7 +122,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case ANIMATION:
+	case s2::SYM_ANIMATION:
 		{
 			s2::AnimSymbol* sym = new s2::AnimSymbol();
 			AnimSymLoader loader(sym);
@@ -136,7 +130,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case PARTICLE3D:
+	case s2::SYM_PARTICLE3D:
 		{
 			s2::Particle3dSymbol* sym = new s2::Particle3dSymbol;
 			P3dSymLoader loader;
@@ -145,7 +139,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case PARTICLE2D:
+	case s2::SYM_PARTICLE2D:
 		{
 			s2::Particle2dSymbol* sym = new s2::Particle2dSymbol;
 			P2dSymLoader loader;
@@ -154,7 +148,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case SHAPE:
+	case s2::SYM_SHAPE:
 		{
 			s2::ShapeSymbol* sym = new s2::ShapeSymbol;
 			ShapeSymLoader loader(sym);
@@ -162,7 +156,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case MASK:
+	case s2::SYM_MASK:
 		{
 			s2::MaskSymbol* sym = new s2::MaskSymbol;
 			MaskSymLoader loader(sym);
@@ -170,7 +164,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case TRAIL:
+	case s2::SYM_TRAIL:
 		{
 			s2::TrailSymbol* sym = new s2::TrailSymbol;
 			TrailSymLoader loader;
@@ -179,7 +173,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 			ret = sym;
 		}
 		break;
-	case SKELETON:
+	case s2::SYM_SKELETON:
 		{
 			s2::SkeletonSymbol* sym = new s2::SkeletonSymbol;
 			SkeletonSymLoader loader(sym);
@@ -192,27 +186,21 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, SymFileType* _typ
 	}
 
 	if (ret) {
-		m_path_cache.insert(std::make_pair(fixed_path, Node(ret, type)));
+		m_path_cache.insert(std::make_pair(fixed_path, ret));
 	}
 
 	return ret;
 }
 
-s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
+s2::Symbol* SymbolFactory::Create(uint32_t id) const
 {
-	std::map<uint32_t, Node>::const_iterator itr = m_id_cache.find(id);
+	std::map<uint32_t, s2::Symbol*>::const_iterator itr = m_id_cache.find(id);
 	if (itr != m_id_cache.end()) {
-		const Node& node = itr->second;
-		node.sym->AddReference();
-		if (_type) {
-			*_type = node.type;
-		}
-		return node.sym;
+		itr->second->AddReference();
+		return itr->second;
 	}
 
 	s2::Symbol* ret = NULL;
-
-	SymFileType stype = UNKNOWN;
 
 	int type;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
@@ -221,8 +209,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 	{
 	case simp::TYPE_IMAGE:
 		{
-			stype = IMAGE;
-
 			const simp::NodePicture* pic = (const simp::NodePicture*)data;
 
 			const simp::Package* pkg = simp::NodeFactory::Instance()->GetPkg(id);
@@ -239,8 +225,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_SCALE9:
 		{
-			stype = SCALE9;
-
 			s2::Scale9Symbol* sym = new s2::Scale9Symbol;
 			Scale9SymLoader loader(sym);
 			loader.LoadBin((const simp::NodeScale9*)data);
@@ -249,8 +233,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_ICON:
 		{
-			stype = ICON;
-
 			s2::IconSymbol* sym = new s2::IconSymbol;
 			IconSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeIcon*)data);
@@ -259,8 +241,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_TEXTURE:
 		{
-			stype = TEXTURE;
-
 			s2::TextureSymbol* sym = new s2::TextureSymbol;
 			TextureSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeTexture*)data);
@@ -269,8 +249,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_LABEL:
 		{
-			stype = TEXTBOX;
-
 			TextboxSymbol* sym = new TextboxSymbol();
 			TextboxLoader loader(sym->GetTextbox());
 			loader.LoadBin((const simp::NodeLabel*)data);
@@ -279,8 +257,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_COMPLEX:
 		{
-			stype = COMPLEX;
-
 			s2::ComplexSymbol* sym = new s2::ComplexSymbol;
 			ComplexSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeComplex*)data);
@@ -289,8 +265,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_ANIMATION:
 		{
-			stype = ANIMATION;
-
 			s2::AnimSymbol* sym = new s2::AnimSymbol;
 			AnimSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeAnimation*)data);
@@ -299,8 +273,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_PARTICLE3D:
 		{
-			stype = PARTICLE3D;
-
 			s2::Particle3dSymbol* sym = new s2::Particle3dSymbol;
 			P3dSymLoader loader;
 			loader.LoadBin((const simp::NodeParticle3d*)data);
@@ -310,8 +282,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_PARTICLE2D:
 		{
-			stype = PARTICLE2D;
-
 			s2::Particle2dSymbol* sym = new s2::Particle2dSymbol;
 			P2dSymLoader loader;
 			loader.LoadBin((const simp::NodeParticle2d*)data);
@@ -321,8 +291,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_SHAPE:
 		{
-			stype = SHAPE;
-
 			s2::ShapeSymbol* sym = new s2::ShapeSymbol;
 			ShapeSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeShape*)data);
@@ -331,8 +299,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_MESH:
 		{
-			stype = MESH;
-
 			s2::MeshSymbol* sym = new s2::MeshSymbol;
 			MeshSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeMesh*)data);
@@ -341,8 +307,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_MASK:
 		{
-			stype = MASK;
-
 			s2::MaskSymbol* sym = new s2::MaskSymbol;
 			MaskSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeMask*)data);
@@ -351,8 +315,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		break;
 	case simp::TYPE_TRAIL:
 		{
-			stype = TRAIL;
-
 			s2::TrailSymbol* sym = new s2::TrailSymbol;
 			TrailSymLoader loader;
 			loader.LoadBin((const simp::NodeTrail*)data);
@@ -364,57 +326,20 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, SymFileType* _type) const
 		assert(0);
 	}
 
-	if (_type) {
-		*_type = stype;
-	}
 	if (ret) {
-		m_id_cache.insert(std::make_pair(id, Node(ret, stype)));
+		m_id_cache.insert(std::make_pair(id, ret));
 	}
 
 	return ret;
 }
 
-s2::Symbol* SymbolFactory::Create(const std::string& pkg_name, const std::string& node_name, SymFileType* type) const
+s2::Symbol* SymbolFactory::Create(const std::string& pkg_name, const std::string& node_name) const
 {
 	uint32_t id = simp::NodeFactory::Instance()->GetID(pkg_name, node_name);
 	if (id != 0xffffffff) {
-		return Create(id, type);
+		return Create(id);
 	} else {
 		return NULL;
-	}
-}
-
-/************************************************************************/
-/* class SymbolFactory::Node                                            */
-/************************************************************************/
-
-SymbolFactory::Node::Node(s2::Symbol* _sym, SymFileType _type) 
-	: sym(_sym)
-	, type(_type) 
-{
-	if (sym) {
-		sym->AddReference();
-	}
-}
-
-SymbolFactory::Node::Node(const Node& node)
-	: sym(NULL)
-	, type(node.type)
-{
-	cu::RefCountObjAssign(sym, const_cast<s2::Symbol*>(node.sym));
-}
-
-SymbolFactory::Node& SymbolFactory::Node::operator = (const Node& node)
-{
-	type = node.type;
-	cu::RefCountObjAssign(sym, const_cast<s2::Symbol*>(node.sym));
-	return *this;
-}
-
-SymbolFactory::Node::~Node() 
-{
-	if (sym) {
-		sym->RemoveReference();
 	}
 }
 

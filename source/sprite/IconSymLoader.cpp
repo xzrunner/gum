@@ -1,7 +1,6 @@
 #include "IconSymLoader.h"
 #include "IconType.h"
 #include "FilepathHelper.h"
-#include "SymFileType.h"
 #include "SymbolFactory.h"
 
 #include <sprite2/IconSymbol.h>
@@ -12,6 +11,8 @@
 #include <sprite2/ImageSymbol.h>
 #include <simp/NodeIcon.h>
 #include <simp/from_int.h>
+
+#include <sprite2/SymType.h>
 
 #include <fstream>
 
@@ -104,9 +105,8 @@ void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 		break;
 	}
 
-	gum::SymFileType type;
-	s2::Symbol* base = SymbolFactory::Instance()->Create(node->base_id, &type);
-	assert(type == IMAGE);
+	s2::Symbol* base = SymbolFactory::Instance()->Create(node->base_id);
+	assert(base->Type() == s2::SYM_IMAGE);
 	icon->SetImage(VI_DOWNCASTING<s2::ImageSymbol*>(base));
 	base->RemoveReference();
 
