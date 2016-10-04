@@ -32,6 +32,7 @@ private:
 	void LoadJoints(const SpineParser& parser);
 	void InitRoot();
 	void InitPose(const SpineParser& parser);
+	void InitSkeleton(const SpineParser& parser);
 
 private:
 	s2::SkeletonSymbol* m_sym;

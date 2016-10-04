@@ -72,14 +72,7 @@ void SpineSkeletonLoader::LoadParser(const SpineParser& parser, const std::strin
 	LoadJoints(parser);
 	InitRoot();
 	InitPose(parser);
-
-	std::vector<s2::Joint*> joints;
-	joints.reserve(m_joints.size());
-	std::map<std::string, s2::Joint*>::iterator itr = m_joints.begin();
-	for ( ; itr != m_joints.end(); ++itr) {
-		joints.push_back(itr->second);
-	}
-	m_sym->SetSkeleton(new s2::Skeleton(m_root, joints));
+	InitSkeleton(parser);
 }
 
 void SpineSkeletonLoader::Clear()
@@ -191,6 +184,23 @@ void SpineSkeletonLoader::InitPose(const SpineParser& parser)
 		dst->SetLocalPose(s2::JointPose(src.pos, src.angle));
 	}
 	m_root->Update();
+}
+
+void SpineSkeletonLoader::InitSkeleton(const SpineParser& parser)
+{
+	assert(m_joints.size() == parser.slots.size());
+
+	std::vector<s2::Joint*> joints;
+	joints.reserve(m_joints.size());
+	for (int i = 0, n = parser.slots.size(); i < n; ++i) 
+	{
+		std::map<std::string, s2::Joint*>::iterator itr
+			= m_joints.find(parser.slots[i].bone);
+		assert(itr != m_joints.end());
+		itr->second->SetName(itr->first);
+		joints.push_back(itr->second);
+	}
+	m_sym->SetSkeleton(new s2::Skeleton(m_root, joints));
 }
 
 }
