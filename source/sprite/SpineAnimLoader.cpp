@@ -213,14 +213,14 @@ void SpineAnimLoader::LoadJointPoses(float next_time, s2::SkeletonPose& sk_pose)
 		if (src_bone.scales.empty()) {
 			;
 		} else if (idx == src_bone.scales.size() - 1) {
-//			pose.scale = src_bone.scales[idx].scale;
+			pose.scale = src_bone.scales[idx].scale;
 		} else if (next_time >= src_bone.scales[idx].time) {
  			float t0 = src_bone.scales[idx].time,
  				  t1 = src_bone.scales[idx + 1].time;
  			assert(next_time <= t1);
  			sm::vec2 v0 = src_bone.scales[idx].scale,
  				     v1 = src_bone.scales[idx + 1].scale;
-//			pose.scale = (v1 - v0) * (next_time - t0) / (t1 - t0) + v0;
+			pose.scale = (v1 - v0) * (next_time - t0) / (t1 - t0) + v0;
 		}
 
 		idx = m_bone2pose[i];

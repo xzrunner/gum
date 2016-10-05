@@ -123,7 +123,7 @@ void SpineSkeletonLoader::LoadJoints(const SpineParser& parser)
 		if (!spr) {
 			continue;
 		}
-		s2::JointPose pose(spr->GetPosition(), spr->GetAngle());
+		s2::JointPose pose(spr->GetPosition(), spr->GetAngle(), spr->GetScale());
 		s2::Joint* joint = m_joint_loader->Create(spr, -pose);
 		m_joints.insert(std::make_pair(slot.bone, joint));
 	}
@@ -181,7 +181,7 @@ void SpineSkeletonLoader::InitPose(const SpineParser& parser)
 			= parser.bones.find(itr->first);
 		const SpineParser::Bone& src = itr_bone->second;
 		s2::Joint* dst = itr->second;
-		dst->SetLocalPose(s2::JointPose(src.pos, src.angle));
+		dst->SetLocalPose(s2::JointPose(src.pos, src.angle, src.scale));
 	}
 	m_root->Update();
 }

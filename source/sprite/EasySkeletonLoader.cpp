@@ -122,7 +122,7 @@ void EasySkeletonLoader::LoadJoints(const Json::Value& val)
 		}
 		if (!dst_joint) {
 			dst_joint = m_joint_loader->Create(spr, s2::JointPose());
-			dst_joint->SetWorldPose(s2::JointPose(spr->GetCenter(), spr->GetAngle()));
+			dst_joint->SetWorldPose(s2::JointPose(spr->GetCenter(), spr->GetAngle(), spr->GetScale()));
 		}
 		m_joints.push_back(dst_joint);
 	}
@@ -176,7 +176,8 @@ void EasySkeletonLoader::InitPose()
 		assert(joint->GetParent());
 		joint->SetLocalPose(s2::world2local(joint->GetParent()->GetWorldPose(), joint->GetWorldPose()));
 		const s2::Sprite* skin = joint->GetSkinSpr();
-		joint->SetSkinPose(s2::world2local(joint->GetWorldPose(), s2::JointPose(skin->GetCenter(), skin->GetAngle())));
+		s2::JointPose local(skin->GetCenter(), skin->GetAngle(), skin->GetScale());
+		joint->SetSkinPose(s2::world2local(joint->GetWorldPose(), local));
 		const std::vector<s2::Joint*>& children = joint->GetChildren();
 		for (int i = 0, n = children.size(); i < n; ++i) {
 			buf.push(children[i]);

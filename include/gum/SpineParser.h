@@ -26,6 +26,9 @@ public:
 		std::string parent;
 		sm::vec2 pos;
 		float angle;
+		sm::vec2 scale;
+
+		Bone() : angle(0), scale(1, 1) {}
 	};
 
 	struct Slot
@@ -41,6 +44,8 @@ public:
 		std::string type;
 		sm::vec2 pos;
 		float angle;
+
+		SkinItem() : angle(0) {}
 	};
 
 	struct Skin
@@ -53,18 +58,24 @@ public:
 	{
 		float time;
 		float rot;
+
+		Rotate() : time(0), rot(0) {}
 	};
 
 	struct Translate
 	{
 		float time;
 		sm::vec2 trans;
+
+		Translate() : time(0) {}
 	};
 
 	struct Scale
 	{
 		float time;
 		sm::vec2 scale;
+
+		Scale() : time(0), scale(1, 1) {}
 	};
 
 	struct AnimBone
