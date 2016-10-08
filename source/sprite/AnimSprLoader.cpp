@@ -35,7 +35,7 @@ void AnimSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	m_spr->SetFPS(anim_val["fps"].asInt());
 
-	m_spr->SetStartTime(anim_val["start"].asInt());
+	m_spr->SetStartRandom(anim_val["start_random"].asBool());
 
 	if (anim_val.isMember("active")) {
 		m_spr->SetActive(anim_val["active"].asBool());
