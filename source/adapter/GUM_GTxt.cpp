@@ -71,7 +71,8 @@ render_glyph(int id, float* _texcoords, float x, float y, float w, float h, stru
 		sl::FilterShader* filter = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
 		filter->SetColor(color.mul.ToABGR(), color.add.ToABGR());
 		filter->Draw(&vertices[0].x, &texcoords[0].x, id);
-	} else if (sl_mgr->GetShaderType() == sl::SPRITE2) {
+	} else {
+		sl_mgr->SetShader(sl::SPRITE2);
 	 	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
 	 	sl_shader->SetColor(color.mul.ToABGR(), color.add.ToABGR());
 	 	sl_shader->SetColorMap(color.rmap.ToABGR(), color.gmap.ToABGR(), color.bmap.ToABGR());
