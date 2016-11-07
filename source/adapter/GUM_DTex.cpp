@@ -146,8 +146,8 @@ _texture_release(int id) {
 }
 
 static void
-_texture_update(const void* pixels, int x, int y, int w, int h, unsigned int id) {
-	RenderContext::Instance()->UpdateTexture(static_cast<const uint8_t*>(pixels), x, y, w, h, id);
+_texture_update(const void* pixels, int w, int h, unsigned int id) {
+	RenderContext::Instance()->UpdateTexture(static_cast<const uint8_t*>(pixels), w, h, id);
 }
 
 static int
