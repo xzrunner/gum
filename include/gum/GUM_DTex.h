@@ -30,6 +30,8 @@ public:
 
 	void OnSize(int w, int h);
 
+	void Update();
+
 	void DebugDraw() const;
 
 protected:

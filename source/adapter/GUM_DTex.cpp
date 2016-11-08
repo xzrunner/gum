@@ -281,6 +281,11 @@ void DTex::OnSize(int w, int h)
 	dtex_set_screen(static_cast<float>(w), static_cast<float>(h), 1);
 }
 
+void DTex::Update()
+{
+	dtexf_update();
+}
+
 void DTex::DebugDraw() const
 {
 	if (sl::Shader* shader = sl::ShaderMgr::Instance()->GetShader()) {
