@@ -65,4 +65,10 @@ void RenderContext::UpdateTexture(const uint8_t* data, int w, int h, int id)
 	render_texture_update(r, id, w, h, data, 0, 0);
 }
 
+void RenderContext::UpdateSubTex(const uint8_t* data, int x, int y, int w, int h, int id)
+{
+	render* r = sl::ShaderMgr::Instance()->GetContext()->GetEJRender();
+	render_texture_subupdate(r, id, data, x, y, w, h);
+}
+
 }

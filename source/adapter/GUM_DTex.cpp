@@ -150,6 +150,11 @@ _texture_update(const void* pixels, int w, int h, unsigned int id) {
 	RenderContext::Instance()->UpdateTexture(static_cast<const uint8_t*>(pixels), w, h, id);
 }
 
+static void
+_sub_tex_update(const void* pixels, int x, int y, int w, int h, unsigned int id) {
+	RenderContext::Instance()->UpdateSubTex(static_cast<const uint8_t*>(pixels), x, y, w, h, id);
+}
+
 static int
 _texture_id(int id) {
 	return id;
@@ -197,7 +202,7 @@ static const char* CFG =
 	"	\"open_cg\" : true,		\n"
 	"	\"open_cs\" : true,		\n"
 	"	\"c1_tex_size\" : 1024, \n"
-	"	\"c2_tex_size\" : 2048	\n"
+	"	\"c2_tex_size\" : 1024	\n"
 	"} \n"
 	;
 
@@ -207,7 +212,7 @@ DTex::DTex()
 		&_draw_begin, &_draw, &_draw_end, &_draw_flush, &_scissor_enable, _scissor_disable);
 
 	dtex_gl_init(&_clear_color);
-	dtex_gl_texture_init(&_texture_create, &_texture_release, &_texture_update, &_texture_id);
+	dtex_gl_texture_init(&_texture_create, &_texture_release, &_texture_update, &_sub_tex_update, &_texture_id);
 
 	dtexf_create(CFG);
 }
