@@ -71,13 +71,13 @@ static void _draw_begin()
 		DRAW_BEGIN();
 	} else {
 		s2::RenderCtxStack::Instance()->Push(s2::RenderCtx(2, 2));
-	}
 
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
-	sl_mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
-	sl_shader->SetColor(0xffffffff, 0);
-	sl_shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
+		sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
+		sl_mgr->SetShader(sl::SPRITE2);
+		sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+		sl_shader->SetColor(0xffffffff, 0);
+		sl_shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
+	}
 }
 
 static void _draw(const float vb[16], int texid)
@@ -91,8 +91,21 @@ static void _draw(const float vb[16], int texid)
 	}
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
-	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
-	sl_shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+	switch (sl_mgr->GetShaderType()) 
+	{
+	case sl::SPRITE2:
+		{
+			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+			shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+		}
+		break;
+	case sl::FILTER:
+		{
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
+			shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+		}
+		break;
+	}
 }
 
 static void _draw_end()
