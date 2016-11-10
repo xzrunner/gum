@@ -173,7 +173,14 @@ _clear_color(float xmin, float ymin, float xmax, float ymax) {
 	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(mgr->GetShader());
 	
 	shader->SetColor(0);
-//	sshader->SetColor(0xff0000ff);
+//	shader->SetColor(0xff0000ff);
+
+	int x, y, w, h;
+	dtex_gl_get_viewport(&x, &y, &w, &h);
+	xmin = w * 0.5f * (xmin - 1);
+	xmax = w * 0.5f * (xmax - 1);
+	ymin = h * 0.5f * (ymin + 1);
+	ymax = h * 0.5f * (ymax + 1);
 
 	std::vector<sm::vec2> triangles(4);
 	triangles[0].Set(xmin, ymin);
