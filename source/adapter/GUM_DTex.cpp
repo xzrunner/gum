@@ -10,6 +10,8 @@
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/Texture.h>
 
+#include <gl/glew.h>
+
 #include <assert.h>
 
 namespace gum
@@ -162,33 +164,34 @@ _texture_id(int id) {
 
 static void 
 _clear_color(float xmin, float ymin, float xmax, float ymax) {
-// 	glDisable(GL_BLEND);
-// 	//	glBlendFunc(GL_ONE, GL_ZERO);
-// 
-// 	ShaderMgr* mgr = ShaderMgr::Instance();
-// 
-// 	mgr->SetShader(ShaderMgr::SHAPE);
-// 	ShapeShader* shader = static_cast<ShapeShader*>(mgr->GetShader(ShaderMgr::SHAPE));
-// 	
-// 	shader->SetColor(s2::Color(0, 0, 0, 0));
-// 
-// 	std::vector<sm::vec2> triangles;
-// 	triangles.push_back(sm::vec2(xmin, ymin));
-// 	triangles.push_back(sm::vec2(xmin, ymax));
-// 	triangles.push_back(sm::vec2(xmax, ymin));
-// 	triangles.push_back(sm::vec2(xmax, ymax));
-// 
-// 	s2::RVG::TriangleStrip(triangles);
-// 
-// 	mgr->Commit();
+	glDisable(GL_BLEND);
+//	glBlendFunc(GL_ONE, GL_ZERO);
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
+	mgr->SetShader(sl::SHAPE2);
+	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(mgr->GetShader());
+	
+	shader->SetColor(0);
+//	sshader->SetColor(0xff0000ff);
+
+	std::vector<sm::vec2> triangles(4);
+	triangles[0].Set(xmin, ymin);
+	triangles[1].Set(xmin, ymax);
+	triangles[2].Set(xmax, ymin);
+	triangles[3].Set(xmax, ymax);
+
+	s2::RVG::TriangleStrip(triangles);
+
+	shader->Commit();
 // 	ShaderLab::Instance()->Flush();
-// 
-// 	//	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-// 	glEnable(GL_BLEND);
+
+//	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	//////////////////////////////////////////////////////////////////////////
 
-	dtex_gl_clear_color(0, 0, 0, 0);
+//	dtex_gl_clear_color(0, 0, 0, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -201,8 +204,8 @@ static const char* CFG =
 	"	\"open_c4\" : false,	\n"
 	"	\"open_cg\" : true,		\n"
 	"	\"open_cs\" : true,		\n"
-	"	\"c1_tex_size\" : 1024, \n"
-	"	\"c2_tex_size\" : 1024	\n"
+	"	\"c1_tex_size\" : 2048, \n"
+	"	\"c2_tex_size\" : 2048	\n"
 	"} \n"
 	;
 
