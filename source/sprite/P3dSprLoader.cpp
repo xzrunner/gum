@@ -53,6 +53,11 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 		local_mode_draw = p_val["local_mode_draw"].asBool();
 	}
 	m_spr->SetLocalModeDraw(local_mode_draw);
+
+	if (p_val.isMember("start_radius")) {
+		float start_radius = p_val["start_radius"].asDouble();
+		m_spr->SetStartRadius(start_radius);
+	}
 }
 
 void P3dSprLoader::LoadBin(const simp::NodeParticle3dSpr* node)
