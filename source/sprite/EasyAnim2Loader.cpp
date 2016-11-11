@@ -1,5 +1,5 @@
 #include "EasyAnim2Loader.h"
-#include "SpriteLoader.h"
+#include "SymbolLoader.h"
 #include "SpriteFactory.h"
 #include "SkeletonIO.h"
 
@@ -17,19 +17,22 @@ namespace gum
 {
 
 EasyAnim2Loader::EasyAnim2Loader(s2::Anim2Symbol* sym, 
-								 const SpriteLoader* spr_loader)
+								 const SymbolLoader* sym_loader)
 	: m_sym(sym)
-	, m_spr_loader(spr_loader)
+	, m_sym_loader(sym_loader)
 	, m_num(0)
+	, m_joint_count(0)
+	, m_joints(NULL)
+	, m_sk(NULL)
 	, m_root(NULL)
 {
 	if (m_sym) {
 		m_sym->AddReference();
 	}
-	if (m_spr_loader) {
-		m_spr_loader->AddReference();
+	if (m_sym_loader) {
+		m_sym_loader->AddReference();
 	} else {
-		m_spr_loader = new SpriteLoader;
+		m_sym_loader = new SymbolLoader;
 	}
 }
 
@@ -38,7 +41,7 @@ EasyAnim2Loader::~EasyAnim2Loader()
 	if (m_sym) {
 		m_sym->RemoveReference();
 	}
-	m_spr_loader->RemoveReference();
+	m_sym_loader->RemoveReference();
 	Clear();
 }
 
@@ -58,10 +61,15 @@ void EasyAnim2Loader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	LoadSprites(val["sprite"], dir);
 	LoadJoints(val["skeleton"]);
+
+	m_sk = (rg_skeleton*)malloc(SIZEOF_RG_SKELETON);
+	m_sk->joints = m_joints;
+	m_sk->joint_count = m_joint_count;
+
 	InitRoot();
 	InitPose();
 
-	m_sym->SetSkeleton(rg_skeleton_create(&m_joints[0], m_joints.size()));
+	m_sym->SetSkeleton(m_sk);
 }
 
 void EasyAnim2Loader::Clear()
@@ -71,8 +79,6 @@ void EasyAnim2Loader::Clear()
 	for_each(m_sprs.begin(), m_sprs.end(), cu::RemoveRefFunctor<s2::Sprite>());
 	m_sprs.clear();
 
-	m_joints.clear();
-
 	m_root = NULL;
 }
 
@@ -80,14 +86,12 @@ void EasyAnim2Loader::LoadSprites(const Json::Value& val, const std::string& dir
 {
 	m_sprs.reserve(m_num);
 	for (int i = 0; i < m_num; ++i) {
-		m_sprs.push_back(m_spr_loader->Create(val[i], dir));
+//		m_sprs.push_back(m_sym_loader->Create(val[i], dir));
 	}
 }
 
 void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 {
-	m_joints.reserve(m_num);
-
 	std::vector<Joint> src_joints;
 	std::vector<Joint> dst_joints;
 
@@ -134,8 +138,9 @@ void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 	}
 
 	// create
-	m_joints.reserve(dst_joints.size());
-	for (int i = 0, n = dst_joints.size(); i < n; ++i) 
+	m_joint_count = dst_joints.size();
+	m_joints = (rg_joint**)malloc(sizeof(rg_joint*) * m_joint_count);
+	for (int i = 0; i < m_joint_count; ++i) 
 	{
 		const Joint& src = dst_joints[i];
 		rg_joint* dst = (rg_joint*)malloc(sizeof(struct rg_joint) + sizeof(uint8_t) * src.children.size());
@@ -153,21 +158,16 @@ void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 			dst->children[j] = src.children[i];
 		}
 
-		m_joints.push_back(dst);
+		m_joints[i] = dst;
 	}
 }
 
 void EasyAnim2Loader::InitRoot()
 {
-	assert(!m_joints.empty());
+	assert(m_joint_count > 0);
 	m_root = m_joints[0];
-
-	while (true) {
-		int parent = m_root->parent;
-		if (parent == -1) {
-			break;
-		}
-		m_root = m_joints[parent];
+	while (m_root->parent != 0xff) {
+		m_root = m_joints[m_root->parent];
 	}
 }
 
@@ -177,38 +177,41 @@ void EasyAnim2Loader::InitPose()
 	sm::vec2 root_trans(m_root->world_pose.trans[0], m_root->world_pose.trans[1]);
 	for (int i = 0; i < m_root->children_count; ++i)
 	{
-		rg_joint* child = m_root->children[i];
+		rg_joint* child = m_joints[m_root->children[i]];
 		sm::vec2 child_trans(child->world_pose.trans[0], child->world_pose.trans[1]);
 		float rot = sm::get_line_angle(root_trans, child_trans);
-		std::queue<s2::Joint*> buf;
+		std::queue<rg_joint*> buf;
 		buf.push(child);
 		while (!buf.empty()) {
-			s2::Joint* joint = buf.front(); buf.pop();
-			s2::JointPose world = joint->GetWorldPose();
-			world.rot += rot;
-			joint->SetWorldPose(world);
-			const std::vector<s2::Joint*>& children = joint->GetChildren();
-			for (int i = 0, n = children.size(); i < n; ++i) {
-				buf.push(children[i]);
+			rg_joint* joint = buf.front(); buf.pop();
+			rg_joint_pose* world = &joint->world_pose;
+			world->rot += rot;
+			for (int i = 0; i < joint->children_count; ++i) {
+				buf.push(m_joints[joint->children[i]]);
 			}
 		}
 	}
 
 	// local
-	std::queue<s2::Joint*> buf;
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		buf.push(children[i]);
+	std::queue<rg_joint*> buf;
+	for (int i = 0; i < m_root->children_count; ++i) {
+		buf.push(m_joints[m_root->children[i]]);
 	}
 	while (!buf.empty()) {
-		s2::Joint* joint = buf.front(); buf.pop();
-		assert(joint->GetParent());
-		joint->SetLocalPose(s2::world2local(joint->GetParent()->GetWorldPose(), joint->GetWorldPose()));
-		const s2::Sprite* skin = joint->GetSkinSpr();
-		s2::JointPose local(skin->GetCenter(), skin->GetAngle(), skin->GetScale());
-		joint->SetSkinPose(s2::world2local(joint->GetWorldPose(), local));
-		const std::vector<s2::Joint*>& children = joint->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			buf.push(children[i]);
+		rg_joint* joint = buf.front(); buf.pop();
+		assert(joint->parent != 0xff);
+		rg_joint* parent = m_joints[joint->parent];
+		rg_world2local(&parent->world_pose, &joint->world_pose, &joint->local_pose);
+
+// 		const s2::Sprite* skin = joint->GetSkinSpr();
+// 		s2::JointPose local(skin->GetCenter(), skin->GetAngle(), skin->GetScale());
+// 		joint->SetSkinPose(s2::world2local(joint->GetWorldPose(), local));
+
+// 		const s2::Sprite* spr = joint->skin.ud
+// 		rg_world2local();
+
+		for (int i = 0; i < joint->children_count; ++i) {
+			buf.push(m_joints[joint->children[i]]);
 		}
 	}
 }
@@ -217,7 +220,7 @@ void EasyAnim2Loader::CopyJointPose(rg_joint_pose* dst, const s2::JointPose& src
 {
 	dst->trans[0] = src.trans.x;
 	dst->trans[1] = src.trans.y;
-	dst->rot = src.rot;
+	dst->rot      = src.rot;
 	dst->scale[0] = src.scale.x;
 	dst->scale[1] = src.scale.y;
 }

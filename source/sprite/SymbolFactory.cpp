@@ -11,6 +11,7 @@
 #include "TextboxLoader.h"
 #include "ComplexSymLoader.h"
 #include "AnimSymLoader.h"
+#include "Anim2SymLoader.h"
 #include "P3dSymLoader.h"
 #include "P2dSymLoader.h"
 #include "ShapeSymLoader.h"
@@ -30,6 +31,7 @@
 #include <sprite2/TextureSymbol.h>
 #include <sprite2/ComplexSymbol.h>
 #include <sprite2/AnimSymbol.h>
+#include <sprite2/Anim2Symbol.h>
 #include <sprite2/Particle3dSymbol.h>
 #include <sprite2/Particle2dSymbol.h>
 #include <sprite2/ShapeSymbol.h>
@@ -128,6 +130,14 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		{
 			s2::AnimSymbol* sym = new s2::AnimSymbol();
 			AnimSymLoader loader(sym);
+			loader.LoadJson(filepath);
+			ret = sym;
+		}
+		break;
+	case s2::SYM_ANIM2:
+		{
+			s2::Anim2Symbol* sym = new s2::Anim2Symbol;
+			Anim2SymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}

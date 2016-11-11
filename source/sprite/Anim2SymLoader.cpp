@@ -1,21 +1,19 @@
 #include "Anim2SymLoader.h"
 #include "FilepathHelper.h"
-#include "EasySkeletonLoader.h"
-#include "SpineSkeletonLoader.h"
+#include "EasyAnim2Loader.h"
+#include "SpineAnim2Loader.h"
 
-#include <sprite2/SkeletonSymbol.h>
+#include <sprite2/Anim2Symbol.h>
 
 #include <fstream>
 
 namespace gum
 {
 
-Anim2SymLoader::Anim2SymLoader(s2::SkeletonSymbol* sym, 
-							   const SpriteLoader* spr_loader,
-							   const JointLoader* joint_loader)
+Anim2SymLoader::Anim2SymLoader(s2::Anim2Symbol* sym, 
+							   const SymbolLoader* sym_loader)
 	: m_sym(sym)
-	, m_spr_loader(spr_loader)
-	, m_joint_loader(joint_loader)
+	, m_sym_loader(sym_loader)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -46,10 +44,10 @@ void Anim2SymLoader::LoadJson(const std::string& filepath)
 	fin.close();
 
 	if (val.isMember("skeleton") && !val["skeleton"].isArray() && val["skeleton"].isMember("spine")) {
-		SpineSkeletonLoader loader(m_sym, m_spr_loader, m_joint_loader);
+		SpineAnim2Loader loader(m_sym, m_sym_loader);
 		loader.LoadJson(val, dir);
 	} else {
-		EasySkeletonLoader loader(m_sym, m_spr_loader, m_joint_loader);
+		EasyAnim2Loader loader(m_sym, m_sym_loader);
 		loader.LoadJson(val, dir);
 	}
 }

@@ -30,7 +30,7 @@ private:
 	s2::SkeletonSymbol* m_sym;
 
 	const SpriteLoader* m_spr_loader;
-	const JointLoader* m_joint_loader;
+	const JointLoader*  m_joint_loader;
 
 }; // SkeletonSymLoader
 
