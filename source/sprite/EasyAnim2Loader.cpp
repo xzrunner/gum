@@ -69,7 +69,7 @@ void EasyAnim2Loader::LoadJson(const Json::Value& val, const std::string& dir)
 	InitRoot();
 	InitPose();
 
-	m_sym->SetSkeleton(m_sk);
+//	m_sym->SetSkeleton(m_sk);
 }
 
 void EasyAnim2Loader::Clear()

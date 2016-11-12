@@ -10,6 +10,7 @@ namespace s2 { class Anim2Symbol; class Symbol; }
 
 struct rg_joint;
 struct rg_skeleton;
+struct rg_dopesheet;
 
 namespace gum
 {
@@ -40,6 +41,8 @@ private:
 	void InitRoot();
  	void InitPose(const SpineParser& parser);
 
+	void LoadDopesheets(const SpineParser& parser);
+
 private:
 	struct JointData
 	{
@@ -65,10 +68,12 @@ private:
 	std::map<std::string, int> m_map2jointdata;
 
 	// dst
-	int          m_joint_count;
-	rg_joint**   m_joints;
-	rg_skeleton* m_sk;
-	rg_joint*    m_root;
+	int            m_joint_count;
+	rg_joint**     m_joints;
+	rg_skeleton*   m_sk;
+	rg_joint*      m_root;
+	rg_dopesheet** m_sheets;
+	int            m_max_frame;
 
 }; // SpineAnim2Loader
 
