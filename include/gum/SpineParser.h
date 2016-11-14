@@ -86,10 +86,18 @@ public:
 		std::vector<Scale> scales;
 	};
 
-	struct Animation
+	struct AnimSlot
 	{
 		std::string name;
+		std::vector<std::pair<float, std::string> > skins;
+	};
+
+	struct Animation
+	{
+
+		std::string name;
 		std::vector<AnimBone> bones;
+		std::vector<AnimSlot> slots;
 	};
 
 	const SkinItem* QuerySkin(const Slot& slot) const;
@@ -104,6 +112,7 @@ private:
 	
 	void ParseAnimations(const Json::Value& val);
 	void ParseAnimBond(const Json::Value& val, AnimBone& bone);
+	void ParseAnimSlot(const Json::Value& val, AnimSlot& slot);
 
 public:
 	bool m_parse_anim;
@@ -114,7 +123,7 @@ public:
 
 	std::vector<Slot> slots;
 
-	std::map<std::string, Skin> skins;
+	std::vector<Skin> skins;
 
 	std::vector<Animation> anims;
 

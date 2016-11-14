@@ -147,8 +147,8 @@ void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 
 		dst->name = NULL;
 
-		CopyJointPose(&dst->skin.local, src.skin_pose);
-		dst->skin.ud = src.skin;
+//		CopyJointPose(&dst->skin.local, src.skin_pose);
+//		dst->skin.ud = src.skin;
 
 		CopyJointPose(&dst->world_pose, src.world_pose);
 

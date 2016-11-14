@@ -1,8 +1,11 @@
 #ifndef _GUM_SPINE_ANIM2_LOADER_H_
 #define _GUM_SPINE_ANIM2_LOADER_H_
 
+#include "SpineParser.h"
+
 #include <CU_Uncopyable.h>
 #include <rigging/rg_joint_pose.h>
+#include <rigging/rg_skin.h>
 
 #include <json/value.h>
 
@@ -31,28 +34,30 @@ public:
 private:
 	void Clear();
 
-	void LoadSprites(const SpineParser& parser, const std::string& img_dir);
-
 	void LoadJointsData(const SpineParser& parser);
 	void ConnectJoints(const SpineParser& parser);
 
+	void CreateSkins(const SpineParser& parser, const std::string& img_dir);
 	void CreateJoints();
 	void CreateSkeleton();
 	void InitRoot();
  	void InitPose(const SpineParser& parser);
 
 	void LoadDopesheets(const SpineParser& parser);
+	void LoadDopesheetsFrames(const SpineParser::AnimBone* bone, struct rg_dopesheet* ds);
+	void LoadDopesheetsSlots(const SpineParser::AnimSlot* slot, struct rg_dopesheet* ds);
 
 private:
 	struct JointData
 	{
 		std::string name;
+		std::string bone;
+		std::string skin;
 
-		s2::Symbol* skin;
-		rg_joint_pose pose;
 		std::vector<int> children;
 
-		JointData();
+		JointData(const std::string& name, const std::string& bone, const std::string& skin) 
+			: name(name), bone(bone), skin(skin) {}
 	};
 
 private:
@@ -61,13 +66,14 @@ private:
 	const SymbolLoader* m_spr_loader;
 
 	int m_num;
-	std::vector<s2::Symbol*> m_syms;
 
 	// middle
 	std::vector<JointData>     m_joints_data;
-	std::map<std::string, int> m_map2jointdata;
+	std::map<std::string, int> m_bone2joint;
+	std::map<std::string, int> m_map2skin;
 
 	// dst
+	std::vector<rg_skin> m_skins;
 	int            m_joint_count;
 	rg_joint**     m_joints;
 	rg_skeleton*   m_sk;
