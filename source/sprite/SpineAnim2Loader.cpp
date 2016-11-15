@@ -256,7 +256,7 @@ void SpineAnim2Loader::InitPose(const SpineParser& parser)
 		dst->local_pose.scale[0] = src.scale.x;
 		dst->local_pose.scale[1] = src.scale.y;
 
-		rg_joint_pose_identity(&dst->world_pose);
+		rg_pose_srt_identity(&dst->world_pose);
 	}
 	rg_joint_update(m_root, m_sk);
 }

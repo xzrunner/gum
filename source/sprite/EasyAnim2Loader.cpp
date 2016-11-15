@@ -150,7 +150,7 @@ void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 //		CopyJointPose(&dst->skin.local, src.skin_pose);
 //		dst->skin.ud = src.skin;
 
-		CopyJointPose(&dst->world_pose, src.world_pose);
+//		CopyJointPose(&dst->world_pose, src.world_pose);
 
 		dst->parent = src.parent;
 		dst->children_count = src.children.size();
@@ -174,49 +174,49 @@ void EasyAnim2Loader::InitRoot()
 void EasyAnim2Loader::InitPose()
 {
 	// world
-	sm::vec2 root_trans(m_root->world_pose.trans[0], m_root->world_pose.trans[1]);
-	for (int i = 0; i < m_root->children_count; ++i)
-	{
-		rg_joint* child = m_joints[m_root->children[i]];
-		sm::vec2 child_trans(child->world_pose.trans[0], child->world_pose.trans[1]);
-		float rot = sm::get_line_angle(root_trans, child_trans);
-		std::queue<rg_joint*> buf;
-		buf.push(child);
-		while (!buf.empty()) {
-			rg_joint* joint = buf.front(); buf.pop();
-			rg_joint_pose* world = &joint->world_pose;
-			world->rot += rot;
-			for (int i = 0; i < joint->children_count; ++i) {
-				buf.push(m_joints[joint->children[i]]);
-			}
-		}
-	}
+	//sm::vec2 root_trans(m_root->world_pose.trans[0], m_root->world_pose.trans[1]);
+	//for (int i = 0; i < m_root->children_count; ++i)
+	//{
+	//	rg_joint* child = m_joints[m_root->children[i]];
+	//	sm::vec2 child_trans(child->world_pose.trans[0], child->world_pose.trans[1]);
+	//	float rot = sm::get_line_angle(root_trans, child_trans);
+	//	std::queue<rg_joint*> buf;
+	//	buf.push(child);
+	//	while (!buf.empty()) {
+	//		rg_joint* joint = buf.front(); buf.pop();
+	//		rg_pose_srt* world = &joint->world_pose;
+	//		world->rot += rot;
+	//		for (int i = 0; i < joint->children_count; ++i) {
+	//			buf.push(m_joints[joint->children[i]]);
+	//		}
+	//	}
+	//}
 
 	// local
-	std::queue<rg_joint*> buf;
-	for (int i = 0; i < m_root->children_count; ++i) {
-		buf.push(m_joints[m_root->children[i]]);
-	}
-	while (!buf.empty()) {
-		rg_joint* joint = buf.front(); buf.pop();
-		assert(joint->parent != 0xff);
-		rg_joint* parent = m_joints[joint->parent];
-		rg_world2local(&parent->world_pose, &joint->world_pose, &joint->local_pose);
+	//std::queue<rg_joint*> buf;
+	//for (int i = 0; i < m_root->children_count; ++i) {
+	//	buf.push(m_joints[m_root->children[i]]);
+	//}
+	//while (!buf.empty()) {
+	//	rg_joint* joint = buf.front(); buf.pop();
+	//	assert(joint->parent != 0xff);
+	//	rg_joint* parent = m_joints[joint->parent];
+	//	rg_world2local(&parent->world_pose, &joint->world_pose, &joint->local_pose);
 
-// 		const s2::Sprite* skin = joint->GetSkinSpr();
-// 		s2::JointPose local(skin->GetCenter(), skin->GetAngle(), skin->GetScale());
-// 		joint->SetSkinPose(s2::world2local(joint->GetWorldPose(), local));
+ //		const s2::Sprite* skin = joint->GetSkinSpr();
+ //		s2::JointPose local(skin->GetCenter(), skin->GetAngle(), skin->GetScale());
+ //		joint->SetSkinPose(s2::world2local(joint->GetWorldPose(), local));
 
-// 		const s2::Sprite* spr = joint->skin.ud
-// 		rg_world2local();
+ //		const s2::Sprite* spr = joint->skin.ud
+ //		rg_world2local();
 
-		for (int i = 0; i < joint->children_count; ++i) {
-			buf.push(m_joints[joint->children[i]]);
-		}
-	}
+	//	for (int i = 0; i < joint->children_count; ++i) {
+	//		buf.push(m_joints[joint->children[i]]);
+	//	}
+	//}
 }
 
-void EasyAnim2Loader::CopyJointPose(rg_joint_pose* dst, const s2::JointPose& src)
+void EasyAnim2Loader::CopyJointPose(rg_pose_srt* dst, const s2::JointPose& src)
 {
 	dst->trans[0] = src.trans.x;
 	dst->trans[1] = src.trans.y;

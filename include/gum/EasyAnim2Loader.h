@@ -7,7 +7,7 @@
 #include <json/json.h>
 
 struct rg_joint;
-struct rg_joint_pose;
+struct rg_pose_srt;
 struct rg_skeleton;
 
 namespace s2 { class Anim2Symbol; class Sprite; }
@@ -34,7 +34,7 @@ private:
 	void InitRoot();
 	void InitPose();
 
-	static void CopyJointPose(rg_joint_pose* dst, const s2::JointPose& src);
+	static void CopyJointPose(rg_pose_srt* dst, const s2::JointPose& src);
 
 private:
 	struct Joint
