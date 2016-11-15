@@ -15,7 +15,7 @@
 namespace gum
 {
 
-static const int ANIM_IDX = 0;
+static const int ANIM_IDX = 5;
 
 SpineAnim2Loader::SpineAnim2Loader(s2::Anim2Symbol* sym, 
 								   const SymbolLoader* sym_loader)
@@ -300,15 +300,15 @@ void SpineAnim2Loader::InitPose(const SpineParser& parser)
 		dst->local_pose.scale[0] = src.scale.x;
 		dst->local_pose.scale[1] = src.scale.y;
 
-		rg_pose_srt_identity(&dst->world_pose);
+		rg_pose_mat_identity(&dst->world_pose);
 	}
+
+	rg_pose_mat_build(&m_root->world_pose, &m_root->local_pose);
 	rg_joint_update(m_root, m_sk);
 }
 
 void SpineAnim2Loader::LoadDopesheets(const SpineParser& parser)
 {
-	static const int FPS = 30;
-
 	const SpineParser::Animation& anim = parser.anims[ANIM_IDX];
 
 	m_sheets = (rg_dopesheet**)malloc(sizeof(struct rg_dopesheet*) * m_sk->joint_count);
