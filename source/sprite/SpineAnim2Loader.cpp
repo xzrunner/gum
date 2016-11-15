@@ -15,6 +15,8 @@
 namespace gum
 {
 
+static const int ANIM_IDX = 0;
+
 SpineAnim2Loader::SpineAnim2Loader(s2::Anim2Symbol* sym, 
 								   const SymbolLoader* sym_loader)
 	: m_sym(sym)
@@ -73,6 +75,7 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& 
 	ConnectJoints(parser);
 
 	CreateSkins(parser, img_dir);
+	CreateSlots(parser);
 	CreateJoints();
 	CreateSkeleton();
 
@@ -97,33 +100,45 @@ void SpineAnim2Loader::Clear()
 
 void SpineAnim2Loader::LoadJointsData(const SpineParser& parser)
 {
-	for (int i = 0, n = parser.slots.size(); i < n; ++i)
-	{
-		const SpineParser::Slot& slot = parser.slots[i];
-		const SpineParser::SkinItem* item = parser.QuerySkin(slot);
-		if (!item) {
-			continue;
-		}
-
-		m_bone2joint.insert(std::make_pair(slot.bone, m_joints_data.size()));
-		m_joints_data.push_back(JointData(slot.name, slot.bone, slot.attachment));
-	}
-
 	std::map<std::string, SpineParser::Bone>::const_iterator itr 
 		= parser.bones.begin();
 	for ( ; itr != parser.bones.end(); ++itr)
 	{
 		const SpineParser::Bone& bone = itr->second;
-		std::map<std::string, int>::iterator itr_joint 
-			= m_bone2joint.find(bone.name);
-		if (itr_joint != m_bone2joint.end()) {
-			continue;
-		}
-
 		m_bone2joint.insert(std::make_pair(bone.name, m_joints_data.size()));
-		m_joints_data.push_back(JointData(bone.name, bone.name, ""));
+		m_joints_data.push_back(JointData(bone.name));
 	}
 }
+
+//void SpineAnim2Loader::LoadJointsData(const SpineParser& parser)
+//{
+//	for (int i = 0, n = parser.slots.size(); i < n; ++i)
+//	{
+//		const SpineParser::Slot& slot = parser.slots[i];
+//		const SpineParser::SkinItem* item = parser.QuerySkin(slot);
+//		if (!item) {
+//			continue;
+//		}
+//
+//		m_bone2joint.insert(std::make_pair(slot.bone, m_joints_data.size()));
+//		m_joints_data.push_back(JointData(slot.name, slot.bone, slot.attachment));
+//	}
+//
+//	std::map<std::string, SpineParser::Bone>::const_iterator itr 
+//		= parser.bones.begin();
+//	for ( ; itr != parser.bones.end(); ++itr)
+//	{
+//		const SpineParser::Bone& bone = itr->second;
+//		std::map<std::string, int>::iterator itr_joint 
+//			= m_bone2joint.find(bone.name);
+//		if (itr_joint != m_bone2joint.end()) {
+//			continue;
+//		}
+//
+//		m_bone2joint.insert(std::make_pair(bone.name, m_joints_data.size()));
+//		m_joints_data.push_back(JointData(bone.name, bone.name, ""));
+//	}
+//}
 
 void SpineAnim2Loader::ConnectJoints(const SpineParser& parser)
 {
@@ -172,6 +187,9 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string&
 		for (int j = 0, m = parser.skins[i].items.size(); j < m; ++j) 
 		{
 			const SpineParser::SkinItem& src = parser.skins[i].items[j];
+			if (src.type == "boundingbox") {
+				continue;
+			}
 
 			m_map2skin.insert(std::make_pair(src.name, ptr++));
 
@@ -188,6 +206,28 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string&
 	}
 }
 
+void SpineAnim2Loader::CreateSlots(const SpineParser& parser)
+{
+	m_slots.reserve(parser.slots.size());
+	for (int i = 0, n = parser.slots.size(); i < n; ++i)
+	{
+		const SpineParser::Slot& src = parser.slots[i];
+		rg_slot dst;
+
+		std::map<std::string, int>::iterator itr_joint = m_bone2joint.find(src.bone);
+		assert(itr_joint != m_bone2joint.end());
+		dst.joint = itr_joint->second;
+
+		std::map<std::string, int>::iterator itr_skin = m_map2skin.find(src.attachment);
+		if (itr_skin == m_map2skin.end()) {
+			continue;
+		}
+		dst.skin = itr_skin->second;
+
+		m_slots.push_back(dst);
+	}
+}
+
 void SpineAnim2Loader::CreateJoints()
 {
 	m_joint_count = m_joints_data.size();
@@ -196,13 +236,7 @@ void SpineAnim2Loader::CreateJoints()
 	{
 		const JointData& src = m_joints_data[i];
 		rg_joint* dst = (rg_joint*)malloc(SIZEOF_RG_JOINT + sizeof(uint8_t) * src.children.size());
-		dst->name           = strdup(src.bone.c_str());
-		std::map<std::string, int>::iterator itr = m_map2skin.find(src.skin);
-		if (itr != m_map2skin.end()) {
-			dst->skin = itr->second;
-		} else {
-			dst->skin = -1;
-		}
+		dst->name           = strdup(src.name.c_str());
 		dst->parent         = 0xff;
 		dst->children_count = src.children.size();
 		for (int j = 0; j < dst->children_count; ++j) {
@@ -220,13 +254,23 @@ void SpineAnim2Loader::CreateJoints()
 
 void SpineAnim2Loader::CreateSkeleton()
 {
-	m_sk = (rg_skeleton*)malloc(SIZEOF_RG_SKELETON + SIZEOF_RG_SKIN * m_skins.size());
+	int skins_sz = SIZEOF_RG_SKIN * m_skins.size();
+	int slots_sz = SIZEOF_RG_SLOT * m_slots.size();
+	m_sk = (rg_skeleton*)malloc(SIZEOF_RG_SKELETON + skins_sz + slots_sz);
+
 	m_sk->joints = m_joints;
 	m_sk->joint_count = m_joint_count;
 	m_sk->root = -1;
+
 	m_sk->skin_count = m_skins.size();
 	for (int i = 0; i < m_sk->skin_count; ++i) {
 		m_sk->skins[i] = m_skins[i];
+	}
+
+	m_sk->slot_count = m_slots.size();
+	m_sk->slots = (rg_slot*)((intptr_t)(m_sk + 1) + skins_sz);
+	for (int i = 0; i < m_sk->slot_count; ++i) {
+		m_sk->slots[i] = m_slots[i];
 	}
 }
 
@@ -246,7 +290,7 @@ void SpineAnim2Loader::InitPose(const SpineParser& parser)
 	for (int i = 0; i < m_joint_count; ++i) 
 	{
 		std::map<std::string, SpineParser::Bone>::const_iterator itr_bone 
-			= parser.bones.find(m_joints_data[i].bone);
+			= parser.bones.find(m_joints_data[i].name);
 		const SpineParser::Bone& src = itr_bone->second;
 
 		rg_joint* dst = m_joints[i];
@@ -265,13 +309,12 @@ void SpineAnim2Loader::LoadDopesheets(const SpineParser& parser)
 {
 	static const int FPS = 30;
 
-	static const int ANIM_IDX = 0;
 	const SpineParser::Animation& anim = parser.anims[ANIM_IDX];
 
 	m_sheets = (rg_dopesheet**)malloc(sizeof(struct rg_dopesheet*) * m_sk->joint_count);
 	for (int i = 0; i < m_sk->joint_count; ++i) 
 	{
-		const std::string& name = m_joints_data[i].bone;
+		const std::string& name = m_joints_data[i].name;
 		const SpineParser::AnimBone* bone = NULL;
 		for (int j = 0, m = anim.bones.size(); j < m; ++j) {
 			if (name == anim.bones[j].name) {
@@ -279,7 +322,10 @@ void SpineAnim2Loader::LoadDopesheets(const SpineParser& parser)
 				break;
 			}
 		}
-		assert(bone);
+		if (!bone) {
+			m_sheets[i] = NULL;
+			continue;
+		}
 
 		const SpineParser::AnimSlot* slot = NULL;
 		for (int j = 0, m = anim.slots.size(); j < m; ++j) {

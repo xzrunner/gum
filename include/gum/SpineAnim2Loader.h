@@ -6,6 +6,7 @@
 #include <CU_Uncopyable.h>
 #include <rigging/rg_pose_srt.h>
 #include <rigging/rg_skin.h>
+#include <rigging/rg_slot.h>
 
 #include <json/value.h>
 
@@ -38,6 +39,7 @@ private:
 	void ConnectJoints(const SpineParser& parser);
 
 	void CreateSkins(const SpineParser& parser, const std::string& img_dir);
+	void CreateSlots(const SpineParser& parser);
 	void CreateJoints();
 	void CreateSkeleton();
 	void InitRoot();
@@ -51,13 +53,11 @@ private:
 	struct JointData
 	{
 		std::string name;
-		std::string bone;
-		std::string skin;
 
 		std::vector<int> children;
 
-		JointData(const std::string& name, const std::string& bone, const std::string& skin) 
-			: name(name), bone(bone), skin(skin) {}
+		JointData(const std::string& name) 
+			: name(name) {}
 	};
 
 private:
@@ -74,6 +74,7 @@ private:
 
 	// dst
 	std::vector<rg_skin> m_skins;
+	std::vector<rg_slot> m_slots;
 	int            m_joint_count;
 	rg_joint**     m_joints;
 	rg_skeleton*   m_sk;
