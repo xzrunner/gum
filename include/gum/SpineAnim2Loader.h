@@ -14,7 +14,8 @@ namespace s2 { class Anim2Symbol; class Symbol; }
 
 struct rg_joint;
 struct rg_skeleton;
-struct rg_dopesheet;
+struct rg_ds_joint;
+struct rg_ds_skin;
 
 namespace gum
 {
@@ -45,9 +46,11 @@ private:
 	void InitRoot();
  	void InitPose(const SpineParser& parser);
 
-	void LoadDopesheets(const SpineParser& parser);
-	void LoadDopesheetsFrames(const SpineParser::AnimBone* bone, struct rg_dopesheet* ds);
-	void LoadDopesheetsSlots(const SpineParser::AnimSlot* slot, struct rg_dopesheet* ds);
+	void LoadDopesheetsJoints(const SpineParser::Animation& anim);
+	void LoadDopesheetsJoints(const SpineParser::AnimBone* bone, struct rg_ds_joint* ds);
+	
+	void LoadDopesheetsSkins(const SpineParser::Animation& anim);
+	void LoadDopesheetsSkins(const SpineParser::AnimSlot* slot, struct rg_ds_skin* ds);
 
 private:
 	struct JointData
@@ -60,6 +63,14 @@ private:
 			: name(name) {}
 	};
 
+	struct SlotData
+	{
+		std::string name;
+
+		SlotData(const std::string& name) 
+			: name(name) {}
+	};
+
 private:
 	s2::Anim2Symbol* m_sym;
 
@@ -69,6 +80,7 @@ private:
 
 	// middle
 	std::vector<JointData>     m_joints_data;
+	std::vector<SlotData>      m_slots_data;
 	std::map<std::string, int> m_bone2joint;
 	std::map<std::string, int> m_map2skin;
 
@@ -79,7 +91,8 @@ private:
 	rg_joint**     m_joints;
 	rg_skeleton*   m_sk;
 	rg_joint*      m_root;
-	rg_dopesheet** m_sheets;
+	rg_ds_joint**  m_ds_joints;
+	rg_ds_skin**   m_ds_skins;
 	int            m_max_frame;
 
 }; // SpineAnim2Loader

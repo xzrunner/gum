@@ -15,7 +15,7 @@
 namespace gum
 {
 
-static const int ANIM_IDX = 5;
+static const int ANIM_IDX = 0;
 
 SpineAnim2Loader::SpineAnim2Loader(s2::Anim2Symbol* sym, 
 								   const SymbolLoader* sym_loader)
@@ -26,7 +26,8 @@ SpineAnim2Loader::SpineAnim2Loader(s2::Anim2Symbol* sym,
 	, m_joints(NULL)
 	, m_sk(NULL)
 	, m_root(NULL)
-	, m_sheets(NULL)
+	, m_ds_joints(NULL)
+	, m_ds_skins(NULL)
 	, m_max_frame(0)
 {
 	if (m_sym) {
@@ -82,11 +83,13 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& 
 	InitRoot();
 	InitPose(parser);
 
-	LoadDopesheets(parser);
+	LoadDopesheetsJoints(parser.anims[ANIM_IDX]);
+	LoadDopesheetsSkins(parser.anims[ANIM_IDX]);
 
 	rg_animation* anim = (rg_animation*)malloc(SIZEOF_RG_ANIM);
 	anim->sk = m_sk;
-	anim->ds = m_sheets;
+	anim->ds.joints = m_ds_joints;
+	anim->ds.skins = m_ds_skins;
 	anim->max_frame = m_max_frame;
 	m_sym->SetAnim(anim);
 }
@@ -218,11 +221,13 @@ void SpineAnim2Loader::CreateSlots(const SpineParser& parser)
 		assert(itr_joint != m_bone2joint.end());
 		dst.joint = itr_joint->second;
 
+		dst.skin = 0xffff;
 		std::map<std::string, int>::iterator itr_skin = m_map2skin.find(src.attachment);
-		if (itr_skin == m_map2skin.end()) {
-			continue;
+		if (itr_skin != m_map2skin.end()) {
+			dst.skin = itr_skin->second;
 		}
-		dst.skin = itr_skin->second;
+
+		m_slots_data.push_back(src.name);
 
 		m_slots.push_back(dst);
 	}
@@ -307,11 +312,9 @@ void SpineAnim2Loader::InitPose(const SpineParser& parser)
 	rg_joint_update(m_root, m_sk);
 }
 
-void SpineAnim2Loader::LoadDopesheets(const SpineParser& parser)
+void SpineAnim2Loader::LoadDopesheetsJoints(const SpineParser::Animation& anim)
 {
-	const SpineParser::Animation& anim = parser.anims[ANIM_IDX];
-
-	m_sheets = (rg_dopesheet**)malloc(sizeof(struct rg_dopesheet*) * m_sk->joint_count);
+	m_ds_joints = (rg_ds_joint**)malloc(sizeof(struct rg_ds_joint*) * m_sk->joint_count);
 	for (int i = 0; i < m_sk->joint_count; ++i) 
 	{
 		const std::string& name = m_joints_data[i].name;
@@ -323,36 +326,22 @@ void SpineAnim2Loader::LoadDopesheets(const SpineParser& parser)
 			}
 		}
 		if (!bone) {
-			m_sheets[i] = NULL;
+			m_ds_joints[i] = NULL;
 			continue;
 		}
 
-		const SpineParser::AnimSlot* slot = NULL;
-		for (int j = 0, m = anim.slots.size(); j < m; ++j) {
-			if (name == anim.slots[j].name) {
-				slot = &anim.slots[j];
-				break;
-			}
-		}
-
 		int frame_count = bone->translates.size() * 2 + bone->rotates.size() + bone->scales.size() * 2;
-		int skin_count = slot ? slot->skins.size() : 0;
-
-		int sz = SIZEOF_RG_DOPESHEET + sizeof(struct rg_frame) * frame_count + sizeof(struct rg_frame_skin) * skin_count;
-		struct rg_dopesheet* ds = (struct rg_dopesheet*)malloc(sz);
+		int sz = SIZEOF_RG_DOPESHEET_JOINT + sizeof(struct rg_ds_joint_frame) * frame_count;
+		struct rg_ds_joint* ds = (struct rg_ds_joint*)malloc(sz);
 		memset(ds, 0, sz);
 
-		LoadDopesheetsFrames(bone, ds);
-		if (slot) {
-			ds->skins = (rg_frame_skin*)((intptr_t)(ds + 1) + sizeof(struct rg_frame) * frame_count);
-			LoadDopesheetsSlots(slot, ds);
-		}
+		LoadDopesheetsJoints(bone, ds);
 	
-		m_sheets[i] = ds;
+		m_ds_joints[i] = ds;
 	}
 }
 
-void SpineAnim2Loader::LoadDopesheetsFrames(const SpineParser::AnimBone* bone, struct rg_dopesheet* ds)
+void SpineAnim2Loader::LoadDopesheetsJoints(const SpineParser::AnimBone* bone, struct rg_ds_joint* ds)
 {
 	int frame_ptr = 0;
 	if (!bone->translates.empty())
@@ -366,7 +355,7 @@ void SpineAnim2Loader::LoadDopesheetsFrames(const SpineParser::AnimBone* bone, s
 			m_max_frame = max_frame;
 		}
 
-		rg_frame* frame = &ds->frames[frame_ptr];
+		rg_ds_joint_frame* frame = &ds->frames[frame_ptr];
 		for (int i = 0, n = bone->translates.size(); i < n; ++i) {
 			frame[i].time = (int)(bone->translates[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
@@ -392,7 +381,7 @@ void SpineAnim2Loader::LoadDopesheetsFrames(const SpineParser::AnimBone* bone, s
 			m_max_frame = max_frame;
 		}
 
-		rg_frame* frame = &ds->frames[frame_ptr];
+		rg_ds_joint_frame* frame = &ds->frames[frame_ptr];
 		for (int i = 0, n = bone->rotates.size(); i < n; ++i) {
 			frame[i].time = (int)(bone->rotates[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
@@ -411,7 +400,7 @@ void SpineAnim2Loader::LoadDopesheetsFrames(const SpineParser::AnimBone* bone, s
 			m_max_frame = max_frame;
 		}
 
-		rg_frame* frame = &ds->frames[frame_ptr];
+		rg_ds_joint_frame* frame = &ds->frames[frame_ptr];
 		for (int i = 0, n = bone->scales.size(); i < n; ++i) {
 			frame[i].time = (int)(bone->scales[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
@@ -429,15 +418,48 @@ void SpineAnim2Loader::LoadDopesheetsFrames(const SpineParser::AnimBone* bone, s
 	}
 }
 
-void SpineAnim2Loader::LoadDopesheetsSlots(const SpineParser::AnimSlot* slot, struct rg_dopesheet* ds)
+void SpineAnim2Loader::LoadDopesheetsSkins(const SpineParser::Animation& anim) 
+{
+	m_ds_skins = (rg_ds_skin**)malloc(sizeof(struct rg_ds_skin*) * m_sk->slot_count);
+	for (int i = 0; i < m_sk->slot_count; ++i)
+	{
+		const std::string& name = m_slots_data[i].name;
+		const SpineParser::AnimSlot* slot = NULL;
+		for (int j = 0, m = anim.slots.size(); j < m; ++j) {
+			if (name == anim.slots[j].name) {
+				slot = &anim.slots[j];
+				break;
+			}
+		}
+		if (!slot) {
+			m_ds_skins[i] = NULL;
+			continue;
+		}
+
+		int skin_count = slot->skins.size();
+		int sz = SIZEOF_RG_DOPESHEET_SKIN + sizeof(struct rg_ds_skin_frame) * skin_count;
+		struct rg_ds_skin* ds = (struct rg_ds_skin*)malloc(sz);
+		memset(ds, 0, sz);
+
+		LoadDopesheetsSkins(slot, ds);
+
+		m_ds_skins[i] = ds;
+	}
+}
+
+void SpineAnim2Loader::LoadDopesheetsSkins(const SpineParser::AnimSlot* slot, struct rg_ds_skin* ds)
 {
 	ds->skin_count = slot->skins.size();
 	for (int i = 0, n = slot->skins.size(); i < n; ++i) {
 		ds->skins[i].time = (int)(slot->skins[i].first * 30 + 0.5f);
-		std::map<std::string, int>::iterator itr 
-			= m_map2skin.find(slot->skins[i].second);
-		assert(itr != m_map2skin.end());
-		ds->skins[i].skin = itr->second;
+		if (slot->skins[i].second.empty()) {
+			ds->skins[i].skin = 0xffff;
+		} else {
+			std::map<std::string, int>::iterator itr 
+				= m_map2skin.find(slot->skins[i].second);
+			assert(itr != m_map2skin.end());
+			ds->skins[i].skin = itr->second;
+		}
 	}
 }
 
