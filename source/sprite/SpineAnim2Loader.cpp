@@ -221,7 +221,7 @@ void SpineAnim2Loader::CreateSlots(const SpineParser& parser)
 		assert(itr_joint != m_bone2joint.end());
 		dst.joint = itr_joint->second;
 
-		dst.skin = 0xffff;
+		dst.skin = RG_SKIN_UNKNOWN;
 		std::map<std::string, int>::iterator itr_skin = m_map2skin.find(src.attachment);
 		if (itr_skin != m_map2skin.end()) {
 			dst.skin = itr_skin->second;
@@ -453,7 +453,7 @@ void SpineAnim2Loader::LoadDopesheetsSkins(const SpineParser::AnimSlot* slot, st
 	for (int i = 0, n = slot->skins.size(); i < n; ++i) {
 		ds->skins[i].time = (int)(slot->skins[i].first * 30 + 0.5f);
 		if (slot->skins[i].second.empty()) {
-			ds->skins[i].skin = 0xffff;
+			ds->skins[i].skin = RG_SKIN_NULL;
 		} else {
 			std::map<std::string, int>::iterator itr 
 				= m_map2skin.find(slot->skins[i].second);
