@@ -16,8 +16,18 @@ void SpineParser::Parse(const Json::Value& val)
 	ParseHeader(val["skeleton"]);
 	ParseBones(val["bones"]);
 	ParseSlots(val["slots"]);
-// 	ParseSkins(val["skins"]["goblin"]);
 	ParseSkins(val["skins"]["default"]);
+	Json::Value::Members key_skins = val["skins"].getMemberNames();
+	for (int i = 0, n = key_skins.size(); i < n; ++i) {
+		const std::string& key = key_skins[i];
+		if (key == "default") {
+			continue;
+		} else {
+			ParseSkins(val["skins"][key]);
+			break;
+		}
+	}
+ 	ParseSkins(val["skins"]["goblin"]);
 	if (m_parse_anim) {
 		ParseAnimations(val["animations"]);
 	}
