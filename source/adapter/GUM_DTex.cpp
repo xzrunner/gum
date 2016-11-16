@@ -71,13 +71,13 @@ static void _draw_begin()
 		DRAW_BEGIN();
 	} else {
 		s2::RenderCtxStack::Instance()->Push(s2::RenderCtx(2, 2));
-
-		sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
-		sl_mgr->SetShader(sl::SPRITE2);
-		sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
-		sl_shader->SetColor(0xffffffff, 0);
-		sl_shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	}
+
+	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
+	sl_mgr->SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+	sl_shader->SetColor(0xffffffff, 0);
+	sl_shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 }
 
 static void _draw(const float vb[16], int texid)
