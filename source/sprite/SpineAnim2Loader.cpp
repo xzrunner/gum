@@ -202,7 +202,7 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string&
 			skin.local.rot      = src.angle;
 			skin.local.scale[0] = 1;
 			skin.local.scale[1] = 1;
-			std::string filepath = FilepathHelper::Absolute(img_dir, src.name + ".png");
+			std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 			skin.ud = m_spr_loader->Create(filepath);
 			m_skins.push_back(skin);
 		}

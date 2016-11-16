@@ -41,6 +41,7 @@ public:
 	struct SkinItem
 	{
 		std::string name;
+		std::string path;
 		std::string type;
 		sm::vec2 pos;
 		float angle;

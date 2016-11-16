@@ -16,6 +16,7 @@ void SpineParser::Parse(const Json::Value& val)
 	ParseHeader(val["skeleton"]);
 	ParseBones(val["bones"]);
 	ParseSlots(val["slots"]);
+// 	ParseSkins(val["skins"]["goblin"]);
 	ParseSkins(val["skins"]["default"]);
 	if (m_parse_anim) {
 		ParseAnimations(val["animations"]);
@@ -99,6 +100,11 @@ void SpineParser::ParseSkins(const Json::Value& val)
 			const Json::Value& src_item = src_skin[key];
 			SkinItem item;
 			item.name = key;
+			if (src_item.isMember("name")) {
+				item.path = src_item["name"].asString();
+			} else {
+				item.path = key;
+			}
 			if (src_item.isMember("type")) {
 				item.type = src_item["type"].asString();
 			}
