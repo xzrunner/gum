@@ -27,7 +27,6 @@ void SpineParser::Parse(const Json::Value& val)
 			break;
 		}
 	}
- 	ParseSkins(val["skins"]["goblin"]);
 	if (m_parse_anim) {
 		ParseAnimations(val["animations"]);
 	}
@@ -46,7 +45,7 @@ const SpineParser::SkinItem* SpineParser::QuerySkin(const Slot& slot) const
 
 	for (int i = 0, n = skin->items.size(); i < n; ++i) {
 		const SkinItem& item = skin->items[i];
-		if (slot.attachment == item.name && item.type != "boundingbox") {
+		if (slot.attachment == item.name && item.type != SKIN_BOUNDINGBOX) {
 			return &item;
 		}
 	}
@@ -115,16 +114,79 @@ void SpineParser::ParseSkins(const Json::Value& val)
 			} else {
 				item.path = key;
 			}
+
+			item.type = SKIN_IMAGE;
 			if (src_item.isMember("type")) {
-				item.type = src_item["type"].asString();
+				std::string stype = src_item["type"].asString();
+				if (stype == "boundingbox") {
+					item.type = SKIN_BOUNDINGBOX;
+				} else if (stype == "mesh") {
+					item.type = SKIN_MESH;
+				} else {
+					item.type = SKIN_UNKNOWN;
+				}
 			}
-			item.pos.x = src_item["x"].asDouble();
-			item.pos.y = src_item["y"].asDouble();
-			item.angle = src_item["rotation"].asDouble() * SM_DEG_TO_RAD;
+
+			item.width = src_item["width"].asInt();
+			item.height = src_item["height"].asInt();
+
+			switch (item.type)
+			{
+			case SKIN_IMAGE:
+				ParseImage(item, src_item);
+				break;
+			case SKIN_MESH:
+				ParseMesh(item, src_item);
+				break;
+			}
+
 			skin.items.push_back(item);
 		}
 		skins.push_back(skin);
 	}
+}
+
+void SpineParser::ParseImage(SkinItem& dst, const Json::Value& src)
+{
+	dst.pos.x = src["x"].asDouble();
+	dst.pos.y = src["y"].asDouble();
+	dst.angle = src["rotation"].asDouble() * SM_DEG_TO_RAD;
+}
+
+void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
+{
+	int ptr = 0;
+	int tn = src["uvs"].size() / 2;
+	dst.texcoords.reserve(tn);
+	for (int i = 0; i < tn; ++i) 
+	{
+		sm::vec2 pos;
+		pos.x = src["uvs"][ptr++].asDouble();
+		pos.y = src["uvs"][ptr++].asDouble();
+		pos.y = 1 - pos.y;
+		dst.texcoords.push_back(pos);
+	}
+
+	ptr = 0;
+	int vn = src["vertices"].size() / 2;
+	assert(vn >= tn);
+	vn = tn;
+	dst.vertices.reserve(vn);
+	for (int i = 0; i < vn; ++i) 
+	{
+		sm::vec2 pos;
+		pos.x = src["vertices"][ptr++].asDouble();
+		pos.y = src["vertices"][ptr++].asDouble();
+		dst.vertices.push_back(pos);
+	}
+
+	ptr = 0;
+	dst.triangles.reserve(src["triangles"].size());
+	for (int i = 0, n = src["triangles"].size(); i < n; ++i) {
+		dst.triangles.push_back(src["triangles"][ptr++].asInt());
+	}
+
+	assert(dst.vertices.size() == dst.texcoords.size());
 }
 
 void SpineParser::ParseAnimations(const Json::Value& val)

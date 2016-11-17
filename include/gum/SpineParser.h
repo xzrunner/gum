@@ -38,15 +38,32 @@ public:
 		std::string attachment;
 	};
 
+	enum SKIN_TYPE
+	{
+		SKIN_UNKNOWN = 0,
+		SKIN_IMAGE,
+		SKIN_MESH,
+		SKIN_BOUNDINGBOX
+	};
+
 	struct SkinItem
 	{
 		std::string name;
 		std::string path;
-		std::string type;
+
+		SKIN_TYPE   type;
+
+		int         width;
+		int         height;
+
+		// img
 		sm::vec2 pos;
 		float angle;
 
-		SkinItem() : angle(0) {}
+		// mesh
+		std::vector<sm::vec2> vertices;
+		std::vector<sm::vec2> texcoords;
+		std::vector<int> triangles;
 	};
 
 	struct Skin
@@ -110,6 +127,8 @@ private:
 	void ParseBones(const Json::Value& val);
 	void ParseSlots(const Json::Value& val);
 	void ParseSkins(const Json::Value& val);
+	void ParseImage(SkinItem& dst, const Json::Value& src);
+	void ParseMesh(SkinItem& dst, const Json::Value& src);
 	
 	void ParseAnimations(const Json::Value& val);
 	void ParseAnimBond(const Json::Value& val, AnimBone& bone);

@@ -14,8 +14,8 @@ namespace s2 { class Anim2Symbol; class Symbol; }
 
 struct rg_joint;
 struct rg_skeleton;
-struct rg_ds_joint;
-struct rg_ds_skin;
+struct rg_tl_joint;
+struct rg_tl_skin;
 
 namespace gum
 {
@@ -40,17 +40,19 @@ private:
 	void ConnectJoints(const SpineParser& parser);
 
 	void CreateSkins(const SpineParser& parser, const std::string& img_dir);
+	void CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const;
+	void CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const;
 	void CreateSlots(const SpineParser& parser);
 	void CreateJoints();
 	void CreateSkeleton();
 	void InitRoot();
  	void InitPose(const SpineParser& parser);
 
-	void LoadDopesheetsJoints(const SpineParser::Animation& anim);
-	void LoadDopesheetsJoints(const SpineParser::AnimBone* bone, struct rg_ds_joint* ds);
+	void LoadTimelineJoints(const SpineParser::Animation& anim);
+	void LoadTimelineJoints(const SpineParser::AnimBone* bone, struct rg_tl_joint* joint);
 	
-	void LoadDopesheetsSkins(const SpineParser::Animation& anim);
-	void LoadDopesheetsSkins(const SpineParser::AnimSlot* slot, struct rg_ds_skin* ds);
+	void LoadTimelineSkins(const SpineParser::Animation& anim);
+	void LoadTimelineSkins(const SpineParser::AnimSlot* slot, struct rg_tl_skin* skin);
 
 private:
 	struct JointData
@@ -74,7 +76,7 @@ private:
 private:
 	s2::Anim2Symbol* m_sym;
 
-	const SymbolLoader* m_spr_loader;
+	const SymbolLoader* m_sym_loader;
 
 	int m_num;
 
@@ -91,8 +93,8 @@ private:
 	rg_joint**     m_joints;
 	rg_skeleton*   m_sk;
 	rg_joint*      m_root;
-	rg_ds_joint**  m_ds_joints;
-	rg_ds_skin**   m_ds_skins;
+	rg_tl_joint**  m_tl_joints;
+	rg_tl_skin**   m_tl_skins;
 	int            m_max_frame;
 
 }; // SpineAnim2Loader
