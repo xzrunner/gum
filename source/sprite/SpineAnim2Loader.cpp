@@ -7,6 +7,7 @@
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/TrianglesMesh.h>
+#include <sprite2/Skeleton2Mesh.h>
 #include <rigging/rg_joint.h>
 #include <rigging/rg_skeleton.h>
 #include <rigging/rg_timeline.h>
@@ -79,8 +80,8 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& 
 
 	CreateSkins(parser, img_dir);
 	CreateSlots(parser);
-	CreateJoints();
-	CreateSkeleton();
+ 	CreateJoints();
+ 	CreateSkeleton();
 
 	InitRoot();
 	InitPose(parser);
@@ -108,11 +109,9 @@ void SpineAnim2Loader::Clear()
 
 void SpineAnim2Loader::LoadJointsData(const SpineParser& parser)
 {
-	std::map<std::string, SpineParser::Bone>::const_iterator itr 
-		= parser.bones.begin();
-	for ( ; itr != parser.bones.end(); ++itr)
+	for (int i = 0, n = parser.bones.size(); i < n; ++i) 
 	{
-		const SpineParser::Bone& bone = itr->second;
+		const SpineParser::Bone& bone = parser.bones[i];
 		m_bone2joint.insert(std::make_pair(bone.name, m_joints_data.size()));
 		m_joints_data.push_back(JointData(bone.name));
 	}
@@ -150,11 +149,9 @@ void SpineAnim2Loader::LoadJointsData(const SpineParser& parser)
 
 void SpineAnim2Loader::ConnectJoints(const SpineParser& parser)
 {
-	std::map<std::string, SpineParser::Bone>::const_iterator itr 
-		= parser.bones.begin();
-	for ( ; itr != parser.bones.end(); ++itr)
+	for (int i = 0, n = parser.bones.size(); i < n; ++i)
 	{
-		const SpineParser::Bone& bone = itr->second;
+		const SpineParser::Bone& bone = parser.bones[i];
 		if (bone.parent.empty()) {
 			continue;
 		}
@@ -226,6 +223,7 @@ void SpineAnim2Loader::CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem
 	dst.local.scale[1] = 1;
 	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 	dst.ud = m_sym_loader->Create(filepath);
+	dst.type = SKIN_IMG;
 }
 
 void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const
@@ -237,8 +235,41 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
 
-	s2::TrianglesMesh* mesh = new s2::TrianglesMesh(base_sym);
-	mesh->SetData(src.vertices, src.texcoords, src.triangles);
+	s2::Mesh* mesh = NULL;
+	if (!src.vertices.empty()) {
+		s2::TrianglesMesh* tri_mesh = new s2::TrianglesMesh(base_sym);
+		tri_mesh->SetData(src.vertices, src.texcoords, src.triangles);
+		mesh = tri_mesh;
+		dst.type = SKIN_MESH;
+	} else {
+		assert(!src.skinned_vertices.empty());
+		s2::Skeleton2Mesh* sk_mesh = new s2::Skeleton2Mesh(base_sym);
+
+		std::vector<s2::Skeleton2Mesh::SkinnedVertex> vertices;
+		vertices.reserve(src.skinned_vertices.size());
+		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i)
+		{
+			const SpineParser::SkinItem::SkinnedVertex& vsrc = src.skinned_vertices[i];
+			s2::Skeleton2Mesh::SkinnedVertex vdst;
+			vdst.items.reserve(vsrc.items.size());
+			for (int j = 0, m = vsrc.items.size(); j < m; ++j) 
+			{
+				const SpineParser::SkinItem::SkinnedVertex::Item& isrc = vsrc.items[j];
+				s2::Skeleton2Mesh::SkinnedVertex::Item idst;
+				idst.joint  = isrc.bone;
+				idst.vx     = isrc.vx;
+				idst.vy     = isrc.vy;
+				idst.weight = isrc.weight;
+				vdst.items.push_back(idst);
+			}
+			vertices.push_back(vdst);
+		}
+		sk_mesh->SetData(vertices, src.texcoords, src.triangles);
+
+		mesh = sk_mesh;
+
+		dst.type = SKIN_JOINT_MESH;
+	}
 
 	sym->SetMesh(mesh);
 	mesh->RemoveReference();
@@ -331,9 +362,7 @@ void SpineAnim2Loader::InitPose(const SpineParser& parser)
 {
 	for (int i = 0; i < m_joint_count; ++i) 
 	{
-		std::map<std::string, SpineParser::Bone>::const_iterator itr_bone 
-			= parser.bones.find(m_joints_data[i].name);
-		const SpineParser::Bone& src = itr_bone->second;
+		const SpineParser::Bone& src = parser.bones[i];
 
 		rg_joint* dst = m_joints[i];
 		dst->local_pose.trans[0] = src.pos.x;

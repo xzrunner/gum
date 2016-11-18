@@ -60,8 +60,21 @@ public:
 		sm::vec2 pos;
 		float angle;
 
+		struct SkinnedVertex
+		{
+			struct Item
+			{
+				int bone;
+				float vx, vy;
+				float weight;
+			};
+
+			std::vector<Item> items;
+		};
+
 		// mesh
 		std::vector<sm::vec2> vertices;
+		std::vector<SkinnedVertex> skinned_vertices;
 		std::vector<sm::vec2> texcoords;
 		std::vector<int> triangles;
 	};
@@ -139,7 +152,7 @@ public:
 
 	std::string img_dir;
 
-	std::map<std::string, Bone> bones;
+	std::vector<Bone> bones;
 
 	std::vector<Slot> slots;
 

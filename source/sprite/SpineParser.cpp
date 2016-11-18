@@ -67,6 +67,7 @@ void SpineParser::ParseHeader(const Json::Value& val)
 
 void SpineParser::ParseBones(const Json::Value& val)
 {
+	bones.reserve(val.size());
 	for (int i = 0, n = val.size(); i < n; ++i)
 	{
 		const Json::Value& src = val[i];
@@ -76,7 +77,7 @@ void SpineParser::ParseBones(const Json::Value& val)
 		dst.pos.x = src["x"].asDouble();
 		dst.pos.y = src["y"].asDouble();
 		dst.angle = src["rotation"].asDouble() * SM_DEG_TO_RAD;
-		bones.insert(std::make_pair(dst.name, dst));
+		bones.push_back(dst);
 	}
 }
 
@@ -167,17 +168,39 @@ void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
 		dst.texcoords.push_back(pos);
 	}
 
-	ptr = 0;
-	int vn = src["vertices"].size() / 2;
-	assert(vn >= tn);
-	vn = tn;
-	dst.vertices.reserve(vn);
-	for (int i = 0; i < vn; ++i) 
+	if (src["vertices"].size() == src["uvs"].size())
 	{
-		sm::vec2 pos;
-		pos.x = src["vertices"][ptr++].asDouble();
-		pos.y = src["vertices"][ptr++].asDouble();
-		dst.vertices.push_back(pos);
+		int ptr = 0;
+		int vn = tn;
+		dst.vertices.reserve(vn);
+		for (int i = 0; i < vn; ++i) 
+		{
+			sm::vec2 pos;
+			pos.x = src["vertices"][ptr++].asDouble();
+			pos.y = src["vertices"][ptr++].asDouble();
+			dst.vertices.push_back(pos);
+		}
+		assert(dst.vertices.size() == dst.texcoords.size());
+	}
+	else
+	{
+		for (int i = 0, n = src["vertices"].size(); i < n; )
+		{
+			SkinItem::SkinnedVertex sv;
+			int bone_n = src["vertices"][i++].asInt();
+			sv.items.reserve(bone_n);
+			for (int j = 0; j < bone_n; ++j) 
+			{
+				SkinItem::SkinnedVertex::Item item;
+				item.bone = src["vertices"][i++].asInt();
+				item.vx = src["vertices"][i++].asDouble();
+				item.vy = src["vertices"][i++].asDouble();
+				item.weight = src["vertices"][i++].asDouble();
+				sv.items.push_back(item);
+			}
+			dst.skinned_vertices.push_back(sv);
+		}
+		assert(dst.skinned_vertices.size() == dst.texcoords.size());
 	}
 
 	ptr = 0;
@@ -185,8 +208,6 @@ void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
 	for (int i = 0, n = src["triangles"].size(); i < n; ++i) {
 		dst.triangles.push_back(src["triangles"][ptr++].asInt());
 	}
-
-	assert(dst.vertices.size() == dst.texcoords.size());
 }
 
 void SpineParser::ParseAnimations(const Json::Value& val)

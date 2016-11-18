@@ -128,11 +128,8 @@ void SpineSkeletonLoader::LoadJoints(const SpineParser& parser)
 		m_joints.insert(std::make_pair(slot.bone, joint));
 	}
 
-	std::map<std::string, SpineParser::Bone>::const_iterator itr 
-		= parser.bones.begin();
-	for ( ; itr != parser.bones.end(); ++itr)
-	{
-		const SpineParser::Bone& bone = itr->second;
+	for (int i = 0, n = parser.bones.size(); i < n; ++i) {
+		const SpineParser::Bone& bone = parser.bones[i];
 		std::map<std::string, s2::Joint*>::iterator itr_joint 
 			= m_joints.find(bone.name);
 		if (itr_joint != m_joints.end()) {
@@ -143,10 +140,9 @@ void SpineSkeletonLoader::LoadJoints(const SpineParser& parser)
 	}
 
 	// connect
-	itr = parser.bones.begin();
-	for ( ; itr != parser.bones.end(); ++itr)
+	for (int i = 0, n = parser.bones.size(); i < n; ++i)
 	{
-		const SpineParser::Bone& bone = itr->second;
+		const SpineParser::Bone& bone = parser.bones[i];
 		if (bone.parent.empty()) {
 			continue;
 		}
@@ -177,11 +173,17 @@ void SpineSkeletonLoader::InitPose(const SpineParser& parser)
 	std::map<std::string, s2::Joint*>::iterator itr = m_joints.begin();
 	for ( ; itr != m_joints.end(); ++itr)
 	{
-		std::map<std::string, SpineParser::Bone>::const_iterator itr_bone 
-			= parser.bones.find(itr->first);
-		const SpineParser::Bone& src = itr_bone->second;
+		const SpineParser::Bone* src = NULL;
+		for (int i = 0, n = parser.bones.size(); i < n; ++i) {
+			if (parser.bones[i].name == itr->first) {
+				src = &parser.bones[i];
+				break;
+			}			
+		}
+		assert(src);
+
 		s2::Joint* dst = itr->second;
-		dst->SetLocalPose(s2::JointPose(src.pos, src.angle, src.scale));
+		dst->SetLocalPose(s2::JointPose(src->pos, src->angle, src->scale));
 	}
 	m_root->Update();
 }
