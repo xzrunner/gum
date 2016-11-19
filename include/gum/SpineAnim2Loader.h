@@ -16,6 +16,7 @@ struct rg_joint;
 struct rg_skeleton;
 struct rg_tl_joint;
 struct rg_tl_skin;
+struct rg_tl_deform;
 
 namespace gum
 {
@@ -54,6 +55,9 @@ private:
 	void LoadTimelineSkins(const SpineParser::Animation& anim);
 	void LoadTimelineSkins(const SpineParser::AnimSlot* slot, struct rg_tl_skin* skin);
 
+	void LoadTimelineDeforms(const SpineParser::Animation& anim);
+	void LoadTimelineDeforms(const SpineParser::AnimDeform* deform);
+
 private:
 	struct JointData
 	{
@@ -73,6 +77,15 @@ private:
 			: name(name) {}
 	};
 
+	struct SkinData
+	{
+		std::string slot;
+		std::string name;
+
+		SkinData(const std::string& slot, const std::string& name)
+			: slot(slot), name(name) {}
+	};
+
 private:
 	s2::Anim2Symbol* m_sym;
 
@@ -83,6 +96,7 @@ private:
 	// middle
 	std::vector<JointData>     m_joints_data;
 	std::vector<SlotData>      m_slots_data;
+	std::vector<SkinData>      m_skins_data;
 	std::map<std::string, int> m_bone2joint;
 	std::map<std::string, int> m_map2skin;
 
@@ -95,6 +109,7 @@ private:
 	rg_joint*      m_root;
 	rg_tl_joint**  m_tl_joints;
 	rg_tl_skin**   m_tl_skins;
+	rg_tl_deform** m_tl_deforms;
 	int            m_max_frame;
 
 }; // SpineAnim2Loader

@@ -243,6 +243,16 @@ void SpineParser::ParseAnimations(const Json::Value& val)
 			dst.slots.push_back(slot);
 		}
 
+		Json::Value::Members key_deform = src["deform"].getMemberNames();
+		if (key_deform.size() > 0)
+		{
+			ParseAnimDeforms(src["deform"]["default"], dst.deforms);
+			if (key_deform.size() > 1) {
+				const std::string& key = key_deform[1];
+				ParseAnimDeforms(src["deform"][key], dst.deforms);
+			}
+		}
+
 		anims.push_back(dst);
 	}
 }
@@ -296,6 +306,53 @@ void SpineParser::ParseAnimSlot(const Json::Value& val, AnimSlot& slot)
 		float time = val[i]["time"].asDouble();
 		std::string skin = val[i]["name"].asString();
 		slot.skins.push_back(std::make_pair(time, skin));
+	}
+}
+
+void SpineParser::ParseAnimDeforms(const Json::Value& val, std::vector<AnimDeform>& deforms)
+{
+	Json::Value::Members key_slots = val.getMemberNames();
+	for (int i = 0, n = key_slots.size(); i < n; ++i)
+	{
+		const std::string& slot = key_slots[i];
+		Json::Value::Members key_skins = val[slot].getMemberNames();
+		for (int j = 0, m = key_skins.size(); j < m; ++j)
+		{
+			const std::string& skin = key_skins[j];
+			AnimDeform deform;
+			deform.slot = slot;
+			deform.skin = skin;
+			ParseAnimDeform(val[slot][skin], deform);
+			deforms.push_back(deform);
+		}
+	}
+}
+
+void SpineParser::ParseAnimDeform(const Json::Value& val, AnimDeform& deform)
+{
+	deform.samples.reserve(val.size());
+	for (int i = 0, n = val.size(); i < n; ++i) 
+	{
+		const Json::Value& src = val[i];
+		Deform dst;
+
+		dst.time = src["time"].asDouble();
+		if (src.isMember("offset")) {
+			dst.offset = src["offset"].asInt() / 2;
+		} else {
+			dst.offset = 0;
+		}
+
+		int ptr = 0;
+		int m = src["vertices"].size() / 2;
+		dst.vertices.reserve(m);
+		for (int j = 0; j < m; ++j) {
+			float x = src["vertices"][ptr++].asDouble(),
+				  y = src["vertices"][ptr++].asDouble();
+			dst.vertices.push_back(sm::vec2(x, y));
+		}
+
+		deform.samples.push_back(dst);
 	}
 }
 

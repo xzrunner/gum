@@ -88,15 +88,17 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& 
 
 	LoadTimelineJoints(parser.anims[ANIM_IDX]);
 	LoadTimelineSkins(parser.anims[ANIM_IDX]);
+	LoadTimelineDeforms(parser.anims[ANIM_IDX]);
 
 	rg_animation* anim = (rg_animation*)malloc(SIZEOF_RG_ANIM);
 	anim->sk = m_sk;
 
 	s2::Symbol* sym = static_cast<s2::Symbol*>(anim->sk->skins[10].ud);
 
-	anim->timeline.joints = m_tl_joints;
-	anim->timeline.skins = m_tl_skins;
-	anim->max_frame = m_max_frame;
+	anim->timeline.joints  = m_tl_joints;
+	anim->timeline.skins   = m_tl_skins;
+	anim->timeline.deforms = m_tl_deforms;
+	anim->max_frame        = m_max_frame;
 	m_sym->SetAnim(anim);
 }
 
@@ -209,7 +211,9 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string&
 				CreateMeshSkin(skin, src, img_dir);
 				break;
 			}
+
 			m_skins.push_back(skin);
+			m_skins_data.push_back(SkinData(parser.skins[i].name, src.name));
 		}
 	}
 }
@@ -527,6 +531,52 @@ void SpineAnim2Loader::LoadTimelineSkins(const SpineParser::AnimSlot* slot, stru
 			skin->skins[i].skin = itr->second;
 		}
 	}
+}
+
+void SpineAnim2Loader::LoadTimelineDeforms(const SpineParser::Animation& anim)
+{
+	int sz = sizeof(struct rg_tl_deform*) * m_sk->skin_count;
+	m_tl_deforms = (rg_tl_deform**)malloc(sz);
+	memset(m_tl_deforms, 0, sz);
+	for (int i = 0, n = anim.deforms.size(); i < n; ++i) {
+		LoadTimelineDeforms(&anim.deforms[i]);
+	}
+}
+
+void SpineAnim2Loader::LoadTimelineDeforms(const SpineParser::AnimDeform* deform)
+{
+	int count = deform->samples.size();
+	int sz = SIZEOF_RG_TIMELINE_DEFORM + SIZEOF_RG_DEFORM_SAMPLE * count;
+	rg_tl_deform* ret = (rg_tl_deform*)malloc(sz);
+	memset(ret, 0, sz);
+
+	ret->count = count;
+	for (int i = 0; i < count; ++i)
+	{
+		const SpineParser::Deform& src = deform->samples[i];
+		rg_deform_sample sample;
+		sample.time   = (int)(src.time * 30 + 0.5f);
+		sample.offset = src.offset;
+		sample.count  = src.vertices.size();
+		sample.data   = (float*)malloc(sizeof(float) * 2 * sample.count);
+		int ptr = 0;
+		for (int i = 0, n = sample.count; i < n; ++i) {
+			sample.data[ptr++] = src.vertices[i].x;
+			sample.data[ptr++] = src.vertices[i].y;
+		}
+		ret->samples[i] = sample;
+	}
+
+	int idx = -1;
+	for (int i = 0, n = m_skins_data.size(); i < n; ++i) {
+		if (m_skins_data[i].slot == deform->slot &&
+			m_skins_data[i].name == deform->skin) {
+			idx = i;
+			break;
+		}
+	}
+	assert(idx != -1);
+	m_tl_deforms[idx] = ret;
 }
 
 }

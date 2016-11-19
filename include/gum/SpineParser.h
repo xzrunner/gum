@@ -123,12 +123,27 @@ public:
 		std::vector<std::pair<float, std::string> > skins;
 	};
 
+	struct Deform
+	{
+		float time;
+		int offset;
+		std::vector<sm::vec2> vertices;
+	};
+
+	struct AnimDeform
+	{
+		std::string slot;
+		std::string skin;
+		std::vector<Deform> samples;
+	};
+
 	struct Animation
 	{
 
 		std::string name;
 		std::vector<AnimBone> bones;
 		std::vector<AnimSlot> slots;
+		std::vector<AnimDeform> deforms;
 	};
 
 	const SkinItem* QuerySkin(const Slot& slot) const;
@@ -146,6 +161,8 @@ private:
 	void ParseAnimations(const Json::Value& val);
 	void ParseAnimBond(const Json::Value& val, AnimBone& bone);
 	void ParseAnimSlot(const Json::Value& val, AnimSlot& slot);
+	void ParseAnimDeforms(const Json::Value& val, std::vector<AnimDeform>& deforms);
+	void ParseAnimDeform(const Json::Value& val, AnimDeform& deform);
 
 public:
 	bool m_parse_anim;
