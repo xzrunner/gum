@@ -4,9 +4,7 @@
 #include "SpineParser.h"
 
 #include <CU_Uncopyable.h>
-#include <rigging/rg_pose_srt.h>
-#include <rigging/rg_skin.h>
-#include <rigging/rg_slot.h>
+#include <rigging.h>
 
 #include <json/value.h>
 

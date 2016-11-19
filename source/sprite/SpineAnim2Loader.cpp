@@ -8,10 +8,7 @@
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/TrianglesMesh.h>
 #include <sprite2/Skeleton2Mesh.h>
-#include <rigging/rg_joint.h>
-#include <rigging/rg_skeleton.h>
-#include <rigging/rg_timeline.h>
-#include <rigging/rg_animation.h>
+#include <rigging.h>
 
 #include <assert.h>
 

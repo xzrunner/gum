@@ -4,8 +4,7 @@
 #include "SkeletonIO.h"
 
 #include <SM_Calc.h>
-#include <rigging/rg_skeleton.h>
-#include <rigging/rg_joint.h>
+#include <rigging.h>
 #include <sprite2/Anim2Symbol.h>
 #include <sprite2/S2_Sprite.h>
 
