@@ -45,7 +45,9 @@ void TextboxSprLoader::LoadBin(const simp::NodeLabel* node)
 	TextboxLoader loader(m_spr->GetTextbox());
 	loader.LoadBin(node);
 	
-	m_spr->SetText(node->text);
+	if (node->text) {
+		m_spr->SetText(node->text);
+	}
 }
 
 }

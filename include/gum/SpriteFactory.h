@@ -31,6 +31,7 @@ public:
 	 *    pack, binary res
 	 */	
 	s2::Sprite* Create(uint32_t id);
+	s2::Sprite* CreateFromSym(uint32_t id);
 
 	SINGLETON_DECLARATION(SpriteFactory);
 

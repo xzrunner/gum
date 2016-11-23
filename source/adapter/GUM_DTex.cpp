@@ -10,8 +10,6 @@
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/Texture.h>
 
-#include <gl/glew.h>
-
 #include <assert.h>
 
 namespace gum
@@ -177,7 +175,7 @@ _texture_id(int id) {
 
 static void 
 _clear_color(float xmin, float ymin, float xmax, float ymax) {
-	glDisable(GL_BLEND);
+	render_gl_blend_disable();
 //	glBlendFunc(GL_ONE, GL_ZERO);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -207,7 +205,7 @@ _clear_color(float xmin, float ymin, float xmax, float ymax) {
 // 	ShaderLab::Instance()->Flush();
 
 //	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
+	render_gl_blend_enable();
 
 	//////////////////////////////////////////////////////////////////////////
 

@@ -2,6 +2,7 @@
 #include "Image.h"
 
 #include <dtex_facade.h>
+#include <dtex_screen.h>
 
 namespace gum
 {

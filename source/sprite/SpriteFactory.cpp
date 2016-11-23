@@ -390,4 +390,16 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 	return spr;
 }
 
+s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id)
+{
+	s2::Symbol* sym = SymbolFactory::Instance()->Create(id);
+	if (!sym) {
+		return NULL;
+	} else {
+		s2::Sprite* spr = Create(sym);
+		sym->RemoveReference();
+		return spr;
+	}
+}
+
 }
