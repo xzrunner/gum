@@ -241,8 +241,8 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 	radial_spd_var		= node->radial_spd_var;
 	tangential_spd		= (int16_t)(node->tangential_spd);
 	tangential_spd_var	= node->tangential_spd_var;
-	angular_spd			= (int16_t)(node->angular_spd);
-	angular_spd_var		= node->angular_spd_var;
+	angular_spd			= simp::int2radian((int16_t)(node->angular_spd));
+	angular_spd_var		= simp::int2radian(node->angular_spd_var);
 
 	dis_region			= node->dis_region;
 	dis_region_var		= node->dis_region_var;
