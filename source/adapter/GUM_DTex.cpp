@@ -68,7 +68,7 @@ static void _draw_begin()
 	if (DRAW_BEGIN) {
 		DRAW_BEGIN();
 	} else {
-		s2::RenderCtxStack::Instance()->Push(s2::RenderCtx(2, 2));
+		s2::RenderCtxStack::Instance()->Push(s2::RenderCtx(2, 2, 0, 0), false);
 	}
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
@@ -113,7 +113,7 @@ static void _draw_end()
 	if (DRAW_END) {
 		DRAW_END();
 	} else {
-		s2::RenderCtxStack::Instance()->Pop();
+		s2::RenderCtxStack::Instance()->Pop(false);
 	}
 }
 
