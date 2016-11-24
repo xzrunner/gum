@@ -30,6 +30,12 @@ void* gum_create_spr(const char* pkg, const char* spr)
 }
 
 extern "C"
+void* gum_create_spr_by_id(int id)
+{
+	return SpriteFactory::Instance()->CreateFromSym(id);
+}
+
+extern "C"
 void gum_draw_spr(const void* spr, float x, float y, float angle, float sx, float sy)
 {
 	s2::RenderParams params;
