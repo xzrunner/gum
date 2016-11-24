@@ -16,6 +16,7 @@ class ImageSymbol : public s2::ImageSymbol
 {
 public:
 	ImageSymbol();
+	ImageSymbol(uint32_t id);
 	virtual ~ImageSymbol();
 
 	/**
@@ -37,6 +38,9 @@ protected:
 	virtual void GetScreenSize(int& w, int& h) const;
 	virtual float GetP3dCamAngle() const;
 	virtual int GetScreenCacheTexid() const;
+
+private:
+	void InitTexcoords();
 
 private:
 	Image* m_img;

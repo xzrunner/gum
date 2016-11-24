@@ -17,7 +17,7 @@ namespace gum
 class SpriteFactory
 {
 public:
-	s2::Sprite* Create(s2::Symbol* sym) const;
+	s2::Sprite* Create(s2::Symbol* sym, uint32_t id = -1) const;
 
 	/**
 	 *  @brief

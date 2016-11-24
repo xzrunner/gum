@@ -30,14 +30,21 @@ void* gum_create_spr(const char* pkg, const char* spr)
 }
 
 extern "C"
-void gum_draw_spr(const void* spr)
+void gum_draw_spr(const void* spr, float x, float y, float angle, float sx, float sy)
 {
-	s2::DrawNode::Draw(static_cast<const s2::Sprite*>(spr));
+	s2::RenderParams params;
+	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+	s2::DrawNode::Draw(static_cast<const s2::Sprite*>(spr), params);
 }
 
 extern "C"
 void gum_update_spr(void* spr) {
 	static_cast<s2::Sprite*>(spr)->Update(s2::RenderParams());
+}
+
+extern "C"
+void* gum_fetch_child(const void* spr, const char* name) {
+	return static_cast<const s2::Sprite*>(spr)->FetchChild(name);
 }
 
 }

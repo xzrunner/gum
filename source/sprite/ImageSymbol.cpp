@@ -11,10 +11,15 @@ ImageSymbol::ImageSymbol()
 	: m_img(NULL)
 	, m_packed(false)
 {
-	m_texcoords[0] = 0; m_texcoords[1] = 0;
-	m_texcoords[2] = 0; m_texcoords[3] = 1;
-	m_texcoords[4] = 1; m_texcoords[5] = 1;
-	m_texcoords[6] = 1; m_texcoords[7] = 0;
+	InitTexcoords();
+}
+
+ImageSymbol::ImageSymbol(uint32_t id)
+	: s2::ImageSymbol(id)
+	, m_img(NULL)
+	, m_packed(false)
+{
+	InitTexcoords();
 }
 
 ImageSymbol::~ImageSymbol()
@@ -127,6 +132,14 @@ float ImageSymbol::GetP3dCamAngle() const
 int ImageSymbol::GetScreenCacheTexid() const
 {
 	return dtexf_cs1_get_texture_id();
+}
+
+void ImageSymbol::InitTexcoords()
+{
+	m_texcoords[0] = 0; m_texcoords[1] = 0;
+	m_texcoords[2] = 0; m_texcoords[3] = 1;
+	m_texcoords[4] = 1; m_texcoords[5] = 1;
+	m_texcoords[6] = 1; m_texcoords[7] = 0;
 }
 
 }

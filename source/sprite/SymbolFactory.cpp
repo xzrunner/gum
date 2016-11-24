@@ -226,7 +226,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 			const simp::Package* pkg = simp::NodeFactory::Instance()->GetPkg(id);
 			std::string filepath = pkg->GetImagePath(pic->texid);
 			
-			ImageSymbol* sym = new ImageSymbol;
+			ImageSymbol* sym = new ImageSymbol(id);
 			ImageSymLoader loader(sym);
 			loader.Load(filepath);
 			sym->SetRegion(
@@ -237,7 +237,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_SCALE9:
 		{
-			s2::Scale9Symbol* sym = new s2::Scale9Symbol;
+			s2::Scale9Symbol* sym = new s2::Scale9Symbol(id);
 			Scale9SymLoader loader(sym);
 			loader.LoadBin((const simp::NodeScale9*)data);
 			ret = sym;
@@ -245,7 +245,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_ICON:
 		{
-			s2::IconSymbol* sym = new s2::IconSymbol;
+			s2::IconSymbol* sym = new s2::IconSymbol(id);
 			IconSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeIcon*)data);
 			ret = sym;
@@ -253,7 +253,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_TEXTURE:
 		{
-			s2::TextureSymbol* sym = new s2::TextureSymbol;
+			s2::TextureSymbol* sym = new s2::TextureSymbol(id);
 			TextureSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeTexture*)data);
 			ret = sym;
@@ -261,7 +261,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_LABEL:
 		{
-			TextboxSymbol* sym = new TextboxSymbol();
+			TextboxSymbol* sym = new TextboxSymbol(id);
 			TextboxLoader loader(sym->GetTextbox());
 			loader.LoadBin((const simp::NodeLabel*)data);
 			ret = sym;
@@ -269,7 +269,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_COMPLEX:
 		{
-			s2::ComplexSymbol* sym = new s2::ComplexSymbol;
+			s2::ComplexSymbol* sym = new s2::ComplexSymbol(id);
 			ComplexSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeComplex*)data);
 			ret = sym;
@@ -277,7 +277,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_ANIMATION:
 		{
-			s2::AnimSymbol* sym = new s2::AnimSymbol;
+			s2::AnimSymbol* sym = new s2::AnimSymbol(id);
 			AnimSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeAnimation*)data);
 			ret = sym;
@@ -285,7 +285,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_PARTICLE3D:
 		{
-			s2::Particle3dSymbol* sym = new s2::Particle3dSymbol;
+			s2::Particle3dSymbol* sym = new s2::Particle3dSymbol(id);
 			P3dSymLoader loader;
 			loader.LoadBin((const simp::NodeParticle3d*)data);
 			loader.Store(sym);
@@ -294,7 +294,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_PARTICLE2D:
 		{
-			s2::Particle2dSymbol* sym = new s2::Particle2dSymbol;
+			s2::Particle2dSymbol* sym = new s2::Particle2dSymbol(id);
 			P2dSymLoader loader;
 			loader.LoadBin((const simp::NodeParticle2d*)data);
 			loader.Store(sym);
@@ -303,7 +303,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_SHAPE:
 		{
-			s2::ShapeSymbol* sym = new s2::ShapeSymbol;
+			s2::ShapeSymbol* sym = new s2::ShapeSymbol(id);
 			ShapeSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeShape*)data);
 			ret = sym;
@@ -311,7 +311,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_MESH:
 		{
-			s2::MeshSymbol* sym = new s2::MeshSymbol;
+			s2::MeshSymbol* sym = new s2::MeshSymbol(id);
 			MeshSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeMesh*)data);
 			ret = sym;
@@ -319,7 +319,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_MASK:
 		{
-			s2::MaskSymbol* sym = new s2::MaskSymbol;
+			s2::MaskSymbol* sym = new s2::MaskSymbol(id);
 			MaskSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeMask*)data);
 			ret = sym;
@@ -327,7 +327,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_TRAIL:
 		{
-			s2::TrailSymbol* sym = new s2::TrailSymbol;
+			s2::TrailSymbol* sym = new s2::TrailSymbol(id);
 			TrailSymLoader loader;
 			loader.LoadBin((const simp::NodeTrail*)data);
 			loader.Store(sym);

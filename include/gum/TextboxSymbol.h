@@ -11,6 +11,8 @@ namespace gum
 class TextboxSymbol : public s2::TextboxSymbol
 {
 public:
+	TextboxSymbol() {}
+	TextboxSymbol(uint32_t id);
 
 protected:
 	/**
