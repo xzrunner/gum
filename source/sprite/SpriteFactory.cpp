@@ -1,5 +1,5 @@
 #include "SpriteFactory.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 #include "FilepathHelper.h"
 #include "SpriteIO.h"
 
@@ -109,7 +109,7 @@ s2::Sprite* SpriteFactory::Create(s2::Symbol* sym, uint32_t id) const
 
 s2::Sprite* SpriteFactory::Create(const std::string& filepath) const
 {
-	s2::Symbol* sym = SymbolFactory::Instance()->Create(filepath);
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
 	if (!sym) {
 		return NULL;
 	} else {
@@ -221,7 +221,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 	{
 	case simp::TYPE_IMAGE:
 		{
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(id);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 			spr = new s2::ImageSprite(sym, id);
 			sym->RemoveReference();
 		}
@@ -230,7 +230,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeScale9Spr* node = (const simp::NodeScale9Spr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::Scale9Sprite* s9_spr = new s2::Scale9Sprite(sym, id);
 			sym->RemoveReference();
 
@@ -244,7 +244,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeIconSpr* node = (const simp::NodeIconSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::IconSprite* icon_spr = new s2::IconSprite(sym, id);
 			sym->RemoveReference();
 
@@ -258,7 +258,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeTextureSpr* node = (const simp::NodeTextureSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::TextureSprite* tex_spr = new s2::TextureSprite(sym, id);
 			sym->RemoveReference();
 
@@ -269,7 +269,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeLabel* node = (const simp::NodeLabel*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(id);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 			s2::TextboxSprite* tb_spr = VI_DOWNCASTING<s2::TextboxSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -283,7 +283,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeComplexSpr* node = (const simp::NodeComplexSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::ComplexSprite* comp_spr = VI_DOWNCASTING<s2::ComplexSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -297,7 +297,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeAnimationSpr* node = (const simp::NodeAnimationSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::AnimSprite* anim_spr = VI_DOWNCASTING<s2::AnimSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -311,7 +311,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeParticle3dSpr* node = (const simp::NodeParticle3dSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::Particle3dSprite* p3d_spr = VI_DOWNCASTING<s2::Particle3dSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -325,7 +325,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeParticle2dSpr* node = (const simp::NodeParticle2dSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::Particle2dSprite* p2d_spr = VI_DOWNCASTING<s2::Particle2dSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -339,7 +339,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeShapeSpr* node = (const simp::NodeShapeSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::ShapeSprite* shape_spr = VI_DOWNCASTING<s2::ShapeSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -350,7 +350,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeMeshSpr* node = (const simp::NodeMeshSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->mesh_id);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->mesh_id);
 			s2::MeshSprite* mesh_spr = VI_DOWNCASTING<s2::MeshSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -364,7 +364,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeMaskSpr* node = (const simp::NodeMaskSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::MaskSprite* mask_spr = VI_DOWNCASTING<s2::MaskSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -375,7 +375,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 		{
 			const simp::NodeTrailSpr* node = (const simp::NodeTrailSpr*)data;
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->sym);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			s2::TrailSprite* trail_spr = VI_DOWNCASTING<s2::TrailSprite*>(SpriteFactory::Instance()->Create(sym, id));
 			sym->RemoveReference();
 
@@ -391,7 +391,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 
 s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id)
 {
-	s2::Symbol* sym = SymbolFactory::Instance()->Create(id);
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 	if (!sym) {
 		return NULL;
 	} else {

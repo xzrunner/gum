@@ -1,5 +1,4 @@
 #include "SymbolFactory.h"
-#include "StringHelper.h"
 #include "SymbolFile.h"
 
 #include "ImageSymbol.h"
@@ -41,6 +40,8 @@
 #include <sprite2/SkeletonSymbol.h>
 #include <sprite2/SymType.h>
 
+#include <fstream>
+
 #include <assert.h>
 
 namespace gum
@@ -54,20 +55,10 @@ SymbolFactory::SymbolFactory()
 
 s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 {
-	std::string fixed_path = filepath;
-	StringHelper::ToLower(fixed_path);
-
-	std::map<std::string, s2::Symbol*>::const_iterator itr 
-		= m_path_cache.find(fixed_path);
-	if (itr != m_path_cache.end()) {
-		itr->second->AddReference();
-		return itr->second;
-	}
-
 	s2::Symbol* ret = NULL;
 
 	if (type == s2::SYM_UNKNOWN) {
-		type = SymbolFile::Instance()->Type(fixed_path);
+		type = SymbolFile::Instance()->Type(filepath);
 	}
 	switch (type)
 	{
@@ -197,21 +188,11 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		assert(0);
 	}
 
-	if (ret) {
-		m_path_cache.insert(std::make_pair(fixed_path, ret));
-	}
-
 	return ret;
 }
 
 s2::Symbol* SymbolFactory::Create(uint32_t id) const
 {
-	std::map<uint32_t, s2::Symbol*>::const_iterator itr = m_id_cache.find(id);
-	if (itr != m_id_cache.end()) {
-		itr->second->AddReference();
-		return itr->second;
-	}
-
 	s2::Symbol* ret = NULL;
 
 	int type;
@@ -336,10 +317,6 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	default:
 		assert(0);
-	}
-
-	if (ret) {
-		m_id_cache.insert(std::make_pair(id, ret));
 	}
 
 	return ret;

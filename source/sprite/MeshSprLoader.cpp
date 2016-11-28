@@ -1,7 +1,7 @@
 #include "MeshSprLoader.h"
 #include "MeshSymLoader.h"
 #include "FilepathHelper.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 #include "MeshIO.h"
 
 #include <sprite2/MeshSprite.h>
@@ -41,7 +41,7 @@ void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	if (mesh_val.isMember("base_symbol")) {
 		std::string base_path = FilepathHelper::Absolute(dir, mesh_val["base_symbol"].asString());
-		s2::Symbol* base_sym = SymbolFactory::Instance()->Create(base_path);
+		s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(base_path);
 		m_spr->SetBaseSym(base_sym);
 		base_sym->RemoveReference();
 	}
@@ -69,7 +69,7 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 	}
 	trans.StoreToMesh(VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol())->GetMesh());
 
-	s2::Symbol* base_sym = SymbolFactory::Instance()->Create(node->base_id);
+	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 	m_spr->SetBaseSym(base_sym);
 	base_sym->RemoveReference();
 }

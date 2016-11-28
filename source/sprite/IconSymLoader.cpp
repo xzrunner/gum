@@ -1,7 +1,7 @@
 #include "IconSymLoader.h"
 #include "IconType.h"
 #include "FilepathHelper.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 
 #include <sprite2/IconSymbol.h>
 #include <sprite2/StaticRectIcon.h>
@@ -105,7 +105,7 @@ void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 		break;
 	}
 
-	s2::Symbol* base = SymbolFactory::Instance()->Create(node->base_id);
+	s2::Symbol* base = SymbolPool::Instance()->Fetch(node->base_id);
 	assert(base->Type() == s2::SYM_IMAGE);
 	icon->SetImage(VI_DOWNCASTING<s2::ImageSymbol*>(base));
 	base->RemoveReference();

@@ -2,7 +2,7 @@
 #include "Exception.h"
 #include "FilepathHelper.h"
 #include "JsonSerializer.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 
 #include <sm_const.h>
 #include <ps_2d.h>
@@ -99,7 +99,7 @@ void P2dSymLoader::Store(p2d_emitter_cfg* cfg) const
 		if (!src.filepath.empty()) {
 			dst.ud = LoadSymbol(src.filepath);			
 		} else {
-			dst.ud = SymbolFactory::Instance()->Create(src.sym_id);
+			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id);
 		}
 		if (!dst.ud) {
 			throw Exception("Symbol doesn't exist: %s", src.filepath.c_str());
@@ -296,7 +296,7 @@ void P2dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 
 s2::Symbol* P2dSymLoader::LoadSymbol(const std::string& filepath) const
 {
-	return SymbolFactory::Instance()->Create(filepath);
+	return SymbolPool::Instance()->Fetch(filepath);
 }
 
 }

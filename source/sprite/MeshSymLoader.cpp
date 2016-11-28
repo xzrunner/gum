@@ -1,6 +1,6 @@
 #include "MeshSymLoader.h"
 #include "FilepathHelper.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 #include "JsonSerializer.h"
 #include "MeshIO.h"
 
@@ -54,7 +54,7 @@ void MeshSymLoader::LoadJson(const std::string& filepath)
 
 	std::string dir = FilepathHelper::Dir(filepath);
 	std::string base_path = FilepathHelper::Absolute(dir, value["base_symbol"].asString());
-	s2::Symbol* base_sym = SymbolFactory::Instance()->Create(base_path);
+	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(base_path);
 
 	std::string type = value["type"].asString();
 	s2::Mesh* mesh = NULL;
@@ -74,7 +74,7 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 		return;
 	}
 
-	s2::Symbol* base_sym = SymbolFactory::Instance()->Create(node->base_id);
+	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 	s2::NetworkMesh* mesh = new s2::NetworkMesh(base_sym);
 
 	std::vector<sm::vec2> outer;

@@ -2,7 +2,7 @@
 #include "FilepathHelper.h"
 #include "JsonSerializer.h"
 #include "Exception.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 
 #include <mt_2d.h>
 #include <sprite2/TrailSymbol.h>
@@ -56,7 +56,7 @@ void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
 			if (!src.filepath.empty()) {
 				dst.mode.A.ud = LoadSymbol(src.filepath);
 			} else {
-				dst.mode.A.ud = SymbolFactory::Instance()->Create(src.sym_id);
+				dst.mode.A.ud = SymbolPool::Instance()->Fetch(src.sym_id);
 			}
 			if (!dst.mode.A.ud) {
 				throw Exception("TrailSymLoader::Store create sym fail: %s", src.filepath.c_str());
@@ -189,7 +189,7 @@ void TrailSymLoader::LoadShapeComp(const Json::Value& comp_val)
 
 s2::Symbol* TrailSymLoader::LoadSymbol(const std::string& filepath) const
 {
-	return SymbolFactory::Instance()->Create(filepath);
+	return SymbolPool::Instance()->Fetch(filepath);
 }
 
 }

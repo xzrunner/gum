@@ -1,7 +1,7 @@
 #include "ShapeSymLoader.h"
 #include "FilepathHelper.h"
 #include "ShapeType.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 #include "ImageSymbol.h"
 #include "Image.h"
 
@@ -87,7 +87,7 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 		{
 			s2::PolygonShape* polygon = new s2::PolygonShape(vertices);
 
-			s2::Symbol* sym = SymbolFactory::Instance()->Create(node->color);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->color);
 			assert(sym->Type() == s2::SYM_IMAGE);
 			gum::ImageSymbol* tex_sym = VI_DOWNCASTING<gum::ImageSymbol*>(sym);
 			s2::Polygon* poly = new s2::TexturePolygon(tex_sym);

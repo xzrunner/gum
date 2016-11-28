@@ -1,6 +1,6 @@
 #include "GUM_GTxt.h"
 #include "StringHelper.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 #include "GUM_DTex.h"
 #include "ImageSymbol.h"
 #include "Image.h"
@@ -167,7 +167,7 @@ ext_sym_create(const char* str) {
 	}
 
 	std::string filepath(&str[5]);
-	s2::Symbol* sym = SymbolFactory::Instance()->Create(filepath);
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
 	return sym;
 }
 
@@ -277,7 +277,7 @@ void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 		std::string str = c_val["str"].asString();
 		std::string utf8 = StringHelper::ToUtf8(str);
 		std::string filepath = c_val["filepath"].asString();
-		s2::Symbol* sym = SymbolFactory::Instance()->Create(filepath);
+		s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
 		sm::vec2 sz = sym->GetBounding().Size();
 		gtxt_uf_add_char(font, utf8.c_str(), (int)sz.x, (int)sz.y, sym);
 	}

@@ -6,7 +6,6 @@
 #include <sprite2/SymType.h>
 
 #include <string>
-#include <map>
 
 #include <stdint.h>
 
@@ -30,10 +29,6 @@ public:
 	 */	
 	s2::Symbol* Create(uint32_t id) const;
 	s2::Symbol* Create(const std::string& pkg_name, const std::string& node_name) const;
-
-private:
-	mutable std::map<std::string, s2::Symbol*> m_path_cache;
-	mutable std::map<uint32_t, s2::Symbol*> m_id_cache;
 
 	SINGLETON_DECLARATION(SymbolFactory);
 

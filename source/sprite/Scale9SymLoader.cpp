@@ -1,7 +1,7 @@
 #include "Scale9SymLoader.h"
 #include "FilepathHelper.h"
 #include "SpriteFactory.h"
-#include "SymbolFactory.h"
+#include "SymbolPool.h"
 #include "SpriteLoader.h"
 
 #include <sprite2/Scale9Symbol.h>
@@ -205,7 +205,7 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 
 s2::Sprite* Scale9SymLoader::LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror)
 {
-	s2::Symbol* sym = SymbolFactory::Instance()->Create(sym_id);
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(sym_id);
 	s2::Sprite* spr = SpriteFactory::Instance()->Create(sym);
 	float angle = dir * SM_PI / 2;
 	spr->SetAngle(angle);

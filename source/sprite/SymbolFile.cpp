@@ -1,4 +1,5 @@
 #include "SymbolFile.h"
+#include "StringHelper.h"
 
 #include <sprite2/SymType.h>
 
@@ -40,6 +41,7 @@ int SymbolFile::Type(const std::string& filepath) const
 	}
 
 	std::string ext = filepath.substr(pos + 1);
+	StringHelper::ToLower(ext);
 	if (ext == "png" || ext == "jpg" || ext == "bmp" || ext == "pvr" || ext == "pkm") 
 	{
 		return s2::SYM_IMAGE;
@@ -53,6 +55,7 @@ int SymbolFile::Type(const std::string& filepath) const
 		}
 
 		std::string tag = filename.substr(pos + 1);
+		StringHelper::ToLower(tag);
 		std::map<std::string, int>::const_iterator itr = m_tag2type.find(tag);
 		if (itr != m_tag2type.end()) {
 			return itr->second;

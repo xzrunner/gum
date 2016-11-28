@@ -1,4 +1,5 @@
 #include "SpriteFactory.h"
+#include "SymbolPool.h"
 
 #include <simp/Package.h>
 #include <simp/NodeFactory.h>
@@ -8,6 +9,16 @@
 
 namespace gum
 {
+
+extern "C"
+void gum_gc()
+{
+	SymbolPool* sym =SymbolPool::Instance();
+	int sym_before = sym->Count();
+	sym->GC();
+	int sym_after = sym->Count();
+	printf("[GUM] gc sym before %d, after %d\n", sym_before, sym_after);
+}
 
 extern "C"
 void gum_update(float dt)
@@ -42,7 +53,7 @@ void* gum_create_spr_from_file(const char* filepath)
 }
 
 extern "C"
-void gum_draw_spr(const void* spr, float x, float y, float angle, float sx, float sy)
+void gum_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy)
 {
 	s2::RenderParams params;
 	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
@@ -50,8 +61,14 @@ void gum_draw_spr(const void* spr, float x, float y, float angle, float sx, floa
 }
 
 extern "C"
-void gum_update_spr(void* spr) {
+void gum_spr_update(void* spr) {
 	static_cast<s2::Sprite*>(spr)->Update(s2::RenderParams());
+}
+
+extern "C"
+void gum_spr_release(void* spr) {
+	s2::Sprite* test = static_cast<s2::Sprite*>(spr);
+	test->RemoveReference();
 }
 
 extern "C"
