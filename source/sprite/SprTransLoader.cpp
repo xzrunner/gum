@@ -1,6 +1,9 @@
 #include "SprTransLoader.h"
 
 #include <sprite2/S2_Sprite.h>
+#include <sprite2/RenderColor.h>
+#include <sprite2/RenderShader.h>
+#include <sprite2/RenderCamera.h>
 #include <simp/NodeTrans.h>
 
 namespace gum
@@ -33,33 +36,42 @@ void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 		float angle = ToFloat(trans->data[idx++]);
 		spr->SetAngle(angle);
 	}
+
+	s2::RenderColor rc;
 	if (trans->type & simp::NodeTrans::COL_MUL_MASK) {
-		spr->Color().mul.FromRGBA(trans->data[idx++]);
+		rc.mul.FromRGBA(trans->data[idx++]);
 	}
 	if (trans->type & simp::NodeTrans::COL_ADD_MASK) {
-		spr->Color().add.FromRGBA(trans->data[idx++]);
+		rc.add.FromRGBA(trans->data[idx++]);
 	}
 	if (trans->type & simp::NodeTrans::COL_R_MASK) {
-		spr->Color().rmap.FromRGBA(trans->data[idx++]);
+		rc.rmap.FromRGBA(trans->data[idx++]);
 	}
 	if (trans->type & simp::NodeTrans::COL_G_MASK) {
-		spr->Color().gmap.FromRGBA(trans->data[idx++]);
+		rc.gmap.FromRGBA(trans->data[idx++]);
 	}
 	if (trans->type & simp::NodeTrans::COL_B_MASK) {
-		spr->Color().bmap.FromRGBA(trans->data[idx++]);
+		rc.bmap.FromRGBA(trans->data[idx++]);
 	}
+	spr->SetColor(rc);
+
+	s2::RenderShader rs;
 	if (trans->type & simp::NodeTrans::BLEND_MASK) {
-		spr->Shader().blend = s2::BlendMode(trans->data[idx++]);
+		rs.SetBlend(s2::BlendMode(trans->data[idx++]));
 	}
 	if (trans->type & simp::NodeTrans::FAST_BLEND_MASK) {
-		spr->Shader().fast_blend = s2::FastBlendMode(trans->data[idx++]);
+		rs.SetFastBlend(s2::FastBlendMode(trans->data[idx++]));
 	}
 	if (trans->type & simp::NodeTrans::FILTER_MASK) {
 		s2::FilterMode mode = s2::FilterMode(trans->data[idx++]);
-		spr->Shader().SetFilter(mode);
+		rs.SetFilter(mode);
 	}
+	spr->SetShader(rs);
+
 	if (trans->type & simp::NodeTrans::CAMERA_MASK) {
-		spr->Camera().mode = s2::CameraMode(trans->data[idx++]);
+		s2::RenderCamera rc;
+		rc.mode = s2::CameraMode(trans->data[idx++]);
+		spr->SetCamera(rc);
 	}
 
 	if (trans->name) {

@@ -19,8 +19,7 @@ class SpriteIO
 {
 public:
 	SpriteIO(bool compress, bool render_open);
-	// pass filter to spr
-	//~SpriteIO() { delete filter; }
+	~SpriteIO();
 
 	void Load(const Json::Value& val, s2::Sprite* spr);
 	void Store(Json::Value& val, const s2::Sprite* spr);
@@ -54,17 +53,17 @@ protected:
 	virtual void StoreEdit(Json::Value& val);
 
 private:
-	void LoadColor(s2::RenderColor& color);
+	void LoadColor(s2::Sprite* spr);
 	void StoreColor(const s2::RenderColor& color);
 	void LoadColor(const Json::Value& val);
 	void StoreColor(Json::Value& val);
 
-	void LoadShader(s2::RenderShader& shader);
+	void LoadShader(s2::Sprite* spr);
 	void StoreShader(const s2::RenderShader& shader);
 	void LoadShader(const Json::Value& val);
 	void StoreShader(Json::Value& val);
 
-	void LoadCamera(s2::RenderCamera& camera);
+	void LoadCamera(s2::Sprite* spr);
 	void StoreCamera(const s2::RenderCamera& camera);	
 	void LoadCamera(const Json::Value& val);
 	void StoreCamera(Json::Value& val);

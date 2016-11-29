@@ -320,22 +320,6 @@
 			Name="sprite"
 			>
 			<File
-				RelativePath="..\..\..\source\sprite\SpriteFactory.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gum\SpriteFactory.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\sprite\SymbolFactory.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gum\SymbolFactory.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\sprite\SymbolFile.cpp"
 				>
 			</File>
@@ -756,6 +740,46 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\SpineAnim2Loader.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="pool"
+				>
+				<File
+					RelativePath="..\..\..\source\sprite\SpritePool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpritePool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SymbolPool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SymbolPool.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="factory"
+				>
+				<File
+					RelativePath="..\..\..\source\sprite\SpriteFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SpriteFactory.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\SymbolFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\SymbolFactory.h"
 					>
 				</File>
 			</Filter>

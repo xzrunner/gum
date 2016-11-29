@@ -10,6 +10,8 @@
 #include <sprite2/RFEdgeDetection.h>
 #include <sprite2/RFGaussianBlur.h>
 #include <sprite2/RFOuterGlow.h>
+#include <sprite2/RenderShader.h>
+#include <sprite2/RenderCamera.h>
 
 namespace gum
 {
@@ -31,6 +33,13 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 
 	m_visible		= true;
 	m_editable		= true;
+}
+
+SpriteIO::~SpriteIO() 
+{ 
+	if (m_filter) {
+		delete m_filter; 
+	}
 }
 
 void SpriteIO::Load(const Json::Value& val, s2::Sprite* spr)
@@ -173,16 +182,16 @@ void SpriteIO::StoreGeometry(Json::Value& val)
 
 void SpriteIO::LoadRender(s2::Sprite* spr)
 {
-	LoadColor(spr->Color());
-	LoadShader(spr->Shader());
-	LoadCamera(spr->Camera());	
+	LoadColor(spr);
+	LoadShader(spr);
+	LoadCamera(spr);	
 }
 
 void SpriteIO::StoreRender(const s2::Sprite* spr)
 {
-	StoreColor(spr->Color());
-	StoreShader(spr->Shader());
-	StoreCamera(spr->Camera());	
+	StoreColor(spr->GetColor());
+	StoreShader(spr->GetShader());
+	StoreCamera(spr->GetCamera());	
 }
 
 void SpriteIO::LoadRender(const Json::Value& val)
@@ -273,9 +282,9 @@ void SpriteIO::StoreEdit(Json::Value& val)
 /* private                                                              */
 /************************************************************************/
 
-void SpriteIO::LoadColor(s2::RenderColor& color)
+void SpriteIO::LoadColor(s2::Sprite* spr)
 {
-	color = m_col;
+	spr->SetColor(m_col);
 }
 
 void SpriteIO::StoreColor(const s2::RenderColor& color)
@@ -336,18 +345,20 @@ void SpriteIO::StoreColor(Json::Value& val)
 	}
 }
 
-void SpriteIO::LoadShader(s2::RenderShader& shader)
+void SpriteIO::LoadShader(s2::Sprite* spr)
 {
-	shader.blend = m_blend;
-	shader.fast_blend = m_fast_blend;
-	shader.filter = m_filter;
+	s2::RenderShader rs = spr->GetShader();
+	rs.SetBlend(m_blend);
+	rs.SetFastBlend(m_fast_blend);
+	rs.SetFilter(m_filter);
+	spr->SetShader(rs);
 }
 
 void SpriteIO::StoreShader(const s2::RenderShader& shader)
 {
-	m_blend = shader.blend;
-	m_fast_blend = shader.fast_blend;
-	m_filter = shader.filter;
+	m_blend      = shader.GetBlend();
+	m_fast_blend = shader.GetFastBlend();
+	m_filter     = const_cast<s2::RenderFilter*>(shader.GetFilter());
 }
 
 void SpriteIO::LoadShader(const Json::Value& val)
@@ -466,9 +477,11 @@ void SpriteIO::StoreShader(Json::Value& val)
 	}
 }
 
-void SpriteIO::LoadCamera(s2::RenderCamera& rc)
+void SpriteIO::LoadCamera(s2::Sprite* spr)
 {
+	s2::RenderCamera rc = spr->GetCamera();
 	rc.mode = m_camera;
+	spr->SetCamera(rc);
 }
 
 void SpriteIO::StoreCamera(const s2::RenderCamera& rc)
