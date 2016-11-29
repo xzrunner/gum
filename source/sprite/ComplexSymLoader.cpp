@@ -3,6 +3,7 @@
 #include "SpriteFactory.h"
 #include "SprTransLoader.h"
 
+#include <sprite2/S2_Sprite.h>
 #include <sprite2/ComplexSymbol.h>
 #include <simp/NodeComplex.h>
 
@@ -53,6 +54,7 @@ void ComplexSymLoader::LoadJson(const std::string& filepath)
 	for (int i = 0, n = value["sprite"].size(); i < n; ++i) {
 		s2::Sprite* spr = SpriteFactory::Instance()->Create(value["sprite"][i], dir);
 		m_sym->Add(spr);
+		spr->RemoveReference();
 	}
 
 	LoadJsonAction(value, m_sym);
@@ -72,6 +74,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i]);
 		SprTransLoader::Load(spr, node->trans[i]);
 		m_sym->Add(spr);
+		spr->RemoveReference();
 	}
 
 	const std::vector<s2::Sprite*>& children = m_sym->GetChildren();
