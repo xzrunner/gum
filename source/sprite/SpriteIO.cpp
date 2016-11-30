@@ -358,7 +358,11 @@ void SpriteIO::StoreShader(const s2::RenderShader& shader)
 {
 	m_blend      = shader.GetBlend();
 	m_fast_blend = shader.GetFastBlend();
-	m_filter     = shader.GetFilter()->Clone();
+	if (shader.GetFilter()) {
+		m_filter = shader.GetFilter()->Clone();
+	} else {
+		m_filter = NULL;
+	}
 }
 
 void SpriteIO::LoadShader(const Json::Value& val)

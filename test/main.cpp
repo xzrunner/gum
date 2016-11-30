@@ -97,7 +97,7 @@ void
 resize(int width, int height) {
 	s2::RenderCtxStack* s2_stack = s2::RenderCtxStack::Instance();
 	s2_stack->Pop();
-	s2_stack->Push(s2::RenderCtx(width, height));
+	s2_stack->Push(s2::RenderCtx(width, height, width, height));
 
 	task->Resize(width, height);
 }
