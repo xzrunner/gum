@@ -19,15 +19,14 @@ class SymbolPool
 {
 public:
 	void GC();
-
 	int Count() const { return m_path_cache.size() + m_id_cache.size(); }
 	
 	s2::Symbol* Fetch(const std::string& filepath, int type = s2::SYM_UNKNOWN);
 	s2::Symbol* Fetch(const uint32_t id);
 	
 private:
-	mutable std::map<std::string, s2::Symbol*> m_path_cache;
-	mutable std::map<uint32_t, s2::Symbol*>    m_id_cache;
+	std::map<std::string, s2::Symbol*> m_path_cache;
+	std::map<uint32_t, s2::Symbol*>    m_id_cache;
 
 	SINGLETON_DECLARATION(SymbolPool);
 

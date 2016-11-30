@@ -23,6 +23,10 @@ void  gum_spr_release(void* spr);
 
 void* gum_fetch_child(const void* spr, const char* name);
 
+void  gum_spr_set_pos(void* spr, float x, float y);
+void  gum_spr_set_angle(void* spr, float angle);
+void  gum_spr_set_scale(void* spr, float sx, float sy);
+
 #endif // _gum_wrap_c_h_
 
 #ifdef __cplusplus

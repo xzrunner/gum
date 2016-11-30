@@ -13,11 +13,14 @@ namespace gum
 extern "C"
 void gum_gc()
 {
-	SymbolPool* sym =SymbolPool::Instance();
+	SymbolPool* sym = SymbolPool::Instance();
 	int sym_before = sym->Count();
+	int spr_before = s2::Sprite::GetCount();
 	sym->GC();
 	int sym_after = sym->Count();
+	int spr_after = s2::Sprite::GetCount();
 	printf("[GUM] gc sym before %d, after %d\n", sym_before, sym_after);
+	printf("[GUM] gc spr before %d, after %d\n", spr_before, spr_after);
 }
 
 extern "C"
@@ -74,6 +77,21 @@ void gum_spr_release(void* spr) {
 extern "C"
 void* gum_fetch_child(const void* spr, const char* name) {
 	return static_cast<const s2::Sprite*>(spr)->FetchChild(name);
+}
+
+extern "C"
+void gum_spr_set_pos(void* spr, float x, float y) {
+	static_cast<s2::Sprite*>(spr)->SetPosition(sm::vec2(x, y));
+}
+
+extern "C"
+void gum_spr_set_angle(void* spr, float angle) {
+	static_cast<s2::Sprite*>(spr)->SetAngle(angle);
+}
+
+extern "C"
+void gum_spr_set_scale(void* spr, float sx, float sy) {
+	static_cast<s2::Sprite*>(spr)->SetScale(sm::vec2(sx, sy));
 }
 
 }
