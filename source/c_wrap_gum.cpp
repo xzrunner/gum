@@ -1,11 +1,17 @@
 #include "SpriteFactory.h"
 #include "SymbolPool.h"
 
+#include <render/render.h>
+#include <dtex_screen.h>
 #include <simp/Package.h>
 #include <simp/NodeFactory.h>
+#include <gimg_export.h>
+#include <gimg_import.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/S2_Sprite.h>
+#include <sprite2/S2_Symbol.h>
 #include <sprite2/SprTimer.h>
+#include <sprite2/ComplexSprite.h>
 
 namespace gum
 {
@@ -13,20 +19,68 @@ namespace gum
 extern "C"
 void gum_gc()
 {
-	SymbolPool* sym = SymbolPool::Instance();
-	int sym_before = sym->Count();
-	int spr_before = s2::Sprite::GetCount();
-	sym->GC();
-	int sym_after = sym->Count();
-	int spr_after = s2::Sprite::GetCount();
-	printf("[GUM] gc sym before %d, after %d\n", sym_before, sym_after);
-	printf("[GUM] gc spr before %d, after %d\n", spr_before, spr_after);
+	SymbolPool::Instance()->GC();
+}
+
+extern "C"
+int gum_get_sym_count() {
+	return SymbolPool::Instance()->Count();
+}
+
+extern "C"
+int gum_get_spr_count() {
+	return s2::Sprite::GetCount();
 }
 
 extern "C"
 void gum_update(float dt)
 {
 	s2::SprTimer::Instance()->Update(dt);
+}
+
+extern "C"
+void gum_store_snapshoot(const char* filepath)
+{
+	float w, h, scale;
+	dtex_get_screen(&w, &h, &scale);
+	w *= scale;
+	h *= scale;
+
+	uint8_t* pixels = (uint8_t*)malloc(w * h * 3);
+	memset(pixels, 0, w * h * 3);
+	render_gl_read_pixels(0, 0, w, h, pixels);
+	gimg_export(filepath, pixels, w, h, GPF_RGB);
+	free(pixels);
+}
+
+extern "C"
+int gum_compare_snapshoot(const char* filepath)
+{
+	float w, h, scale;
+	dtex_get_screen(&w, &h, &scale);
+	w *= scale;
+	h *= scale;
+
+	int sz = w * h * 3;
+	uint8_t* now = (uint8_t*)malloc(sz);
+	memset(now, 0, sz);
+	render_gl_read_pixels(0, 0, w, h, now);
+
+	int _w, _h;
+	enum GIMG_PIXEL_FORMAT _fmt;
+	uint8_t* old = gimg_import(filepath, &_w, &_h, &_fmt);
+
+	int cmp = 0;
+	if (_w != static_cast<int>(w) || _h != static_cast<int>(h)) {
+		cmp = -1;
+	} else {
+		cmp = memcmp(old, now, sz);
+	}
+
+	free(now);
+	free(old);
+
+	return cmp;
 }
 
 extern "C"
@@ -92,6 +146,15 @@ void gum_spr_set_angle(void* spr, float angle) {
 extern "C"
 void gum_spr_set_scale(void* spr, float sx, float sy) {
 	static_cast<s2::Sprite*>(spr)->SetScale(sm::vec2(sx, sy));
+}
+
+extern "C"
+void gum_spr_set_action(void* spr, const char* action) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == s2::SYM_COMPLEX) {
+		s2::ComplexSprite* complex = VI_DOWNCASTING<s2::ComplexSprite*>(s2_spr);
+		complex->SetAction(action);
+	}
 }
 
 }
