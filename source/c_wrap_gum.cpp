@@ -12,6 +12,8 @@
 #include <sprite2/S2_Symbol.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/ComplexSprite.h>
+#include <sprite2/RenderFilter.h>
+#include <c_wrap_sl.h>
 
 namespace gum
 {
@@ -155,6 +157,83 @@ void gum_spr_set_action(void* spr, const char* action) {
 		s2::ComplexSprite* complex = VI_DOWNCASTING<s2::ComplexSprite*>(s2_spr);
 		complex->SetAction(action);
 	}
+}
+
+extern "C"
+uint32_t gum_spr_get_col_mul(void* spr) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	return s2_spr->GetColor().mul.ToRGBA();
+}
+
+extern "C"
+uint32_t gum_spr_get_col_add(void* spr) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	return s2_spr->GetColor().add.ToRGBA();
+}
+
+extern "C"
+void gum_spr_get_col_map(void* spr, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	*rmap = s2_spr->GetColor().rmap.ToRGBA();
+	*gmap = s2_spr->GetColor().gmap.ToRGBA();
+	*bmap = s2_spr->GetColor().bmap.ToRGBA();
+}
+
+extern "C"
+void gum_spr_set_col_mul(void* spr, uint32_t rgba) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetColor().mul.ToRGBA() == rgba) {
+		return;
+	}
+
+	s2::RenderColor col = s2_spr->GetColor();
+	col.mul.FromRGBA(rgba);
+	s2_spr->SetColor(col);
+}
+
+extern "C"
+void gum_spr_set_col_add(void* spr, uint32_t rgba) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetColor().add.ToRGBA() == rgba) {
+		return;
+	}
+
+	s2::RenderColor col = s2_spr->GetColor();
+	col.add.FromRGBA(rgba);
+	s2_spr->SetColor(col);
+}
+
+extern "C"
+void gum_spr_set_col_map(void* spr, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetColor().rmap.ToRGBA() == rmap &&
+		s2_spr->GetColor().gmap.ToRGBA() == gmap &&
+		s2_spr->GetColor().bmap.ToRGBA() == bmap) {
+		return;
+	}
+
+	s2::RenderColor col = s2_spr->GetColor();
+	col.rmap.FromRGBA(rmap);
+	col.gmap.FromRGBA(gmap);
+	col.bmap.FromRGBA(bmap);
+	s2_spr->SetColor(col);
+}
+
+extern "C"
+void gum_spr_set_filter(void* spr, int mode) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	const s2::RenderFilter* filter = s2_spr->GetShader().GetFilter();
+	int ori = SLFM_NULL;
+	if (filter) {
+		ori = filter->GetMode();
+	}
+	if (ori == mode) {
+		return;
+	}
+
+	s2::RenderShader shader = s2_spr->GetShader();
+	shader.SetFilter(s2::FilterMode(mode));
+	s2_spr->SetShader(shader);
 }
 
 }

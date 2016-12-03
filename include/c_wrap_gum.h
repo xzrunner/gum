@@ -35,6 +35,15 @@ void  gum_spr_set_scale(void* spr, float sx, float sy);
 
 void  gum_spr_set_action(void* spr, const char* action);
 
+uint32_t gum_spr_get_col_mul(void* spr);
+uint32_t gum_spr_get_col_add(void* spr);
+void  gum_spr_get_col_map(void* spr, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap);
+
+void  gum_spr_set_col_mul(void* spr, uint32_t rgba);
+void  gum_spr_set_col_add(void* spr, uint32_t rgba);
+void  gum_spr_set_col_map(void* spr, uint32_t rmap, uint32_t gmap, uint32_t bmap);
+void  gum_spr_set_filter(void* spr, int mode);
+
 #endif // _gum_wrap_c_h_
 
 #ifdef __cplusplus
