@@ -107,8 +107,8 @@ void ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
 
 void ImageSymbol::Proj2Screen(float px, float py, int w, int h, float& sx, float& sy) const
 {
-	sx = px;
-	sy = py;
+	sx = w * 0.5f + px;
+	sy = h * 0.5f - py;
 }
 
 bool ImageSymbol::IsOrthoCam() const
