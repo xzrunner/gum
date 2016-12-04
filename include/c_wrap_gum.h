@@ -7,6 +7,7 @@ extern "C"
 #define _gum_wrap_c_h_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 void  gum_gc();
 
@@ -33,7 +34,15 @@ void  gum_spr_set_pos(void* spr, float x, float y);
 void  gum_spr_set_angle(void* spr, float angle);
 void  gum_spr_set_scale(void* spr, float sx, float sy);
 
+bool  gum_spr_get_visible(void* spr);
+void  gum_spr_set_visible(void* spr, bool visible);
+
+void  gum_spr_set_frame(void* spr, int frame);
 void  gum_spr_set_action(void* spr, const char* action);
+
+int   gum_spr_get_frame(void* spr);
+int   gum_spr_get_frame_count(void* spr);
+int   gum_spr_get_component_count(void* spr);
 
 uint32_t gum_spr_get_col_mul(void* spr);
 uint32_t gum_spr_get_col_add(void* spr);

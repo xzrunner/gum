@@ -12,6 +12,9 @@
 #include <sprite2/S2_Symbol.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/ComplexSprite.h>
+#include <sprite2/AnimSprite.h>
+#include <sprite2/AnimSymbol.h>
+#include <sprite2/ComplexSymbol.h>
 #include <sprite2/RenderFilter.h>
 #include <c_wrap_sl.h>
 
@@ -151,11 +154,65 @@ void gum_spr_set_scale(void* spr, float sx, float sy) {
 }
 
 extern "C"
+bool gum_spr_get_visible(void* spr) {
+	return static_cast<s2::Sprite*>(spr)->IsVisible();
+}
+
+extern "C"
+void gum_spr_set_visible(void* spr, bool visible) {
+	static_cast<s2::Sprite*>(spr)->SetVisible(visible);
+}
+
+extern "C"
+void gum_spr_set_frame(void* spr, int frame) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == s2::SYM_ANIMATION) {
+		s2::AnimSprite* anim = VI_DOWNCASTING<s2::AnimSprite*>(s2_spr);
+		anim->SetFrame(frame);
+	}
+}
+
+extern "C"
 void gum_spr_set_action(void* spr, const char* action) {
 	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == s2::SYM_COMPLEX) {
 		s2::ComplexSprite* complex = VI_DOWNCASTING<s2::ComplexSprite*>(s2_spr);
 		complex->SetAction(action);
+	}
+}
+
+extern "C"
+int gum_spr_get_frame(void* spr) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == s2::SYM_ANIMATION) {
+		s2::AnimSprite* anim = VI_DOWNCASTING<s2::AnimSprite*>(s2_spr);
+		return anim->GetFrame();
+	} else {
+		return -1;
+	}
+}
+
+extern "C"
+int gum_spr_get_frame_count(void* spr) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == s2::SYM_ANIMATION) {
+		s2::AnimSprite* anim = VI_DOWNCASTING<s2::AnimSprite*>(s2_spr);
+		const s2::AnimSymbol* sym = VI_DOWNCASTING<const s2::AnimSymbol*>(anim->GetSymbol());
+		return sym->GetMaxFrameIdx();
+	} else {
+		return -1;
+	}
+}
+
+extern "C"
+int gum_spr_get_component_count(void* spr) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == s2::SYM_COMPLEX) {
+		s2::ComplexSprite* complex = VI_DOWNCASTING<s2::ComplexSprite*>(s2_spr);
+		const s2::ComplexSymbol* sym = VI_DOWNCASTING<const s2::ComplexSymbol*>(complex->GetSymbol());
+		return sym->GetChildren().size();
+	} else {
+		return -1;
 	}
 }
 
