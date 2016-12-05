@@ -15,6 +15,7 @@
 #include <sprite2/AnimSprite.h>
 #include <sprite2/AnimSymbol.h>
 #include <sprite2/ComplexSymbol.h>
+#include <sprite2/TextboxSprite.h>
 #include <sprite2/RenderFilter.h>
 #include <c_wrap_sl.h>
 
@@ -291,6 +292,26 @@ void gum_spr_set_filter(void* spr, int mode) {
 	s2::RenderShader shader = s2_spr->GetShader();
 	shader.SetFilter(s2::FilterMode(mode));
 	s2_spr->SetShader(shader);
+}
+
+extern "C"
+const char* gum_spr_get_text(void* spr) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == s2::SYM_TEXTBOX) {
+		s2::TextboxSprite* text = VI_DOWNCASTING<s2::TextboxSprite*>(s2_spr);
+		return text->GetText().c_str();
+	} else {
+		return NULL;
+	}
+}
+
+extern "C"
+void  gum_spr_set_text(void* spr, const char* text) {
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == s2::SYM_TEXTBOX) {
+		s2::TextboxSprite* text_spr = VI_DOWNCASTING<s2::TextboxSprite*>(s2_spr);
+		text_spr->SetText(text);
+	}
 }
 
 }

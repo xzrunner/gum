@@ -53,6 +53,9 @@ void  gum_spr_set_col_add(void* spr, uint32_t rgba);
 void  gum_spr_set_col_map(void* spr, uint32_t rmap, uint32_t gmap, uint32_t bmap);
 void  gum_spr_set_filter(void* spr, int mode);
 
+const char* gum_spr_get_text(void* spr);
+void  gum_spr_set_text(void* spr, const char* text);
+
 #endif // _gum_wrap_c_h_
 
 #ifdef __cplusplus
