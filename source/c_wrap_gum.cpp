@@ -52,7 +52,7 @@ void gum_update(float dt)
 }
 
 extern "C"
-void gum_store_snapshoot(const char* filepath)
+void gum_store_snapshot(const char* filepath)
 {
 	float w, h, scale;
 	dtex_get_screen(&w, &h, &scale);
@@ -67,7 +67,7 @@ void gum_store_snapshoot(const char* filepath)
 }
 
 extern "C"
-int gum_compare_snapshoot(const char* filepath)
+int gum_compare_snapshot(const char* filepath)
 {
 	float w, h, scale;
 	dtex_get_screen(&w, &h, &scale);
@@ -144,13 +144,23 @@ void gum_spr_release(void* spr) {
 extern "C"
 void* gum_fetch_child(const void* spr, const char* name) {
 	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(name);
-	child->AddReference();
-	return const_cast<s2::Sprite*>(child);
+	if (child) {
+		child->AddReference();
+		return const_cast<s2::Sprite*>(child);
+	} else {
+		return NULL;
+	}
 }
 
 extern "C"
 void* gum_fetch_child_by_index(const void* spr, int idx) {
-	return NULL;
+	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(idx);
+	if (child) {
+		child->AddReference();
+		return const_cast<s2::Sprite*>(child);
+	} else {
+		return NULL;
+	}
 }
 
 extern "C"

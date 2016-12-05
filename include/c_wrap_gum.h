@@ -17,8 +17,8 @@ int   gum_get_img_count();
 
 void  gum_update(float dt);
 
-void  gum_store_snapshoot(const char* filepath);
-int   gum_compare_snapshoot(const char* filepath);
+void  gum_store_snapshot(const char* filepath);
+int   gum_compare_snapshot(const char* filepath);
 
 void  gum_create_pkg(const char* filepath, const char* name, int id);
 void* gum_create_spr(const char* pkg, const char* spr);
