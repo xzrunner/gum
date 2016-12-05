@@ -25,6 +25,7 @@ void ImageSymLoader::Load(const std::string& filepath)
 	Image* img = ImageMgr::Instance()->Create(filepath);
 	if (img) {
 		m_sym->SetImage(img);
+		img->RemoveReference();
 	}
 }
 

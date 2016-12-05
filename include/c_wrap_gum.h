@@ -13,6 +13,7 @@ void  gum_gc();
 
 int   gum_get_sym_count();
 int   gum_get_spr_count();
+int   gum_get_img_count();
 
 void  gum_update(float dt);
 
@@ -29,6 +30,7 @@ void  gum_spr_update(void* spr);
 void  gum_spr_release(void* spr);
 
 void* gum_fetch_child(const void* spr, const char* name);
+void* gum_fetch_child_by_index(const void* spr, int idx);
 
 void  gum_spr_set_pos(void* spr, float x, float y);
 void  gum_spr_set_angle(void* spr, float angle);

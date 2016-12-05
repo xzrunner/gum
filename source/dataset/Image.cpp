@@ -24,7 +24,9 @@ Image::Image()
 Image::~Image()
 {
 	RenderContext::Instance()->ReleaseTexture(m_id);
-	delete m_s2_tex;
+	if (m_s2_tex) {
+		m_s2_tex->RemoveReference();
+	}
 }
 
 bool Image::LoadFromFile(const std::string& filepath)

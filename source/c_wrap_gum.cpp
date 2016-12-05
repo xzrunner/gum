@@ -1,5 +1,6 @@
 #include "SpriteFactory.h"
 #include "SymbolPool.h"
+#include "Image.h"
 
 #include <render/render.h>
 #include <dtex_screen.h>
@@ -26,11 +27,17 @@ extern "C"
 void gum_gc()
 {
 	SymbolPool::Instance()->GC();
+	ImageMgr::Instance()->GC();
 }
 
 extern "C"
 int gum_get_sym_count() {
 	return SymbolPool::Instance()->Count();
+}
+
+extern "C"
+int gum_get_img_count() {
+	return ImageMgr::Instance()->Count();
 }
 
 extern "C"
@@ -136,7 +143,14 @@ void gum_spr_release(void* spr) {
 
 extern "C"
 void* gum_fetch_child(const void* spr, const char* name) {
-	return static_cast<const s2::Sprite*>(spr)->FetchChild(name);
+	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(name);
+	child->AddReference();
+	return const_cast<s2::Sprite*>(child);
+}
+
+extern "C"
+void* gum_fetch_child_by_index(const void* spr, int idx) {
+	return NULL;
 }
 
 extern "C"

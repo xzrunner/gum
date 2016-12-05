@@ -15,23 +15,36 @@ SymbolPool::SymbolPool()
 
 void SymbolPool::GC()
 {
-	std::map<std::string, s2::Symbol*>::iterator itr0 = m_path_cache.begin();
-	for ( ; itr0 != m_path_cache.end(); ) {
-		if (itr0->second->GetRefCount() == 1) {
-			itr0->second->RemoveReference();
-			itr0 = m_path_cache.erase(itr0);
-		} else {
-			++itr0;
-		}
-	}
+	while (true)
+	{
+		bool dirty = false;
 
-	std::map<uint32_t, s2::Symbol*>::iterator itr1 = m_id_cache.begin();
-	for ( ; itr1 != m_id_cache.end(); ) {
-		if (itr1->second->GetRefCount() == 1) {
-			itr1->second->RemoveReference();
-			itr1 = m_id_cache.erase(itr1);
-		} else {
-			++itr1;
+		std::map<std::string, s2::Symbol*>::iterator itr0 = m_path_cache.begin();
+		for ( ; itr0 != m_path_cache.end(); ) 
+		{
+			if (itr0->second->GetRefCount() == 1) {
+				itr0->second->RemoveReference();
+				itr0 = m_path_cache.erase(itr0);
+				dirty = true;
+			} else {
+				++itr0;
+			}
+		}
+
+		std::map<uint32_t, s2::Symbol*>::iterator itr1 = m_id_cache.begin();
+		for ( ; itr1 != m_id_cache.end(); ) 
+		{
+			if (itr1->second->GetRefCount() == 1) {
+				itr1->second->RemoveReference();
+				itr1 = m_id_cache.erase(itr1);
+				dirty = true;
+			} else {
+				++itr1;
+			}
+		}
+
+		if (!dirty) {
+			 break;
 		}
 	}
 }

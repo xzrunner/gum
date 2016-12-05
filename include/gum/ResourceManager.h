@@ -15,6 +15,9 @@ public:
 
 	void Clear();
 
+	void GC();
+	int Count() const { return m_res_map.size(); }
+
 	static ResourceManager* Instance();
 
 private:

@@ -39,6 +39,7 @@ inline T* ResourceManager<T>::Create(const std::string& filepath)
 		if (loaded)
 		{
 			m_res_map.insert(std::make_pair(filepath, res));
+			res->AddReference();
 			return res;
 		}
 		else
@@ -62,6 +63,31 @@ inline void ResourceManager<T>::Release(const std::string& filepath)
 	if (itr != m_res_map.end()) {
 		itr->second->RemoveReference();
 		m_res_map.erase(itr->second);
+	}
+}
+
+template<class T>
+inline void ResourceManager<T>::GC()
+{
+	while (true)
+	{
+		bool dirty = false;
+
+		std::map<std::string, T*>::iterator itr = m_res_map.begin();
+		for ( ; itr != m_res_map.end(); )
+		{
+			if (itr->second->GetRefCount() == 1) {
+				itr->second->RemoveReference();
+				itr = m_res_map.erase(itr);
+				dirty = true;
+			} else {
+				++itr;
+			}
+		}
+
+		if (!dirty) {
+			break;
+		}
 	}
 }
 
