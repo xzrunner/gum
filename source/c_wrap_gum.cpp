@@ -142,7 +142,7 @@ void gum_spr_release(void* spr) {
 }
 
 extern "C"
-void* gum_fetch_child(const void* spr, const char* name) {
+void* gum_spr_fetch_child(const void* spr, const char* name) {
 	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(name);
 	if (child) {
 		child->AddReference();
@@ -153,7 +153,7 @@ void* gum_fetch_child(const void* spr, const char* name) {
 }
 
 extern "C"
-void* gum_fetch_child_by_index(const void* spr, int idx) {
+void* gum_spr_fetch_child_by_index(const void* spr, int idx) {
 	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(idx);
 	if (child) {
 		child->AddReference();
@@ -161,6 +161,11 @@ void* gum_fetch_child_by_index(const void* spr, int idx) {
 	} else {
 		return NULL;
 	}
+}
+
+extern "C"
+void gum_spr_mount_child(void* parent, const char* name, void* child) {
+	static_cast<s2::Sprite*>(parent)->MountChild(name, static_cast<s2::Sprite*>(child));
 }
 
 extern "C"
