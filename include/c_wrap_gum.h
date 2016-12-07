@@ -37,8 +37,18 @@ void  gum_spr_set_pos(void* spr, float x, float y);
 void  gum_spr_set_angle(void* spr, float angle);
 void  gum_spr_set_scale(void* spr, float sx, float sy);
 
+void  gum_spr_get_pos(const void* spr, float* x, float* y);
+void  gum_spr_get_angle(const void* spr, float* angle);
+void  gum_spr_get_scale(const void* spr, float* sx, float* sy);
+
+int   gum_spr_get_sym_id(void* spr);
+const char* gum_spr_get_name(void* spr);
+int   gum_spr_get_sym_type(void* spr);
+
 bool  gum_spr_get_visible(void* spr);
 void  gum_spr_set_visible(void* spr, bool visible);
+bool  gum_spr_get_editable(void* spr);
+void  gum_spr_set_editable(void* spr, bool editable);
 
 void  gum_spr_set_frame(void* spr, int frame);
 void  gum_spr_set_action(void* spr, const char* action);
@@ -58,6 +68,18 @@ void  gum_spr_set_filter(void* spr, int mode);
 
 const char* gum_spr_get_text(void* spr);
 void  gum_spr_set_text(void* spr, const char* text);
+
+void  gum_spr_get_aabb(const void* spr, float aabb[4]);
+void  gum_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]);
+bool  gum_spr_point_test(const void* spr, float x, float y);
+void* gum_spr_point_query(const void* spr, float x, float y, float mat[6]);
+
+bool  gum_spr_has_action(const void* spr, const char* name);
+
+bool  gum_spr_get_text_size(const void* spr, float* w, float* h);
+
+bool  gum_spr_get_scissor(const void* spr, float* x, float* y, float* w, float* h);
+bool  gum_spr_set_scissor(void* spr, float x, float y, float w, float h);
 
 #endif // _gum_wrap_c_h_
 

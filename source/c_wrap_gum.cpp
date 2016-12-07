@@ -18,7 +18,11 @@
 #include <sprite2/ComplexSymbol.h>
 #include <sprite2/TextboxSprite.h>
 #include <sprite2/RenderFilter.h>
+#include <sprite2/BoundingBox.h>
+#include <sprite2/S2_RVG.h>
+#include <sprite2/PointQueryVisitor.h>
 #include <c_wrap_sl.h>
+#include <gtxt_label.h>
 
 namespace gum
 {
@@ -127,7 +131,8 @@ void gum_spr_draw(const void* spr, float x, float y, float angle, float sx, floa
 {
 	s2::RenderParams params;
 	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
-	s2::DrawNode::Draw(static_cast<const s2::Sprite*>(spr), params);
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	s2::DrawNode::Draw(s2_spr, params);
 }
 
 extern "C"
@@ -184,6 +189,41 @@ void gum_spr_set_scale(void* spr, float sx, float sy) {
 }
 
 extern "C"
+void gum_spr_get_pos(const void* spr, float* x, float* y) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	*x = s2_spr->GetPosition().x;
+	*y = s2_spr->GetPosition().y;
+}
+
+extern "C"
+void gum_spr_get_angle(const void* spr, float* angle) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	*angle = s2_spr->GetAngle();
+}
+
+extern "C"
+void gum_spr_get_scale(const void* spr, float* sx, float* sy) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	*sx = s2_spr->GetScale().x;
+	*sy = s2_spr->GetScale().y;
+}
+
+extern "C"
+int gum_spr_get_sym_id(void* spr) {
+	return static_cast<s2::Sprite*>(spr)->GetSymbol()->GetID();
+}
+
+extern "C"
+const char* gum_spr_get_name(void* spr) {
+	return static_cast<s2::Sprite*>(spr)->GetName().c_str();
+}
+
+extern "C"
+int gum_spr_get_sym_type(void* spr) {
+	return static_cast<s2::Sprite*>(spr)->GetSymbol()->Type();
+}
+
+extern "C"
 bool gum_spr_get_visible(void* spr) {
 	return static_cast<s2::Sprite*>(spr)->IsVisible();
 }
@@ -191,6 +231,16 @@ bool gum_spr_get_visible(void* spr) {
 extern "C"
 void gum_spr_set_visible(void* spr, bool visible) {
 	static_cast<s2::Sprite*>(spr)->SetVisible(visible);
+}
+
+extern "C"
+bool gum_spr_get_editable(void* spr) {
+	return static_cast<s2::Sprite*>(spr)->IsEditable();	
+}
+
+extern "C"
+void gum_spr_set_editable(void* spr, bool editable) {
+	static_cast<s2::Sprite*>(spr)->SetEditable(editable);
 }
 
 extern "C"
@@ -335,12 +385,168 @@ const char* gum_spr_get_text(void* spr) {
 }
 
 extern "C"
-void  gum_spr_set_text(void* spr, const char* text) {
+void gum_spr_set_text(void* spr, const char* text) {
 	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == s2::SYM_TEXTBOX) {
 		s2::TextboxSprite* text_spr = VI_DOWNCASTING<s2::TextboxSprite*>(s2_spr);
 		text_spr->SetText(text);
 	}
+}
+
+extern "C"
+void gum_spr_get_aabb(const void* spr, float aabb[4]) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	sm::rect sz = s2_spr->GetBounding()->GetSize();
+	aabb[0] = sz.xmin;
+	aabb[1] = sz.ymin;
+	aabb[2] = sz.xmax;
+	aabb[3] = sz.ymax;
+}
+
+extern "C"
+void gum_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]) {
+	sm::mat4 outer;
+ 	outer.x[0] = mat[0];
+ 	outer.x[1] = mat[1];
+ 	outer.x[4] = mat[2];
+ 	outer.x[5] = mat[3];
+ 	outer.x[12]= mat[4];
+ 	outer.x[13]= mat[5];
+
+	sm::mat4 m;
+	m.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+	m = outer * m;
+
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	sm::rect sz = s2_spr->GetSymbol()->GetBounding(s2_spr);
+	std::vector<sm::vec2> vertices(4);
+	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
+	vertices[1] = sm::vec2(sz.xmin, sz.ymax);
+	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
+	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
+	for (int i = 0; i < 4; ++i) {
+		vertices[i] = m * vertices[i];
+	}
+	s2::RVG::Polyline(vertices, true);
+}
+
+extern "C"
+bool gum_spr_point_test(const void* spr, float x, float y) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	return s2_spr->GetBounding()->IsContain(sm::vec2(x, y));
+}
+
+extern "C"
+void* gum_spr_point_query(const void* spr, float x, float y, float mat[6]) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+
+	s2::PointQueryVisitor visitor(sm::vec2(x, y));
+	sm::mat4 _mat;
+	s2_spr->Traverse(visitor, &_mat);
+	const s2::Sprite* ret = visitor.GetSelectedSpr();
+	if (!ret) {
+		return NULL;
+	}
+
+	_mat = visitor.GetSelectedMat();
+ 	mat[0] = _mat.x[0];
+ 	mat[1] = _mat.x[1];
+ 	mat[2] = _mat.x[4];
+ 	mat[3] = _mat.x[5];
+ 	mat[4] = _mat.x[12];
+ 	mat[5] = _mat.x[13];
+
+	ret->AddReference();
+	return const_cast<s2::Sprite*>(ret);
+}
+
+extern "C"
+bool gum_spr_has_action(const void* spr, const char* name) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	const s2::ComplexSymbol* sym = static_cast<const s2::ComplexSymbol*>(s2_spr->GetSymbol());
+	const std::vector<s2::ComplexSymbol::Action>& actions = sym->GetActions();
+	for (int i = 0, n = actions.size(); i < n; ++i) {
+		if (name == actions[i].name) {
+			return true;
+		}
+	}
+	return false;
+}
+
+static void
+_init_gtxt_label_style(struct gtxt_label_style* dst, const s2::Textbox& src) {
+	dst->width  = src.width;
+	dst->height = src.height;
+
+	dst->align_h = src.align_hori;
+	dst->align_v = src.align_vert;
+
+	dst->space_h = src.space_hori;
+	dst->space_v = src.space_vert;
+
+	dst->gs.font = src.font_type;
+	dst->gs.font_size = src.font_size;
+	dst->gs.font_color.integer = src.font_color.ToRGBA();
+
+	dst->gs.edge = src.has_edge;
+	dst->gs.edge_size = src.edge_size;
+	dst->gs.edge_color.integer = src.edge_color.ToRGBA();
+
+	dst->overflow = src.overflow;
+}
+
+extern "C"
+bool gum_spr_get_text_size(const void* spr, float* w, float* h) {
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != s2::SYM_TEXTBOX) {
+		return false;
+	}
+
+	const s2::TextboxSprite* text_spr = static_cast<const s2::TextboxSprite*>(s2_spr);
+
+	struct gtxt_label_style style;
+	_init_gtxt_label_style(&style, text_spr->GetTextbox());
+	gtxt_get_label_size(text_spr->GetText().c_str(), &style, w, h);	
+
+	return true;
+}
+
+extern "C"
+bool gum_spr_get_scissor(const void* spr, float* x, float* y, float* w, float* h)
+{
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != s2::SYM_COMPLEX) {
+		return false;
+	}
+
+	const s2::ComplexSprite* complex_spr = static_cast<const s2::ComplexSprite*>(s2_spr);
+	const s2::ComplexSymbol* sym = static_cast<const s2::ComplexSymbol*>(complex_spr->GetSymbol());
+	const sm::rect& scissor = sym->GetScissor();
+	*x = scissor.xmin;
+	*y = scissor.ymin;
+	*w = scissor.xmax - scissor.xmin;
+	*h = scissor.ymax - scissor.ymin;
+
+	return true;
+}
+
+extern "C"
+bool gum_spr_set_scissor(void* spr, float x, float y, float w, float h)
+{
+	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != s2::SYM_COMPLEX) {
+		return false;
+	}
+
+	const s2::ComplexSprite* complex_spr = static_cast<const s2::ComplexSprite*>(s2_spr);
+	const s2::ComplexSymbol* sym = static_cast<const s2::ComplexSymbol*>(complex_spr->GetSymbol());
+	sm::rect scissor;
+	scissor.xmin = x;
+	scissor.ymin = y;
+	scissor.xmax = x + w;
+	scissor.ymax = y + h;
+
+	return true;
 }
 
 }
