@@ -204,7 +204,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		{
 			const simp::NodePicture* pic = (const simp::NodePicture*)data;
 
-			const simp::Package* pkg = simp::NodeFactory::Instance()->GetPkg(id);
+			const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(id);
 			std::string filepath = pkg->GetImagePath(pic->texid);
 			
 			ImageSymbol* sym = new ImageSymbol(id);
@@ -324,7 +324,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 
 s2::Symbol* SymbolFactory::Create(const std::string& pkg_name, const std::string& node_name) const
 {
-	uint32_t id = simp::NodeFactory::Instance()->GetID(pkg_name, node_name);
+	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(pkg_name, node_name);
 	if (id != 0xffffffff) {
 		return Create(id);
 	} else {

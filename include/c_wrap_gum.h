@@ -20,7 +20,7 @@ void  gum_update(float dt);
 void  gum_store_snapshot(const char* filepath);
 int   gum_compare_snapshot(const char* filepath);
 
-void  gum_create_pkg(const char* filepath, const char* name, int id);
+bool  gum_create_pkg(const char* filepath, const char* name, int id);
 void* gum_create_spr(const char* pkg, const char* spr);
 void* gum_create_spr_by_id(int id);
 void* gum_create_spr_from_file(const char* filepath);

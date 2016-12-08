@@ -101,16 +101,16 @@ int gum_compare_snapshot(const char* filepath)
 }
 
 extern "C"
-void gum_create_pkg(const char* filepath, const char* name, int id)
+bool gum_create_pkg(const char* filepath, const char* name, int id)
 {
 	simp::Package* pkg = new simp::Package(filepath);
-	simp::NodeFactory::Instance()->AddPkg(pkg, name, id);
+	return simp::NodeFactory::Instance()->AddPkg(pkg, name, id);
 }
 
 extern "C"
 void* gum_create_spr(const char* pkg, const char* spr)
 {
-	uint32_t id = simp::NodeFactory::Instance()->GetID(pkg, spr);
+	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(pkg, spr);
 	return SpriteFactory::Instance()->CreateFromSym(id);
 }
 
