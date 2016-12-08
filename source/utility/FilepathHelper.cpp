@@ -1,4 +1,5 @@
 #include "FilepathHelper.h"
+#include "StringHelper.h"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/algorithm/string.hpp>
@@ -25,10 +26,13 @@ std::string FilepathHelper::Format(const std::string& path)
 {	
 	std::string ret = path;
 
-	char from = '\\', to = '/';
+	ret = boost::filesystem::canonical(ret).string();
+
+//	char from = '\\', to = '/';
+	char from = '/', to = '\\';
 	std::replace(ret.begin(), ret.end(), from, to);
 
-	ret = boost::filesystem::canonical(ret).string();
+	StringHelper::ToLower(ret);
 
 	return ret;
 }
