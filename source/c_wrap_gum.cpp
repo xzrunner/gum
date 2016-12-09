@@ -111,6 +111,9 @@ extern "C"
 void* gum_create_spr(const char* pkg, const char* spr)
 {
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(pkg, spr);
+	if (id == 0xffffffff) {
+		return NULL;
+	}
 	return SpriteFactory::Instance()->CreateFromSym(id);
 }
 
