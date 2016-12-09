@@ -26,7 +26,9 @@ std::string FilepathHelper::Format(const std::string& path)
 {	
 	std::string ret = path;
 
-	ret = boost::filesystem::canonical(ret).string();
+	if (Exists(ret)) {
+		ret = boost::filesystem::canonical(ret).string();
+	}
 
 //	char from = '\\', to = '/';
 	char from = '/', to = '\\';
