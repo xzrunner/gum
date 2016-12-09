@@ -294,34 +294,44 @@ void SpriteIO::StoreColor(const s2::RenderColor& color)
 
 void SpriteIO::LoadColor(const Json::Value& val)
 {
+	m_col.mul = s2::Color(0xffffffff);
 	if (val.isMember("multi color")) {
-		m_col.mul = str2color(val["multi color"].asString(), BGRA);
-	} else {
-		m_col.mul = s2::Color(0xffffffff);
+		std::string str = val["multi color"].asString();
+		if (!str.empty()) {
+			m_col.mul = str2color(str, BGRA);
+		}
 	}
 
+	m_col.add = s2::Color(0);
 	if (val.isMember("add color")) {
-		m_col.add = str2color(val["add color"].asString(), ABGR);
-	} else {
-		m_col.add = s2::Color(0);
+		std::string str = val["add color"].asString();
+		if (!str.empty()) {
+			m_col.add = str2color(str, ABGR);
+		}
 	}
 
+	m_col.rmap = s2::Color(255, 0, 0, 0);
 	if (val.isMember("r trans")) {
-		m_col.rmap = str2color(val["r trans"].asString(), RGBA);
-	} else {
-		m_col.rmap = s2::Color(255, 0, 0, 0);
+		std::string str = val["r trans"].asString();
+		if (!str.empty()) {
+			m_col.rmap = str2color(str, RGBA);
+		}
 	}
 
+	m_col.gmap = s2::Color(0, 255, 0, 0);
 	if (val.isMember("g trans")) {
-		m_col.gmap = str2color(val["g trans"].asString(), RGBA);
-	} else {
-		m_col.gmap = s2::Color(0, 255, 0, 0);
+		std::string str = val["g trans"].asString();
+		if (!str.empty()) {
+			m_col.gmap = str2color(str, RGBA);
+		}
 	}
 
+	m_col.bmap = s2::Color(0, 0, 255, 0);
 	if (val.isMember("b trans")) {
-		m_col.bmap = str2color(val["b trans"].asString(), RGBA);
-	} else {
-		m_col.bmap = s2::Color(0, 0, 255, 0);
+		std::string str = val["b trans"].asString();
+		if (!str.empty()) {
+			m_col.bmap = str2color(str, RGBA);
+		}
 	}
 }
 
