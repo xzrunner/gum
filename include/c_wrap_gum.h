@@ -27,7 +27,6 @@ void* gum_create_spr_from_file(const char* filepath);
 
 void  gum_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy);
 void  gum_spr_update(void* spr);
-void  gum_spr_release(void* spr);
 
 void* gum_spr_fetch_child(const void* spr, const char* name);
 void* gum_spr_fetch_child_by_index(const void* spr, int idx);

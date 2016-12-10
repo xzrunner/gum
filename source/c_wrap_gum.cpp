@@ -144,12 +144,6 @@ void gum_spr_update(void* spr) {
 }
 
 extern "C"
-void gum_spr_release(void* spr) {
-	s2::Sprite* test = static_cast<s2::Sprite*>(spr);
-	test->RemoveReference();
-}
-
-extern "C"
 void* gum_spr_fetch_child(const void* spr, const char* name) {
 	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(name);
 	if (child) {
