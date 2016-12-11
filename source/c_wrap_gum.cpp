@@ -21,6 +21,7 @@
 #include <sprite2/BoundingBox.h>
 #include <sprite2/S2_RVG.h>
 #include <sprite2/PointQueryVisitor.h>
+#include <sprite2/SprTreePath.h>
 #include <c_wrap_sl.h>
 #include <gtxt_label.h>
 
@@ -134,6 +135,8 @@ void gum_spr_draw(const void* spr, float x, float y, float angle, float sx, floa
 {
 	s2::RenderParams params;
 	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+	s2::SprTreePath path;
+	params.path = &path;
 	const s2::Sprite* s2_spr = static_cast<const s2::Sprite*>(spr);
 	s2::DrawNode::Draw(s2_spr, params);
 }
