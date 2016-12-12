@@ -719,6 +719,14 @@
 				Name="07.anim2"
 				>
 				<File
+					RelativePath="..\..\..\source\sprite\Anim2SprLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\Anim2SprLoader.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprite\Anim2SymLoader.cpp"
 					>
 				</File>
