@@ -150,7 +150,6 @@ extern "C"
 void* gum_spr_fetch_child(const void* spr, const char* name) {
 	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(name);
 	if (child) {
-		child->AddReference();
 		return const_cast<s2::Sprite*>(child);
 	} else {
 		return NULL;
@@ -161,7 +160,6 @@ extern "C"
 void* gum_spr_fetch_child_by_index(const void* spr, int idx) {
 	const s2::Sprite* child = static_cast<const s2::Sprite*>(spr)->FetchChild(idx);
 	if (child) {
-		child->AddReference();
 		return const_cast<s2::Sprite*>(child);
 	} else {
 		return NULL;
@@ -456,7 +454,6 @@ void* gum_spr_point_query(const void* spr, float x, float y, float mat[6]) {
  	mat[4] = _mat.x[12];
  	mat[5] = _mat.x[13];
 
-	ret->AddReference();
 	return const_cast<s2::Sprite*>(ret);
 }
 
