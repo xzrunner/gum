@@ -309,9 +309,9 @@ void SpineAnim2Loader::CreateJoints()
 	for (int i = 0, n = m_joint_count; i < n; ++i) 
 	{
 		const JointData& src = m_joints_data[i];
-		rg_joint* dst = (rg_joint*)malloc(SIZEOF_RG_JOINT + sizeof(uint8_t) * src.children.size());
+		rg_joint* dst = (rg_joint*)malloc(SIZEOF_RG_JOINT + sizeof(uint16_t) * src.children.size());
 		dst->name           = strdup(src.name.c_str());
-		dst->parent         = 0xff;
+		dst->parent         = RG_JOINT_UNKNOWN;
 		dst->children_count = src.children.size();
 		for (int j = 0; j < dst->children_count; ++j) {
 			dst->children[j] = src.children[j];
@@ -342,7 +342,7 @@ void SpineAnim2Loader::CreateSkeleton()
 	}
 
 	m_sk->slot_count = m_slots.size();
-	m_sk->slots = (rg_slot*)((intptr_t)(m_sk + 1) + skins_sz);
+	m_sk->slots = (rg_slot*)((intptr_t)(m_sk) + SIZEOF_RG_SKELETON + skins_sz);
 	for (int i = 0; i < m_sk->slot_count; ++i) {
 		m_sk->slots[i] = m_slots[i];
 	}
@@ -353,7 +353,7 @@ void SpineAnim2Loader::InitRoot()
 	assert(m_joint_count > 0);
 	m_sk->root = 0;
 	m_root = m_joints[0];
-	while (m_root->parent != 0xff) {
+	while (m_root->parent != RG_JOINT_UNKNOWN) {
 		m_sk->root = m_root->parent;
 		m_root = m_joints[m_root->parent];
 	}
