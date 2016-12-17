@@ -382,6 +382,11 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 			spr = trail_spr;
 		}
 		break;
+	case simp::TYPE_SCALE9: case simp::TYPE_ICON: case simp::TYPE_TEXTURE: case simp::TYPE_COMPLEX: case simp::TYPE_ANIMATION:
+	case simp::TYPE_PARTICLE3D: case simp::TYPE_PARTICLE2D: case simp::TYPE_SHAPE: case simp::TYPE_MESH: case simp::TYPE_MASK:
+	case simp::TYPE_TRAIL:
+		spr = CreateFromSym(id);
+		break;
 	default:
 		assert(0);
 	}
