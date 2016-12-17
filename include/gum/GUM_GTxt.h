@@ -27,7 +27,7 @@ public:
 
 	void Draw(const gtxt_label_style& style, const sm::mat4& mt, const s2::Color& mul, 
 		const s2::Color& add, const std::string& text, int time, bool richtext) const;
-	void Draw(const sm::mat4& mt, const std::string& str) const;
+	void Draw(const sm::mat4& mt, const std::string& str, int width = 200) const;
 
 //	void Reload(const Sprite* spr);
 

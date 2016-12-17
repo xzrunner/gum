@@ -24,6 +24,8 @@ void* gum_create_spr(const char* pkg, const char* spr);
 void* gum_create_spr_by_id(int id);
 void* gum_create_spr_from_file(const char* filepath);
 
+void  gum_draw_text(const char* str, int x, int y, int w);
+
 #endif // _gum_wrap_c_h_
 
 #ifdef __cplusplus

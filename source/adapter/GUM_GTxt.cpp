@@ -299,7 +299,7 @@ void GTxt::Draw(const gtxt_label_style& style, const sm::mat4& mt, const s2::Col
 	}
 }
 
-void GTxt::Draw(const sm::mat4& mt, const std::string& str) const
+void GTxt::Draw(const sm::mat4& mt, const std::string& str, int width) const
 {
 	if (str.empty()) {
 		return;
@@ -307,7 +307,7 @@ void GTxt::Draw(const sm::mat4& mt, const std::string& str) const
 
 	gtxt_label_style style;
 
-	style.width = 200;
+	style.width = width;
 	style.height = 50;
 
 	style.align_h = HA_CENTER;
@@ -316,7 +316,7 @@ void GTxt::Draw(const sm::mat4& mt, const std::string& str) const
 	style.space_h = style.space_v = 1;
 
 	style.gs.font = 0;
-	style.gs.font_size = 20;
+	style.gs.font_size = 16;
 	style.gs.font_color.integer = 0xffffffff;
 
 	style.gs.edge = true;

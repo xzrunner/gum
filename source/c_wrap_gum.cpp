@@ -1,6 +1,7 @@
 #include "SpriteFactory.h"
 #include "SymbolPool.h"
 #include "Image.h"
+#include "GUM_GTxt.h"
 
 #include <render/render.h>
 #include <dtex_screen.h>
@@ -9,6 +10,7 @@
 #include <gimg_export.h>
 #include <gimg_import.h>
 #include <sprite2/SprTimer.h>
+#include <SM_Matrix.h>
 
 namespace gum
 {
@@ -108,6 +110,14 @@ extern "C"
 void* gum_create_spr_from_file(const char* filepath)
 {
 	return SpriteFactory::Instance()->Create(filepath);
+}
+
+extern "C"
+void gum_draw_text(const char* str, int x, int y, int w) 
+{
+	sm::mat4 mat;
+	mat.Translate(x, y, 0);
+	GTxt::Instance()->Draw(mat, str, w);
 }
 
 }
