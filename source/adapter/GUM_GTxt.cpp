@@ -16,7 +16,6 @@
 #include <json/json.h>
 
 extern "C" {
-	#include <dtex_facade.h>
 	#include <gtxt.h>
 }
 

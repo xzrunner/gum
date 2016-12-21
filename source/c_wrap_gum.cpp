@@ -4,12 +4,15 @@
 #include "GUM_GTxt.h"
 
 #include <render/render.h>
-#include <dtex_screen.h>
+//#include <dtex_screen.h>
 #include <simp/Package.h>
 #include <simp/NodeFactory.h>
+#include <timp/Package.h>
+#include <timp/PkgMgr.h>
 #include <gimg_export.h>
 #include <gimg_import.h>
 #include <sprite2/SprTimer.h>
+#include <sprite2/RenderCtxStack.h>
 #include <SM_Matrix.h>
 
 namespace gum
@@ -41,10 +44,9 @@ void gum_update(float dt)
 extern "C"
 void gum_store_snapshot(const char* filepath)
 {
-	float w, h, scale;
-	dtex_get_screen(&w, &h, &scale);
-	w *= scale;
-	h *= scale;
+	const s2::RenderCtx* ctx = s2::RenderCtxStack::Instance()->Top();
+	float w = ctx->screen_width;
+	float h = ctx->screen_height;
 
 	uint8_t* pixels = (uint8_t*)malloc(w * h * 3);
 	memset(pixels, 0, w * h * 3);
@@ -56,10 +58,9 @@ void gum_store_snapshot(const char* filepath)
 extern "C"
 int gum_compare_snapshot(const char* filepath)
 {
-	float w, h, scale;
-	dtex_get_screen(&w, &h, &scale);
-	w *= scale;
-	h *= scale;
+	const s2::RenderCtx* ctx = s2::RenderCtxStack::Instance()->Top();
+	float w = ctx->screen_width;
+	float h = ctx->screen_height;
 
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
@@ -84,10 +85,66 @@ int gum_compare_snapshot(const char* filepath)
 }
 
 extern "C"
-bool gum_create_pkg(const char* filepath, const char* name, int id)
+bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path)
 {
-	simp::Package* pkg = new simp::Package(filepath);
-	return simp::NodeFactory::Instance()->AddPkg(pkg, name, id);
+	simp::Package* s_pkg = new simp::Package(spr_path);
+	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, name, id);
+	if (!success) {
+		delete s_pkg;
+		return success;
+	}
+
+	timp::Package* t_pkg = new timp::Package(tex_path);
+	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
+	assert(success);
+
+	return true;
+}
+
+extern "C"
+int gum_pkg_get_page_count(const char* name)
+{
+	const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(name);
+	if (!pkg) {
+		return -1;
+	}
+
+	return pkg->GetPageCount();
+}
+
+extern "C"
+void gum_pkg_set_page_filepath(const char* name, int page, const char* filepath)
+{
+	const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(name);
+	if (!pkg) {
+		return;
+	}
+
+	const_cast<simp::Package*>(pkg)->SetPagePath(page, filepath);
+}
+
+extern "C"
+void gum_pkg_get_texture_count(int pkg_id, int* tex_count, int* lod_count)
+{
+	const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
+	if (!pkg) {
+		*tex_count = *lod_count = -1;
+		return;
+	}
+
+	*tex_count = pkg->GetTexCount();
+	*lod_count = pkg->GetLodCount();
+}
+
+extern "C"
+void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* filepath)
+{
+	const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
+	if (!pkg) {
+		return;
+	}
+
+	const_cast<timp::Package*>(pkg)->SetTexPath(tex, lod, filepath);
 }
 
 extern "C"

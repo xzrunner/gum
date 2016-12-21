@@ -5,7 +5,7 @@
 #include "ResourceManager.h"
 
 #include <sprite2/Texture.h>
-#include <simp/FileLoader.h>
+#include <bimp/FileLoader.h>
 
 #include <SM_Vector.h>
 
@@ -40,12 +40,12 @@ private:
 	bool LoadBin();
 
 private:
-	class Loader : public simp::FileLoader
+	class Loader : public bimp::FileLoader
 	{
 	public:
 		Loader(const std::string& filepath, Image* img);
 	protected:
-		virtual void OnLoad(simp::ImportStream& is);
+		virtual void OnLoad(bimp::ImportStream& is);
 	private:
 		Image* m_img;
 	}; // Loader

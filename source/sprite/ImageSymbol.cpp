@@ -1,8 +1,7 @@
 #include "ImageSymbol.h"
 #include "Image.h"
 
-#include <dtex_facade.h>
-#include <dtex_screen.h>
+#include <sprite2/RenderCtxStack.h>
 
 namespace gum
 {
@@ -118,10 +117,9 @@ bool ImageSymbol::IsOrthoCam() const
 
 void ImageSymbol::GetScreenSize(int& w, int& h) const
 {
-	float _w, _h, s;
-	dtex_get_screen(&_w, &_h, &s);
-	w = _w;
-	h = _h;
+	const s2::RenderCtx* ctx = s2::RenderCtxStack::Instance()->Top();
+	w = ctx->screen_width;
+	h = ctx->screen_height;
 }
 
 float ImageSymbol::GetP3dCamAngle() const
@@ -131,7 +129,8 @@ float ImageSymbol::GetP3dCamAngle() const
 
 int ImageSymbol::GetScreenCacheTexid() const
 {
-	return dtexf_cs1_get_texture_id();
+	// todo
+//	return dtexf_cs1_get_texture_id();
 }
 
 void ImageSymbol::InitTexcoords()

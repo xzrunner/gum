@@ -19,7 +19,11 @@ void  gum_update(float dt);
 void  gum_store_snapshot(const char* filepath);
 int   gum_compare_snapshot(const char* filepath);
 
-bool  gum_create_pkg(const char* filepath, const char* name, int id);
+bool  gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path);
+int   gum_pkg_get_page_count(const char* name);
+void  gum_pkg_set_page_filepath(const char* name, int page, const char* filepath);
+void  gum_pkg_get_texture_count(int pkg_id, int* tex_count, int* lod_count);
+void  gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* filepath);
 void* gum_create_spr(const char* pkg, const char* spr);
 void* gum_create_spr_by_id(int id);
 void* gum_create_spr_from_file(const char* filepath);

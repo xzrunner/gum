@@ -93,12 +93,12 @@ bool Image::LoadBin()
 /************************************************************************/
 
 Image::Loader::Loader(const std::string& filepath, Image* img) 
-	: simp::FileLoader(filepath) 
+	: bimp::FileLoader(filepath) 
 	, m_img(img)
 {
 }
 
-void Image::Loader::OnLoad(simp::ImportStream& is)
+void Image::Loader::OnLoad(bimp::ImportStream& is)
 {
 	if (m_img->m_id != 0) {
 		RenderContext::Instance()->ReleaseTexture(m_img->m_id);

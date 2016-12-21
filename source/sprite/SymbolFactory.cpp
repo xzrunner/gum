@@ -20,10 +20,10 @@
 #include "SkeletonSymLoader.h"
 
 #include <simp/NodeFactory.h>
-#include <simp/Package.h>
 #include <simp/simp_types.h>
-
 #include <simp/NodePicture.h>
+#include <timp/PkgMgr.h>
+#include <timp/Package.h>
 
 #include <sprite2/Scale9Symbol.h>
 #include <sprite2/IconSymbol.h>
@@ -204,8 +204,9 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		{
 			const simp::NodePicture* pic = (const simp::NodePicture*)data;
 
-			const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(id);
-			std::string filepath = pkg->GetImagePath(pic->texid);
+			int pkg_id = simp::NodeFactory::GetPkgID(id);
+			const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
+			std::string filepath = pkg->GetTexPath(pic->texid, 0);
 			
 			ImageSymbol* sym = new ImageSymbol(id);
 			ImageSymLoader loader(sym);
