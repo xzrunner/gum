@@ -1,7 +1,7 @@
 #include "GUM_DTex.h"
 #include "RenderContext.h"
 
-#include <dtex.h>
+//#include <dtex.h>
 #include <shaderlab.h>
 #include <render/render.h>
 
@@ -24,17 +24,17 @@ static void (*DRAW_END)() = NULL;
 
 static void _program(int n) 
 {
-	switch (n) 
-	{
-	case DTEX_PROGRAM_NULL:
-//		ShaderMgr::Instance()->SetShader(ShaderMgr::COUNT);
-		break;
-	case DTEX_PROGRAM_NORMAL:
-		sl::ShaderMgr::Instance()->SetShader(sl::SPRITE2);
-		break;
-	default:
-		assert(0);
-	}
+// 	switch (n) 
+// 	{
+// 	case DTEX_PROGRAM_NULL:
+// //		ShaderMgr::Instance()->SetShader(ShaderMgr::COUNT);
+// 		break;
+// 	case DTEX_PROGRAM_NORMAL:
+// 		sl::ShaderMgr::Instance()->SetShader(sl::SPRITE2);
+// 		break;
+// 	default:
+// 		assert(0);
+// 	}
 }
 
 static void _blend(int mode)
@@ -138,19 +138,21 @@ static void _scissor_disable()
 #define IS_POT(x) ((x) > 0 && ((x) & ((x) -1)) == 0)
 
 static int _texture_create(int type, int width, int height, const void* data, int channel,unsigned int id) {
-	TEXTURE_FORMAT format = TEXTURE_RGBA8;
-	switch (type) {
-	case DTEX_TF_RGBA8:
-		format = TEXTURE_RGBA8;
-		break;
-	case DTEX_TF_PVR4:
-		format = TEXTURE_PVR4;
-		break;
-	default:
-		assert(0);
-	}
+	//TEXTURE_FORMAT format = TEXTURE_RGBA8;
+	//switch (type) {
+	//case DTEX_TF_RGBA8:
+	//	format = TEXTURE_RGBA8;
+	//	break;
+	//case DTEX_TF_PVR4:
+	//	format = TEXTURE_PVR4;
+	//	break;
+	//default:
+	//	assert(0);
+	//}
 
-	return RenderContext::Instance()->CreateTexture(static_cast<const uint8_t*>(data), width, height, format);
+	//return RenderContext::Instance()->CreateTexture(static_cast<const uint8_t*>(data), width, height, format);
+
+	return 0;
 }
 
 static void 
@@ -175,41 +177,41 @@ _texture_id(int id) {
 
 static void 
 _clear_color(float xmin, float ymin, float xmax, float ymax) {
-	render_gl_blend_disable();
-//	glBlendFunc(GL_ONE, GL_ZERO);
-
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-
-	mgr->SetShader(sl::SHAPE2);
-	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(mgr->GetShader());
-	
-	shader->SetColor(0);
-//	shader->SetColor(0xff0000ff);
-
-	int x, y, w, h;
-	dtex_gl_get_viewport(&x, &y, &w, &h);
-	xmin = w * 0.5f * (xmin - 1);
-	xmax = w * 0.5f * (xmax - 1);
-	ymin = h * 0.5f * (ymin + 1);
-	ymax = h * 0.5f * (ymax + 1);
-
-	std::vector<sm::vec2> triangles(4);
-	triangles[0].Set(xmin, ymin);
-	triangles[1].Set(xmin, ymax);
-	triangles[2].Set(xmax, ymin);
-	triangles[3].Set(xmax, ymax);
-
-	s2::RVG::TriangleStrip(triangles);
-
-	shader->Commit();
-// 	ShaderLab::Instance()->Flush();
-
-//	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	render_gl_blend_enable();
-
-	//////////////////////////////////////////////////////////////////////////
-
-//	dtex_gl_clear_color(0, 0, 0, 0);
+//	render_gl_blend_disable();
+////	glBlendFunc(GL_ONE, GL_ZERO);
+//
+//	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+//
+//	mgr->SetShader(sl::SHAPE2);
+//	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(mgr->GetShader());
+//	
+//	shader->SetColor(0);
+////	shader->SetColor(0xff0000ff);
+//
+//	int x, y, w, h;
+//	dtex_gl_get_viewport(&x, &y, &w, &h);
+//	xmin = w * 0.5f * (xmin - 1);
+//	xmax = w * 0.5f * (xmax - 1);
+//	ymin = h * 0.5f * (ymin + 1);
+//	ymax = h * 0.5f * (ymax + 1);
+//
+//	std::vector<sm::vec2> triangles(4);
+//	triangles[0].Set(xmin, ymin);
+//	triangles[1].Set(xmin, ymax);
+//	triangles[2].Set(xmax, ymin);
+//	triangles[3].Set(xmax, ymax);
+//
+//	s2::RVG::TriangleStrip(triangles);
+//
+//	shader->Commit();
+//// 	ShaderLab::Instance()->Flush();
+//
+////	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//	render_gl_blend_enable();
+//
+//	//////////////////////////////////////////////////////////////////////////
+//
+////	dtex_gl_clear_color(0, 0, 0, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -229,13 +231,13 @@ static const char* CFG =
 
 DTex::DTex()
 {
-	dtex_shader_init(&_program, &_blend, &_set_texture, &_get_texture, &_set_target, &_get_target,
-		&_draw_begin, &_draw, &_draw_end, &_draw_flush, &_scissor_enable, _scissor_disable);
-
-	dtex_gl_init(&_clear_color);
-	dtex_gl_texture_init(&_texture_create, &_texture_release, &_texture_update, &_sub_tex_update, &_texture_id);
-
-	dtexf_create(CFG);
+// 	dtex_shader_init(&_program, &_blend, &_set_texture, &_get_texture, &_set_target, &_get_target,
+// 		&_draw_begin, &_draw, &_draw_end, &_draw_flush, &_scissor_enable, _scissor_disable);
+// 
+// 	dtex_gl_init(&_clear_color);
+// 	dtex_gl_texture_init(&_texture_create, &_texture_release, &_texture_update, &_sub_tex_update, &_texture_id);
+// 
+// 	dtexf_create(CFG);
 }
 
 void DTex::InitHook(void (*draw_begin)(), void (*draw_end)())
@@ -246,73 +248,78 @@ void DTex::InitHook(void (*draw_begin)(), void (*draw_end)())
 
 void DTex::LoadBegin()
 {
-	dtexf_c2_load_begin();
+//	dtexf_c2_load_begin();
 }
 
 int DTex::Load(const std::string& filepath, const s2::Texture* tex)
 {
-	std::map<std::string, int>::iterator itr = m_map_filepath.find(filepath);
-	if (itr != m_map_filepath.end()) {
-		return itr->second;
-	}
+// 	std::map<std::string, int>::iterator itr = m_map_filepath.find(filepath);
+// 	if (itr != m_map_filepath.end()) {
+// 		return itr->second;
+// 	}
+// 
+// 	int key = m_map_filepath.size();
+// 	m_map_filepath.insert(std::make_pair(filepath, key));
+// 	sm::vec2 sz = tex->GetSize();
+// 	dtexf_c2_load_tex(tex->GetTexID(), (int)sz.x, (int)sz.y, key);
+// 
+// 	return key;
 
-	int key = m_map_filepath.size();
-	m_map_filepath.insert(std::make_pair(filepath, key));
-	sm::vec2 sz = tex->GetSize();
-	dtexf_c2_load_tex(tex->GetTexID(), (int)sz.x, (int)sz.y, key);
-
-	return key;
+	return 0;
 }
 
 void DTex::LoadEnd()
 {
-	dtexf_c2_load_end();
+//	dtexf_c2_load_end();
 }
 
 float* DTex::Query(const std::string& filepath, const s2::Texture* tex, int* id)
 {
-	if (filepath.empty()) {
-		return NULL;
-	}
+// 	if (filepath.empty()) {
+// 		return NULL;
+// 	}
+// 
+// 	int key;
+// 	std::map<std::string, int>::iterator itr = m_map_filepath.find(filepath);
+// 	if (itr != m_map_filepath.end()) {
+// 		key = itr->second;
+// 	} else {
+// 		dtexf_c2_load_begin();
+// 		key = Load(filepath, tex);
+// 		dtexf_c2_load_end();
+// 	}
+// 	return dtexf_c2_query_tex(key, id);
 
-	int key;
-	std::map<std::string, int>::iterator itr = m_map_filepath.find(filepath);
-	if (itr != m_map_filepath.end()) {
-		key = itr->second;
-	} else {
-		dtexf_c2_load_begin();
-		key = Load(filepath, tex);
-		dtexf_c2_load_end();
-	}
-	return dtexf_c2_query_tex(key, id);
+	return NULL;
 }
 
 void DTex::Clear()
 {
-	dtexf_c2_clear();
+//	dtexf_c2_clear();
 }
 
 dtex_cg* DTex::GetDtexCG()
 {
-	return dtexf_get_cg();
+//	return dtexf_get_cg();
+	return NULL;
 }
 
 void DTex::OnSize(int w, int h)
 {
-	dtex_set_screen(static_cast<float>(w), static_cast<float>(h), 1);
+//	dtex_set_screen(static_cast<float>(w), static_cast<float>(h), 1);
 }
 
 void DTex::Update()
 {
-	dtexf_update();
+//	dtexf_update();
 }
 
 void DTex::DebugDraw() const
 {
-	if (sl::Shader* shader = sl::ShaderMgr::Instance()->GetShader()) {
-		shader->Commit();
-	}
-	dtexf_debug_draw();
+// 	if (sl::Shader* shader = sl::ShaderMgr::Instance()->GetShader()) {
+// 		shader->Commit();
+// 	}
+// 	dtexf_debug_draw();
 }
 
 }

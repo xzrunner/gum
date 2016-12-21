@@ -7,6 +7,7 @@
 #include <dtex2/Render.h>
 #include <dtex2/Resource.h>
 #include <dtex2/Package.h>
+#include <dtex2/PkgMgr.h>
 #include <dtex2/TextureRaw.h>
 
 #include <string>
@@ -17,6 +18,26 @@ namespace dtex { class Package; }
 
 namespace gum
 {
+
+void DTex2::CreatePkg(int pkg_id)
+{
+	const timp::Package* src = timp::PkgMgr::Instance()->Query(pkg_id);
+	assert(src);
+
+	dtex::Package* dst = new dtex::Package(pkg_id);
+
+	const std::vector<timp::Package::TextureDesc>& textures 
+		= src->GetAllTextures();
+	for (int i = 0, n = textures.size(); i < n; ++i) 
+	{
+		const timp::Package::TextureDesc& desc = textures[i];
+		dtex::Texture* tex = new dtex::TextureRaw(1, desc.type);
+		tex->SetSize(desc.w, desc.h);
+		dst->AddTexture(tex);
+	}
+
+	dtex::PkgMgr::Instance()->Add(dst, pkg_id);
+}
 
 /************************************************************************/
 /* Texture                                                              */
@@ -93,26 +114,6 @@ get_tex_filepath(int pkg_id, int tex_idx, int lod_layer)
 	return pkg->GetTexPath(tex_idx, lod_layer);
 }
 
-static void 
-load_package(dtex::Package* dst)
-{
-	assert(dst->GetTextures().empty());
-
-	int id = dst->GetID();
-	const timp::Package* src = timp::PkgMgr::Instance()->Query(id);
-	assert(src);
-
-	const std::vector<timp::Package::TextureDesc>& textures 
-		= src->GetAllTextures();
-	for (int i = 0, n = textures.size(); i < n; ++i) 
-	{
-		const timp::Package::TextureDesc& desc = textures[i];
-		dtex::Texture* tex = new dtex::TextureRaw(1, desc.type);
-		tex->SetSize(desc.w, desc.h);
-		dst->AddTexture(tex);
-	}
-}
-
 DTex2::DTex2()
 {
 	dtex::Render::TargetCB target_cb;
@@ -126,7 +127,6 @@ DTex2::DTex2()
 
 	dtex::Resource::Callback res_cb;
 	res_cb.get_tex_filepath = get_tex_filepath;
-	res_cb.load_package     = load_package;
 	dtex::Resource::InitCallback(res_cb);
 }
 

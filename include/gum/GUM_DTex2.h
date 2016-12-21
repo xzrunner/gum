@@ -10,6 +10,8 @@ class DTex2
 {
 public:
 
+	void CreatePkg(int pkg_id);
+
 private:	
 	SINGLETON_DECLARATION(DTex2)
 
