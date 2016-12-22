@@ -1,7 +1,6 @@
 #include "GUM_DTex.h"
 #include "RenderContext.h"
 
-//#include <dtex.h>
 #include <shaderlab.h>
 #include <render/render.h>
 

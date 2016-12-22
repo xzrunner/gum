@@ -11,7 +11,10 @@ class ResourceManager
 {
 public:
 	T* Create(const std::string& filepath);
-	void Release(const std::string& filepath);
+
+	T* Query(const std::string& filepath);
+	bool Add(const std::string& filepath, T* res);
+	bool Delete(const std::string& filepath);
 
 	void Clear();
 

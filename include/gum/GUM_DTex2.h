@@ -12,6 +12,8 @@ public:
 
 	void CreatePkg(int pkg_id);
 
+	void DebugDraw() const;
+
 private:	
 	SINGLETON_DECLARATION(DTex2)
 

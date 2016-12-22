@@ -202,18 +202,29 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 	{
 	case simp::TYPE_IMAGE:
 		{
-			const simp::NodePicture* pic = (const simp::NodePicture*)data;
+			const simp::NodePicture* pic = (const simp::NodePicture*)data;	
+			ImageSymbol* sym = NULL;
+			if (pic->texid < simp::NodePicture::MAX_IN_PKG)
+			{
+				int pkg_id = simp::NodeID::GetPkgID(id);
+				const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
+				std::string filepath = pkg->GetTexPath(pic->texid, 0);
 
-			int pkg_id = simp::NodeFactory::GetPkgID(id);
-			const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
-			std::string filepath = pkg->GetTexPath(pic->texid, 0);
-			
-			ImageSymbol* sym = new ImageSymbol(id);
-			ImageSymLoader loader(sym);
-			loader.Load(filepath);
-			sym->SetRegion(
-				sm::ivec2(pic->region[0], pic->region[1]), 
-				sm::ivec2(pic->region[2], pic->region[3]));
+				sym = new ImageSymbol(id);
+				ImageSymLoader loader(sym);
+				loader.Load(filepath);
+				sym->SetRegion(
+					sm::ivec2(pic->region[0], pic->region[1]), 
+					sm::ivec2(pic->region[2], pic->region[3]));
+			}
+			else
+			{
+				sym = new ImageSymbol(id);
+				Image* 
+				sym->SetRegion(
+					sm::ivec2(pic->region[0], pic->region[1]), 
+					sm::ivec2(pic->region[2], pic->region[3]));
+			}
 			ret = sym;
 		}
 		break;
