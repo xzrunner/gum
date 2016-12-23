@@ -3,6 +3,7 @@
 
 #include "ImageSymbol.h"
 #include "ImageSymLoader.h"
+#include "ProxyImage.h"
 #include "Scale9SymLoader.h"
 #include "IconSymLoader.h"
 #include "TextureSymLoader.h"
@@ -219,8 +220,12 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 			}
 			else
 			{
+				std::string filepath = ProxyImage::GetFilepath(pic->texid - simp::NodePicture::MAX_IN_PKG);
+				Image* img = ImageMgr::Instance()->Query(filepath);
+				assert(img);
+
 				sym = new ImageSymbol(id);
-				Image* 
+				sym->SetImage(img);
 				sym->SetRegion(
 					sm::ivec2(pic->region[0], pic->region[1]), 
 					sm::ivec2(pic->region[2], pic->region[3]));

@@ -1,6 +1,7 @@
 #include "GUM_DTex2.h"
 #include "ImageLoader.h"
 #include "RenderContext.h"
+#include "ProxyImage.h"
 #include "opengl.h"
 
 #include <logger.h>
@@ -390,7 +391,7 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 /************************************************************************/
 
 static void
-relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_w, int dst_h, int dst_xmin, int dst_ymin, int dst_xmax, int dst_ymax)
+relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_fmt, int dst_w, int dst_h, int dst_xmin, int dst_ymin, int dst_xmax, int dst_ymax)
 {
 	simp::RelocateTexcoords::Item item;
 	item.src_pkg = src_pkg;
@@ -403,6 +404,19 @@ relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_w, int dst_h, int
 	item.dst_xmax = dst_xmax;
 	item.dst_ymax = dst_ymax;
 	simp::RelocateTexcoords::Instance()->Add(item);
+
+	std::string filepath = ProxyImage::GetFilepath(dst_tex_id);
+	Image* img = ImageMgr::Instance()->Query(filepath);
+	if (img) {
+		ProxyImage* p_img = static_cast<ProxyImage*>(img);
+		p_img->Init(dst_tex_id, dst_w, dst_h, dst_fmt);
+	} else {
+		img = new ProxyImage(dst_tex_id, dst_w, dst_h, dst_fmt);
+		std::string filepath = ProxyImage::GetFilepath(dst_tex_id);
+		bool succ = ImageMgr::Instance()->Add(filepath, img);
+		assert(succ);
+		img->RemoveReference();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -469,7 +483,8 @@ void DTex2::CreatePkg(int pkg_id)
 	for (int i = 0, n = textures.size(); i < n; ++i) 
 	{
 		const timp::Package::TextureDesc& desc = textures[i];
-		dtex::Texture* tex = new dtex::TextureRaw(1, desc.type);
+		dtex::Texture* tex = new dtex::TextureRaw(1);
+		tex->SetFormat(desc.type);
 		tex->SetSize(desc.w, desc.h);
 		dst->AddTexture(tex);
 	}

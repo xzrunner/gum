@@ -37,7 +37,7 @@ public:
 
 	const std::string& GetFilepath() const { return m_filepath; }
 
-private:
+protected:
 	std::string m_filepath;
 
 	int m_width, m_height;

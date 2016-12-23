@@ -70,7 +70,10 @@ template<class T>
 inline bool ResourceManager<T>::Add(const std::string& filepath, T* res)
 {
 	std::pair<std::map<std::string, T*>::iterator, bool> ret 
-		= m_res_map.insert(std::make_pair(filepath, ret));
+		= m_res_map.insert(std::make_pair(filepath, res));
+	if (ret.second) {
+		res->AddReference();
+	}
 	return ret.second;
 }
 
