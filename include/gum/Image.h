@@ -3,13 +3,15 @@
 
 #include "Resource.h"
 #include "ResourceManager.h"
-
-#include <sprite2/Texture.h>
-#include <bimp/FileLoader.h>
-
+//
+//#include <sprite2/Texture.h>
+//#include <bimp/FileLoader.h>
+//
 #include <SM_Vector.h>
 
 #include <stdint.h>
+
+namespace s2 { class Texture; }
 
 namespace gum
 {
@@ -35,22 +37,7 @@ public:
 
 	const std::string& GetFilepath() const { return m_filepath; }
 
-private:
-	bool LoadRaw();
-	bool LoadBin();
-
-private:
-	class Loader : public bimp::FileLoader
-	{
-	public:
-		Loader(const std::string& filepath, Image* img);
-	protected:
-		virtual void OnLoad(bimp::ImportStream& is);
-	private:
-		Image* m_img;
-	}; // Loader
-
-private:
+protected:
 	std::string m_filepath;
 
 	int m_width, m_height;

@@ -1,9 +1,9 @@
 #ifndef _GUM_RENDER_CONTEXT_H_
 #define _GUM_RENDER_CONTEXT_H_
 
-#include <render/render.h>
-
 #include <CU_Singleton.h>
+
+#include <stdint.h>
 
 namespace gum
 {
@@ -22,8 +22,8 @@ public:
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
 
-	RID CreateTexture(const uint8_t* data, int width, int height, TEXTURE_FORMAT format);
-	void ReleaseTexture(RID id);
+	int  CreateTexture(const uint8_t* data, int width, int height, int format);
+	void ReleaseTexture(int id);
 	void UpdateTexture(const uint8_t* data, int w, int h, int id);
 	void UpdateSubTex(const uint8_t* data, int x, int y, int w, int h, int id);
 

@@ -56,14 +56,38 @@ inline T* ResourceManager<T>::Create(const std::string& filepath)
 }
 
 template<class T>
-inline void ResourceManager<T>::Release(const std::string& filepath)
+inline T* ResourceManager<T>::Query(const std::string& filepath)
 {
 	std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
-	assert(itr != m_res_map.end());
 	if (itr != m_res_map.end()) {
-		itr->second->RemoveReference();
-		m_res_map.erase(itr->second);
+		return itr->second;
+	} else {
+		return NULL;
 	}
+}
+
+template<class T>
+inline bool ResourceManager<T>::Add(const std::string& filepath, T* res)
+{
+	std::pair<std::map<std::string, T*>::iterator, bool> ret 
+		= m_res_map.insert(std::make_pair(filepath, res));
+	if (ret.second) {
+		res->AddReference();
+	}
+	return ret.second;
+}
+
+template<class T>
+inline bool ResourceManager<T>::Delete(const std::string& filepath)
+{
+	std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
+	if (itr == m_res_map.end()) {
+		return false;
+	}
+
+	itr->second->RemoveReference();
+	m_res_map.erase(itr->second);
+	return true;
 }
 
 template<class T>

@@ -2,6 +2,7 @@
 #include "Image.h"
 
 #include <sprite2/RenderCtxStack.h>
+#include <sprite2/Texture.h>
 
 namespace gum
 {

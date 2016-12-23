@@ -255,6 +255,22 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\dataset\ImageLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\ImageLoader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\dataset\ProxyImage.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\ProxyImage.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\dataset\Texture.cpp"
 					>
 				</File>

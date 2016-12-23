@@ -2,6 +2,7 @@
 #include "SymbolPool.h"
 #include "Image.h"
 #include "GUM_GTxt.h"
+#include "GUM_DTex2.h"
 
 #include <render/render.h>
 //#include <dtex_screen.h>
@@ -85,9 +86,15 @@ int gum_compare_snapshot(const char* filepath)
 }
 
 extern "C"
+bool gum_pkg_exists(const char* name)
+{
+	return simp::NodeFactory::Instance()->QueryPkg(name) != NULL;
+}
+
+extern "C"
 bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path)
 {
-	simp::Package* s_pkg = new simp::Package(spr_path);
+	simp::Package* s_pkg = new simp::Package(spr_path, id);
 	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, name, id);
 	if (!success) {
 		delete s_pkg;
@@ -97,6 +104,8 @@ bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* 
 	timp::Package* t_pkg = new timp::Package(tex_path);
 	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
 	assert(success);
+
+	DTex2::Instance()->CreatePkg(id);
 
 	return true;
 }
@@ -175,6 +184,12 @@ void gum_draw_text(const char* str, int x, int y, int w)
 	sm::mat4 mat;
 	mat.Translate(x, y, 0);
 	GTxt::Instance()->Draw(mat, str, w);
+}
+
+extern "C"
+void gum_debug_draw()
+{
+	DTex2::Instance()->DebugDraw();
 }
 
 }
