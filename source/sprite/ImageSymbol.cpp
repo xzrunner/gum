@@ -132,6 +132,7 @@ int ImageSymbol::GetScreenCacheTexid() const
 {
 	// todo
 //	return dtexf_cs1_get_texture_id();
+	return 0;
 }
 
 void ImageSymbol::InitTexcoords()
