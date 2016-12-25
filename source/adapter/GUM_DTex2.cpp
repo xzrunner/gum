@@ -2,7 +2,6 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
 #include "ProxyImage.h"
-#include "opengl.h"
 
 #include <logger.h>
 #include <timp/Package.h>
@@ -19,7 +18,6 @@
 #include <dtex2/CacheAPI.h>
 #include <shaderlab.h>
 #include <sprite2/S2_RVG.h>
-#include <render/render.h>
 #include <sprite2/RenderCtx.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>

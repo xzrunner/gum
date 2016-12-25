@@ -16,7 +16,7 @@
 //
 //void ImageSymbol::Draw(const sm::mat4& mt) const
 //{
-//	RID texid = m_tex->GetID();
+//	int texid = m_tex->GetID();
 //
 //	sm::vec2 positions[4];
 //	float hw = m_tex->GetWidth() * 0.5f,
@@ -85,7 +85,7 @@
 //
 //void ImageSymbol::Draw25(const sm::mat4& mt) const
 //{
-//	RID texid = m_tex->GetID(); 
+//	int texid = m_tex->GetID(); 
 //
 //	sm::vec2 positions[4];
 //	float hw = m_tex->GetWidth() * 0.5f,

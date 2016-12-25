@@ -2,7 +2,7 @@
 #include "RenderContext.h"
 
 #include <shaderlab.h>
-#include <render/render.h>
+#include <unirender/IRenderContext.h>
 
 #include <sprite2/S2_RVG.h>
 #include <sprite2/RenderScissor.h>
@@ -44,22 +44,22 @@ static void _blend(int mode)
 
 static void _set_texture(int id)
 {
-	sl::ShaderMgr::Instance()->GetContext()->SetTexture(id, 0);
+	sl::ShaderMgr::Instance()->GetContext()->BindTexture(id, 0);
 }
 
 static int _get_texture()
 {
-	return 	sl::ShaderMgr::Instance()->GetContext()->GetTexture();
+	return 	sl::ShaderMgr::Instance()->GetContext()->GetCurrTexture();
 }
 
 static void _set_target(int id)
 {
-	sl::ShaderMgr::Instance()->GetContext()->SetTarget(id);
+	sl::ShaderMgr::Instance()->GetContext()->BindRT(id);
 }
 
 static int _get_target()
 {
-	return sl::ShaderMgr::Instance()->GetContext()->GetTarget();
+	return sl::ShaderMgr::Instance()->GetContext()->GetCurrRT();
 }
 
 static void _draw_begin() 
@@ -137,7 +137,7 @@ static void _scissor_disable()
 #define IS_POT(x) ((x) > 0 && ((x) & ((x) -1)) == 0)
 
 static int _texture_create(int type, int width, int height, const void* data, int channel,unsigned int id) {
-	//TEXTURE_FORMAT format = TEXTURE_RGBA8;
+	//ur::TEXTURE_FORMAT format = TEXTURE_RGBA8;
 	//switch (type) {
 	//case DTEX_TF_RGBA8:
 	//	format = TEXTURE_RGBA8;

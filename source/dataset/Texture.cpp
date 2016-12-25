@@ -30,17 +30,17 @@ void Texture::Load(const std::string& filepath)
 		return;
 	}
 
-	TEXTURE_FORMAT tf = TEXTURE_INVALID;
+	ur::TEXTURE_FORMAT tf = ur::TEXTURE_INVALID;
 	switch (fmt)
 	{
 	case GPF_ALPHA: case GPF_LUMINANCE: case GPF_LUMINANCE_ALPHA:
-		tf = TEXTURE_A8;
+		tf = ur::TEXTURE_A8;
 		break;
 	case GPF_RGB:
-		tf = TEXTURE_RGB;
+		tf = ur::TEXTURE_RGB;
 		break;
 	case GPF_RGBA:
-		tf = TEXTURE_RGBA8;
+		tf = ur::TEXTURE_RGBA8;
 		break;
 	}
 
@@ -52,7 +52,7 @@ void Texture::Load(const std::string& filepath)
 	free(pixels);
 }
 
-void Texture::Load(const uint8_t* data, int width, int height, TEXTURE_FORMAT format)
+void Texture::Load(const uint8_t* data, int width, int height, ur::TEXTURE_FORMAT format)
 {
 	m_id = RenderContext::Instance()->CreateTexture(data, width, height, format);
 }

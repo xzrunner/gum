@@ -3,7 +3,6 @@
 #include "Pseudo3DCamera.h"
 
 #include <shaderlab.h>
-#include <render/render.h>
 
 #include <stddef.h>
 
@@ -48,7 +47,7 @@ void RenderContext::SetCamera(float x, float y, float sx, float sy)
 int RenderContext::CreateTexture(const uint8_t* data, int width, int height, int format)
 {
 	render* r = sl::ShaderMgr::Instance()->GetContext()->GetEJRender();
-	RID id = render_texture_create(r, width, height, static_cast<TEXTURE_FORMAT>(format), TEXTURE_2D, 0);
+	int id = render_texture_create(r, width, height, static_cast<ur::TEXTURE_FORMAT>(format), TEXTURE_2D, 0);
 	render_texture_update(r, id, width, height, data, 0, 0);
 	return id;
 }
