@@ -7,6 +7,7 @@
 #include <gimg_etc2.h>
 #include <timp/TextureFormat.h>
 #include <timp/TextureLoader.h>
+#include <unirender/RenderContext.h>
 
 namespace gum
 {
@@ -56,7 +57,7 @@ bool ImageLoader::LoadRaw()
 	}
 
 	m_format = tf;
-	m_id = RenderContext::Instance()->CreateTexture(pixels, w, h, tf);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(pixels, w, h, tf);
 	free(pixels);
 
 	return true;
@@ -75,7 +76,7 @@ bool ImageLoader::LoadBin()
 	switch (m_format)
 	{
 	case timp::TEXTURE_RGBA4: case timp::TEXTURE_RGBA8:
-		m_id = RenderContext::Instance()->CreateTexture(static_cast<const uint8_t*>(loader.GetData()), m_width, m_height, m_format);
+		m_id = RenderContext::Instance()->GetImpl()->CreateTexture(static_cast<const uint8_t*>(loader.GetData()), m_width, m_height, m_format);
 		break;
 	case timp::TEXTURE_PVR2:
 		ret = DecodePVR2(loader.GetData());
@@ -99,7 +100,7 @@ bool ImageLoader::DecodePVR2(const void* data)
 #if defined( __APPLE__ ) && !defined(__MACOSX)
 //	int internal_format = 0;
 //	internal_format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-	m_id = RenderContext::Instance()->CreateTexture(TEXTURE_PVR2, m_width, m_height, data, 0, 0);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(TEXTURE_PVR2, m_width, m_height, data, 0, 0);
 	return true;
 #else
 	return false;
@@ -111,11 +112,11 @@ bool ImageLoader::DecodePVR4(const void* data)
 #if defined( __APPLE__ ) && !defined(__MACOSX)
 //	int internal_format = 0;
 //	internal_format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-	m_id = RenderContext::Instance()->CreateTexture(data, m_width, m_height, TEXTURE_PVR4);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, TEXTURE_PVR4);
 #else
 	uint8_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(data), m_width, m_height);
 	gimg_revert_y((uint32_t*)uncompressed, m_width, m_height);
-	m_id = RenderContext::Instance()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
 	free(uncompressed);
 #endif
 	return true;
@@ -124,10 +125,10 @@ bool ImageLoader::DecodePVR4(const void* data)
 bool ImageLoader::DecodeETC2(const void* data)
 {
 #ifdef __ANDROID__
-	m_id = RenderContext::Instance()->CreateTexture(data, m_width, m_height, TEXTURE_ETC2);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, TEXTURE_ETC2);
 #else
 	uint8_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(data), m_width, m_height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
-	m_id = RenderContext::Instance()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
 	free(uncompressed);
 #endif // __ANDROID__
 	return true;

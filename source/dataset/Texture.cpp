@@ -5,6 +5,7 @@
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
+#include <unirender/RenderContext.h>
 
 namespace gum
 {
@@ -18,7 +19,7 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-	RenderContext::Instance()->ReleaseTexture(m_id);
+	RenderContext::Instance()->GetImpl()->ReleaseTexture(m_id);
 }
 
 void Texture::Load(const std::string& filepath)
@@ -54,7 +55,7 @@ void Texture::Load(const std::string& filepath)
 
 void Texture::Load(const uint8_t* data, int width, int height, ur::TEXTURE_FORMAT format)
 {
-	m_id = RenderContext::Instance()->CreateTexture(data, width, height, format);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, width, height, format);
 }
 
 }

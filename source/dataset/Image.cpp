@@ -3,6 +3,7 @@
 #include "RenderContext.h"
 
 #include <sprite2/Texture.h>
+#include <unirender/RenderContext.h>
 
 #include <assert.h>
 
@@ -19,7 +20,7 @@ Image::Image()
 
 Image::~Image()
 {
-	RenderContext::Instance()->ReleaseTexture(m_id);
+	RenderContext::Instance()->GetImpl()->ReleaseTexture(m_id);
 	if (m_s2_tex) {
 		m_s2_tex->RemoveReference();
 	}

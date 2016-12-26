@@ -1,11 +1,13 @@
 #include "GUM_GTxt.h"
 #include "StringHelper.h"
 #include "SymbolPool.h"
-#include "GUM_DTex.h"
 #include "ImageSymbol.h"
 #include "Image.h"
 
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/FilterShader.h>
+#include <shaderlab/Sprite2Shader.h>
+#include <shaderlab/Shape2Shader.h>
 #include <sprite2/S2_RVG.h>
 #include <sprite2/RenderColor.h>
 #include <sprite2/S2_Symbol.h>
@@ -205,12 +207,14 @@ ext_sym_render(void* ext_sym, float x, float y, void* ud) {
 
 float* 
 uf_query_and_load(void* ud, struct dtex_glyph* glyph) {
-	DTex* dtex = DTex::Instance();
-	dtex_cg* cg = dtex->GetDtexCG();
-	ImageSymbol* sym = dynamic_cast<ImageSymbol*>(static_cast<s2::Symbol*>(ud));
-	int texid = 0;
-	const Image* img = sym->GetImage();
-	return dtex->Query(img->GetFilepath(), img->GetS2Tex(), &texid);
+	return NULL;
+
+// 	DTex* dtex = DTex::Instance();
+// 	dtex_cg* cg = dtex->GetDtexCG();
+// 	ImageSymbol* sym = dynamic_cast<ImageSymbol*>(static_cast<s2::Symbol*>(ud));
+// 	int texid = 0;
+// 	const Image* img = sym->GetImage();
+// 	return dtex->Query(img->GetFilepath(), img->GetS2Tex(), &texid);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -230,24 +234,24 @@ uf_query_and_load(void* ud, struct dtex_glyph* glyph) {
 void GTxt::Init(const std::vector<std::pair<std::string, std::string> >& fonts, 
 				const std::vector<std::pair<std::string, std::string> >& user_fonts)
 {
-	dtex_cg* cg = DTex::Instance()->GetDtexCG();
-	gtxt_adapter_create(cg);
+	//dtex_cg* cg = DTex::Instance()->GetDtexCG();
+	//gtxt_adapter_create(cg);
 
-	gtxt_ft_create();
+	//gtxt_ft_create();
 
-	for (int i = 0, n = fonts.size(); i < n; ++i) {
-		LoadFont(fonts[i].first.c_str(), fonts[i].second.c_str());
-	}
+	//for (int i = 0, n = fonts.size(); i < n; ++i) {
+	//	LoadFont(fonts[i].first.c_str(), fonts[i].second.c_str());
+	//}
 
-	gtxt_glyph_create(50, 500, NULL);
+	//gtxt_glyph_create(50, 500, NULL);
 
-	gtxt_richtext_ext_sym_cb_init(&ext_sym_create, &ext_sym_release, &ext_sym_get_size, &ext_sym_render, NULL);
+	//gtxt_richtext_ext_sym_cb_init(&ext_sym_create, &ext_sym_release, &ext_sym_get_size, &ext_sym_render, NULL);
 
-	gtxt_uf_cb_init(uf_query_and_load);
-	gtxt_uf_create();
-	for (int i = 0, n = user_fonts.size(); i < n; ++i) {
-		LoadUserFont(user_fonts[i].first, user_fonts[i].second);
-	}
+	//gtxt_uf_cb_init(uf_query_and_load);
+	//gtxt_uf_create();
+	//for (int i = 0, n = user_fonts.size(); i < n; ++i) {
+	//	LoadUserFont(user_fonts[i].first, user_fonts[i].second);
+	//}
 }
 
 void GTxt::LoadFont(const std::string& name, const std::string& filepath)

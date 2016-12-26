@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 
+namespace ur { class RenderContext; }
+
 namespace gum
 {
 
@@ -22,14 +24,13 @@ public:
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
 
-	int  CreateTexture(const uint8_t* data, int width, int height, int format);
-	void ReleaseTexture(int id);
-	void UpdateTexture(const uint8_t* data, int w, int h, int id);
-	void UpdateSubTex(const uint8_t* data, int x, int y, int w, int h, int id);
-
 //	const Camera* GetCamera() const { return m_cam; }
 
+	ur::RenderContext* GetImpl() { return m_rc; }
+
 private:
+	ur::RenderContext* m_rc;
+
 	OrthoCamera* m_ortho_cam;
 	Pseudo3DCamera* m_p3d_cam;
 

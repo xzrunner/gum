@@ -9,8 +9,11 @@ namespace gum
 class DTex2
 {
 public:
+	void InitHook(void (*draw_begin)(), void (*draw_end)());
 
 	void CreatePkg(int pkg_id);
+
+	void Clear();
 
 	void DebugDraw() const;
 

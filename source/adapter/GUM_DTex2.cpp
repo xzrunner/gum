@@ -16,11 +16,15 @@
 #include <dtex2/Cache.h>
 #include <dtex2/CacheMgr.h>
 #include <dtex2/CacheAPI.h>
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/ShapeShader.h>
+#include <shaderlab/Sprite2Shader.h>
+#include <shaderlab/FilterShader.h>
 #include <sprite2/S2_RVG.h>
 #include <sprite2/RenderCtx.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>
+#include <unirender/RenderContext.h>
 
 #include <string>
 
@@ -37,107 +41,13 @@ static void (*DRAW_BEGIN)() = NULL;
 static void (*DRAW_END)() = NULL;
 
 /************************************************************************/
-/* Texture                                                              */
-/************************************************************************/
-
-static int 
-texture_create(const void* data, int width, int height, int format)
-{
-	return RenderContext::Instance()->CreateTexture(static_cast<const uint8_t*>(data), width, height, format);
-}
-
-static void 
-texture_release(int id)
-{
-	RenderContext::Instance()->ReleaseTexture(id);
-}
-
-static void 
-texture_update(const void* pixels, int w, int h, unsigned int id)
-{
-	RenderContext::Instance()->UpdateTexture(static_cast<const uint8_t*>(pixels), w, h, id);
-}
-
-static void 
-sub_tex_update(const void* pixels, int x, int y, int w, int h, unsigned int id)
-{
-	RenderContext::Instance()->UpdateSubTex(static_cast<const uint8_t*>(pixels), x, y, w, h, id);
-}
-
-/************************************************************************/
-/* Target                                                               */
-/************************************************************************/
-
-static int 
-create_target(int id) 
-{
-	GLuint gl_id = id;
-	glGenFramebuffers(1, &gl_id);
-	return gl_id;
-}
-
-static void 
-release_target(int id) 
-{
-	GLuint gl_id = id;
-	glDeleteFramebuffers(1, &gl_id);
-}
-
-static void 
-target_bind_texture(int tex_id) 
-{
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_id, 0);
-}
-
-static void 
-target_bind(int id) 
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, id);
-}
-
-static int 
-check_target_status() 
-{
-	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	switch(status)
-	{
-	case GL_FRAMEBUFFER_COMPLETE:
-		return 1;
-	case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-		LOGW("%s", "Framebuffer incomplete: Attachment is NOT complete.\n");
-		return 0;
-	case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-		LOGW("%s", "Framebuffer incomplete: No image is attached to FBO.\n");
-		return 0;
-#if !defined(_WIN32) && !defined(__MACOSX)
-	case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
-		LOGW("%s", "Framebuffer incomplete: Attached images have different dimensions.\n");
-		return 0;
-#endif
-	case GL_FRAMEBUFFER_UNSUPPORTED:
-		LOGW("%s", "Unsupported by FBO implementation.\n");
-		return 0;
-	default:
-		LOGW("%s", "Unknow error.\n");
-		return 0;
-	}
-}
-
-/************************************************************************/
 /* draw                                                                 */
 /************************************************************************/
 
 static void 
-clear_color(float r, float g, float b, float a)
-{
-	glClearColor(r, g, b, a);
-	glClear(GL_COLOR_BUFFER_BIT);
-}
-
-static void 
 clear_color_part(float xmin, float ymin, float xmax, float ymax)
 {
-	render_gl_blend_disable();
+	RenderContext::Instance()->GetImpl()->EnableBlend(false);
 //	glBlendFunc(GL_ONE, GL_ZERO);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -167,7 +77,7 @@ clear_color_part(float xmin, float ymin, float xmax, float ymax)
 // 	ShaderLab::Instance()->Flush();
 
 //	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	render_gl_blend_enable();
+	RenderContext::Instance()->GetImpl()->EnableBlend(true);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -189,30 +99,6 @@ set_blend(int mode)
 
 	assert(mode == 0);
 //	ShaderMgr::Instance()->SetBlendMode(0);
-}
-
-static void 
-set_texture(int id)
-{
-	sl::ShaderMgr::Instance()->GetContext()->SetTexture(id, 0);
-}
-
-static int 
-get_texture()
-{
-	return sl::ShaderMgr::Instance()->GetContext()->GetTexture();
-}
-
-static void 
-set_target(int id)
-{
-	sl::ShaderMgr::Instance()->GetContext()->SetTarget(id);
-}
-
-static int 
-get_target()
-{
-	return sl::ShaderMgr::Instance()->GetContext()->GetTarget();
 }
 
 static void 
@@ -263,7 +149,7 @@ draw(const float vb[16], int texid)
 static void 
 draw_end()
 {
-	sl::ShaderMgr::Instance()->GetShader()->Commit();
+	sl::ShaderMgr::Instance()->GetContext()->Clear(0);
 
 	if (DRAW_END) {
 		DRAW_END();
@@ -278,62 +164,6 @@ draw_flush()
 	sl::Shader* shader = sl::ShaderMgr::Instance()->GetShader();
 	if (shader) {
 		shader->Commit();
-	}
-}
-
-static void 
-scissor_enable(bool enable)
-{
-	if (enable) {
-		s2::RenderScissor::Instance()->Open();
-	} else {
-		s2::RenderScissor::Instance()->Close();
-	}
-}
-
-static void 
-scissor(int x, int y, int w, int h)
-{
-	render_setscissor(x, y, w, h);
-}
-
-static void 
-viewport_push(int x, int y, int w, int h)
-{
-	sl::RenderContext* ctx = sl::ShaderMgr::Instance()->GetContext();
-	ctx->ViewportPush(x, y, w, h);
-}
-
-static void 
-viewport_pop()
-{
-	sl::RenderContext* ctx = sl::ShaderMgr::Instance()->GetContext();
-	ctx->ViewportPop();
-}
-
-/************************************************************************/
-/* util                                                                 */
-/************************************************************************/
-
-static bool 
-out_of_memory()
-{
-	GLenum err = glGetError();
-	return err == GL_OUT_OF_MEMORY;
-}
-
-static bool 
-is_texture(unsigned int id)
-{
-	return glIsTexture(id);
-}
-
-static void 
-check_error()
-{
-	GLenum error = glGetError();
-	if (error != GL_NO_ERROR) {
-		exit(1);
 	}
 }
 
@@ -419,45 +249,24 @@ relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_fmt, int dst_w, i
 
 //////////////////////////////////////////////////////////////////////////
 
+void DTex2::InitHook(void (*draw_begin)(), void (*draw_end)())
+{
+	DRAW_BEGIN = draw_begin;
+	DRAW_END = draw_end;
+}
+
 DTex2::DTex2()
 {
-	dtex::RenderAPI::TextureCB texture_cb;
-	texture_cb.texture_create  = texture_create;
-	texture_cb.texture_release = texture_release;
-	texture_cb.texture_update  = texture_update;
-	texture_cb.sub_tex_update  = sub_tex_update;
+	dtex::RenderAPI::Callback render_cb;
+	render_cb.clear_color_part = clear_color_part;
+	render_cb.set_program      = set_program;
+	render_cb.set_blend        = set_blend;
+	render_cb.draw_begin       = draw_begin;
+	render_cb.draw             = draw;
+	render_cb.draw_end         = draw_end;
+	render_cb.draw_flush       = draw_flush;
 
-	dtex::RenderAPI::TargetCB target_cb;
-	target_cb.create_target       = create_target;
-	target_cb.release_target      = release_target;
-	target_cb.target_bind_texture = target_bind_texture;
-	target_cb.target_bind         = target_bind;
-	target_cb.check_target_status = check_target_status;
-
-	dtex::RenderAPI::DrawCB draw_cb;
-	draw_cb.clear_color      = clear_color;
-	draw_cb.clear_color_part = clear_color_part;
-	draw_cb.set_program      = set_program;
-	draw_cb.set_blend        = set_blend;
-	draw_cb.set_texture      = set_texture;
-	draw_cb.get_texture      = get_texture;
-	draw_cb.set_target       = set_target;
-	draw_cb.get_target       = get_target;
-	draw_cb.draw_begin       = draw_begin;
-	draw_cb.draw             = draw;
-	draw_cb.draw_end         = draw_end;
-	draw_cb.draw_flush       = draw_flush;
-	draw_cb.scissor_enable   = scissor_enable;
-	draw_cb.scissor          = scissor;
-	draw_cb.viewport_push    = viewport_push;
-	draw_cb.viewport_pop     = viewport_pop;
-
-	dtex::RenderAPI::UtilCB util_cb;
-	util_cb.out_of_memory = out_of_memory;
-	util_cb.is_texture    = is_texture;
-	util_cb.check_error   = check_error;
-
-	dtex::RenderAPI::InitTexCB(texture_cb, target_cb, draw_cb, util_cb);
+	dtex::RenderAPI::InitCallback(render_cb);
 
 	dtex::ResourceAPI::Callback res_cb;
 	res_cb.load_texture    = load_texture;
@@ -488,6 +297,12 @@ void DTex2::CreatePkg(int pkg_id)
 	}
 
 	dtex::PkgMgr::Instance()->Add(dst, pkg_id);
+}
+
+void DTex2::Clear()
+{
+	// todo
+	// dtexf_c2_clear();
 }
 
 void DTex2::DebugDraw() const
