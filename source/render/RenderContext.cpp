@@ -14,9 +14,14 @@ namespace gum
 
 SINGLETON_DEFINITION(RenderContext)
 
-static void state_change()
+static void flush_shader()
 {
-	sl::ShaderMgr::Instance()->Flush();
+	sl::ShaderMgr::Instance()->FlushShader();
+}
+
+static void flush_render_shader()
+{
+	sl::ShaderMgr::Instance()->FlushRenderShader();
 }
 
 RenderContext::RenderContext() 
@@ -26,7 +31,8 @@ RenderContext::RenderContext()
 	, m_height(0)
 {
 	ur::gl::RenderContext::Callback cb;
-	cb.state_change = state_change;
+	cb.flush_shader = flush_shader;
+	cb.flush_render_shader = flush_render_shader;
 	m_rc = new ur::gl::RenderContext(cb);
 
 	sl::ShaderMgr::Instance()->SetContext(m_rc);
@@ -51,6 +57,9 @@ void RenderContext::OnSize(int w, int h)
 // 	sl::SubjectMVP3::Instance()->NotifyProjection(m_p3d_cam->GetProjectMat());
 
 	RenderTarget::Instance()->OnSize(m_rc, w, h);
+
+	m_width = w;
+	m_height = h;
 }
 
 void RenderContext::SetCamera(float x, float y, float sx, float sy)
