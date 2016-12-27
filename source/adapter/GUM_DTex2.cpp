@@ -16,6 +16,8 @@
 #include <dtex2/Cache.h>
 #include <dtex2/CacheMgr.h>
 #include <dtex2/CacheAPI.h>
+#include <dtex2/CacheSymbol.h>
+#include <dtex2/CS_Node.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -118,14 +120,14 @@ draw_begin()
 }
 
 static void 
-draw(const float vb[16], int texid)
+draw(const float _vertices[8], const float _texcoords[8], int texid)
 {
 	sm::vec2 vertices[4], texcoords[4];
 	for (int i = 0; i < 4; ++i) {
-		vertices[i].x  = vb[i * 4];
-		vertices[i].y  = vb[i * 4 + 1];
-		texcoords[i].x = vb[i * 4 + 2];
-		texcoords[i].y = vb[i * 4 + 3];
+		vertices[i].x  = _vertices[i * 2];
+		vertices[i].y  = _vertices[i * 2 + 1];
+		texcoords[i].x = _texcoords[i * 2];
+		texcoords[i].y = _texcoords[i * 2 + 1];
 	}
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
@@ -149,7 +151,7 @@ draw(const float vb[16], int texid)
 static void 
 draw_end()
 {
-	sl::ShaderMgr::Instance()->GetContext()->Clear(0);
+	sl::ShaderMgr::Instance()->FlushShader();
 
 	if (DRAW_END) {
 		DRAW_END();
@@ -251,8 +253,8 @@ relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_fmt, int dst_w, i
 
 void DTex2::InitHook(void (*draw_begin)(), void (*draw_end)())
 {
-	DRAW_BEGIN = draw_begin;
-	DRAW_END = draw_end;
+ 	DRAW_BEGIN = draw_begin;
+ 	DRAW_END = draw_end;
 }
 
 DTex2::DTex2()
@@ -267,6 +269,7 @@ DTex2::DTex2()
 	render_cb.draw_flush       = draw_flush;
 
 	dtex::RenderAPI::InitCallback(render_cb);
+	dtex::RenderAPI::InitRenderContext(RenderContext::Instance()->GetImpl());
 
 	dtex::ResourceAPI::Callback res_cb;
 	res_cb.load_texture    = load_texture;
@@ -276,6 +279,9 @@ DTex2::DTex2()
 	dtex::CacheAPI::Callback cache_cb;
 	cache_cb.relocate_pkg = relocate_pkg;
 	dtex::CacheAPI::InitCallback(cache_cb);
+
+	m_c2 = new dtex::CacheSymbol(2048, 2048);
+	dtex::CacheMgr::Instance()->Add(m_c2, "C2");
 }
 
 void DTex2::CreatePkg(int pkg_id)
@@ -299,6 +305,42 @@ void DTex2::CreatePkg(int pkg_id)
 	dtex::PkgMgr::Instance()->Add(dst, pkg_id);
 }
 
+void DTex2::LoadSymStart()
+{
+	m_c2->LoadStart();
+}
+
+void DTex2::LoadSymbol(const std::string& filepath, int tex_id, int tex_w, int tex_h)
+{
+	uint32_t key = m_file2id.Add(filepath);
+	if (key == 0xffffffff) {
+		return;
+	}
+
+	dtex::Rect r;
+	r.xmin = r.ymin = 0;
+	r.xmax = tex_w;
+	r.ymax = tex_h;
+	m_c2->Load(tex_id, tex_w, tex_h, r, key);
+}
+
+void DTex2::LoadSymFinish()
+{
+	m_c2->LoadFinish();
+}
+
+const float* DTex2::QuerySymbol(const std::string& filepath, int* tex_id) const
+{
+	uint32_t key = m_file2id.Query(filepath);
+	const dtex::CS_Node* node = m_c2->Query(key);
+	if (node) {
+		*tex_id = m_c2->GetTexID();
+		return node->GetTexcoords();
+	} else {
+		return NULL;
+	}
+}
+
 void DTex2::Clear()
 {
 	// todo
@@ -313,6 +355,64 @@ void DTex2::DebugDraw() const
 	for ( ; itr != caches.end(); ++itr) {
 		itr->second->DebugDraw();
 	}
+}
+
+/************************************************************************/
+/* struct DTex2::Filepath2ID                                            */
+/************************************************************************/
+
+uint32_t DTex2::Filepath2ID::
+Add(const std::string& filepath)
+{
+	std::map<std::string, int>::iterator itr0 = map_filepath.find(filepath);
+	if (itr0 != map_filepath.end()) {
+		return 0xffffffff;
+	}
+
+	uint32_t hash = HashStr(filepath);
+	map_filepath.insert(std::make_pair(filepath, hash));
+
+	std::set<int>::iterator itr1 = set_id.find(hash);
+	if (itr1 == set_id.end()) {
+		set_id.insert(hash);
+	} else {
+		std::map<std::string, int>::iterator itr = conflict.find(filepath);
+		assert(itr == conflict.end());
+
+		hash = 0x7FFFFFFF + conflict.size();
+		conflict.insert(std::make_pair(filepath, hash));
+	}
+
+	return hash;
+}
+
+uint32_t DTex2::Filepath2ID::
+Query(const std::string& filepath) const
+{
+	uint32_t hash = HashStr(filepath);
+	std::map<std::string, int>::const_iterator itr 
+		= conflict.find(filepath);
+	if (itr != conflict.end()) {
+		return itr->second;
+	} else {
+		return hash;
+	}
+}
+
+uint32_t DTex2::Filepath2ID::
+HashStr(const std::string& _str)
+{
+	const char* str = _str.c_str();
+
+	// BKDR Hash Function
+	unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
+	unsigned int hash = 0;
+
+	while (*str) {
+		hash = hash * seed + (*str++);
+	}
+
+	return (hash & 0x7FFFFFFF);
 }
 
 }
