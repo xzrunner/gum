@@ -280,7 +280,7 @@ DTex2::DTex2()
 	cache_cb.relocate_pkg = relocate_pkg;
 	dtex::CacheAPI::InitCallback(cache_cb);
 
-	m_c2 = new dtex::CacheSymbol(2048, 2048);
+	m_c2 = new dtex::CacheSymbol(2048, 2048, 0, 0);
 	dtex::CacheMgr::Instance()->Add(m_c2, "C2");
 }
 
