@@ -232,6 +232,14 @@
 			Name="dataset"
 			>
 			<File
+				RelativePath="..\..\..\source\dataset\GlyphStyle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gum\GlyphStyle.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\gum\Resource.h"
 				>
 			</File>
@@ -241,6 +249,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gum\ResourceManager.inl"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\dataset\ResourceUID.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gum\ResourceUID.h"
 				>
 			</File>
 			<Filter

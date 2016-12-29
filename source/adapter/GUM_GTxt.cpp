@@ -3,6 +3,9 @@
 #include "SymbolPool.h"
 #include "ImageSymbol.h"
 #include "Image.h"
+#include "GlyphStyle.h"
+#include "GUM_DTex.h"
+#include "ResourceUID.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterShader.h>
@@ -28,6 +31,10 @@ namespace gum
 
 SINGLETON_DEFINITION(GTxt)
 
+/************************************************************************/
+/* render                                                               */
+/************************************************************************/
+
 struct render_params
 {
 	const sm::mat4* mt;
@@ -36,7 +43,7 @@ struct render_params
 };
 
 static void
-render_glyph(int id, float* _texcoords, float x, float y, float w, float h, struct gtxt_draw_style* ds, render_params* rp) 
+render_glyph(int id, const float* _texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp) 
 {
 	x += ds->offset_x;
 	y += ds->offset_y;
@@ -44,9 +51,9 @@ render_glyph(int id, float* _texcoords, float x, float y, float w, float h, stru
 
 	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(x - hw, y - hh);
-	vertices[1] = sm::vec2(x - hw, y + hh);
+	vertices[1] = sm::vec2(x + hw, y - hh);
 	vertices[2] = sm::vec2(x + hw, y + hh);
-	vertices[3] = sm::vec2(x + hw, y - hh);
+	vertices[3] = sm::vec2(x - hw, y + hh);
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = *rp->mt * vertices[i];
 	}
@@ -82,9 +89,9 @@ render_glyph(int id, float* _texcoords, float x, float y, float w, float h, stru
 }
 
 static void 
-render_decoration(const sm::mat4& mat, float x, float y, float w, float h, struct gtxt_draw_style* ds)
+render_decoration(const sm::mat4& mat, float x, float y, float w, float h, const gtxt_draw_style* ds)
 {
-	struct gtxt_decoration* d = &ds->decoration;
+	const gtxt_decoration* d = &ds->decoration;
 	if (d->type == GRDT_NULL) {
 		return;
 	}
@@ -132,15 +139,15 @@ render_decoration(const sm::mat4& mat, float x, float y, float w, float h, struc
 }
 
 static void 
-render(int id, float* _texcoords, float x, float y, float w, float h, struct gtxt_draw_style* ds, void* ud) 
+render(int id, const float* texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, void* ud) 
 {
 	render_params* rp = (render_params*)ud;
 	if (ds) {
 		if (ds->decoration.type == GRDT_BG) {
 			render_decoration(*rp->mt, x, y, w, h, ds);
-			render_glyph(id, _texcoords, x, y, w, h, ds, rp);
+			render_glyph(id, texcoords, x, y, w, h, ds, rp);
 		} else {
-			render_glyph(id, _texcoords, x, y, w, h, ds, rp);
+			render_glyph(id, texcoords, x, y, w, h, ds, rp);
 			render_decoration(*rp->mt, x, y, w, h, ds);
 		}
 	} else {
@@ -148,18 +155,35 @@ render(int id, float* _texcoords, float x, float y, float w, float h, struct gtx
 		ds.alpha = 1;
 		ds.scale = 1;
 		ds.offset_x = ds.offset_y = 0;
-		render_glyph(id, _texcoords, x, y, w, h, &ds, rp);
+		render_glyph(id, texcoords, x, y, w, h, &ds, rp);
 	}
 }
 
-GTxt::GTxt() 
-{
-//	sl::ShaderMgr::Instance()->SetShader(sl::SPRITE2);
+static void
+draw_glyph(int unicode, float x, float y, float w, float h, 
+		   const gtxt_glyph_style* gs, const gtxt_draw_style* ds, void* ud) 
+{	
+	GlyphStyle gum_gs(gs);
+
+	int tex_id;
+	const float* texcoords = DTex::Instance()->QueryGlyph(unicode, gum_gs, &tex_id);
+	if (!texcoords) {
+		int ft_count = gtxt_ft_get_font_cout();
+		if (gs->font < ft_count) {
+			struct gtxt_glyph_layout layout;
+			uint32_t* bmp = gtxt_glyph_get_bitmap(unicode, gs, &layout);
+			DTex::Instance()->LoadGlyph(bmp, w, h, ResourceUID::Glyph(unicode, gum_gs));
+		}
+	}
+
+	if (texcoords) {
+		render(tex_id, texcoords, x, y, w, h, ds, ud);
+	}
 }
 
-GTxt::~GTxt() 
-{
-}
+/************************************************************************/
+/* richtext ext eym                                                     */
+/************************************************************************/
 
 void*
 ext_sym_create(const char* str) {
@@ -209,12 +233,12 @@ float*
 uf_query_and_load(void* ud, struct dtex_glyph* glyph) {
 	return NULL;
 
-// 	DTex* dtex = DTex::Instance();
-// 	dtex_cg* cg = dtex->GetDtexCG();
-// 	ImageSymbol* sym = dynamic_cast<ImageSymbol*>(static_cast<s2::Symbol*>(ud));
-// 	int texid = 0;
-// 	const Image* img = sym->GetImage();
-// 	return dtex->Query(img->GetFilepath(), img->GetS2Tex(), &texid);
+	// 	DTex* dtex = DTex::Instance();
+	// 	dtex_cg* cg = dtex->GetDtexCG();
+	// 	ImageSymbol* sym = dynamic_cast<ImageSymbol*>(static_cast<s2::Symbol*>(ud));
+	// 	int texid = 0;
+	// 	const Image* img = sym->GetImage();
+	// 	return dtex->Query(img->GetFilepath(), img->GetS2Tex(), &texid);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -231,27 +255,37 @@ uf_query_and_load(void* ud, struct dtex_glyph* glyph) {
 	// 	}
 }
 
+/************************************************************************/
+/*                                                                      */
+/************************************************************************/
+
+GTxt::GTxt() 
+{
+	gtxt_label_cb_init(draw_glyph);
+
+	gtxt_ft_create();
+
+	gtxt_glyph_create(50, 500, NULL);
+
+	gtxt_richtext_ext_sym_cb_init(&ext_sym_create, &ext_sym_release, &ext_sym_get_size, &ext_sym_render, NULL);
+
+	gtxt_uf_cb_init(uf_query_and_load);
+	gtxt_uf_create();
+}
+
+GTxt::~GTxt() 
+{
+}
+
 void GTxt::Init(const std::vector<std::pair<std::string, std::string> >& fonts, 
 				const std::vector<std::pair<std::string, std::string> >& user_fonts)
 {
-	//dtex_cg* cg = DTex::Instance()->GetDtexCG();
-	//gtxt_adapter_create(cg);
-
-	//gtxt_ft_create();
-
-	//for (int i = 0, n = fonts.size(); i < n; ++i) {
-	//	LoadFont(fonts[i].first.c_str(), fonts[i].second.c_str());
-	//}
-
-	//gtxt_glyph_create(50, 500, NULL);
-
-	//gtxt_richtext_ext_sym_cb_init(&ext_sym_create, &ext_sym_release, &ext_sym_get_size, &ext_sym_render, NULL);
-
-	//gtxt_uf_cb_init(uf_query_and_load);
-	//gtxt_uf_create();
-	//for (int i = 0, n = user_fonts.size(); i < n; ++i) {
-	//	LoadUserFont(user_fonts[i].first, user_fonts[i].second);
-	//}
+	for (int i = 0, n = fonts.size(); i < n; ++i) {
+		LoadFont(fonts[i].first.c_str(), fonts[i].second.c_str());
+	}
+	for (int i = 0, n = user_fonts.size(); i < n; ++i) {
+		LoadUserFont(user_fonts[i].first, user_fonts[i].second);
+	}
 }
 
 void GTxt::LoadFont(const std::string& name, const std::string& filepath)
@@ -296,9 +330,9 @@ void GTxt::Draw(const gtxt_label_style& style, const sm::mat4& mt, const s2::Col
 
 	std::string utf8 = text;
 	if (richtext) {
-		gtxt_label_draw_richtext(utf8.c_str(), &style, time, render, (void*)&rp);
+		gtxt_label_draw_richtext(utf8.c_str(), &style, time, (void*)&rp);
 	} else {
-		gtxt_label_draw(utf8.c_str(), &style, render, (void*)&rp);
+		gtxt_label_draw(utf8.c_str(), &style, (void*)&rp);
 	}
 }
 
@@ -331,7 +365,7 @@ void GTxt::Draw(const sm::mat4& mt, const std::string& str, int width) const
 	rp.mul = NULL;
 	rp.add = NULL;
 
-	gtxt_label_draw(str.c_str(), &style, render, (void*)&rp);
+	gtxt_label_draw(str.c_str(), &style, (void*)&rp);
 }
 
 //void GTxt::Reload(const Sprite* spr) 

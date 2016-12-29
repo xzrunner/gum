@@ -9,44 +9,42 @@
 
 #include <stdint.h>
 
-namespace dtex { class CacheSymbol; }
+namespace dtex { class CacheSymbol; class CacheGlyph; class Texture; struct Rect; }
 
 namespace gum
 {
+
+class GlyphStyle;
 
 class DTex
 {
 public:
 	void InitHook(void (*draw_begin)(), void (*draw_end)());
 
+	// C3
 	void CreatePkg(int pkg_id);
 
+	// C2
 	void LoadSymStart();
 	void LoadSymbol(const std::string& filepath, int tex_id, int tex_w, int tex_h);
 	void LoadSymFinish();
 	const float* QuerySymbol(const std::string& filepath, int* tex_id) const;
 
+	// CG
+	const float* QueryGlyph(int unicode, const GlyphStyle& gs, int* tex_id) const;
+	void DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key);
+	void LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key);
+
 	void Clear();
+
+	void Flush();
 
 	void DebugDraw() const;
 
 private:
-	struct Filepath2ID
-	{
-		uint32_t Add(const std::string& filepath);
-		uint32_t Query(const std::string& filepath) const;
-
-		static uint32_t HashStr(const std::string& str);
-
-		std::map<std::string, int> map_filepath;
-		std::set<int> set_id;
-
-		std::map<std::string, int> conflict;
-	};
-
-private:
 	dtex::CacheSymbol* m_c2;
-	Filepath2ID m_file2id;
+
+	dtex::CacheGlyph* m_cg;
 
 	SINGLETON_DECLARATION(DTex)
 

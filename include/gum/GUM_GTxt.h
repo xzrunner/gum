@@ -31,6 +31,8 @@ public:
 
 //	void Reload(const Sprite* spr);
 
+private:
+	
 	SINGLETON_DECLARATION(GTxt)
 
 }; // GTxt

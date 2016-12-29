@@ -2,6 +2,7 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
 #include "ProxyImage.h"
+#include "ResourceUID.h"
 
 #include <logger.h>
 #include <timp/Package.h>
@@ -18,6 +19,7 @@
 #include <dtex2/CacheAPI.h>
 #include <dtex2/CacheSymbol.h>
 #include <dtex2/CS_Node.h>
+#include <dtex2/CacheGlyph.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -249,7 +251,31 @@ relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_fmt, int dst_w, i
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
+/************************************************************************/
+/* Glyph                                                                */
+/************************************************************************/
+
+static void 
+glyph_load_start()
+{
+	DTex::Instance()->LoadSymStart();
+}
+
+static void 
+glyph_load(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key)
+{
+	DTex::Instance()->DrawGlyph(tex_id, tex_w, tex_h, r, key);
+}
+
+static void 
+glyph_load_finish()
+{
+	DTex::Instance()->LoadSymFinish();
+}
+
+/************************************************************************/
+/*                                                                      */
+/************************************************************************/
 
 void DTex::InitHook(void (*draw_begin)(), void (*draw_end)())
 {
@@ -280,8 +306,15 @@ DTex::DTex()
 	cache_cb.relocate_pkg = relocate_pkg;
 	dtex::CacheAPI::InitCallback(cache_cb);
 
-	m_c2 = new dtex::CacheSymbol(2048, 2048, 0, 0);
+	m_c2 = new dtex::CacheSymbol(2048, 2048);
 	dtex::CacheMgr::Instance()->Add(m_c2, "C2");
+
+	dtex::CacheGlyph::Callback glyph_cb;
+	glyph_cb.load_start  = glyph_load_start;
+	glyph_cb.load        = glyph_load;
+	glyph_cb.load_finish = glyph_load_finish;
+	m_cg = new dtex::CacheGlyph(256, 512, glyph_cb);
+	dtex::CacheMgr::Instance()->Add(m_cg, "CG");
 }
 
 void DTex::CreatePkg(int pkg_id)
@@ -312,16 +345,13 @@ void DTex::LoadSymStart()
 
 void DTex::LoadSymbol(const std::string& filepath, int tex_id, int tex_w, int tex_h)
 {
-	uint32_t key = m_file2id.Add(filepath);
-	if (key == 0xffffffff) {
-		return;
-	}
+	UID uid = ResourceUID::RawFile(filepath);
 
 	dtex::Rect r;
 	r.xmin = r.ymin = 0;
 	r.xmax = tex_w;
 	r.ymax = tex_h;
-	m_c2->Load(tex_id, tex_w, tex_h, r, key);
+	m_c2->Load(tex_id, tex_w, tex_h, r, uid, 0, 1);
 }
 
 void DTex::LoadSymFinish()
@@ -331,8 +361,8 @@ void DTex::LoadSymFinish()
 
 const float* DTex::QuerySymbol(const std::string& filepath, int* tex_id) const
 {
-	uint32_t key = m_file2id.Query(filepath);
-	const dtex::CS_Node* node = m_c2->Query(key);
+	UID uid = ResourceUID::RawFile(filepath);
+	const dtex::CS_Node* node = m_c2->Query(uid);
 	if (node) {
 		*tex_id = m_c2->GetTexID();
 		return node->GetTexcoords();
@@ -341,10 +371,37 @@ const float* DTex::QuerySymbol(const std::string& filepath, int* tex_id) const
 	}
 }
 
+const float* DTex::QueryGlyph(int unicode, const GlyphStyle& gs, int* tex_id) const
+{
+	UID uid = ResourceUID::Glyph(unicode, gs);
+	const dtex::CS_Node* node = m_c2->Query(uid);
+	if (node) {
+		*tex_id = m_c2->GetTexID();
+		return node->GetTexcoords();
+	} else {
+		return NULL;
+	}
+}
+
+void DTex::DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key)
+{
+	m_c2->Load(tex_id, tex_w, tex_h, r, key, 1, 0);
+}
+
+void DTex::LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key)
+{
+	m_cg->Load(bitmap, width, height, key);
+}
+
 void DTex::Clear()
 {
 	// todo
 	// dtexf_c2_clear();
+}
+
+void DTex::Flush()
+{
+	m_cg->Flush();
 }
 
 void DTex::DebugDraw() const
@@ -355,64 +412,6 @@ void DTex::DebugDraw() const
 	for ( ; itr != caches.end(); ++itr) {
 		itr->second->DebugDraw();
 	}
-}
-
-/************************************************************************/
-/* struct DTex::Filepath2ID                                            */
-/************************************************************************/
-
-uint32_t DTex::Filepath2ID::
-Add(const std::string& filepath)
-{
-	std::map<std::string, int>::iterator itr0 = map_filepath.find(filepath);
-	if (itr0 != map_filepath.end()) {
-		return 0xffffffff;
-	}
-
-	uint32_t hash = HashStr(filepath);
-	map_filepath.insert(std::make_pair(filepath, hash));
-
-	std::set<int>::iterator itr1 = set_id.find(hash);
-	if (itr1 == set_id.end()) {
-		set_id.insert(hash);
-	} else {
-		std::map<std::string, int>::iterator itr = conflict.find(filepath);
-		assert(itr == conflict.end());
-
-		hash = 0x7FFFFFFF + conflict.size();
-		conflict.insert(std::make_pair(filepath, hash));
-	}
-
-	return hash;
-}
-
-uint32_t DTex::Filepath2ID::
-Query(const std::string& filepath) const
-{
-	uint32_t hash = HashStr(filepath);
-	std::map<std::string, int>::const_iterator itr 
-		= conflict.find(filepath);
-	if (itr != conflict.end()) {
-		return itr->second;
-	} else {
-		return hash;
-	}
-}
-
-uint32_t DTex::Filepath2ID::
-HashStr(const std::string& _str)
-{
-	const char* str = _str.c_str();
-
-	// BKDR Hash Function
-	unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
-	unsigned int hash = 0;
-
-	while (*str) {
-		hash = hash * seed + (*str++);
-	}
-
-	return (hash & 0x7FFFFFFF);
 }
 
 }
