@@ -30,18 +30,6 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	const Json::Value& p_val = val["particle3d"];
 
-	bool alone = false;
-	if (p_val.isMember("alone")) {
-		alone = p_val["alone"].asBool();
-	}
-	m_spr->SetAlone(alone);
-
-	bool reuse = false;
-	if (p_val.isMember("reuse")) {
-		reuse = p_val["reuse"].asBool();
-	}
-	m_spr->SetReuse(reuse);
-
 	bool loop = false;
 	if (p_val.isMember("loop")) {
 		loop = p_val["loop"].asBool();
@@ -53,6 +41,18 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 		local_mode_draw = p_val["local_mode_draw"].asBool();
 	}
 	m_spr->SetLocalModeDraw(local_mode_draw);
+
+	bool alone = false;
+	if (p_val.isMember("alone")) {
+		alone = p_val["alone"].asBool();
+	}
+	m_spr->SetAlone(alone);
+
+	bool reuse = false;
+	if (p_val.isMember("reuse")) {
+		reuse = p_val["reuse"].asBool();
+	}
+	m_spr->SetReuse(reuse);
 
 	if (p_val.isMember("start_radius")) {
 		float start_radius = p_val["start_radius"].asDouble();
