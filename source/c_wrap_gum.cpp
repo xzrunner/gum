@@ -2,10 +2,10 @@
 #include "SymbolPool.h"
 #include "Image.h"
 #include "GUM_GTxt.h"
-#include "GUM_DTex2.h"
+#include "GUM_DTex.h"
+#include "RenderContext.h"
 
-#include <render/render.h>
-//#include <dtex_screen.h>
+#include <unirender/RenderContext.h>
 #include <simp/Package.h>
 #include <simp/NodeFactory.h>
 #include <timp/Package.h>
@@ -51,7 +51,7 @@ void gum_store_snapshot(const char* filepath)
 
 	uint8_t* pixels = (uint8_t*)malloc(w * h * 3);
 	memset(pixels, 0, w * h * 3);
-	render_gl_read_pixels(0, 0, w, h, pixels);
+	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 0, 0, w, h);
 	gimg_export(filepath, pixels, w, h, GPF_RGB);
 	free(pixels);
 }
@@ -66,7 +66,7 @@ int gum_compare_snapshot(const char* filepath)
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
 	memset(now, 0, sz);
-	render_gl_read_pixels(0, 0, w, h, now);
+	RenderContext::Instance()->GetImpl()->ReadPixels(now, 0, 0, w, h);
 
 	int _w, _h;
 	enum GIMG_PIXEL_FORMAT _fmt;
@@ -105,7 +105,7 @@ bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* 
 	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
 	assert(success);
 
-	DTex2::Instance()->CreatePkg(id);
+	DTex::Instance()->CreatePkg(id);
 
 	return true;
 }
@@ -189,7 +189,7 @@ void gum_draw_text(const char* str, int x, int y, int w)
 extern "C"
 void gum_debug_draw()
 {
-	DTex2::Instance()->DebugDraw();
+	DTex::Instance()->DebugDraw();
 }
 
 }
