@@ -33,7 +33,11 @@ RenderContext::RenderContext()
 	ur::gl::RenderContext::Callback cb;
 	cb.flush_shader = flush_shader;
 	cb.flush_render_shader = flush_render_shader;
-	m_rc = new ur::gl::RenderContext(cb);
+#ifdef EASY_EDITOR
+	m_rc = new ur::gl::RenderContext(cb, 4096);
+#else
+	m_rc = new ur::gl::RenderContext(cb, 1024);
+#endif // EASY_EDITOR
 
 	sl::ShaderMgr::Instance()->SetContext(m_rc);
 }
