@@ -1,7 +1,7 @@
 #include "ImageSymbol.h"
 #include "Image.h"
+#include "RenderContext.h"
 
-#include <sprite2/RenderCtxStack.h>
 #include <sprite2/Texture.h>
 
 namespace gum
@@ -118,9 +118,8 @@ bool ImageSymbol::IsOrthoCam() const
 
 void ImageSymbol::GetScreenSize(int& w, int& h) const
 {
-	const s2::RenderCtx* ctx = s2::RenderCtxStack::Instance()->Top();
-	w = ctx->screen_width;
-	h = ctx->screen_height;
+	w = RenderContext::Instance()->GetWidth();
+	h = RenderContext::Instance()->GetHeight();
 }
 
 float ImageSymbol::GetP3dCamAngle() const

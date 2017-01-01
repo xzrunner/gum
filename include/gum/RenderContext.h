@@ -10,8 +10,7 @@ namespace ur { class RenderContext; }
 namespace gum
 {
 
-class OrthoCamera;
-class Pseudo3DCamera;
+class Camera;
 
 class RenderContext
 {
@@ -19,22 +18,18 @@ public:
 	void Init();
 
 	void OnSize(int w, int h);
-	void SetCamera(float x, float y, float sx, float sy);
 
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
-
-//	const Camera* GetCamera() const { return m_cam; }
 
 	ur::RenderContext* GetImpl() { return m_rc; }
 
 private:
 	ur::RenderContext* m_rc;
 
-	OrthoCamera* m_ortho_cam;
-	Pseudo3DCamera* m_p3d_cam;
-
 	int m_width, m_height;
+
+	Camera* m_cam;
 
 	SINGLETON_DECLARATION(RenderContext)
 	

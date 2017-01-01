@@ -4,6 +4,7 @@
 #include <unirender/RenderTarget.h>
 #include <unirender/Texture.h>
 #include <shaderlab/ShaderMgr.h>
+#include <dtex2/DebugDraw.h>
 
 namespace gum
 {
@@ -29,6 +30,11 @@ void RenderTarget::OnSize(ur::RenderContext* rc, int w, int h)
 
 	m_screen0 = new ur::RenderTarget(rc, w, h);
 	m_screen1 = new ur::RenderTarget(rc, w, h);
+}
+
+void RenderTarget::DebugDraw() const
+{
+	dtex::DebugDraw::Draw(m_screen0->GetTexture()->ID(), 1);
 }
 
 }

@@ -16,6 +16,8 @@ public:
 
 	void OnSize(ur::RenderContext* rc, int w, int h);
 
+	void DebugDraw() const;
+
 private:
 	ur::RenderTarget *m_screen0, *m_screen1;
 

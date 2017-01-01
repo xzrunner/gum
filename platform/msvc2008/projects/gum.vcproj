@@ -175,6 +175,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\include\gum\CameraType.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\render\OrthoCamera.cpp"
 					>
 				</File>

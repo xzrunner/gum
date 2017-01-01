@@ -8,11 +8,12 @@
 namespace gum
 {
 
-class OrthoCamera
+class OrthoCamera : public Camera
 {
 public:
 	OrthoCamera();
 	
+	virtual CameraType Type() const { return CAM_ORTHO2D; }
 	virtual void OnSize(int width, int height);
 	virtual void Reset();
 
@@ -23,14 +24,17 @@ public:
 	void Scale(float scale, int x, int y, int width, int height);
 
 	float GetScale() const { return m_scale; }
-	void SetScale(float s) { m_scale = s; }
+	void  SetScale(float s) { m_scale = s; }
 
 	const sm::vec2& GetPosition() const { return m_position; }
 	void SetPosition(const sm::vec2& pos) { m_position = pos; } 
 
 private:
+	void UpdateRender() const;
+
+private:
 	sm::vec2 m_position;
-	float m_scale;
+	float    m_scale;
 
 }; // OrthoCamera
 

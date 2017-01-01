@@ -25,7 +25,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <sprite2/S2_RVG.h>
-#include <sprite2/RenderCtx.h>
+#include <sprite2/RenderContext.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>
 #include <unirender/RenderContext.h>
@@ -111,7 +111,7 @@ draw_begin()
 	if (DRAW_BEGIN) {
 		DRAW_BEGIN();
 	} else {
-		s2::RenderCtxStack::Instance()->Push(s2::RenderCtx(2, 2, 0, 0), false);
+		s2::RenderCtxStack::Instance()->Push(s2::RenderContext(2, 2, 0, 0), false);
 	}
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();

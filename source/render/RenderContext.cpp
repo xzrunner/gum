@@ -25,9 +25,7 @@ static void flush_render_shader()
 }
 
 RenderContext::RenderContext() 
-	: m_ortho_cam(new OrthoCamera())
-	, m_p3d_cam(new Pseudo3DCamera())
-	, m_width(0)
+	: m_width(0)
 	, m_height(0)
 {
 	ur::gl::RenderContext::Callback cb;
@@ -40,36 +38,30 @@ RenderContext::RenderContext()
 #endif // EASY_EDITOR
 
 	sl::ShaderMgr::Instance()->SetContext(m_rc);
+
+	m_cam = new OrthoCamera();
 }
 
 RenderContext::~RenderContext() 
 {
-	delete m_ortho_cam;
-	delete m_p3d_cam;
+	delete m_cam;
+	delete m_rc;
 }
 
 void RenderContext::Init()
 {
-
+	// dummy
 }
 
 void RenderContext::OnSize(int w, int h)
 {
-	sl::SubjectMVP2::Instance()->NotifyProjection(w, h);
+	if (m_width == w && m_height == h) {
+		return;
+	}
 
-	m_p3d_cam->OnSize(w, h);
-// 	sl::SubjectMVP3::Instance()->NotifyProjection(m_p3d_cam->GetProjectMat());
+	m_cam->OnSize(w, h);
 
 	RenderTarget::Instance()->OnSize(m_rc, w, h);
-
-	m_width = w;
-	m_height = h;
-}
-
-void RenderContext::SetCamera(float x, float y, float sx, float sy)
-{
-	sl::SubjectMVP2::Instance()->NotifyModelview(x, y, sx, sy);
-	//sl::SubjectMVP3::Instance()->NotifyModelview(m_p3d_cam->GetModelViewMat());
 }
 
 }

@@ -25,7 +25,7 @@ void DRect::Bind()
 	RenderContext* rc = RenderContext::Instance();
 	int w = rc->GetWidth() + EXTEND * 2,
 		h = rc->GetHeight() + EXTEND * 2;
-	s2::RenderCtxStack::Instance()->Push(s2::RenderCtx(w, h, w, h));
+	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(w, h, w, h));
 
 	m_rt->Bind();
 }
@@ -40,9 +40,6 @@ void DRect::Unbind()
 void DRect::DebugDraw() const
 {
 	dtex::DebugDraw::Draw(m_rt->GetTexID(), 2);
-
-	s2::RVG::SetColor(s2::Color(255, 0, 0));
-	s2::RVG::Rect(sm::vec2(0, 0), 0.5f, 0.5f, false);
 }
 
 }
