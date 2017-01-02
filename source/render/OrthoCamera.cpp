@@ -18,6 +18,7 @@ void OrthoCamera::OnSize(int width, int height)
 	s2::RenderContext* ctx = const_cast<s2::RenderContext*>(s2::RenderCtxStack::Instance()->Top());
 	if (ctx) {
 		ctx->SetProjection(width, height);
+		ctx->SetScreen(width, height);
 	}
 }
 
