@@ -3,6 +3,8 @@
 
 #include <c25_camera.h>
 #include <sm_c_vector.h>
+#include <sprite2/RenderContext.h>
+#include <sprite2/RenderCtxStack.h>
 
 #include <stddef.h>
 
