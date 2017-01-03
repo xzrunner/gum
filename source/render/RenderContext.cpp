@@ -59,6 +59,9 @@ void RenderContext::OnSize(int w, int h)
 		return;
 	}
 
+	m_width = w;
+	m_height = h;
+
 	m_cam->OnSize(w, h);
 
 	RenderTarget::Instance()->OnSize(m_rc, w, h);
