@@ -49,6 +49,12 @@ void gum_update(float dt)
 }
 
 extern "C"
+void gum_flush()
+{
+	DTex::Instance()->Flush();
+}
+
+extern "C"
 void gum_store_snapshot(const char* filepath)
 {
 	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();

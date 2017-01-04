@@ -398,6 +398,10 @@ void DTex::DebugDraw() const
 	for ( ; itr != caches.end(); ++itr) {
 		itr->second->DebugDraw();
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+//	m_c2->DebugDraw();
 }
 
 }

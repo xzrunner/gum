@@ -15,8 +15,7 @@ DTexC2Strategy::DTexC2Strategy()
 	m_no_update_count = 0;
 	m_discount = 1;
 
-//	m_single_max_count	= 512;
-	m_single_max_count	= 5;
+	m_single_max_count	= 512;
 	m_diff_spr_count	= 256;
 	m_tot_count			= 10240;
 }
