@@ -1,6 +1,8 @@
 #ifndef _GUM_DTEX_H_
 #define _GUM_DTEX_H_
 
+#include "ResourceUID.h"
+
 #include <CU_Singleton.h>
 
 #include <string>
@@ -26,9 +28,9 @@ public:
 
 	// C2
 	void LoadSymStart();
-	void LoadSymbol(const std::string& filepath, int tex_id, int tex_w, int tex_h);
+	void LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h);
 	void LoadSymFinish();
-	const float* QuerySymbol(const std::string& filepath, int* tex_id) const;
+	const float* QuerySymbol(UID sym_id, int* tex_id) const;
 
 	// CG
 	const float* QueryGlyph(int unicode, const GlyphStyle& gs, int* tex_id) const;

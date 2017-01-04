@@ -2,7 +2,6 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
 #include "ProxyImage.h"
-#include "ResourceUID.h"
 
 #include <logger.h>
 #include <timp/Package.h>
@@ -343,15 +342,13 @@ void DTex::LoadSymStart()
 	m_c2->LoadStart();
 }
 
-void DTex::LoadSymbol(const std::string& filepath, int tex_id, int tex_w, int tex_h)
+void DTex::LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h)
 {
-	UID uid = ResourceUID::RawFile(filepath);
-
 	dtex::Rect r;
 	r.xmin = r.ymin = 0;
 	r.xmax = tex_w;
 	r.ymax = tex_h;
-	m_c2->Load(tex_id, tex_w, tex_h, r, uid, 0, 1);
+	m_c2->Load(tex_id, tex_w, tex_h, r, sym_id, 0, 1);
 }
 
 void DTex::LoadSymFinish()
@@ -359,10 +356,9 @@ void DTex::LoadSymFinish()
 	m_c2->LoadFinish();
 }
 
-const float* DTex::QuerySymbol(const std::string& filepath, int* tex_id) const
+const float* DTex::QuerySymbol(UID sym_id, int* tex_id) const
 {
-	UID uid = ResourceUID::RawFile(filepath);
-	const dtex::CS_Node* node = m_c2->Query(uid);
+	const dtex::CS_Node* node = m_c2->Query(sym_id);
 	if (node) {
 		*tex_id = m_c2->GetTexID();
 		return node->GetTexcoords();
