@@ -349,7 +349,7 @@ void DTex::LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h, const sm::ui
 	r.ymin = region.ymin;
 	r.xmax = region.xmax;
 	r.ymax = region.ymax;
-	m_c2->Load(tex_id, tex_w, tex_h, r, sym_id, 0, 0);
+	m_c2->Load(tex_id, tex_w, tex_h, r, sym_id, 0, 1);
 }
 
 void DTex::LoadSymFinish()
