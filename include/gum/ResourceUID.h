@@ -28,6 +28,7 @@ public:
 
 	static UID RawFile(const std::string& filepath);
 	static UID Glyph(int unicode, const GlyphStyle& gs);
+	static UID BinNode(uint32_t node_id);
 
 private:
 	static const int DATA_SIZE = 62;

@@ -37,6 +37,11 @@ UID ResourceUID::Glyph(int unicode, const GlyphStyle& gs)
 	return Compose(hash, RES_GLYPH);
 }
 
+UID ResourceUID::BinNode(uint32_t node_id)
+{
+	return Compose(node_id, RES_BIN_NODE);
+}
+
 uint64_t ResourceUID::HashString(const std::string& str)
 {
 	const char* c = str.c_str();
