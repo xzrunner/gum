@@ -19,6 +19,9 @@ RenderTarget::RenderTarget()
 
 void RenderTarget::OnSize(ur::RenderContext* rc, int w, int h)
 {
+	if (w == 0 || h == 0) {
+		return;
+	}
 	if (m_screen0 && 
 		m_screen0->GetTexture()->Width() == w &&
 		m_screen0->GetTexture()->Height() == h) {
