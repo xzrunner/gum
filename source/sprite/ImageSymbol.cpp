@@ -1,6 +1,8 @@
 #include "ImageSymbol.h"
 #include "Image.h"
 #include "RenderContext.h"
+#include "GUM_DTex.h"
+#include "DTexC2Strategy.h"
 
 #include <sprite2/Texture.h>
 
@@ -42,7 +44,7 @@ void ImageSymbol::SetImage(Image* img)
 {
 	cu::RefCountObjAssign(m_img, img);
 
-	s2::ImageSymbol::Quad q;
+	sm::ui16_rect q;
 	q.xmin = q.ymin = 0;
 	sm::ivec2 sz = m_img->GetSize();
 	q.xmax = sz.x;
@@ -55,9 +57,9 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 {
 	m_packed = true;
 
-	bool rotate = false;
+	m_rotate = false;
 	if (max.y < min.y) {
-		rotate = true;
+		m_rotate = true;
 	}
 
 	float hw, hh;
@@ -67,7 +69,7 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 	tymin = (float)min.y / sz.y;
 	txmax = (float)max.x / sz.x;
 	tymax = (float)max.y / sz.y;
-	if (rotate) 
+	if (m_rotate) 
 	{
 		hw = (min.y - max.y) * 0.5f;
 		hh = (max.x - min.x) * 0.5f;
@@ -76,6 +78,11 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 		m_texcoords[2] = txmin; m_texcoords[3] = tymax;
 		m_texcoords[4] = txmax; m_texcoords[5] = tymax;
 		m_texcoords[6] = txmax; m_texcoords[7] = tymin;
+
+		m_quad.xmin = min.x;
+		m_quad.ymin = max.y;
+		m_quad.xmax = max.x;
+		m_quad.ymax = min.y;
 	}
 	else
 	{
@@ -86,12 +93,12 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 		m_texcoords[2] = txmax; m_texcoords[3] = tymin;
 		m_texcoords[4] = txmax; m_texcoords[5] = tymax;
 		m_texcoords[6] = txmin; m_texcoords[7] = tymax;
-	}
 
-	m_quad.xmin = min.x;
-	m_quad.ymin = min.y;
-	m_quad.xmax = max.x;
-	m_quad.ymax = max.y;
+		m_quad.xmin = min.x;
+		m_quad.ymin = min.y;
+		m_quad.xmax = max.x;
+		m_quad.ymax = max.y;
+	}
 
 	m_size.xmin = -hw;
 	m_size.ymin = -hh;
@@ -101,8 +108,25 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 
 void ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
 {
-	texid = m_img->GetTexID();
-	memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
+	UID uid = ResourceUID::BinNode(GetID());
+	const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, &texid);
+	if (c2_texcoords) {
+		memcpy(texcoords, c2_texcoords, sizeof(float) * 8);
+		if (m_rotate) {
+			float x, y;
+			x = texcoords[6]; y = texcoords[7];
+			texcoords[6] = texcoords[4]; texcoords[7] = texcoords[5];
+			texcoords[4] = texcoords[2]; texcoords[5] = texcoords[3];
+			texcoords[2] = texcoords[0]; texcoords[3] = texcoords[1];
+			texcoords[0] = x;           texcoords[1] = y;
+		}
+	} else {
+		texid = m_img->GetTexID();
+		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
+
+		sm::ivec2 sz = m_img->GetSize();
+		DTexC2Strategy::Instance()->OnC2QueryFail(uid, texid, sz.x, sz.y, m_quad);
+	}
 }
 
 void ImageSymbol::Proj2Screen(float px, float py, int w, int h, float& sx, float& sy) const

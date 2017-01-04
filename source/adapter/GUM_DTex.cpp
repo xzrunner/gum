@@ -342,13 +342,14 @@ void DTex::LoadSymStart()
 	m_c2->LoadStart();
 }
 
-void DTex::LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h)
+void DTex::LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h, const sm::ui16_rect& region)
 {
 	dtex::Rect r;
-	r.xmin = r.ymin = 0;
-	r.xmax = tex_w;
-	r.ymax = tex_h;
-	m_c2->Load(tex_id, tex_w, tex_h, r, sym_id, 0, 1);
+	r.xmin = region.xmin;
+	r.ymin = region.ymin;
+	r.xmax = region.xmax;
+	r.ymax = region.ymax;
+	m_c2->Load(tex_id, tex_w, tex_h, r, sym_id, 0, 0);
 }
 
 void DTex::LoadSymFinish()

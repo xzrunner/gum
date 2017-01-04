@@ -3,6 +3,7 @@
 
 #include "ResourceUID.h"
 
+#include <SM_Rect.h>
 #include <CU_Singleton.h>
 
 #include <string>
@@ -26,7 +27,7 @@ public:
 
 	// C2
 	void LoadSymStart();
-	void LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h);
+	void LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h, const sm::ui16_rect& region);
 	void LoadSymFinish();
 	const float* QuerySymbol(UID sym_id, int* tex_id) const;
 
