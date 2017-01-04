@@ -31,6 +31,9 @@ namespace gum
 
 SINGLETON_DEFINITION(GTxt)
 
+int GTxt::m_cap_bitmap = 50;
+int GTxt::m_cap_layout = 500;
+
 /************************************************************************/
 /* render                                                               */
 /************************************************************************/
@@ -265,7 +268,7 @@ GTxt::GTxt()
 
 	gtxt_ft_create();
 
-	gtxt_glyph_create(50, 500, NULL);
+	gtxt_glyph_create(m_cap_bitmap, m_cap_layout, NULL);
 
 	gtxt_richtext_ext_sym_cb_init(&ext_sym_create, &ext_sym_release, &ext_sym_get_size, &ext_sym_render, NULL);
 
@@ -391,5 +394,11 @@ void GTxt::Draw(const sm::mat4& mt, const std::string& str, int width) const
 //	std::string utf8 = StringHelper::ToUtf8(spr->GetText());
 //	gtxt_label_reload_richtext(utf8.c_str(), &style);
 //}
+
+void GTxt::SetCap(int cap_bitmap, int cap_layout)
+{
+	m_cap_bitmap = cap_bitmap;
+	m_cap_layout = cap_layout;
+}
 
 }

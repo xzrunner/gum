@@ -20,6 +20,12 @@ namespace gum
 {
 
 extern "C"
+void* gum_get_render_context()
+{
+	return RenderContext::Instance()->GetImpl();
+}
+
+extern "C"
 void gum_gc()
 {
 	SymbolPool::Instance()->GC();
@@ -45,13 +51,13 @@ void gum_update(float dt)
 extern "C"
 void gum_store_snapshot(const char* filepath)
 {
-	const s2::RenderCtx* ctx = s2::RenderCtxStack::Instance()->Top();
-	float w = ctx->screen_width;
-	float h = ctx->screen_height;
+	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
+	float w = ctx->GetScreenWidth();
+	float h = ctx->GetScreenHeight();
 
 	uint8_t* pixels = (uint8_t*)malloc(w * h * 3);
 	memset(pixels, 0, w * h * 3);
-	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 0, 0, w, h);
+	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 3, 0, 0, w, h);
 	gimg_export(filepath, pixels, w, h, GPF_RGB);
 	free(pixels);
 }
@@ -59,14 +65,14 @@ void gum_store_snapshot(const char* filepath)
 extern "C"
 int gum_compare_snapshot(const char* filepath)
 {
-	const s2::RenderCtx* ctx = s2::RenderCtxStack::Instance()->Top();
-	float w = ctx->screen_width;
-	float h = ctx->screen_height;
+	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
+	float w = ctx->GetScreenWidth();
+	float h = ctx->GetScreenHeight();
 
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
 	memset(now, 0, sz);
-	RenderContext::Instance()->GetImpl()->ReadPixels(now, 0, 0, w, h);
+	RenderContext::Instance()->GetImpl()->ReadPixels(now, 3, 0, 0, w, h);
 
 	int _w, _h;
 	enum GIMG_PIXEL_FORMAT _fmt;
@@ -176,6 +182,13 @@ extern "C"
 void* gum_create_spr_from_file(const char* filepath)
 {
 	return SpriteFactory::Instance()->Create(filepath);
+}
+
+extern "C"
+void gum_init_gtxt(int cap_bitmap, int cap_layout)
+{
+	GTxt::SetCap(cap_bitmap, cap_layout);
+	GTxt::Instance();
 }
 
 extern "C"

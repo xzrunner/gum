@@ -31,7 +31,10 @@ public:
 
 //	void Reload(const Sprite* spr);
 
+	static void SetCap(int cap_bitmap, int cap_layout);
+
 private:
+	static int m_cap_bitmap, m_cap_layout;
 	
 	SINGLETON_DECLARATION(GTxt)
 

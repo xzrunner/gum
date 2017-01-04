@@ -9,6 +9,8 @@ extern "C"
 #include <stdint.h>
 #include <stdbool.h>
 
+void* gum_get_render_context();
+
 void  gum_gc();
 
 int   gum_get_sym_count();
@@ -29,6 +31,7 @@ void* gum_create_spr(const char* pkg, const char* spr);
 void* gum_create_spr_by_id(int id);
 void* gum_create_spr_from_file(const char* filepath);
 
+void  gum_init_gtxt(int cap_bitmap, int cap_layout);
 void  gum_draw_text(const char* str, int x, int y, int w);
 
 void  gum_debug_draw();
