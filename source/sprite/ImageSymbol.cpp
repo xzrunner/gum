@@ -73,9 +73,9 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 		hh = (max.x - min.x) * 0.5f;
 
 		m_texcoords[0] = txmin; m_texcoords[1] = tymin;
-		m_texcoords[2] = txmax; m_texcoords[3] = tymin;
+		m_texcoords[2] = txmin; m_texcoords[3] = tymax;
 		m_texcoords[4] = txmax; m_texcoords[5] = tymax;
-		m_texcoords[6] = txmin; m_texcoords[7] = tymax;
+		m_texcoords[6] = txmax; m_texcoords[7] = tymin;
 	}
 	else
 	{
@@ -83,9 +83,9 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 		hh = (max.y - min.y) * 0.5f;
 
 		m_texcoords[0] = txmin; m_texcoords[1] = tymin;
-		m_texcoords[2] = txmin; m_texcoords[3] = tymax;
+		m_texcoords[2] = txmax; m_texcoords[3] = tymin;
 		m_texcoords[4] = txmax; m_texcoords[5] = tymax;
-		m_texcoords[6] = txmax; m_texcoords[7] = tymin;
+		m_texcoords[6] = txmin; m_texcoords[7] = tymax;
 	}
 
 	m_quad.xmin = min.x;
