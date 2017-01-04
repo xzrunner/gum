@@ -840,6 +840,14 @@
 			Name="adapter"
 			>
 			<File
+				RelativePath="..\..\..\source\adapter\DTexC2Strategy.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gum\DTexC2Strategy.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\adapter\GUM_DRect.cpp"
 				>
 			</File>
