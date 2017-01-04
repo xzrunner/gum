@@ -125,7 +125,7 @@ void ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
 		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
 
 		sm::ivec2 sz = m_img->GetSize();
-		DTexC2Strategy::Instance()->OnC2QueryFail(uid, texid, sz.x, sz.y, m_quad);
+		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_quad);
 	}
 }
 
