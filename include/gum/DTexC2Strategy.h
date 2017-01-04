@@ -14,7 +14,7 @@ namespace gum
 class DTexC2Strategy
 {
 public:
-	void OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::ui16_rect& region);
+	void OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region);
 
 	void Update();
 
@@ -28,7 +28,7 @@ private:
 		int16_t tex_id;
 		int16_t tex_w, tex_h;
 		
-		sm::ui16_rect region;
+		sm::i16_rect region;
 
 		Symbol() : count(0), tex_id(0), tex_w(0), tex_h(0) {}
 	};
@@ -39,7 +39,7 @@ private:
 		Package(int pkg_id, int sym_count);
 		~Package();
 
-		void AddCount(int id, int tex_id, int tex_w, int tex_h, const sm::ui16_rect& region);
+		void AddCount(int id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region);
 
 		int GetSingleMaxCount() const { return m_single_max_count; }
 		int GetDiffSprCount() const { return m_diff_spr_count; }

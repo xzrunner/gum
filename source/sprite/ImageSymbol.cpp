@@ -44,7 +44,7 @@ void ImageSymbol::SetImage(Image* img)
 {
 	cu::RefCountObjAssign(m_img, img);
 
-	sm::ui16_rect q;
+	sm::i16_rect q;
 	q.xmin = q.ymin = 0;
 	sm::ivec2 sz = m_img->GetSize();
 	q.xmax = sz.x;

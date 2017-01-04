@@ -21,7 +21,7 @@ DTexC2Strategy::DTexC2Strategy()
 	m_tot_count			= 10240;
 }
 
-void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::ui16_rect& region)
+void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
 {
 	Package* pkg = NULL;
 	int pkg_id = simp::NodeID::GetPkgID(id);
@@ -94,7 +94,7 @@ DTexC2Strategy::Package::
 }
 
 void DTexC2Strategy::Package::
-AddCount(int id, int tex_id, int tex_w, int tex_h, const sm::ui16_rect& region)
+AddCount(int id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
 {
 	++m_tot_count;
 	if (m_symbols[id].count == 0) {
@@ -122,8 +122,8 @@ Load()
 		}
 		uint32_t id = simp::NodeID::ComposeID(m_pkg_id, i);
 		UID uid = ResourceUID::BinNode(id);
-		dtex->LoadSymbol(uid, m_symbols[i].tex_id, m_symbols[i].tex_w, m_symbols[i].tex_h, m_symbols[i].region);
-	}		
+		dtex->LoadSymbol(uid, m_symbols[i].tex_id, m_symbols[i].tex_w, m_symbols[i].tex_h, m_symbols[i].region, 1, 0, 1);
+	}
 	dtex->LoadSymFinish();
 }
 
