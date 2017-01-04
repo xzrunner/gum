@@ -16,8 +16,6 @@ namespace dtex { class CacheSymbol; class CacheGlyph; class Texture; struct Rect
 namespace gum
 {
 
-class GlyphStyle;
-
 class DTex
 {
 public:
@@ -33,7 +31,6 @@ public:
 	const float* QuerySymbol(UID sym_id, int* tex_id) const;
 
 	// CG
-	const float* QueryGlyph(int unicode, const GlyphStyle& gs, int* tex_id) const;
 	void DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key);
 	void LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key);
 

@@ -367,18 +367,6 @@ const float* DTex::QuerySymbol(UID sym_id, int* tex_id) const
 	}
 }
 
-const float* DTex::QueryGlyph(int unicode, const GlyphStyle& gs, int* tex_id) const
-{
-	UID uid = ResourceUID::Glyph(unicode, gs);
-	const dtex::CS_Node* node = m_c2->Query(uid);
-	if (node) {
-		*tex_id = m_c2->GetTexID();
-		return node->GetTexcoords();
-	} else {
-		return NULL;
-	}
-}
-
 void DTex::DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key)
 {
 	m_c2->Load(tex_id, tex_w, tex_h, r, key, 1, 0);
