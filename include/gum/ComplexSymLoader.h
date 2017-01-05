@@ -29,8 +29,8 @@ public:
 		std::vector<int> idx;
 	};
 
-	static void LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym);
-	static void LoadJsonAction(const Json::Value& val, std::vector<Action>& actions);
+// 	static void LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym);
+// 	static void LoadJsonAction(const Json::Value& val, std::vector<Action>& actions);
 
 private:
 	s2::ComplexSymbol* m_sym;
