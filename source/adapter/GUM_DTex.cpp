@@ -392,16 +392,16 @@ void DTex::Flush()
 
 void DTex::DebugDraw() const
 {
-	const std::map<std::string, dtex::Cache*>& caches 
-		= dtex::CacheMgr::Instance()->FetchAll();
-	std::map<std::string, dtex::Cache*>::const_iterator itr = caches.begin();
-	for ( ; itr != caches.end(); ++itr) {
-		itr->second->DebugDraw();
-	}
+// 	const std::map<std::string, dtex::Cache*>& caches 
+// 		= dtex::CacheMgr::Instance()->FetchAll();
+// 	std::map<std::string, dtex::Cache*>::const_iterator itr = caches.begin();
+// 	for ( ; itr != caches.end(); ++itr) {
+// 		itr->second->DebugDraw();
+// 	}
 
 	//////////////////////////////////////////////////////////////////////////
 
-//	m_c2->DebugDraw();
+	m_c2->DebugDraw();
 }
 
 }
