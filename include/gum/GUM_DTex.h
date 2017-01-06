@@ -5,6 +5,7 @@
 
 #include <SM_Rect.h>
 #include <CU_Singleton.h>
+#include <bimp/FileLoader.h>
 
 #include <string>
 #include <map>
@@ -41,6 +42,21 @@ public:
 	void Flush();
 
 	void DebugDraw() const;
+
+public:
+	class FileLoader : public bimp::FileLoader
+	{
+	public:
+		FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud);
+
+	protected:
+		virtual void OnLoad(bimp::ImportStream& is);
+		
+	private:
+		void (*m_parser_cb)(const void* data, size_t size, void* ud);
+		void* m_ud;
+
+	}; // FileLoader
 
 private:
 	dtex::CacheSymbol* m_c2;

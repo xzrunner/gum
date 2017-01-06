@@ -4,6 +4,7 @@
 #include "ProxyImage.h"
 
 #include <logger.h>
+#include <bimp/ImportStream.h>
 #include <timp/Package.h>
 #include <timp/PkgMgr.h>
 #include <timp/TextureLoader.h>
@@ -19,6 +20,7 @@
 #include <dtex2/CacheSymbol.h>
 #include <dtex2/CS_Node.h>
 #include <dtex2/CacheGlyph.h>
+#include <dtex2/AsyncTask.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -183,6 +185,13 @@ get_tex_filepath(int pkg_id, int tex_idx, int lod_layer)
 }
 
 static void 
+load_file(const std::string& filepath, bool async, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+{
+	DTex::FileLoader loader(filepath, async, parser_cb, ud);
+	loader.Load();
+}
+
+static void 
 load_texture(int pkg_id, int tex_idx) 
 {
 	const timp::Package* t_pkg = timp::PkgMgr::Instance()->Query(pkg_id);
@@ -212,6 +221,15 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 	const std::string& filepath = t_pkg->GetTexPath(tex_idx, 0);
 
 	timp::TextureLoader loader(filepath);
+	loader.Load();
+
+	cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
+}
+
+static void 
+load_texture_cb2(const void* data, size_t size, void (*cb)(int format, int w, int h, const void* data, void* ud), void* ud) 
+{
+	timp::TextureLoader loader(static_cast<const char*>(data), size);
 	loader.Load();
 
 	cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
@@ -297,8 +315,11 @@ DTex::DTex()
 	dtex::RenderAPI::InitRenderContext(RenderContext::Instance()->GetImpl());
 
 	dtex::ResourceAPI::Callback res_cb;
-	res_cb.load_texture    = load_texture;
-	res_cb.load_texture_cb = load_texture_cb;
+	res_cb.get_tex_filepath = get_tex_filepath;
+	res_cb.load_file        = load_file;
+	res_cb.load_texture     = load_texture;
+	res_cb.load_texture_cb  = load_texture_cb;
+	res_cb.load_texture_cb2 = load_texture_cb2;
 	dtex::ResourceAPI::InitCallback(res_cb);
 
 	dtex::CacheAPI::Callback cache_cb;
@@ -387,6 +408,7 @@ void DTex::Clear()
 
 void DTex::Flush()
 {
+	dtex::AsyncTask::Instance()->Update();
 	m_cg->Flush();
 }
 
@@ -402,6 +424,23 @@ void DTex::DebugDraw() const
 	//////////////////////////////////////////////////////////////////////////
 
 	m_c2->DebugDraw();
+}
+
+/************************************************************************/
+/* class DTex::FileLoader                                               */
+/************************************************************************/
+
+DTex::FileLoader::
+FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+	: bimp::FileLoader(filepath, use_cache)
+	, m_parser_cb(parser_cb)
+	, m_ud(ud)
+{}
+
+void DTex::FileLoader::
+OnLoad(bimp::ImportStream& is) 
+{
+	m_parser_cb(is.Stream(), is.Size(), m_ud);
 }
 
 }
