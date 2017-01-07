@@ -184,10 +184,31 @@ get_tex_filepath(int pkg_id, int tex_idx, int lod_layer)
 	return pkg->GetTexPath(tex_idx, lod_layer);
 }
 
+class FileLoader : public bimp::FileLoader
+{
+public:
+	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+		: bimp::FileLoader(filepath, use_cache)
+		, m_parser_cb(parser_cb)
+		, m_ud(ud)
+	{}
+
+protected:
+	virtual void OnLoad(bimp::ImportStream& is) 
+	{
+		m_parser_cb(is.Stream(), is.Size(), m_ud);
+	}
+
+private:
+	void (*m_parser_cb)(const void* data, size_t size, void* ud);
+	void* m_ud;
+
+}; // FileLoader
+
 static void 
 load_file(const std::string& filepath, bool async, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 {
-	DTex::FileLoader loader(filepath, async, parser_cb, ud);
+	FileLoader loader(filepath, async, parser_cb, ud);
 	loader.Load();
 }
 
@@ -424,23 +445,6 @@ void DTex::DebugDraw() const
 	//////////////////////////////////////////////////////////////////////////
 
 	m_c2->DebugDraw();
-}
-
-/************************************************************************/
-/* class DTex::FileLoader                                               */
-/************************************************************************/
-
-DTex::FileLoader::
-FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
-	: bimp::FileLoader(filepath, use_cache)
-	, m_parser_cb(parser_cb)
-	, m_ud(ud)
-{}
-
-void DTex::FileLoader::
-OnLoad(bimp::ImportStream& is) 
-{
-	m_parser_cb(is.Stream(), is.Size(), m_ud);
 }
 
 }
