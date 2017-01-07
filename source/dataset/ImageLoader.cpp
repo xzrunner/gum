@@ -32,8 +32,7 @@ bool ImageLoader::Load()
 
 bool ImageLoader::LoadRaw()
 {
-	int w, h;
-	GIMG_PIXEL_FORMAT fmt;
+	int w, h, fmt;
 	uint8_t* pixels = gimg_import(m_filepath.c_str(), &w, &h, &fmt);
 	if (!pixels) {
 		return false;

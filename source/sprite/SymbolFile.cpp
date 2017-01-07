@@ -42,7 +42,7 @@ int SymbolFile::Type(const std::string& filepath) const
 
 	std::string ext = filepath.substr(pos + 1);
 	StringHelper::ToLower(ext);
-	if (ext == "png" || ext == "jpg" || ext == "bmp" || ext == "pvr" || ext == "pkm") 
+	if (ext == "png" || ext == "jpg" || ext == "bmp" || ext == "ppm" || ext == "pvr" || ext == "pkm") 
 	{
 		return s2::SYM_IMAGE;
 	}

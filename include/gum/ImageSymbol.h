@@ -30,7 +30,7 @@ public:
 
 	void SetRegion(const sm::ivec2& min, const sm::ivec2& max);
 
-	virtual void QueryTexcoords(float* texcoords, int& texid) const;
+	virtual bool QueryTexcoords(float* texcoords, int& texid) const;
 
 protected:
 	virtual void Proj2Screen(float px, float py, int w, int h, float& sx, float& sy) const;

@@ -106,7 +106,7 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 	m_size.ymax = hh;
 }
 
-void ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
+bool ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
 {
 	UID uid = ResourceUID::BinNode(GetID());
 	const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, &texid);
@@ -127,6 +127,8 @@ void ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
 		sm::ivec2 sz = m_img->GetSize();
 		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_quad);
 	}
+
+	return true;
 }
 
 void ImageSymbol::Proj2Screen(float px, float py, int w, int h, float& sx, float& sy) const
