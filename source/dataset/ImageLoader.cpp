@@ -114,7 +114,7 @@ bool ImageLoader::DecodePVR4(const void* data)
 	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, TEXTURE_PVR4);
 #else
 	uint8_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(data), m_width, m_height);
-	gimg_revert_y((uint32_t*)uncompressed, m_width, m_height);
+	gimg_revert_y(uncompressed, m_width, m_height, GPF_RGBA);
 	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
 	free(uncompressed);
 #endif
