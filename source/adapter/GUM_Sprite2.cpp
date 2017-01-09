@@ -16,10 +16,8 @@ Sprite2::Sprite2()
 void Sprite2::DebugDraw() const
 {
 	s2::RenderTargetMgr* RT = s2::RenderTargetMgr::Instance();
-	s2::RenderTarget* rt = RT->Fetch();
-	if (rt) {
-		dtex::DebugDraw::Draw(rt->GetTexID(), 1);
-		RT->Return(rt);
+	for (int i = 0; i < 4; ++i) {
+		dtex::DebugDraw::Draw(RT->GetTexID(i), i + 1);
 	}
 }
 
