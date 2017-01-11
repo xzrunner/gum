@@ -16,6 +16,7 @@ class SymbolLoader : public cu::RefCountObj
 {
 public:
 	virtual s2::Symbol* Create(const std::string& filepath, int type = s2::SYM_UNKNOWN) const;
+	virtual s2::Symbol* Create(int type) const;
 
 }; // SymbolLoader
 

@@ -231,7 +231,7 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 {
 	rg_pose_srt_identity(&dst.local);
 
-	s2::MeshSymbol* sym = new s2::MeshSymbol;
+	s2::MeshSymbol* sym = VI_DOWNCASTING<s2::MeshSymbol*>(m_sym_loader->Create(s2::SYM_MESH));
 
 	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
@@ -275,7 +275,7 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 	sym->SetMesh(mesh);
 	mesh->RemoveReference();
 
-	dst.ud = (s2::Symbol*)(sym);
+	dst.ud = static_cast<s2::Symbol*>(sym);
 }
 
 void SpineAnim2Loader::CreateSlots(const SpineParser& parser)
