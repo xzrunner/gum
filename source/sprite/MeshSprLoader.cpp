@@ -61,10 +61,10 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 	for (int i = 0; i < node->n; ++i) 
 	{
 		sm::vec2 f, t;
-		f.x = simp::int2float16x(int16_t(node->vertices[idx++]));
-		f.y = simp::int2float16x(int16_t(node->vertices[idx++]));
-		t.x = simp::int2float16x(int16_t(node->vertices[idx++]));
-		t.y = simp::int2float16x(int16_t(node->vertices[idx++]));
+		f.x = simp::int2float(int16_t(node->vertices[idx++]), 16);
+		f.y = simp::int2float(int16_t(node->vertices[idx++]), 16);
+		t.x = simp::int2float(int16_t(node->vertices[idx++]), 16);
+		t.y = simp::int2float(int16_t(node->vertices[idx++]), 16);
 		map.insert(std::make_pair(f, t));
 	}
 	trans.StoreToMesh(VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol())->GetMesh());

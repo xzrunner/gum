@@ -227,10 +227,10 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 	static_mode			= simp::int2bool(node->static_mode);
 
 	count				= node->count;
-	emission_time		= simp::int2float100x(node->emission_time);
+	emission_time		= simp::int2float(node->emission_time, 100);
 
-	life				= simp::int2float100x(node->life) * 1000;
-	life_var			= simp::int2float100x(node->life_var) * 1000;
+	life				= simp::int2float(node->life, 100) * 1000;
+	life_var			= simp::int2float(node->life_var, 100) * 1000;
 
 	hori				= simp::int2radian((int16_t)(node->hori));
 	hori_var			= simp::int2radian(node->hori_var);
@@ -256,7 +256,7 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 
 	inertia				= 0;
 
-	fadeout_time		= simp::int2float100x(node->fadeout_time);
+	fadeout_time		= simp::int2float(node->fadeout_time, 100);
 
 	ground				= node->ground;
 
@@ -276,8 +276,8 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 		Component dst;
 		dst.sym_id			= src.sym_id;
 		dst.count			= src.count;
-		dst.scale_start		= simp::int2float100x(src.scale_start) * 100;
-		dst.scale_end		= simp::int2float100x(src.scale_end) * 100;
+		dst.scale_start		= simp::int2float(src.scale_start, 100) * 100;
+		dst.scale_end		= simp::int2float(src.scale_end, 100) * 100;
 		dst.angle			= (int16_t)(src.angle);
 		dst.angle_var		= src.angle_var;
 		dst.mul_col_begin.FromRGBA(src.mul_col_begin);

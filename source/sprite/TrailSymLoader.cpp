@@ -116,10 +116,10 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 
 	count			= node->count;
 
-	life_begin		= simp::int2float100x(node->life_begin);
-	life_offset		= simp::int2float100x(node->life_offset);
+	life_begin		= simp::int2float(node->life_begin, 100);
+	life_offset		= simp::int2float(node->life_offset, 100);
 
-	fadeout_time	= simp::int2float100x(node->fadeout_time);
+	fadeout_time	= simp::int2float(node->fadeout_time, 100);
 
 	int n = node->n;
 	if (mode == T2D_MODE_IMAGE)
@@ -130,8 +130,8 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 			const simp::NodeTrail::Component& src = node->components[i];
 			CompImage dst;
 			dst.sym_id			= src.mode.A.sym_id;
-			dst.scale_begin		= simp::int2float100x(src.mode.A.scale_begin);
-			dst.scale_end		= simp::int2float100x(src.mode.A.scale_end);
+			dst.scale_begin		= simp::int2float(src.mode.A.scale_begin, 100);
+			dst.scale_end		= simp::int2float(src.mode.A.scale_end, 100);
 			dst.mul_col_begin	= src.col_begin;
 			dst.mul_col_end		= src.col_end;
 			dst.add_col_begin	= src.mode.A.add_col_begin;
@@ -147,8 +147,8 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 		{
 			const simp::NodeTrail::Component& src = node->components[i];
 			CompShape dst;
-			dst.linewidth		= simp::int2float100x(src.mode.B.size);
-			dst.acuity			= simp::int2float100x(src.mode.B.acuity);
+			dst.linewidth		= simp::int2float(src.mode.B.size, 100);
+			dst.acuity			= simp::int2float(src.mode.B.acuity, 100);
 			dst.col_begin		= src.col_begin;
 			dst.col_end			= src.col_end;
 			comp_shapes.push_back(dst);

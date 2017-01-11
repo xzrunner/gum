@@ -81,8 +81,8 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	outer.reserve(node->outer_n);
 	int idx = 0;
 	for (int i = 0; i < node->outer_n; ++i) {
-		float x = simp::int2float16x(int16_t(node->outer[idx++])),
-			  y = simp::int2float16x(int16_t(node->outer[idx++]));
+		float x = simp::int2float(int16_t(node->outer[idx++]), 16),
+			  y = simp::int2float(int16_t(node->outer[idx++]), 16);
 		outer.push_back(sm::vec2(x, y));
 	}
 	s2::NetworkShape* shape = new s2::NetworkShape(outer);
@@ -91,8 +91,8 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	inner.reserve(node->inner_n);
 	idx = 0;
 	for (int i = 0; i < node->inner_n; ++i) {
-		float x = simp::int2float16x(int16_t(node->inner[idx++])),
-			  y = simp::int2float16x(int16_t(node->inner[idx++]));
+		float x = simp::int2float(int16_t(node->inner[idx++]), 16),
+			  y = simp::int2float(int16_t(node->inner[idx++]), 16);
 		inner.push_back(sm::vec2(x, y));
 	}
 	shape->SetInnerVertices(inner);

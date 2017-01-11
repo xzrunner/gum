@@ -234,12 +234,12 @@ void P2dSymLoader::LoadBin(const simp::NodeParticle2d* node)
 		throw Exception("P2dSymLoader::LoadJson unknown mode type.");
 	}
 
-	emission_time		= simp::int2float100x(node->emission_time);
+	emission_time		= simp::int2float(node->emission_time, 100);
 
 	count				= node->count;
 
-	life				= simp::int2float100x(node->life);
-	life_var			= simp::int2float100x(node->life_var);
+	life				= simp::int2float(node->life, 100);
+	life_var			= simp::int2float(node->life_var, 100);
 
 	position.x			= node->position[0];
 	position_var.x		= node->position_var[0];

@@ -65,8 +65,8 @@ void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 	vertices.reserve(node->vertices_n);
 	int idx = 0;
 	for (int i = 0; i < node->vertices_n; ++i) {
-		float x = simp::int2float16x(int16_t(node->vertices[idx++])),
-			  y = simp::int2float16x(int16_t(node->vertices[idx++]));
+		float x = simp::int2float(int16_t(node->vertices[idx++]), 16),
+			  y = simp::int2float(int16_t(node->vertices[idx++]), 16);
 		vertices.push_back(sm::vec2(x, y));
 	}
 

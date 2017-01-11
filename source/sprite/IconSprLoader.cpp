@@ -28,7 +28,7 @@ void IconSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 void IconSprLoader::LoadBin(const simp::NodeIconSpr* node)
 {
-	m_spr->SetProcess(simp::int2float1024x(node->process));
+	m_spr->SetProcess(simp::int2float(node->process, 1024));
 }
 
 }
