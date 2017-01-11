@@ -24,7 +24,7 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_angle			= 0;
 	m_scale			= sm::vec2(1, 1);
 	m_shear			= sm::vec2(0, 0);
-	m_offset		= sm::vec2(0, 0);
+	m_offset.MakeInvalid();
 
 	m_blend			= s2::BM_NULL;
 	m_fast_blend	= s2::FBM_NULL;
@@ -170,7 +170,7 @@ void SpriteIO::StoreGeometry(Json::Value& val)
 		val["y shear"] = m_shear.y;
 	}
 
-	if (!m_compress || m_offset != sm::vec2(0, 0)) {
+	if (!m_compress || m_offset.IsValid()) {
 		val["x offset"] = m_offset.x;
 		val["y offset"] = m_offset.y;
 	}
