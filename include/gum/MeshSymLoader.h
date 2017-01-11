@@ -13,7 +13,6 @@ namespace simp { class NodeMesh; }
 namespace gum
 {
 
-// todo: only support network mesh
 class MeshSymLoader : private cu::Uncopyable
 {
 public:
@@ -24,6 +23,8 @@ public:
 	void LoadBin(const simp::NodeMesh* node);
 
 private:
+	
+
 	static s2::Mesh* CreateNetworkMesh(const Json::Value& val, const s2::Symbol* sym);
 
 private:

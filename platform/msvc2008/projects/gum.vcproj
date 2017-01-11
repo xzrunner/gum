@@ -630,10 +630,6 @@
 					RelativePath="..\..\..\include\gum\MeshSymLoader.h"
 					>
 				</File>
-				<File
-					RelativePath="..\..\..\include\gum\MeshType.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="12.mask"
