@@ -3,13 +3,20 @@
 #include "SymbolPool.h"
 #include "JsonSerializer.h"
 #include "MeshIO.h"
+#include "ArrayLoader.h"
 
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/Mesh.h>
 #include <sprite2/MeshTransform.h>
 #include <sprite2/NetworkMesh.h>
 #include <sprite2/NetworkShape.h>
+#include <sprite2/TrianglesMesh.h>
+#include <sprite2/Skeleton2Mesh.h>
 #include <simp/NodeMesh.h>
+#include <simp/from_int.h>
+#include <simp/NetworkMesh.h>
+#include <simp/TrianglesMesh.h>
+#include <simp/Skeleton2Mesh.h>
 #include <simp/from_int.h>
 
 #include <json/json.h>
@@ -75,33 +82,92 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	}
 
 	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
+
+	s2::Mesh* mesh = NULL;
+	switch (node->shape->Type())
+	{
+	case simp::MESH_NETWORK:
+		mesh = LoadNetworkMesh(base_sym, static_cast<simp::NetworkMesh*>(node->shape));
+		break;
+	case simp::MESH_TRIANGLES:
+		mesh = LoadTrianglesMesh(base_sym, static_cast<simp::TrianglesMesh*>(node->shape));
+		break;
+	case simp::MESH_SKELETON2:
+		mesh = LoadSkeleton2Mesh(base_sym, static_cast<simp::Skeleton2Mesh*>(node->shape));
+		break;
+	}
+	m_sym->SetMesh(mesh);
+}
+
+s2::Mesh* MeshSymLoader::LoadNetworkMesh(s2::Symbol* base_sym, simp::NetworkMesh* node)
+{
 	s2::NetworkMesh* mesh = new s2::NetworkMesh(base_sym);
 
 	std::vector<sm::vec2> outer;
-	outer.reserve(node->outer_n);
-	int idx = 0;
-	for (int i = 0; i < node->outer_n; ++i) {
-		float x = simp::int2float(int16_t(node->outer[idx++]), 16),
-			  y = simp::int2float(int16_t(node->outer[idx++]), 16);
-		outer.push_back(sm::vec2(x, y));
-	}
+	ArrayLoader::Load(outer, node->outer, node->outer_n, 16);
 	s2::NetworkShape* shape = new s2::NetworkShape(outer);
 
 	std::vector<sm::vec2> inner;
-	inner.reserve(node->inner_n);
-	idx = 0;
-	for (int i = 0; i < node->inner_n; ++i) {
-		float x = simp::int2float(int16_t(node->inner[idx++]), 16),
-			  y = simp::int2float(int16_t(node->inner[idx++]), 16);
-		inner.push_back(sm::vec2(x, y));
-	}
+	ArrayLoader::Load(inner, node->inner, node->inner_n, 16);
 	shape->SetInnerVertices(inner);
 
 	mesh->SetShape(shape);
-	shape->RemoveReference();
 
-	m_sym->SetMesh(mesh);
-	mesh->RemoveReference();
+	return mesh;
+}
+
+s2::Mesh* MeshSymLoader::LoadTrianglesMesh(s2::Symbol* base_sym, simp::TrianglesMesh* node)
+{
+	s2::TrianglesMesh* mesh = new s2::TrianglesMesh(base_sym);
+
+	std::vector<sm::vec2> vertices;
+	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
+
+	std::vector<sm::vec2> texcoords;
+	ArrayLoader::Load(texcoords, node->texcoords, node->texcoords_n, 8192);
+
+	std::vector<int> triangles;
+	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
+
+	mesh->SetData(vertices, texcoords, triangles);
+
+	return mesh;
+}
+
+s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skeleton2Mesh* node)
+{
+	s2::Skeleton2Mesh* mesh = new s2::Skeleton2Mesh(base_sym);
+
+	std::vector<s2::Skeleton2Mesh::SkinnedVertex> vertices;
+	vertices.reserve(node->vertices_n);
+	int ptr = 0;
+	for (int i = 0; i < node->vertices_n; ++i)
+	{
+		int item_n = node->items_n[i];
+		s2::Skeleton2Mesh::SkinnedVertex vdst;
+		vdst.items.reserve(item_n);
+		for (int j = 0, m = item_n; j < m; ++j) 
+		{
+			const simp::Skeleton2Mesh::Item& isrc = node->items[ptr++];
+			s2::Skeleton2Mesh::SkinnedVertex::Item idst;
+			idst.joint  = isrc.joint;
+			idst.vx     = simp::int2float(isrc.vx, 1024);
+			idst.vy     = simp::int2float(isrc.vy, 1024);
+			idst.weight = simp::int2float(isrc.weight, 4096);
+			vdst.items.push_back(idst);
+		}
+		vertices.push_back(vdst);
+	}
+	
+	std::vector<sm::vec2> texcoords;
+	ArrayLoader::Load(texcoords, node->texcoords, node->texcoords_n, 8192);
+
+	std::vector<int> triangles;
+	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
+
+	mesh->SetData(vertices, texcoords, triangles);
+
+	return mesh;
 }
 
 s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val, 

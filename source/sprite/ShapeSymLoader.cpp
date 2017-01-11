@@ -4,6 +4,7 @@
 #include "SymbolPool.h"
 #include "ImageSymbol.h"
 #include "Image.h"
+#include "ArrayLoader.h"
 
 #include <sprite2/ShapeSymbol.h>
 #include <sprite2/Color.h>
@@ -62,14 +63,9 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 	}
 
 	s2::Color col(node->color);
+
 	std::vector<sm::vec2> vertices;
-	vertices.reserve(node->vertices_n);
-	int idx = 0;
-	for (int i = 0; i < node->vertices_n; ++i) {
-		float x = simp::int2float(int16_t(node->vertices[idx++]), 16),
-			  y = simp::int2float(int16_t(node->vertices[idx++]), 16);
-		vertices.push_back(sm::vec2(x, y));
-	}
+	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
 
 	switch (node->type)
 	{

@@ -8,7 +8,7 @@
 #include <string>
 
 namespace s2 { class MeshSymbol; class MeshTransform; class Mesh; class Symbol; }
-namespace simp { class NodeMesh; }
+namespace simp { class NodeMesh; class NetworkMesh; class TrianglesMesh; class Skeleton2Mesh; }
 
 namespace gum
 {
@@ -23,7 +23,9 @@ public:
 	void LoadBin(const simp::NodeMesh* node);
 
 private:
-	
+	static s2::Mesh* LoadNetworkMesh(s2::Symbol* base_sym, simp::NetworkMesh* mesh);
+	static s2::Mesh* LoadTrianglesMesh(s2::Symbol* base_sym, simp::TrianglesMesh* mesh);
+	static s2::Mesh* LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skeleton2Mesh* mesh);
 
 	static s2::Mesh* CreateNetworkMesh(const Json::Value& val, const s2::Symbol* sym);
 

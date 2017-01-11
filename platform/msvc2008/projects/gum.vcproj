@@ -695,6 +695,14 @@
 				Name="loader"
 				>
 				<File
+					RelativePath="..\..\..\source\sprite\ArrayLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\ArrayLoader.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprite\MeshIO.cpp"
 					>
 				</File>
