@@ -314,7 +314,7 @@ void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 	{
 		const Json::Value& c_val = value["chars"][i];
 		std::string str = c_val["str"].asString();
-		std::string utf8 = StringHelper::ToUtf8(str);
+		std::string utf8 = StringHelper::GBKToUTF8(str);
 		std::string filepath = c_val["filepath"].asString();
 		s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
 		sm::vec2 sz = sym->GetBounding().Size();

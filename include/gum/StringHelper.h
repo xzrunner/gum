@@ -57,7 +57,10 @@ public:
 	static void Split(const std::string& src, const std::string& mid, 
 		std::vector<std::string>& dst);
 
-	static std::string ToUtf8(const std::string& str);
+//	static std::string ToUtf8(const std::string& str);
+
+	static std::string UTF8ToGBK(const std::string& str);
+	static std::string GBKToUTF8(const std::string& str);
 
 }; // StringHelper
 
