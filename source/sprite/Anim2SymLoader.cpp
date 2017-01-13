@@ -55,6 +55,15 @@ void Anim2SymLoader::LoadJson(const std::string& filepath)
 	}
 }
 
+static void LoadBinSRT(rg_pose_srt& dst, const simp::NodeAnim2::Srt& src)
+{
+	dst.trans[0] = src.trans.x;
+	dst.trans[1] = src.trans.y;
+	dst.rot      = src.rot;
+	dst.scale[0] = src.scale.x;
+	dst.scale[1] = src.scale.y;
+}
+
 void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 {
 	int sz = CalcNodeSize(node);
@@ -237,15 +246,6 @@ int Anim2SymLoader::CalcNodeSize(const simp::NodeAnim2* node)
 		}
 	}
 	return sz;
-}
-
-void Anim2SymLoader::LoadBinSRT(rg_pose_srt& dst, const simp::NodeAnim2::Srt& src)
-{
-	dst.trans[0] = src.trans.x;
-	dst.trans[1] = src.trans.y;
-	dst.rot      = src.rot;
-	dst.scale[0] = src.scale.x;
-	dst.scale[1] = src.scale.y;
 }
 
 void Anim2SymLoader::InitJointChildren(rg_skeleton* sk)

@@ -3,13 +3,13 @@
 
 #include <CU_Uncopyable.h>
 #include <SM_Vector.h>
-#include <simp/NodeAnim2.h>
 
 #include <json/json.h>
 
 #include <string>
 
 namespace s2 { class Anim2Symbol; }
+namespace simp { class NodeAnim2; }
 
 struct rg_pose_srt;
 struct rg_skeleton;
@@ -31,8 +31,6 @@ public:
 
 private:
 	static int CalcNodeSize(const simp::NodeAnim2* node);
-
-	static void LoadBinSRT(rg_pose_srt& dst, const simp::NodeAnim2::Srt& src);
 
 	static void InitJointChildren(rg_skeleton* sk);
 
