@@ -281,6 +281,14 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 			ret = sym;
 		}
 		break;
+	case simp::TYPE_ANIM2:
+		{
+			s2::Anim2Symbol* sym = new s2::Anim2Symbol(id);
+			Anim2SymLoader loader(sym);
+			loader.LoadBin((const simp::NodeAnim2*)data);
+			ret = sym;
+		}
+		break;
 	case simp::TYPE_PARTICLE3D:
 		{
 			s2::Particle3dSymbol* sym = new s2::Particle3dSymbol(id);

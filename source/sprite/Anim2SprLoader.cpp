@@ -2,7 +2,7 @@
 
 #include <sprite2/Anim2Sprite.h>
 #include <simp/from_int.h>
-#include <simp/NodeAnimationSpr.h>
+#include <simp/NodeAnim2Spr.h>
 
 namespace gum
 {
@@ -30,6 +30,15 @@ void Anim2SprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	const Json::Value& anim_val = val["anim2"];
 	m_spr->SetStaticTime(anim_val["static_time"].asInt());
+}
+
+void Anim2SprLoader::LoadBin(const simp::NodeAnim2Spr* node)
+{
+	if (!m_spr) {
+		return;
+	}
+
+	m_spr->SetStaticTime(node->static_time);
 }
 
 }

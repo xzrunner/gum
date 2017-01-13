@@ -8,6 +8,7 @@
 #include "TextboxSprLoader.h"
 #include "ComplexSprLoader.h"
 #include "AnimSprLoader.h"
+#include "Anim2SprLoader.h"
 #include "P3dSprLoader.h"
 #include "P2dSprLoader.h"
 #include "MeshSprLoader.h"
@@ -25,6 +26,7 @@
 #include <simp/NodeMeshSpr.h>
 #include <simp/NodeMaskSpr.h>
 #include <simp/NodeTrailSpr.h>
+#include <simp/NodeAnim2Spr.h>
 
 #include <sprite2/S2_Symbol.h>
 #include <sprite2/ImageSprite.h>
@@ -34,6 +36,7 @@
 #include <sprite2/TextboxSprite.h>
 #include <sprite2/ComplexSprite.h>
 #include <sprite2/AnimSprite.h>
+#include <sprite2/Anim2Sprite.h>
 #include <sprite2/Particle3dSprite.h>
 #include <sprite2/Particle2dSprite.h>
 #include <sprite2/ShapeSprite.h>
@@ -79,6 +82,9 @@ s2::Sprite* SpriteFactory::Create(s2::Symbol* sym, uint32_t id) const
 		break;
 	case s2::SYM_ANIMATION:
 		spr = new s2::AnimSprite(sym, id);
+		break;
+	case s2::SYM_ANIM2:
+		spr = new s2::Anim2Sprite(sym, id);
 		break;
 	case s2::SYM_PARTICLE3D:
 		spr = new s2::Particle3dSprite(sym, id);
@@ -305,6 +311,20 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 			loader.LoadBin(node);
 
 			spr = anim_spr;
+		}
+		break;
+	case simp::TYPE_ANIM2_SPR:
+		{
+			const simp::NodeAnim2Spr* node = (const simp::NodeAnim2Spr*)data;
+
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
+			s2::Anim2Sprite* anim2_spr = VI_DOWNCASTING<s2::Anim2Sprite*>(SpriteFactory::Instance()->Create(sym, id));
+			sym->RemoveReference();
+
+			Anim2SprLoader loader(anim2_spr);
+			loader.LoadBin(node);
+			
+			spr = anim2_spr;
 		}
 		break;
 	case simp::TYPE_P3D_SPR:

@@ -6,6 +6,7 @@
 #include <json/json.h>
 
 namespace s2 { class Anim2Sprite; }
+namespace simp { class NodeAnim2Spr; }
 
 namespace gum
 {
@@ -17,6 +18,7 @@ public:
 	~Anim2SprLoader();
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadBin(const simp::NodeAnim2Spr* node);
 
 private:
 	s2::Anim2Sprite* m_spr;
