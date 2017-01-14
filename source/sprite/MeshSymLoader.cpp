@@ -150,14 +150,13 @@ s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skeleton2
 		for (int j = 0, m = item_n; j < m; ++j) 
 		{
 			const simp::Skeleton2Mesh::Item& isrc = node->items[ptr++];
-			s2::Skeleton2Mesh::Item idst;
-			idst.joint    = isrc.joint;
-			idst.vertex.x = simp::int2float(isrc.vx, 1024);
-			idst.vertex.y = simp::int2float(isrc.vy, 1024);
+			s2::Skeleton2Mesh::SkinnedVertex::Item idst;
+			idst.joint  = isrc.joint;
+			idst.vx     = simp::int2float(isrc.vx, 128);
+			idst.vy     = simp::int2float(isrc.vy, 128);
 			idst.offset.Set(0, 0);
-			idst.weight    = simp::int2float(isrc.weight, 4096);
-			vdst.items.push_back(items.size());
-			items.push_back(idst);
+			idst.weight = simp::int2float(isrc.weight, 4096);
+			vdst.items.push_back(idst);
 		}
 		vertices.push_back(vdst);
 	}
