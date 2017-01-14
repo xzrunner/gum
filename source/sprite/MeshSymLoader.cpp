@@ -138,23 +138,26 @@ s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skeleton2
 {
 	s2::Skeleton2Mesh* mesh = new s2::Skeleton2Mesh(base_sym);
 
-	std::vector<s2::Skeleton2Mesh::SkinnedVertex> vertices;
+	std::vector<s2::Skeleton2Mesh::Item> items;
+	std::vector<s2::Skeleton2Mesh::Vertex> vertices;
 	vertices.reserve(node->vertices_n);
 	int ptr = 0;
 	for (int i = 0; i < node->vertices_n; ++i)
 	{
 		int item_n = node->items_n[i];
-		s2::Skeleton2Mesh::SkinnedVertex vdst;
+		s2::Skeleton2Mesh::Vertex vdst;
 		vdst.items.reserve(item_n);
 		for (int j = 0, m = item_n; j < m; ++j) 
 		{
 			const simp::Skeleton2Mesh::Item& isrc = node->items[ptr++];
-			s2::Skeleton2Mesh::SkinnedVertex::Item idst;
-			idst.joint  = isrc.joint;
-			idst.vx     = simp::int2float(isrc.vx, 1024);
-			idst.vy     = simp::int2float(isrc.vy, 1024);
-			idst.weight = simp::int2float(isrc.weight, 4096);
-			vdst.items.push_back(idst);
+			s2::Skeleton2Mesh::Item idst;
+			idst.joint    = isrc.joint;
+			idst.vertex.x = simp::int2float(isrc.vx, 1024);
+			idst.vertex.y = simp::int2float(isrc.vy, 1024);
+			idst.offset.Set(0, 0);
+			idst.weight    = simp::int2float(isrc.weight, 4096);
+			vdst.items.push_back(items.size());
+			items.push_back(idst);
 		}
 		vertices.push_back(vdst);
 	}
@@ -165,7 +168,7 @@ s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skeleton2
 	std::vector<int> triangles;
 	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
 
-	mesh->SetData(vertices, texcoords, triangles);
+	mesh->SetData(items, vertices, texcoords, triangles);
 
 	return mesh;
 }

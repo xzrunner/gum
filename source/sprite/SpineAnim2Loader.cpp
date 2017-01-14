@@ -246,26 +246,29 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 		assert(!src.skinned_vertices.empty());
 		s2::Skeleton2Mesh* sk_mesh = new s2::Skeleton2Mesh(base_sym);
 
-		std::vector<s2::Skeleton2Mesh::SkinnedVertex> vertices;
+		std::vector<s2::Skeleton2Mesh::Item> items;
+		std::vector<s2::Skeleton2Mesh::Vertex> vertices;
 		vertices.reserve(src.skinned_vertices.size());
 		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i)
 		{
 			const SpineParser::SkinItem::SkinnedVertex& vsrc = src.skinned_vertices[i];
-			s2::Skeleton2Mesh::SkinnedVertex vdst;
+			s2::Skeleton2Mesh::Vertex vdst;
 			vdst.items.reserve(vsrc.items.size());
 			for (int j = 0, m = vsrc.items.size(); j < m; ++j) 
 			{
 				const SpineParser::SkinItem::SkinnedVertex::Item& isrc = vsrc.items[j];
-				s2::Skeleton2Mesh::SkinnedVertex::Item idst;
-				idst.joint  = isrc.bone;
-				idst.vx     = isrc.vx;
-				idst.vy     = isrc.vy;
-				idst.weight = isrc.weight;
-				vdst.items.push_back(idst);
+				s2::Skeleton2Mesh::Item idst;
+				idst.joint    = isrc.bone;
+				idst.vertex.x = isrc.vx;
+				idst.vertex.y = isrc.vy;
+				idst.offset.Set(0, 0);
+				idst.weight   = isrc.weight;
+				vdst.items.push_back(items.size());
+				items.push_back(idst);
 			}
 			vertices.push_back(vdst);
 		}
-		sk_mesh->SetData(vertices, src.texcoords, src.triangles);
+		sk_mesh->SetData(items, vertices, src.texcoords, src.triangles);
 
 		mesh = sk_mesh;
 
