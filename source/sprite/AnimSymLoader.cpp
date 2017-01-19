@@ -54,6 +54,8 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 		EasyAnimLoader loader(m_sym, m_spr_loader);
 		loader.LoadJson(val, dir);
 	}
+
+	m_sym->LoadCopy();
 }
 
 void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
