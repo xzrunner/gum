@@ -222,8 +222,12 @@ void gum_draw_text(const char* str, int x, int y, int w)
 {
 	std::string gbk_str = StringHelper::UTF8ToGBK(str);
 
-	sm::mat4 mat;
+	S2_MAT mat;
+#ifdef S2_MATRIX_FIX
+	mat.Translate(x, y);
+#else
 	mat.Translate(x, y, 0);
+#endif // S2_MATRIX_FIX
 	GTxt::Instance()->Draw(mat, gbk_str, w);
 }
 

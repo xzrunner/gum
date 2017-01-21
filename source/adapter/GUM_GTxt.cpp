@@ -40,7 +40,7 @@ int GTxt::m_cap_layout = 500;
 
 struct render_params
 {
-	const sm::mat4* mt;
+	const S2_MAT* mt;
 	const s2::Color* mul;
 	const s2::Color* add;
 };
@@ -92,7 +92,7 @@ render_glyph(int id, const float* _texcoords, float x, float y, float w, float h
 }
 
 static void 
-render_decoration(const sm::mat4& mat, float x, float y, float w, float h, const gtxt_draw_style* ds)
+render_decoration(const S2_MAT& mat, float x, float y, float w, float h, const gtxt_draw_style* ds)
 {
 	const gtxt_decoration* d = &ds->decoration;
 	if (d->type == GRDT_NULL) {
@@ -227,7 +227,7 @@ ext_sym_render(void* ext_sym, float x, float y, void* ud) {
 		return;
 	}
 	s2::RenderParams params;
-	params.mt = *((sm::mat4*)ud);
+	params.mt = *((S2_MAT*)ud);
 	s2::DrawNode::Draw(static_cast<s2::Symbol*>(ext_sym), params, sm::vec2(x, y));
 }
 
@@ -322,7 +322,7 @@ void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 	}
 }
 
-void GTxt::Draw(const gtxt_label_style& style, const sm::mat4& mt, const s2::Color& mul, 
+void GTxt::Draw(const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, 
 				const s2::Color& add, const std::string& text, int time, bool richtext) const
 {
 	render_params rp;
@@ -338,7 +338,7 @@ void GTxt::Draw(const gtxt_label_style& style, const sm::mat4& mt, const s2::Col
 	}
 }
 
-void GTxt::Draw(const sm::mat4& mt, const std::string& str, int width) const
+void GTxt::Draw(const S2_MAT& mt, const std::string& str, int width) const
 {
 	if (str.empty()) {
 		return;

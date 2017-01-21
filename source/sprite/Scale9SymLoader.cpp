@@ -7,6 +7,7 @@
 #include <sprite2/Scale9Symbol.h>
 #include <sprite2/S2_Sprite.h>
 #include <simp/NodeScale9.h>
+#include <sm_const.h>
 
 #include <fstream>
 
