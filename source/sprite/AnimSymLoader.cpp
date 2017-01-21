@@ -62,6 +62,8 @@ void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
 {
 	EasyAnimLoader loader(m_sym, m_spr_loader);
 	loader.LoadBin(node);
+
+	m_sym->LoadCopy();
 }
 
 }
