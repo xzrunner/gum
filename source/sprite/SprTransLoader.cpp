@@ -70,7 +70,7 @@ void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 
 	if (trans->type & simp::NodeTrans::CAMERA_MASK) {
 		s2::RenderCamera rc;
-		rc.mode = s2::CameraMode(trans->data[idx++]);
+		rc.SetMode(s2::CameraMode(trans->data[idx++]));
 		spr->SetCamera(rc);
 	}
 

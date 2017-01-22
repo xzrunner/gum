@@ -494,13 +494,13 @@ void SpriteIO::StoreShader(Json::Value& val)
 void SpriteIO::LoadCamera(s2::Sprite* spr)
 {
 	s2::RenderCamera rc = spr->GetCamera();
-	rc.mode = m_camera;
+	rc.SetMode(m_camera);
 	spr->SetCamera(rc);
 }
 
 void SpriteIO::StoreCamera(const s2::RenderCamera& rc)
 {
-	m_camera = rc.mode;
+	m_camera = rc.GetMode();
 }
 
 void SpriteIO::LoadCamera(const Json::Value& val)
