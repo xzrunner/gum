@@ -71,22 +71,22 @@ render_glyph(int id, const float* _texcoords, float x, float y, float w, float h
 	if (rp->mul) {
 		s2::Color multi_col = *rp->mul;
 		multi_col.a = static_cast<int>(multi_col.a * ds->alpha);
-		color.mul = multi_col;
+		color.SetMul(multi_col);
 	} 
 	if (rp->add) {
-		color.add = *rp->add;
+		color.SetAdd(*rp->add);
 	}
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
 	if (sl_mgr->GetShaderType() == sl::FILTER) {
 		sl::FilterShader* filter = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
-		filter->SetColor(color.mul.ToABGR(), color.add.ToABGR());
+		filter->SetColor(color.GetMul().ToABGR(), color.GetAdd().ToABGR());
 		filter->Draw(&vertices[0].x, &texcoords[0].x, id);
 	} else {
 		sl_mgr->SetShader(sl::SPRITE2);
 	 	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
-	 	sl_shader->SetColor(color.mul.ToABGR(), color.add.ToABGR());
-	 	sl_shader->SetColorMap(color.rmap.ToABGR(), color.gmap.ToABGR(), color.bmap.ToABGR());
+	 	sl_shader->SetColor(color.GetMul().ToABGR(), color.GetAdd().ToABGR());
+	 	sl_shader->SetColorMap(color.GetMapR().ToABGR(), color.GetMapG().ToABGR(), color.GetMapB().ToABGR());
 	 	sl_shader->Draw(&vertices[0].x, &texcoords[0].x, id);
 	}
 }

@@ -39,19 +39,19 @@ void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 
 	s2::RenderColor rc;
 	if (trans->type & simp::NodeTrans::COL_MUL_MASK) {
-		rc.mul.FromRGBA(trans->data[idx++]);
+		rc.SetMul(s2::Color(trans->data[idx++]));
 	}
 	if (trans->type & simp::NodeTrans::COL_ADD_MASK) {
-		rc.add.FromRGBA(trans->data[idx++]);
+		rc.SetAdd(s2::Color(trans->data[idx++]));
 	}
 	if (trans->type & simp::NodeTrans::COL_R_MASK) {
-		rc.rmap.FromRGBA(trans->data[idx++]);
+		rc.SetMapR(s2::Color(trans->data[idx++]));
 	}
 	if (trans->type & simp::NodeTrans::COL_G_MASK) {
-		rc.gmap.FromRGBA(trans->data[idx++]);
+		rc.SetMapG(s2::Color(trans->data[idx++]));
 	}
 	if (trans->type & simp::NodeTrans::COL_B_MASK) {
-		rc.bmap.FromRGBA(trans->data[idx++]);
+		rc.SetMapB(s2::Color(trans->data[idx++]));
 	}
 	spr->SetColor(rc);
 
