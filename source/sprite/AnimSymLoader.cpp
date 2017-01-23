@@ -55,7 +55,9 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 		loader.LoadJson(val, dir);
 	}
 
+#ifndef S2_ANIM_CURR_OLD
 	m_sym->LoadCopy();
+#endif // S2_ANIM_CURR_OLD
 }
 
 void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
@@ -63,7 +65,9 @@ void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
 	EasyAnimLoader loader(m_sym, m_spr_loader);
 	loader.LoadBin(node);
 
+#ifndef S2_ANIM_CURR_OLD
 	m_sym->LoadCopy();
+#endif // S2_ANIM_CURR_OLD
 }
 
 }
