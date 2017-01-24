@@ -40,6 +40,7 @@
 #include <sprite2/TrailSymbol.h>
 #include <sprite2/SkeletonSymbol.h>
 #include <sprite2/SymType.h>
+#include <sprite2/CacheMatVisitor.h>
 
 #include <fstream>
 
@@ -343,6 +344,12 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 	default:
 		assert(0);
 	}
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
+ 	if (ret && type != simp::TYPE_SCALE9 && type != simp::TYPE_ANIMATION) {
+ 		ret->Traverse(s2::CacheMatVisitor());
+ 	}
+#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 	return ret;
 }
