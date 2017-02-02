@@ -320,6 +320,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\utility\Config.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gum\Config.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\utility\Exception.cpp"
 				>
 			</File>

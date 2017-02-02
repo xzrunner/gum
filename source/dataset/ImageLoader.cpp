@@ -1,5 +1,6 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
+#include "Config.h"
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
@@ -36,6 +37,10 @@ bool ImageLoader::LoadRaw()
 	uint8_t* pixels = gimg_import(m_filepath.c_str(), &w, &h, &fmt);
 	if (!pixels) {
 		return false;
+	}
+
+	if (fmt == GPF_RGBA && Config::Instance()->GetPreMulAlpha()) {
+		gimg_pre_mul_alpha(pixels, w, h);
 	}
 
 	m_width = w;

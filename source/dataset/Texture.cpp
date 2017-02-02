@@ -2,6 +2,7 @@
 #include "RenderContext.h"
 #include "StringHelper.h"
 #include "Exception.h"
+#include "Config.h"
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
@@ -28,6 +29,10 @@ void Texture::Load(const std::string& filepath)
 	uint8_t* pixels = gimg_import(filepath.c_str(), &w, &h, &fmt);
 	if (!pixels) {
 		return;
+	}
+
+	if (fmt == GPF_RGBA && Config::Instance()->GetPreMulAlpha()) {
+		gimg_pre_mul_alpha(pixels, w, h);
 	}
 
 	ur::TEXTURE_FORMAT tf = ur::TEXTURE_INVALID;
