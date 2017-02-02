@@ -7,7 +7,7 @@
 
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/Mesh.h>
-#include <sprite2/MeshTransform.h>
+#include <sprite2/MeshTransform2.h>
 #include <sprite2/NetworkMesh.h>
 #include <sprite2/NetworkShape.h>
 #include <sprite2/TrianglesMesh.h>
@@ -189,7 +189,7 @@ s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val,
 	mesh->SetShape(shape);
 	shape->RemoveReference();
 
-	s2::MeshTransform trans;
+	s2::MeshTransform2 trans;
 	MeshIO::Load(val, trans);
 	trans.StoreToMesh(mesh);
 

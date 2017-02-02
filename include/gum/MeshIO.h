@@ -3,7 +3,7 @@
 
 #include <json/json.h>
 
-namespace s2 { class MeshTransform; class MeshSkeleton; }
+namespace s2 { class MeshTransform2; class MeshSkeleton; }
 
 namespace gum
 {
@@ -12,8 +12,8 @@ class MeshIO
 {
 public:
 	// MeshTransform
-	static void Load(const Json::Value& val, s2::MeshTransform& trans);
-	static void Store(Json::Value& val, const s2::MeshTransform& trans);
+	static void Load(const Json::Value& val, s2::MeshTransform2& trans);
+	static void Store(Json::Value& val, const s2::MeshTransform2& trans);
 
 	// MeshSkeleton
 	static void Load(const Json::Value& val, s2::MeshSkeleton& sk);

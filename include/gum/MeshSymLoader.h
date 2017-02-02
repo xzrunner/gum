@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace s2 { class MeshSymbol; class MeshTransform; class Mesh; class Symbol; }
+namespace s2 { class MeshSymbol; class MeshTransform2; class Mesh; class Symbol; }
 namespace simp { class NodeMesh; class NetworkMesh; class TrianglesMesh; class Skeleton2Mesh; }
 
 namespace gum

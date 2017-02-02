@@ -3,7 +3,7 @@
 #include "SkeletonIO.h"
 
 #include <SM_Vector.h>
-#include <sprite2/MeshTransform.h>
+#include <sprite2/MeshTransform2.h>
 #include <sprite2/MeshJoint.h>
 #include <sprite2/MeshSkeleton.h>
 
@@ -18,33 +18,33 @@ namespace gum
 /* MeshTransform                                                        */
 /************************************************************************/
 
-void MeshIO::Load(const Json::Value& val, s2::MeshTransform& trans)
+void MeshIO::Load(const Json::Value& val, s2::MeshTransform2& trans)
 {
-	std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>& map = trans.GetMap();
-	map.clear();
-	std::vector<sm::vec2> from, to;
-	gum::JsonSerializer::Load(val["trans"]["from"], from);
-	gum::JsonSerializer::Load(val["trans"]["to"], to);
-	for (int i = 0, n = from.size(); i < n; ++i) {
-		map.insert(std::make_pair(from[i], to[i]));
-	}
+// 	std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>& map = trans.GetMap();
+// 	map.clear();
+// 	std::vector<sm::vec2> from, to;
+// 	gum::JsonSerializer::Load(val["trans"]["from"], from);
+// 	gum::JsonSerializer::Load(val["trans"]["to"], to);
+// 	for (int i = 0, n = from.size(); i < n; ++i) {
+// 		map.insert(std::make_pair(from[i], to[i]));
+// 	}
 }
 
-void MeshIO::Store(Json::Value& val, const s2::MeshTransform& trans)
+void MeshIO::Store(Json::Value& val, const s2::MeshTransform2& trans)
 {
-	Json::Value& trans_val = val["trans"];
-
-	int count = 0;
-	const std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>& map = trans.GetMap();
-	std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>::const_iterator itr = map.begin();
-	for ( ; itr != map.end(); ++itr) 
-	{
-		trans_val["from"][count * 2] = itr->first.x;
-		trans_val["from"][count * 2 + 1] = itr->first.y;
-		trans_val["to"][count * 2] = itr->second.x;
-		trans_val["to"][count * 2 + 1] = itr->second.y;
-		++count;
-	}
+// 	Json::Value& trans_val = val["trans"];
+// 
+// 	int count = 0;
+// 	const std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>& map = trans.GetMap();
+// 	std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>::const_iterator itr = map.begin();
+// 	for ( ; itr != map.end(); ++itr) 
+// 	{
+// 		trans_val["from"][count * 2] = itr->first.x;
+// 		trans_val["from"][count * 2 + 1] = itr->first.y;
+// 		trans_val["to"][count * 2] = itr->second.x;
+// 		trans_val["to"][count * 2 + 1] = itr->second.y;
+// 		++count;
+// 	}
 }
 
 /************************************************************************/
