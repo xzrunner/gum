@@ -190,7 +190,7 @@ s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val,
 	shape->RemoveReference();
 
 	s2::MeshTransform2 trans;
-	MeshIO::Load(val, trans);
+	MeshIO::Load(val, trans, *mesh);
 	trans.StoreToMesh(mesh);
 
 	return mesh;

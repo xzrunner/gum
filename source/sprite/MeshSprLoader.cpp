@@ -40,8 +40,9 @@ void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	const Json::Value& mesh_val = val["mesh"];
 
 	s2::MeshTransform2& trans = m_spr->GetMeshTrans();
-	MeshIO::Load(mesh_val, trans);
-	trans.StoreToMesh(VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol())->GetMesh());
+	const s2::Mesh* mesh = VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol())->GetMesh();
+	MeshIO::Load(mesh_val, trans, *mesh);
+	trans.StoreToMesh(mesh);
 
 	if (mesh_val.isMember("base_symbol")) {
 		std::string base_path = FilepathHelper::Absolute(dir, mesh_val["base_symbol"].asString());
