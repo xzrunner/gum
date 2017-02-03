@@ -1,27 +1,17 @@
 #ifndef _GUM_RENDER_TARGET_H_
 #define _GUM_RENDER_TARGET_H_
 
-#include <CU_Singleton.h>
-
-namespace ur { class RenderTarget; class RenderContext; }
+#include <sprite2/RenderTarget.h>
 
 namespace gum
 {
 
-class RenderTarget
+class RenderTarget : public s2::RenderTarget
 {
 public:
-	ur::RenderTarget* GetScreen0() { return m_screen0; }
-	ur::RenderTarget* GetScreen1() { return m_screen1; }
+	RenderTarget(int width, int height);
 
-	void OnSize(ur::RenderContext* rc, int w, int h);
-
-	void DebugDraw() const;
-
-private:
-	ur::RenderTarget *m_screen0, *m_screen1;
-
-	SINGLETON_DECLARATION(RenderTarget);
+	void Draw() const;
 
 }; // RenderTarget
 

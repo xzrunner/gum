@@ -1,43 +1,51 @@
 #include "RenderTarget.h"
+#include "RenderContext.h"
 
-#include <unirender/RenderContext.h>
-#include <unirender/RenderTarget.h>
-#include <unirender/Texture.h>
 #include <shaderlab/ShaderMgr.h>
-#include <dtex2/DebugDraw.h>
+#include <shaderlab/Sprite2Shader.h>
+#include <shaderlab/FilterShader.h>
 
 namespace gum
 {
 
-SINGLETON_DEFINITION(RenderTarget);
-
-RenderTarget::RenderTarget()
-	: m_screen0(NULL)
-	, m_screen1(NULL)
+RenderTarget::RenderTarget(int width, int height)
+	: s2::RenderTarget(width, height)
 {
 }
 
-void RenderTarget::OnSize(ur::RenderContext* rc, int w, int h)
+void RenderTarget::Draw() const
 {
-	if (w == 0 || h == 0) {
-		return;
+	float vertices[8], texcoords[8];
+
+	RenderContext* ctx = RenderContext::Instance();
+	float hw = ctx->GetWidth() * 0.5f,
+		  hh = ctx->GetHeight() * 0.5f;
+	vertices[0] = -hw; vertices[1] = -hh;
+	vertices[2] =  hw; vertices[3] = -hh; 
+	vertices[4] =  hw; vertices[5] =  hh;
+	vertices[6] = -hw; vertices[7] =  hh;
+
+	texcoords[0] = 0; texcoords[1] = 0;
+	texcoords[2] = 1; texcoords[3] = 0;
+	texcoords[4] = 1; texcoords[5] = 1;
+	texcoords[6] = 0; texcoords[7] = 1;
+
+	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
+	switch (sl_mgr->GetShaderType()) 
+	{
+	case sl::SPRITE2:
+		{
+			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+			shader->Draw(vertices, texcoords, GetTexID());
+		}
+		break;
+	case sl::FILTER:
+		{
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
+			shader->Draw(vertices, texcoords, GetTexID());
+		}
+		break;
 	}
-	if (m_screen0 && 
-		m_screen0->GetTexture()->Width() == w &&
-		m_screen0->GetTexture()->Height() == h) {
-		return;
-	}
-
-	delete m_screen0;
-	delete m_screen1;
-
-	m_screen0 = new ur::RenderTarget(rc, w, h);
-	m_screen1 = new ur::RenderTarget(rc, w, h);
-}
-
-void RenderTarget::DebugDraw() const
-{
-	dtex::DebugDraw::Draw(m_screen0->GetTexture()->ID(), 1);
 }
 
 }

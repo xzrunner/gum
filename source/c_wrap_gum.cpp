@@ -3,8 +3,11 @@
 #include "Image.h"
 #include "GUM_GTxt.h"
 #include "GUM_DTex.h"
+#include "GUM_Sprite2.h"
 #include "RenderContext.h"
 #include "StringHelper.h"
+#include "RenderTargetMgr.h"
+#include "RenderTarget.h"
 
 #include <unirender/RenderContext.h>
 #include <gimg_typedef.h>
@@ -25,6 +28,12 @@ extern "C"
 void* gum_get_render_context()
 {
 	return RenderContext::Instance()->GetImpl();
+}
+
+extern "C"
+void gum_on_size(int w, int h)
+{
+	RenderContext::Instance()->OnSize(w, h);
 }
 
 extern "C"
@@ -232,9 +241,46 @@ void gum_draw_text(const char* str, int x, int y, int w)
 }
 
 extern "C"
+void* gum_fetch_rt()
+{
+	return RenderTargetMgr::Instance()->Fetch();
+}
+
+extern "C"
+void gum_return_rt(void* rt)
+{
+	RenderTarget* gum_rt = static_cast<RenderTarget*>(rt);
+	RenderTargetMgr::Instance()->Return(gum_rt);
+}
+
+extern "C"
+void gum_rt_bind(void* rt)
+{
+	static_cast<RenderTarget*>(rt)->Bind();
+}
+
+extern "C"
+void gum_rt_unbind(void* rt)
+{
+	static_cast<RenderTarget*>(rt)->Unbind();
+}
+
+extern "C"
+void gum_rt_draw(void* rt)
+{
+	static_cast<RenderTarget*>(rt)->Draw();
+}
+
+extern "C"
 void gum_debug_draw()
 {
-	DTex::Instance()->DebugDraw();
+//	DTex::Instance();
+
+//	DTex::Instance()->DebugDraw();
+
+// 	Sprite2::Instance()->DebugDraw();
+
+//	RenderTargetMgr::Instance()->DebugDraw();
 }
 
 }

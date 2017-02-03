@@ -1,7 +1,7 @@
 #include "RenderContext.h"
 #include "OrthoCamera.h"
 #include "Pseudo3DCamera.h"
-#include "RenderTarget.h"
+#include "RenderTargetMgr.h"
 
 #include <unirender/gl/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -64,7 +64,7 @@ void RenderContext::OnSize(int w, int h)
 
 	m_cam->OnSize(w, h);
 
-	RenderTarget::Instance()->OnSize(m_rc, w, h);
+	RenderTargetMgr::Instance()->OnSize(w, h);
 }
 
 }

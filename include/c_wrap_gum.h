@@ -11,6 +11,8 @@ extern "C"
 
 void* gum_get_render_context();
 
+void  gum_on_size(int w, int h);
+
 void  gum_gc();
 
 int   gum_get_sym_count();
@@ -34,6 +36,12 @@ void* gum_create_spr_from_file(const char* filepath);
 
 void  gum_init_gtxt(int cap_bitmap, int cap_layout);
 void  gum_draw_text(const char* str, int x, int y, int w);
+
+void* gum_fetch_rt();
+void  gum_return_rt(void* rt);
+void  gum_rt_bind(void* rt);
+void  gum_rt_unbind(void* rt);
+void  gum_rt_draw(void* rt);
 
 void  gum_debug_draw();
 
