@@ -159,14 +159,6 @@
 				RelativePath="..\..\..\include\gum\RenderContext.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\source\render\RenderTarget.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gum\RenderTarget.h"
-				>
-			</File>
 			<Filter
 				Name="camera"
 				>
@@ -228,6 +220,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\FilterModes.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="rt"
+				>
+				<File
+					RelativePath="..\..\..\source\render\RenderTarget.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\RenderTarget.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\render\RenderTargetMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\RenderTargetMgr.h"
 					>
 				</File>
 			</Filter>
