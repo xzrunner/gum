@@ -27,13 +27,15 @@ RenderTarget* RenderTargetMgr::Fetch()
 
 void RenderTargetMgr::Return(RenderTarget* rt)
 {
+	if (!rt) {
+		return;
+	}
 	for (int i = 0; i < MAX_COUNT; ++i) {
 		if (m_items[i].rt == rt) {
 			m_items[i].available = true;
 			return;
 		}
 	}
-	assert(0);
 }
 
 void RenderTargetMgr::OnSize(int w, int h)
