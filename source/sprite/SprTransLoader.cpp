@@ -6,21 +6,23 @@
 #include <sprite2/RenderCamera.h>
 #include <simp/NodeTrans.h>
 
+#include <sprite2/S2_Symbol.h>
+
 namespace gum
 {
 
 void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 {
 	int idx = 0;
+	if (trans->type & simp::NodeTrans::SCALE_MASK) {
+		float x = ToFloat(trans->data[idx++]),
+			y = ToFloat(trans->data[idx++]);
+		spr->SetScale(sm::vec2(x, y));
+	}
 	if (trans->type & simp::NodeTrans::SHEAR_MASK) {
 		float x = ToFloat(trans->data[idx++]),
 			  y = ToFloat(trans->data[idx++]);
 		spr->SetShear(sm::vec2(x, y));
-	}
-	if (trans->type & simp::NodeTrans::SCALE_MASK) {
-		float x = ToFloat(trans->data[idx++]),
-			  y = ToFloat(trans->data[idx++]);
-		spr->SetScale(sm::vec2(x, y));
 	}
 	if (trans->type & simp::NodeTrans::OFFSET_MASK) {
 		float x = ToFloat(trans->data[idx++]),
