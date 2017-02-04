@@ -1,11 +1,11 @@
 #include "RenderContext.h"
-#include "OrthoCamera.h"
-#include "Pseudo3DCamera.h"
 #include "RenderTargetMgr.h"
 
 #include <unirender/gl/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/SubjectMVP2.h>
+#include <sprite2/OrthoCamera.h>
+#include <sprite2/Pseudo3DCamera.h>
 
 #include <stddef.h>
 
@@ -39,7 +39,7 @@ RenderContext::RenderContext()
 
 	sl::ShaderMgr::Instance()->SetContext(m_rc);
 
-	m_cam = new OrthoCamera();
+	m_cam = new s2::OrthoCamera();
 }
 
 RenderContext::~RenderContext() 

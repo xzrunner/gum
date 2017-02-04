@@ -6,11 +6,10 @@
 #include <stdint.h>
 
 namespace ur { class RenderContext; }
+namespace s2 { class Camera; }
 
 namespace gum
 {
-
-class Camera;
 
 class RenderContext
 {
@@ -29,7 +28,7 @@ private:
 
 	int m_width, m_height;
 
-	Camera* m_cam;
+	s2::Camera* m_cam;
 
 	SINGLETON_DECLARATION(RenderContext)
 	
