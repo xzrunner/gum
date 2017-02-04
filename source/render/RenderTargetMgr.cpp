@@ -60,10 +60,10 @@ void RenderTargetMgr::OnSize(int w, int h)
 void RenderTargetMgr::DebugDraw() const
 {
 	if (m_items[0].rt) {
-		dtex::DebugDraw::Draw(m_items[0].rt->GetTexID(), 1);
+		dtex::DebugDraw::Draw(m_items[0].rt->GetTexID(), 3);
 	}
 	if (m_items[1].rt) {
-		dtex::DebugDraw::Draw(m_items[1].rt->GetTexID(), 2);
+		dtex::DebugDraw::Draw(m_items[1].rt->GetTexID(), 4);
 	}
 }
 
