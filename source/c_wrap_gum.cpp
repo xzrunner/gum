@@ -272,6 +272,19 @@ void gum_rt_draw(void* rt)
 }
 
 extern "C"
+void* gum_create_img(const char* filepath)
+{
+	return ImageMgr::Instance()->Create(filepath);
+}
+
+extern "C"
+int gum_get_img_texid(void* img)
+{
+	Image* gum_img = static_cast<Image*>(img);
+	return gum_img->GetTexID();
+}
+
+extern "C"
 void gum_debug_draw()
 {
 //	DTex::Instance();

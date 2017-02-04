@@ -43,6 +43,9 @@ void  gum_rt_bind(void* rt);
 void  gum_rt_unbind(void* rt);
 void  gum_rt_draw(void* rt);
 
+void* gum_create_img(const char* filepath);
+int   gum_get_img_texid(void* img);
+
 void  gum_debug_draw();
 
 #endif // _gum_wrap_c_h_
