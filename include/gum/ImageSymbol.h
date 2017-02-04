@@ -25,19 +25,16 @@ public:
 	 */
 	virtual sm::vec2 GetNoTrimedSize() const;
 
+	/**
+	 *  @interface
+	 *    s2::ImageSymbol
+	 */
+	virtual bool QueryTexcoords(float* texcoords, int& texid) const;
+
 	void SetImage(Image* img);
 	const Image* GetImage() const { return m_img; }
 
 	void SetRegion(const sm::ivec2& min, const sm::ivec2& max);
-
-	virtual bool QueryTexcoords(float* texcoords, int& texid) const;
-
-protected:
-	virtual void Proj2Screen(float px, float py, int w, int h, float& sx, float& sy) const;
-	virtual bool IsOrthoCam() const;
-	virtual void GetScreenSize(int& w, int& h) const;
-	virtual float GetP3dCamAngle() const;
-	virtual int GetScreenCacheTexid() const;
 
 private:
 	void InitTexcoords();

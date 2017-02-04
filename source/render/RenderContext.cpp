@@ -6,6 +6,7 @@
 #include <shaderlab/SubjectMVP2.h>
 #include <sprite2/OrthoCamera.h>
 #include <sprite2/Pseudo3DCamera.h>
+#include <sprite2/Blackboard.h>
 
 #include <stddef.h>
 
@@ -65,6 +66,8 @@ void RenderContext::OnSize(int w, int h)
 	m_cam->OnSize(w, h);
 
 	RenderTargetMgr::Instance()->OnSize(w, h);
+
+	s2::Blackboard::Instance()->SetScreenSize(w, h);
 }
 
 }

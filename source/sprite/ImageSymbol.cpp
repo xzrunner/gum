@@ -40,6 +40,31 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	}
 }
 
+bool ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
+{
+	UID uid = ResourceUID::BinNode(GetID());
+	const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, &texid);
+	if (c2_texcoords) {
+		memcpy(texcoords, c2_texcoords, sizeof(float) * 8);
+		if (m_rotate) {
+			float x, y;
+			x = texcoords[6]; y = texcoords[7];
+			texcoords[6] = texcoords[4]; texcoords[7] = texcoords[5];
+			texcoords[4] = texcoords[2]; texcoords[5] = texcoords[3];
+			texcoords[2] = texcoords[0]; texcoords[3] = texcoords[1];
+			texcoords[0] = x;           texcoords[1] = y;
+		}
+	} else {
+		texid = m_img->GetTexID();
+		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
+
+		sm::ivec2 sz = m_img->GetSize();
+		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_quad);
+	}
+
+	return true;
+}
+
 void ImageSymbol::SetImage(Image* img)
 {
 	cu::RefCountObjAssign(m_img, img);
@@ -104,60 +129,6 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max)
 	m_size.ymin = -hh;
 	m_size.xmax = hw;
 	m_size.ymax = hh;
-}
-
-bool ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
-{
-	UID uid = ResourceUID::BinNode(GetID());
-	const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, &texid);
-	if (c2_texcoords) {
-		memcpy(texcoords, c2_texcoords, sizeof(float) * 8);
-		if (m_rotate) {
-			float x, y;
-			x = texcoords[6]; y = texcoords[7];
-			texcoords[6] = texcoords[4]; texcoords[7] = texcoords[5];
-			texcoords[4] = texcoords[2]; texcoords[5] = texcoords[3];
-			texcoords[2] = texcoords[0]; texcoords[3] = texcoords[1];
-			texcoords[0] = x;           texcoords[1] = y;
-		}
-	} else {
-		texid = m_img->GetTexID();
-		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
-
-		sm::ivec2 sz = m_img->GetSize();
-		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_quad);
-	}
-
-	return true;
-}
-
-void ImageSymbol::Proj2Screen(float px, float py, int w, int h, float& sx, float& sy) const
-{
-	sx = w * 0.5f + px;
-	sy = h * 0.5f - py;
-}
-
-bool ImageSymbol::IsOrthoCam() const
-{
-	return true;
-}
-
-void ImageSymbol::GetScreenSize(int& w, int& h) const
-{
-	w = RenderContext::Instance()->GetWidth();
-	h = RenderContext::Instance()->GetHeight();
-}
-
-float ImageSymbol::GetP3dCamAngle() const
-{
-	return 0;
-}
-
-int ImageSymbol::GetScreenCacheTexid() const
-{
-	// todo
-//	return dtexf_cs1_get_texture_id();
-	return 0;
 }
 
 void ImageSymbol::InitTexcoords()
