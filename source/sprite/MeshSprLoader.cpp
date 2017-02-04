@@ -73,8 +73,17 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 	trans.Clear();
 
 	const std::vector<s2::MeshTriangle*>& tris = mesh->GetTriangles();
-	int idx =0;
-	for (int i = 0; i < node->n; ++i) 
+	std::multimap<sm::vec2, int, sm::Vector2Cmp> map2idx;
+	int idx = 0;
+	for (int i = 0, n = tris.size(); i < n; ++i) {
+		s2::MeshTriangle* tri = tris[i];
+		for (int j = 0; j < 3; ++j) {
+			map2idx.insert(std::make_pair(tri->nodes[j]->ori_xy, idx++));
+		}
+	}
+
+	idx = 0;
+	for (int i = 0, n = node->n / 2; i < n; ++i) 
 	{
 		sm::vec2 f, t;
 		f.x = simp::int2float(int16_t(node->vertices[idx++]), 16);
@@ -82,15 +91,15 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 		t.x = simp::int2float(int16_t(node->vertices[idx++]), 16);
 		t.y = simp::int2float(int16_t(node->vertices[idx++]), 16);
 
-		int idx = 0;
-		sm::vec2 pos = t - f;
-		for (int j = 0, m = tris.size(); j < m; ++j) {
-			for (int k = 0; k < 3; ++k) {
-				if (f == tris[j]->nodes[k]->ori_xy) {
-					trans.Add(idx, pos);
-				}
-				++idx;
-			}
+		sm::vec2 pos = f - t;
+		std::multimap<sm::vec2, int, sm::Vector2Cmp>::const_iterator 
+			itr_begin = map2idx.lower_bound(f),
+			itr_end = map2idx.upper_bound(f);
+		assert(itr_begin != map2idx.end());
+		std::multimap<sm::vec2, int, sm::Vector2Cmp>::const_iterator itr = itr_begin;
+		for ( ; itr != itr_end; ++itr) {
+			trans.Add(itr->second, pos);
+			break;	// todo
 		}
 	}
 	trans.StoreToMesh(mesh);
