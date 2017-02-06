@@ -104,7 +104,7 @@ void Scale9SymLoader::LoadJson(const std::string& filepath)
 
 	int w = val["width"].asInt(),
 		h = val["height"].asInt();
-	m_sym->GetScale9().Build(type, w, h, grids);
+	m_sym->GetScale9().Build(type, w, h, grids, 0, 0, 0, 0);
 
 	for (int i = 0; i < 9; ++i) {
 		if (grids[i]) {
@@ -195,7 +195,8 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 	}
 
 	const int DEFAULT_SIZE = 256;
-	m_sym->GetScale9().Build(type, DEFAULT_SIZE, DEFAULT_SIZE, grids);
+	m_sym->GetScale9().Build(type, DEFAULT_SIZE, DEFAULT_SIZE, grids, 
+		node->left, node->right, node->top, node->down);
 
 	for (int i = 0; i < 9; ++i) {
 		if (grids[i]) {
