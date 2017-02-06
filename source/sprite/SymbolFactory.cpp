@@ -204,7 +204,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 	{
 	case simp::TYPE_IMAGE:
 		{
-			const simp::NodePicture* pic = (const simp::NodePicture*)data;	
+			const simp::NodePicture* pic = (const simp::NodePicture*)data;
+			sm::vec2 offset(pic->offx * 0.5f, pic->offy * 0.5f);
 			ImageSymbol* sym = NULL;
 			if (pic->texid < simp::NodePicture::MAX_IN_PKG)
 			{
@@ -217,7 +218,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 				loader.Load(filepath);
 				sym->SetRegion(
 					sm::ivec2(pic->region[0], pic->region[1]), 
-					sm::ivec2(pic->region[2], pic->region[3]));
+					sm::ivec2(pic->region[2], pic->region[3]),
+					offset);
 			}
 			else
 			{
@@ -229,7 +231,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 				sym->SetImage(img);
 				sym->SetRegion(
 					sm::ivec2(pic->region[0], pic->region[1]), 
-					sm::ivec2(pic->region[2], pic->region[3]));
+					sm::ivec2(pic->region[2], pic->region[3]),
+					offset);
 			}
 			ret = sym;
 		}

@@ -34,7 +34,7 @@ public:
 	void SetImage(Image* img);
 	const Image* GetImage() const { return m_img; }
 
-	void SetRegion(const sm::ivec2& min, const sm::ivec2& max);
+	void SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm::vec2& offset);
 
 private:
 	void InitTexcoords();
