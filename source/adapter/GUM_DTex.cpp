@@ -172,6 +172,30 @@ draw_flush()
 	}
 }
 
+static void
+scissor_push(int x, int y, int w, int h)
+{
+	s2::RenderScissor::Instance()->Push(x, y, w, h, false);
+}
+
+static void 
+scissor_pop()
+{
+	s2::RenderScissor::Instance()->Pop(false);
+}
+
+static void 
+scissor_close()
+{
+	s2::RenderScissor::Instance()->Close();
+}
+
+static void 
+scissor_open()
+{
+	s2::RenderScissor::Instance()->Open();
+}
+
 /************************************************************************/
 /* Resource                                                             */
 /************************************************************************/
@@ -331,6 +355,10 @@ DTex::DTex()
 	render_cb.draw             = draw;
 	render_cb.draw_end         = draw_end;
 	render_cb.draw_flush       = draw_flush;
+	render_cb.scissor_push     = scissor_push;
+	render_cb.scissor_pop      = scissor_pop;
+	render_cb.scissor_close    = scissor_close;
+	render_cb.scissor_open     = scissor_open;
 
 	dtex::RenderAPI::InitCallback(render_cb);
 	dtex::RenderAPI::InitRenderContext(RenderContext::Instance()->GetImpl());
