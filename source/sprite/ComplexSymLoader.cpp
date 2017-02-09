@@ -77,7 +77,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		spr->RemoveReference();
 	}
 
-	const std::vector<s2::Sprite*>& children = m_sym->GetChildren();
+	const std::vector<s2::Sprite*>& children = m_sym->GetAllChildren();
 	std::vector<s2::ComplexSymbol::Action> dst;
 	dst.reserve(node->actions_n);
 	for (int i = 0; i < node->actions_n; ++i) {
