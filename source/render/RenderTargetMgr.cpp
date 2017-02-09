@@ -19,6 +19,7 @@ RenderTarget* RenderTargetMgr::Fetch()
 	for (int i = 0; i < MAX_COUNT; ++i) {
 		if (m_items[i].available) {
 			m_items[i].available = false;
+			assert(m_items[i].rt);
 			return m_items[i].rt;
 		}
 	}
@@ -51,9 +52,11 @@ void RenderTargetMgr::OnSize(int w, int h)
 	}
 
 	for (int i = 0; i < MAX_COUNT; ++i) {
-		delete m_items[i].rt;
-		m_items[i].rt = new RenderTarget(w, h);
-		m_items[i].available = true;
+		if (m_items[i].rt) {
+			m_items[i].rt->Resize(w, h);
+		} else {
+			m_items[i].rt = new RenderTarget(w, h);
+		}
 	}
 }
 
