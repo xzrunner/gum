@@ -3,12 +3,12 @@
 #include "SpineParser.h"
 #include "FilepathHelper.h"
 
+#include <rigging.h>
+#include <polymesh/TrianglesMesh.h>
+#include <polymesh/Skin2Mesh.h>
 #include <sprite2/Anim2Symbol.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/MeshSymbol.h>
-#include <sprite2/TrianglesMesh.h>
-#include <sprite2/Skeleton2Mesh.h>
-#include <rigging.h>
 
 #include <assert.h>
 
@@ -236,24 +236,25 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
 
-	s2::Mesh* mesh = NULL;
-	if (!src.vertices.empty()) {
-		s2::TrianglesMesh* tri_mesh = new s2::TrianglesMesh(base_sym);
-		tri_mesh->SetData(src.vertices, src.texcoords, src.triangles);
-		mesh = tri_mesh;
+	pm::Mesh* mesh = NULL;
+	if (!src.vertices.empty()) 
+	{
+		mesh = new pm::TrianglesMesh(src.vertices, src.texcoords, src.triangles);
 		dst.type = SKIN_MESH;
-	} else {
+	} 
+	else 
+	{
 		assert(!src.skinned_vertices.empty());
-		s2::Skeleton2Mesh* sk_mesh = new s2::Skeleton2Mesh(base_sym);
+//		pm::Skin2Mesh* sk_mesh = new pm::Skin2Mesh(base_sym);
 
-		std::vector<s2::Skeleton2Mesh::Item> items;
-		std::vector<s2::Skeleton2Mesh::Vertex> vertices;
+		std::vector<pm::Skin2Vertex::Part> parts;
+		std::vector<std::vector<int> > vertices;
 		vertices.reserve(src.skinned_vertices.size());
 		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i)
 		{
 			const SpineParser::SkinItem::SkinnedVertex& vsrc = src.skinned_vertices[i];
 			s2::Skeleton2Mesh::Vertex vdst;
-			vdst.items.reserve(vsrc.items.size());
+			vdst.parts.reserve(vsrc.items.size());
 			for (int j = 0, m = vsrc.items.size(); j < m; ++j) 
 			{
 				const SpineParser::SkinItem::SkinnedVertex::Item& isrc = vsrc.items[j];
@@ -263,12 +264,12 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 				idst.vertex.y = isrc.vy;
 				idst.offset.Set(0, 0);
 				idst.weight   = isrc.weight;
-				vdst.items.push_back(items.size());
-				items.push_back(idst);
+				vdst.parts.push_back(parts.size());
+				parts.push_back(idst);
 			}
 			vertices.push_back(vdst);
 		}
-		sk_mesh->SetData(items, vertices, src.texcoords, src.triangles);
+		sk_mesh->SetData(parts, vertices, src.texcoords, src.triangles);
 
 		mesh = sk_mesh;
 
