@@ -188,15 +188,15 @@ void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
 		{
 			SkinItem::SkinnedVertex sv;
 			int bone_n = src["vertices"][i++].asInt();
-			sv.items.reserve(bone_n);
+			sv.joints.reserve(bone_n);
 			for (int j = 0; j < bone_n; ++j) 
 			{
-				SkinItem::SkinnedVertex::Item item;
+				SkinItem::SkinnedVertex::Joint item;
 				item.bone = src["vertices"][i++].asInt();
 				item.vx = src["vertices"][i++].asDouble();
 				item.vy = src["vertices"][i++].asDouble();
 				item.weight = src["vertices"][i++].asDouble();
-				sv.items.push_back(item);
+				sv.joints.push_back(item);
 			}
 			dst.skinned_vertices.push_back(sv);
 		}

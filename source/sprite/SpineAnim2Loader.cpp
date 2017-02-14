@@ -9,6 +9,7 @@
 #include <sprite2/Anim2Symbol.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/MeshSymbol.h>
+#include <sprite2/Mesh.h>
 
 #include <assert.h>
 
@@ -231,53 +232,54 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 {
 	rg_pose_srt_identity(&dst.local);
 
-	s2::MeshSymbol* sym = VI_DOWNCASTING<s2::MeshSymbol*>(m_sym_loader->Create(s2::SYM_MESH));
-
-	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
-	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
-
-	pm::Mesh* mesh = NULL;
+	pm::Mesh* pm_mesh = NULL;
 	if (!src.vertices.empty()) 
 	{
-		mesh = new pm::TrianglesMesh(src.vertices, src.texcoords, src.triangles);
+		pm_mesh = new pm::TrianglesMesh(src.vertices, src.texcoords, src.triangles);
 		dst.type = SKIN_MESH;
 	} 
 	else 
 	{
 		assert(!src.skinned_vertices.empty());
-//		pm::Skin2Mesh* sk_mesh = new pm::Skin2Mesh(base_sym);
 
-		std::vector<pm::Skin2Vertex::Part> parts;
-		std::vector<std::vector<int> > vertices;
+		std::vector<pm::Skin2Joint> joints;
+		int joints_n = 0;
+		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i) {
+			joints_n += src.skinned_vertices[i].joints.size();
+		}
+		joints.reserve(joints_n);
+
+		std::vector<int> vertices;
 		vertices.reserve(src.skinned_vertices.size());
-		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i)
+
+		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i) 
 		{
 			const SpineParser::SkinItem::SkinnedVertex& vsrc = src.skinned_vertices[i];
-			s2::Skeleton2Mesh::Vertex vdst;
-			vdst.parts.reserve(vsrc.items.size());
-			for (int j = 0, m = vsrc.items.size(); j < m; ++j) 
+			vertices.push_back(vsrc.joints.size());
+			for (int j = 0, m = vsrc.joints.size(); j < m; ++j)
 			{
-				const SpineParser::SkinItem::SkinnedVertex::Item& isrc = vsrc.items[j];
-				s2::Skeleton2Mesh::Item idst;
-				idst.joint    = isrc.bone;
-				idst.vertex.x = isrc.vx;
-				idst.vertex.y = isrc.vy;
-				idst.offset.Set(0, 0);
-				idst.weight   = isrc.weight;
-				vdst.parts.push_back(parts.size());
-				parts.push_back(idst);
+				const SpineParser::SkinItem::SkinnedVertex::Joint& jsrc = vsrc.joints[j];
+				pm::Skin2Joint jdst;
+				jdst.joint    = jsrc.bone;
+				jdst.vertex.x = jsrc.vx;
+				jdst.vertex.y = jsrc.vy;
+				jdst.offset.Set(0, 0);
+				jdst.weight   = jsrc.weight;
+				joints.push_back(jdst);
 			}
-			vertices.push_back(vdst);
 		}
-		sk_mesh->SetData(parts, vertices, src.texcoords, src.triangles);
 
-		mesh = sk_mesh;
-
+		pm_mesh = new pm::Skin2Mesh(joints, vertices, src.texcoords, src.triangles);
 		dst.type = SKIN_JOINT_MESH;
 	}
 
-	sym->SetMesh(mesh);
-	mesh->RemoveReference();
+	s2::MeshSymbol* sym = VI_DOWNCASTING<s2::MeshSymbol*>(m_sym_loader->Create(s2::SYM_MESH));
+
+	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
+	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
+	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
+	s2_mesh->SetMesh(pm_mesh);
+	sym->SetMesh(s2_mesh);
 
 	dst.ud = static_cast<s2::Symbol*>(sym);
 }

@@ -62,14 +62,14 @@ public:
 
 		struct SkinnedVertex
 		{
-			struct Item
+			struct Joint
 			{
 				int bone;
 				float vx, vy;
 				float weight;
 			};
 
-			std::vector<Item> items;
+			std::vector<Joint> joints;
 		};
 
 		// mesh

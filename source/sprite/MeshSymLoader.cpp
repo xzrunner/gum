@@ -5,19 +5,18 @@
 #include "MeshIO.h"
 #include "ArrayLoader.h"
 
-#include <sprite2/MeshSymbol.h>
-#include <sprite2/Mesh.h>
-#include <sprite2/MeshTransform2.h>
-#include <sprite2/NetworkMesh.h>
-#include <sprite2/NetworkShape.h>
-#include <sprite2/TrianglesMesh.h>
-#include <sprite2/Skeleton2Mesh.h>
 #include <simp/NodeMesh.h>
 #include <simp/from_int.h>
-#include <simp/NetworkMesh.h>
+#include <simp/PointsMesh.h>
 #include <simp/TrianglesMesh.h>
-#include <simp/Skeleton2Mesh.h>
+#include <simp/Skin2Mesh.h>
 #include <simp/from_int.h>
+#include <polymesh/PointsMesh.h>
+#include <polymesh/TrianglesMesh.h>
+#include <polymesh/Skin2Mesh.h>
+#include <polymesh/MeshTransform.h>
+#include <sprite2/MeshSymbol.h>
+#include <sprite2/Mesh.h>
 
 #include <json/json.h>
 
@@ -86,39 +85,39 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	s2::Mesh* mesh = NULL;
 	switch (node->shape->Type())
 	{
-	case simp::MESH_NETWORK:
-		mesh = LoadNetworkMesh(base_sym, static_cast<simp::NetworkMesh*>(node->shape));
+	case simp::MESH_POINTS:
+		mesh = LoadNetworkMesh(base_sym, static_cast<simp::PointsMesh*>(node->shape));
 		break;
 	case simp::MESH_TRIANGLES:
 		mesh = LoadTrianglesMesh(base_sym, static_cast<simp::TrianglesMesh*>(node->shape));
 		break;
-	case simp::MESH_SKELETON2:
-		mesh = LoadSkeleton2Mesh(base_sym, static_cast<simp::Skeleton2Mesh*>(node->shape));
+	case simp::MESH_SKIN2:
+		mesh = LoadSkeleton2Mesh(base_sym, static_cast<simp::Skin2Mesh*>(node->shape));
 		break;
 	}
 	m_sym->SetMesh(mesh);
 }
 
-s2::Mesh* MeshSymLoader::LoadNetworkMesh(s2::Symbol* base_sym, simp::NetworkMesh* node)
+s2::Mesh* MeshSymLoader::LoadNetworkMesh(s2::Symbol* base_sym, simp::PointsMesh* node)
 {
-	s2::NetworkMesh* mesh = new s2::NetworkMesh(base_sym);
+	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
+	
+	std::vector<sm::vec2> outline;
+	ArrayLoader::Load(outline, node->outline, node->outline_n, 16);
 
-	std::vector<sm::vec2> outer;
-	ArrayLoader::Load(outer, node->outer, node->outer_n, 16);
-	s2::NetworkShape* shape = new s2::NetworkShape(outer);
+	std::vector<sm::vec2> points;
+	ArrayLoader::Load(points, node->points, node->points_n, 16);
 
-	std::vector<sm::vec2> inner;
-	ArrayLoader::Load(inner, node->inner, node->inner_n, 16);
-	shape->SetInnerVertices(inner);
-
-	mesh->SetShape(shape);
-
-	return mesh;
+	sm::rect r = base_sym->GetBounding();
+	pm::Mesh* pm_mesh = new pm::PointsMesh(outline, points, r.Width(), r.Height());
+	s2_mesh->SetMesh(pm_mesh);
+	
+	return s2_mesh;
 }
 
 s2::Mesh* MeshSymLoader::LoadTrianglesMesh(s2::Symbol* base_sym, simp::TrianglesMesh* node)
 {
-	s2::TrianglesMesh* mesh = new s2::TrianglesMesh(base_sym);
+	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
 
 	std::vector<sm::vec2> vertices;
 	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
@@ -129,71 +128,72 @@ s2::Mesh* MeshSymLoader::LoadTrianglesMesh(s2::Symbol* base_sym, simp::Triangles
 	std::vector<int> triangles;
 	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
 
-	mesh->SetData(vertices, texcoords, triangles);
+	pm::Mesh* pm_mesh = new pm::TrianglesMesh(vertices, texcoords, triangles);
+	s2_mesh->SetMesh(pm_mesh);
 
-	return mesh;
+	return s2_mesh;
 }
 
-s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skeleton2Mesh* node)
+s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* node)
 {
-	s2::Skeleton2Mesh* mesh = new s2::Skeleton2Mesh(base_sym);
+	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
 
-	std::vector<s2::Skeleton2Mesh::Item> items;
-	std::vector<s2::Skeleton2Mesh::Vertex> vertices;
-	vertices.reserve(node->vertices_n);
-	int ptr = 0;
-	for (int i = 0; i < node->vertices_n; ++i)
-	{
-		int item_n = node->items_n[i];
-		s2::Skeleton2Mesh::Vertex vdst;
-		vdst.items.reserve(item_n);
-		for (int j = 0, m = item_n; j < m; ++j) 
-		{
-			const simp::Skeleton2Mesh::Item& isrc = node->items[ptr++];
-			s2::Skeleton2Mesh::Item idst;
-			idst.joint    = isrc.joint;
-			idst.vertex.x = simp::int2float(isrc.vx, 128);
-			idst.vertex.y = simp::int2float(isrc.vy, 128);
-			idst.offset.Set(0, 0);
-			idst.weight = simp::int2float(isrc.weight, 4096);
-			vdst.items.push_back(items.size());
-			items.push_back(idst);
-		}
-		vertices.push_back(vdst);
+	std::vector<pm::Skin2Joint> joints;
+	int joints_n = 0;
+	for (int i = 0; i < node->vertices_n; ++i) {
+		joints_n += node->joints_n[i];
 	}
-	
+	joints.reserve(joints_n);
+	for (int i = 0; i < joints_n; ++i) 
+	{
+		const simp::Skin2Mesh::Joint& src = node->joints[i];
+		pm::Skin2Joint dst;
+		dst.joint = src.joint;
+		dst.vertex.x = simp::int2float(src.vx, 128);
+		dst.vertex.y = simp::int2float(src.vy, 128);
+		dst.offset.Set(0, 0);
+		dst.weight = simp::int2float(src.weight, 4096);
+		joints.push_back(dst);
+	}
+
+	std::vector<int> vertices;
+	vertices.reserve(node->vertices_n);
+	for (int i = 0; i < node->vertices_n; ++i) {
+		vertices.push_back(node->joints_n[i]);
+	}
+
 	std::vector<sm::vec2> texcoords;
 	ArrayLoader::Load(texcoords, node->texcoords, node->texcoords_n, 8192);
 
 	std::vector<int> triangles;
 	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
 
-	mesh->SetData(items, vertices, texcoords, triangles);
+	pm::Mesh* pm_mesh = new pm::Skin2Mesh(joints, vertices, texcoords, triangles);
+	s2_mesh->SetMesh(pm_mesh);
 
-	return mesh;
+	return s2_mesh;
 }
 
-s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val, 
-										   const s2::Symbol* sym)
+s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val, const s2::Symbol* base_sym)
 {
-	s2::NetworkMesh* mesh = new s2::NetworkMesh(sym);
+	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
 
 	std::vector<sm::vec2> outline;
 	JsonSerializer::Load(val["shape"]["outline"], outline);
-	s2::NetworkShape* shape = new s2::NetworkShape(outline);
-	
-	std::vector<sm::vec2> inner;
-	JsonSerializer::Load(val["shape"]["inner"], inner);
-	shape->SetInnerVertices(inner);
 
-	mesh->SetShape(shape);
-	shape->RemoveReference();
+	std::vector<sm::vec2> points;
+	JsonSerializer::Load(val["shape"]["inner"], points);
 
-	s2::MeshTransform2 trans;
-	MeshIO::Load(val, trans, *mesh);
-	trans.StoreToMesh(mesh);
+	sm::rect r = base_sym->GetBounding();
+	pm::Mesh* pm_mesh = new pm::PointsMesh(outline, points, r.Width(), r.Height());
 
-	return mesh;
+	pm::MeshTransform trans;
+	MeshIO::Load(val, trans, *s2_mesh);
+	pm_mesh->LoadFromTransform(trans);
+
+	s2_mesh->SetMesh(pm_mesh);
+
+	return s2_mesh;
 }
 
 }
