@@ -66,8 +66,8 @@ void MeshSymLoader::LoadJson(const std::string& filepath)
 	s2::Mesh* mesh = NULL;
 	if (type == "strip") {
 
-	} else if (type == "network") {
-		mesh = CreateNetworkMesh(value, base_sym);
+	} else if (type == "network" || type == "points") {
+		mesh = CreatePointsMesh(value, base_sym);
 	}
 
 	m_sym->SetMesh(mesh);
@@ -86,19 +86,19 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	switch (node->shape->Type())
 	{
 	case simp::MESH_POINTS:
-		mesh = LoadNetworkMesh(base_sym, static_cast<simp::PointsMesh*>(node->shape));
+		mesh = LoadPointsMesh(base_sym, static_cast<simp::PointsMesh*>(node->shape));
 		break;
 	case simp::MESH_TRIANGLES:
 		mesh = LoadTrianglesMesh(base_sym, static_cast<simp::TrianglesMesh*>(node->shape));
 		break;
 	case simp::MESH_SKIN2:
-		mesh = LoadSkeleton2Mesh(base_sym, static_cast<simp::Skin2Mesh*>(node->shape));
+		mesh = LoadSkin2Mesh(base_sym, static_cast<simp::Skin2Mesh*>(node->shape));
 		break;
 	}
 	m_sym->SetMesh(mesh);
 }
 
-s2::Mesh* MeshSymLoader::LoadNetworkMesh(s2::Symbol* base_sym, simp::PointsMesh* node)
+s2::Mesh* MeshSymLoader::LoadPointsMesh(s2::Symbol* base_sym, simp::PointsMesh* node)
 {
 	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
 	
@@ -134,7 +134,7 @@ s2::Mesh* MeshSymLoader::LoadTrianglesMesh(s2::Symbol* base_sym, simp::Triangles
 	return s2_mesh;
 }
 
-s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* node)
+s2::Mesh* MeshSymLoader::LoadSkin2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* node)
 {
 	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
 
@@ -174,7 +174,7 @@ s2::Mesh* MeshSymLoader::LoadSkeleton2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh
 	return s2_mesh;
 }
 
-s2::Mesh* MeshSymLoader::CreateNetworkMesh(const Json::Value& val, const s2::Symbol* base_sym)
+s2::Mesh* MeshSymLoader::CreatePointsMesh(const Json::Value& val, const s2::Symbol* base_sym)
 {
 	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
 
