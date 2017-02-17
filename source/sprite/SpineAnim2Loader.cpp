@@ -10,6 +10,7 @@
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/Mesh.h>
+#include <sprite2/ImageSymbol.h>
 
 #include <assert.h>
 
@@ -230,12 +231,28 @@ void SpineAnim2Loader::CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem
 
 void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const
 {
+	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
+	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
+
+	// fix texcoords for image trimed
+	std::vector<sm::vec2> texcoords = src.texcoords;
+	if (base_sym->Type() == s2::SYM_IMAGE) 
+	{
+		s2::ImageSymbol* img_sym = VI_DOWNCASTING<s2::ImageSymbol*>(base_sym);
+		const sm::i16_rect& d = img_sym->GetRegion();
+		sm::vec2 s = img_sym->GetNoTrimedSize();
+		for (int i = 0, n = texcoords.size(); i < n; ++i) {
+			texcoords[i].x = (texcoords[i].x * s.x - d.xmin) / d.Width();
+			texcoords[i].y = (texcoords[i].y * s.y - d.ymin) / d.Height();
+		}
+	}
+
 	rg_pose_srt_identity(&dst.local);
 
 	pm::Mesh* pm_mesh = NULL;
 	if (!src.vertices.empty()) 
 	{
-		pm_mesh = new pm::TrianglesMesh(src.vertices, src.texcoords, src.triangles);
+		pm_mesh = new pm::TrianglesMesh(src.vertices, texcoords, src.triangles);
 		dst.type = SKIN_MESH;
 	} 
 	else 
@@ -269,14 +286,11 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 			}
 		}
 
-		pm_mesh = new pm::Skin2Mesh(joints, vertices, src.texcoords, src.triangles);
+		pm_mesh = new pm::Skin2Mesh(joints, vertices, texcoords, src.triangles);
 		dst.type = SKIN_JOINT_MESH;
 	}
 
 	s2::MeshSymbol* sym = VI_DOWNCASTING<s2::MeshSymbol*>(m_sym_loader->Create(s2::SYM_MESH));
-
-	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
-	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
 	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
 	s2_mesh->SetMesh(pm_mesh);
 	sym->SetMesh(s2_mesh);
