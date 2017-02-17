@@ -2,6 +2,9 @@
 #define _GUM_RENDER_TARGET_MGR_H_
 
 #include <CU_Singleton.h>
+#include <SM_Vector.h>
+
+#include <vector>
 
 namespace gum
 {
@@ -28,10 +31,9 @@ private:
 	};
 
 private:
-	static const int MAX_COUNT = 2;
-
-private:
-	Item m_items[MAX_COUNT];
+	sm::ivec2 m_size;
+	
+	std::vector<Item> m_items;
 
 	SINGLETON_DECLARATION(RenderTargetMgr);
 

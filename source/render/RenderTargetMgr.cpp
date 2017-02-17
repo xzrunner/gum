@@ -11,19 +11,27 @@ namespace gum
 SINGLETON_DEFINITION(RenderTargetMgr);
 
 RenderTargetMgr::RenderTargetMgr()
+	: m_size(0, 0)
 {
 }
 
 RenderTarget* RenderTargetMgr::Fetch()
 {
-	for (int i = 0; i < MAX_COUNT; ++i) {
-		if (m_items[i].available) {
-			m_items[i].available = false;
-			assert(m_items[i].rt);
-			return m_items[i].rt;
+	for (int i = 0, n = m_items.size(); i < n; ++i) 
+	{
+		if (!m_items[i].available) {
+			continue;
 		}
+		m_items[i].available = false;
+		assert(m_items[i].rt);
+		return m_items[i].rt;
 	}
-	return NULL;
+
+	Item item;
+	item.rt = new RenderTarget(m_size.x, m_size.y);
+	item.available = false;
+	m_items.push_back(item);
+	return item.rt;
 }
 
 void RenderTargetMgr::Return(RenderTarget* rt)
@@ -31,7 +39,8 @@ void RenderTargetMgr::Return(RenderTarget* rt)
 	if (!rt) {
 		return;
 	}
-	for (int i = 0; i < MAX_COUNT; ++i) {
+
+	for (int i = 0, n = m_items.size(); i < n; ++i) {
 		if (m_items[i].rt == rt) {
 			m_items[i].available = true;
 			return;
@@ -45,13 +54,13 @@ void RenderTargetMgr::OnSize(int w, int h)
 		return;
 	}
 
-	if (m_items[0].rt && 
-		m_items[0].rt->Width() == w && 
-		m_items[0].rt->Height() == h) {
+	if (m_size.x == w && m_size.y == h) {
 		return;
 	}
+	m_size.x = w;
+	m_size.y = h;
 
-	for (int i = 0; i < MAX_COUNT; ++i) {
+	for (int i = 0, n = m_items.size(); i < n; ++i) {
 		if (m_items[i].rt) {
 			m_items[i].rt->Resize(w, h);
 		} else {
@@ -62,10 +71,10 @@ void RenderTargetMgr::OnSize(int w, int h)
 
 void RenderTargetMgr::DebugDraw() const
 {
-	if (m_items[0].rt) {
+	if (m_items.size() > 0 && m_items[0].rt) {
 		dtex::DebugDraw::Draw(m_items[0].rt->GetTexID(), 3);
 	}
-	if (m_items[1].rt) {
+	if (m_items.size() > 1 && m_items[1].rt) {
 		dtex::DebugDraw::Draw(m_items[1].rt->GetTexID(), 4);
 	}
 }
