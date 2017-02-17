@@ -59,7 +59,7 @@ bool ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
 		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
 
 		sm::ivec2 sz = m_img->GetSize();
-		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_quad);
+		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_region);
 	}
 
 	return true;
@@ -75,7 +75,7 @@ void ImageSymbol::SetImage(Image* img)
 	q.xmax = sz.x;
 	q.ymax = sz.y;
 
-	InitTex(m_img->GetS2Tex(), q, sm::vec2(0, 0));	
+	InitTex(m_img->GetS2Tex(), q);	
 }
 
 void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm::vec2& offset)
@@ -104,10 +104,10 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm
 		m_texcoords[4] = txmax; m_texcoords[5] = tymax;
 		m_texcoords[6] = txmax; m_texcoords[7] = tymin;
 
-		m_quad.xmin = min.x;
-		m_quad.ymin = max.y;
-		m_quad.xmax = max.x;
-		m_quad.ymax = min.y;
+		m_region.xmin = min.x;
+		m_region.ymin = max.y;
+		m_region.xmax = max.x;
+		m_region.ymax = min.y;
 	}
 	else
 	{
@@ -119,10 +119,10 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm
 		m_texcoords[4] = txmax; m_texcoords[5] = tymax;
 		m_texcoords[6] = txmin; m_texcoords[7] = tymax;
 
-		m_quad.xmin = min.x;
-		m_quad.ymin = min.y;
-		m_quad.xmax = max.x;
-		m_quad.ymax = max.y;
+		m_region.xmin = min.x;
+		m_region.ymin = min.y;
+		m_region.xmax = max.x;
+		m_region.ymax = max.y;
 	}
 
 	m_size.xmin = -hw + offset.x;
