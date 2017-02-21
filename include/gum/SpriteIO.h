@@ -21,11 +21,11 @@ public:
 	SpriteIO(bool compress, bool render_open);
 	~SpriteIO();
 
-	void Load(const Json::Value& val, s2::Sprite* spr);
-	void Store(Json::Value& val, const s2::Sprite* spr);
+	void Load(const Json::Value& val, s2::Sprite* spr, const std::string& dir);
+	void Store(Json::Value& val, const s2::Sprite* spr, const std::string& dir);
 
-	void Load(const Json::Value& val);
-	void Store(Json::Value& val);
+	void Load(const Json::Value& val, const std::string& dir);
+	void Store(Json::Value& val, const std::string& dir);
 
 protected:
 	// geometry
@@ -37,8 +37,8 @@ protected:
 	// render
 	virtual void LoadRender(s2::Sprite* spr);
 	virtual void StoreRender(const s2::Sprite* spr);
-	virtual void LoadRender(const Json::Value& val);
-	virtual void StoreRender(Json::Value& val);
+	virtual void LoadRender(const Json::Value& val, const std::string& dir);
+	virtual void StoreRender(Json::Value& val, const std::string& dir);
 
 	// info
 	virtual void LoadInfo(s2::Sprite* spr);
@@ -60,8 +60,8 @@ private:
 
 	void LoadShader(s2::Sprite* spr);
 	void StoreShader(const s2::RenderShader& shader);
-	void LoadShader(const Json::Value& val);
-	void StoreShader(Json::Value& val);
+	void LoadShader(const Json::Value& val, const std::string& dir);
+	void StoreShader(Json::Value& val, const std::string& dir);
 
 	void LoadCamera(s2::Sprite* spr);
 	void StoreCamera(const s2::RenderCamera& camera);	

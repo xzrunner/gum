@@ -4,12 +4,18 @@
 #include "CameraModes.h"
 #include "FastBlendModes.h"
 #include "FilterModes.h"
+#include "FilepathHelper.h"
+#include "Image.h"
 
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/HeatHazeProg.h>
+#include <shaderlab/FilterShader.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/FilterFactory.h>
 #include <sprite2/RFEdgeDetection.h>
 #include <sprite2/RFGaussianBlur.h>
 #include <sprite2/RFOuterGlow.h>
+#include <sprite2/RFHeatHaze.h>
 #include <sprite2/RenderShader.h>
 #include <sprite2/RenderCamera.h>
 
@@ -42,9 +48,9 @@ SpriteIO::~SpriteIO()
 	}
 }
 
-void SpriteIO::Load(const Json::Value& val, s2::Sprite* spr)
+void SpriteIO::Load(const Json::Value& val, s2::Sprite* spr, const std::string& dir)
 {
-	Load(val);
+	Load(val, dir);
 
 	LoadGeometry(spr);
 	LoadRender(spr);
@@ -52,28 +58,28 @@ void SpriteIO::Load(const Json::Value& val, s2::Sprite* spr)
 	LoadEdit(spr);
 }
 
-void SpriteIO::Store(Json::Value& val, const s2::Sprite* spr)
+void SpriteIO::Store(Json::Value& val, const s2::Sprite* spr, const std::string& dir)
 {
 	StoreGeometry(spr);
 	StoreRender(spr);
 	StoreInfo(spr);
 	StoreEdit(spr);
 
-	Store(val);
+	Store(val, dir);
 }
 
-void SpriteIO::Load(const Json::Value& val)
+void SpriteIO::Load(const Json::Value& val, const std::string& dir)
 {
 	LoadGeometry(val);
-	LoadRender(val);
+	LoadRender(val, dir);
 	LoadInfo(val);
 	LoadEdit(val);
 }
 
-void SpriteIO::Store(Json::Value& val)
+void SpriteIO::Store(Json::Value& val, const std::string& dir)
 {
 	StoreGeometry(val);
-	StoreRender(val);
+	StoreRender(val, dir);
 	StoreInfo(val);
 	StoreEdit(val);
 }
@@ -194,17 +200,17 @@ void SpriteIO::StoreRender(const s2::Sprite* spr)
 	StoreCamera(spr->GetCamera());	
 }
 
-void SpriteIO::LoadRender(const Json::Value& val)
+void SpriteIO::LoadRender(const Json::Value& val, const std::string& dir)
 {
 	LoadColor(val);
-	LoadShader(val);
-	LoadCamera(val);	
+	LoadShader(val, dir);
+	LoadCamera(val);
 }
 
-void SpriteIO::StoreRender(Json::Value& val)
+void SpriteIO::StoreRender(Json::Value& val, const std::string& dir)
 {
 	StoreColor(val);
-	StoreShader(val);
+	StoreShader(val, dir);
 	StoreCamera(val);	
 }
 
@@ -375,7 +381,7 @@ void SpriteIO::StoreShader(const s2::RenderShader& shader)
 	}
 }
 
-void SpriteIO::LoadShader(const Json::Value& val)
+void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 {
 	m_blend = s2::BM_NULL;
 	m_fast_blend = s2::FBM_NULL;
@@ -435,6 +441,36 @@ void SpriteIO::LoadShader(const Json::Value& val)
 					filter->SetIterations(iterations);
 				}
 				break;
+			case s2::FM_HEAT_HAZE:
+				{
+					s2::RFHeatHaze* filter = static_cast<s2::RFHeatHaze*>(m_filter);
+					float distortion = 0.02f, rise = 0.2f;
+					if (fval.isMember("distortion")) {
+						distortion = fval["distortion"].asDouble();
+					}
+					if (fval.isMember("rise")) {
+						rise = fval["rise"].asDouble();
+					}
+					filter->SetFactor(distortion, rise);
+					if (fval.isMember("filepath")) 
+					{
+						std::string filepath = fval["filepath"].asString();
+						filepath = gum::FilepathHelper::Absolute(dir, filepath);
+						filter->SetFilepath(filepath);
+						
+						sl::HeatHazeProg* prog = NULL;
+						sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+						sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
+						if (shader) {
+							prog = static_cast<sl::HeatHazeProg*>(shader->GetProgram(sl::FM_HEAT_HAZE));
+						}
+						if (prog) {
+							Image* img = ImageMgr::Instance()->Create(filepath);
+							prog->SetDistortionMapTex(img->GetTexID());
+						}
+					}
+				}
+				break;
 			}
 		}
 	}
@@ -444,7 +480,7 @@ void SpriteIO::LoadShader(const Json::Value& val)
 	}
 }
 
-void SpriteIO::StoreShader(Json::Value& val)
+void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
 {
 	if (!m_render_open) {
 		return;
@@ -484,6 +520,16 @@ void SpriteIO::StoreShader(Json::Value& val)
 			{
 				s2::RFOuterGlow* filter = static_cast<s2::RFOuterGlow*>(m_filter);
 				fval["iterations"] = filter->GetIterations();
+			}
+			break;
+		case s2::FM_HEAT_HAZE:
+			{
+				s2::RFHeatHaze* filter = static_cast<s2::RFHeatHaze*>(m_filter);
+				fval["filepath"] = gum::FilepathHelper::Relative(dir, filter->GetFilepath());
+				float distortion, rise;
+				filter->GetFactor(distortion, rise);
+				fval["distortion"] = distortion;
+				fval["rise"] = rise;
 			}
 			break;
 		}

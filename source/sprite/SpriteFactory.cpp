@@ -137,7 +137,7 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 	}
 
 	SpriteIO io(true, true);
-	io.Load(val, spr);
+	io.Load(val, spr, dir);
 
 	switch (spr->GetSymbol()->Type())
 	{
