@@ -241,13 +241,13 @@ void gum_draw_text(const char* str, int x, int y, int w)
 }
 
 extern "C"
-void* gum_fetch_rt()
+void* gum_rt_fetch()
 {
 	return RenderTargetMgr::Instance()->Fetch();
 }
 
 extern "C"
-void gum_return_rt(void* rt)
+void gum_rt_return(void* rt)
 {
 	RenderTarget* gum_rt = static_cast<RenderTarget*>(rt);
 	RenderTargetMgr::Instance()->Return(gum_rt);
@@ -269,6 +269,12 @@ extern "C"
 void gum_rt_draw(void* rt)
 {
 	static_cast<RenderTarget*>(rt)->Draw();
+}
+
+extern "C"
+int gum_rt_get_texid(void* rt)
+{
+	return static_cast<RenderTarget*>(rt)->GetTexID();
 }
 
 extern "C"
