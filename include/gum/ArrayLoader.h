@@ -16,6 +16,8 @@ public:
 	static void Load(std::vector<sm::vec2>& dst, const uint16_t* src, int src_n, int precision);
 	static void Load(std::vector<int>& dst, const uint16_t* src, int src_n);
 
+	static void Load(std::vector<sm::vec2>& dst, const uint32_t* src, int src_n);
+
 }; // ArrayLoader
 
 }

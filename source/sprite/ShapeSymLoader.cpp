@@ -65,7 +65,7 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 	s2::Color col(node->color);
 
 	std::vector<sm::vec2> vertices;
-	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
+	ArrayLoader::Load(vertices, node->vertices, node->vertices_n);
 
 	switch (node->type)
 	{

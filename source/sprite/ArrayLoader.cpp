@@ -24,4 +24,16 @@ void ArrayLoader::Load(std::vector<int>& dst, const uint16_t* src, int src_n)
 	}
 }
 
+void ArrayLoader::Load(std::vector<sm::vec2>& dst, const uint32_t* src, int src_n)
+{
+	dst.reserve(src_n);
+	int idx = 0;
+	for (int i = 0; i < src_n; ++i) {
+		float x, y;
+		memcpy(&x, &src[idx++], sizeof(float));
+		memcpy(&y, &src[idx++], sizeof(float));
+		dst.push_back(sm::vec2(x, y));
+	}	
+}
+
 }
