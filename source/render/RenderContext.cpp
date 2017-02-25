@@ -4,8 +4,6 @@
 #include <unirender/gl/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/SubjectMVP2.h>
-#include <sprite2/OrthoCamera.h>
-#include <sprite2/Pseudo3DCamera.h>
 #include <sprite2/Blackboard.h>
 
 #include <stddef.h>
@@ -39,13 +37,10 @@ RenderContext::RenderContext()
 #endif // EASY_EDITOR
 
 	sl::ShaderMgr::Instance()->SetContext(m_rc);
-
-	m_cam = new s2::OrthoCamera();
 }
 
 RenderContext::~RenderContext() 
 {
-	delete m_cam;
 	delete m_rc;
 }
 
@@ -62,8 +57,6 @@ void RenderContext::OnSize(int w, int h)
 
 	m_width = w;
 	m_height = h;
-
-	m_cam->OnSize(w, h);
 
 	RenderTargetMgr::Instance()->OnSize(w, h);
 
