@@ -17,7 +17,11 @@ void Sprite2::DebugDraw() const
 {
 	s2::RenderTargetMgr* RT = s2::RenderTargetMgr::Instance();
 	for (int i = 0; i < 4; ++i) {
-		dtex::DebugDraw::Draw(RT->GetTexID(i), i + 1);
+		int texid = RT->GetTexID(i);
+		if (texid < 0) {
+			continue;
+		}
+		dtex::DebugDraw::Draw(texid, i + 1);
 	}
 }
 
