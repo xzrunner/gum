@@ -71,11 +71,9 @@ void RenderTargetMgr::OnSize(int w, int h)
 
 void RenderTargetMgr::DebugDraw() const
 {
-	if (m_items.size() > 0 && m_items[0].rt) {
-		dtex::DebugDraw::Draw(m_items[0].rt->GetTexID(), 3);
-	}
-	if (m_items.size() > 1 && m_items[1].rt) {
-		dtex::DebugDraw::Draw(m_items[1].rt->GetTexID(), 4);
+	int n = std::min(4, static_cast<int>(m_items.size()));
+	for (int i = 0; i < n; ++i) {
+		dtex::DebugDraw::Draw(m_items[i].rt->GetTexID(), i + 1);
 	}
 }
 
