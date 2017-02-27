@@ -42,6 +42,11 @@ UID ResourceUID::BinNode(uint32_t node_id)
 	return Compose(node_id, RES_BIN_NODE);
 }
 
+UID ResourceUID::Sprite(int spr_id)
+{
+	return Compose(spr_id, RES_SPRITE);
+}
+
 uint64_t ResourceUID::HashString(const std::string& str)
 {
 	const char* c = str.c_str();

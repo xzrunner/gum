@@ -50,11 +50,6 @@ void  gum_rt_unbind(void* rt);
 void  gum_rt_draw(void* rt);
 int   gum_rt_get_texid(void* rt);
 
-// dtex
-void  gum_dtex_c2_enable(void* spr, bool enable);
-void  gum_dtex_c2_force_cached(void* spr, bool cache);
-void  gum_dtex_c2_force_cached_set_dirty(void* spr, bool dirty);
-
 void* gum_create_img(const char* filepath);
 int   gum_get_img_texid(void* img);
 

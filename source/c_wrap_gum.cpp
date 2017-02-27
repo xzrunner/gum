@@ -285,24 +285,6 @@ int gum_rt_get_texid(void* rt)
 }
 
 extern "C"
-void gum_dtex_c2_enable(void* spr, bool enable)
-{	
-	Sprite2::SetUseDTex(static_cast<s2::Sprite*>(spr), enable);
-}
-
-extern "C"
-void gum_dtex_c2_force_cached(void* spr, bool cache)
-{
-	Sprite2::SetDTexForceCached(static_cast<s2::Sprite*>(spr), cache);
-}
-
-extern "C"
-void gum_dtex_c2_force_cached_set_dirty(void* spr, bool dirty)
-{
-	Sprite2::SetDTexForceCachedDirty(static_cast<s2::Sprite*>(spr), dirty);
-}
-
-extern "C"
 void* gum_create_img(const char* filepath)
 {
 	return ImageMgr::Instance()->Create(filepath);
@@ -319,9 +301,9 @@ extern "C"
 void gum_debug_draw()
 {
 // 	DTex::Instance();
-// 
- 	DTex::Instance()->DebugDraw();
-// 
+
+	DTex::Instance()->DebugDraw();
+
 // 	Sprite2::Instance()->DebugDraw();
 // 
 // 	RenderTargetMgr::Instance()->DebugDraw();

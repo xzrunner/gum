@@ -21,6 +21,7 @@ public:
 		RES_BIN_NODE = 1,
 		RES_RAW_FILE = 2,
 		RES_GLYPH    = 3,
+		RES_SPRITE   = 4,
 	};
 	
 public:
@@ -29,6 +30,7 @@ public:
 	static UID RawFile(const std::string& filepath);
 	static UID Glyph(int unicode, const GlyphStyle& gs);
 	static UID BinNode(uint32_t node_id);
+	static UID Sprite(int spr_id);
 
 private:
 	static const int DATA_SIZE = 62;
