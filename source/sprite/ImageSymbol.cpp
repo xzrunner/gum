@@ -5,6 +5,7 @@
 #include "DTexC2Strategy.h"
 
 #include <sprite2/Texture.h>
+#include <sprite2/RenderParams.h>
 
 namespace gum
 {
@@ -40,8 +41,14 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	}
 }
 
-bool ImageSymbol::QueryTexcoords(float* texcoords, int& texid) const
+bool ImageSymbol::QueryTexcoords(const s2::RenderParams& params, float* texcoords, int& texid) const
 {
+	if (!params.use_dtex) {
+		texid = m_img->GetTexID();
+		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
+		return true;
+	}
+
 	UID uid = ResourceUID::BinNode(GetID());
 	const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, &texid);
 	if (c2_texcoords) {

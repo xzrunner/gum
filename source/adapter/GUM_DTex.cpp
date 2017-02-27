@@ -2,6 +2,7 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
 #include "ProxyImage.h"
+#include "DTexC2Strategy.h"
 
 #include <logger.h>
 #include <bimp/ImportStream.h>
@@ -29,6 +30,9 @@
 #include <sprite2/RenderContext.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>
+#include <sprite2/DrawNode.h>
+#include <sprite2/S2_Sprite.h>
+#include <sprite2/S2_Symbol.h>
 #include <unirender/RenderContext.h>
 
 #include <string>
@@ -345,8 +349,21 @@ void DTex::InitHook(void (*draw_begin)(), void (*draw_end)())
  	DRAW_END = draw_end;
 }
 
+static void prepare_render_params(const s2::RenderParams& parent, 
+								  const s2::Sprite* spr, 
+								  s2::RenderParams& child)
+{
+	if (!parent.use_dtex) {
+		child.use_dtex = false;
+	} else if (DTexC2Strategy::Instance()->IsInBlacklist(spr->GetSymbol()->GetID())) {
+		child.use_dtex = false;
+	}
+}
+
 DTex::DTex()
 {
+	s2::DrawNode::InitDTexCB(prepare_render_params);
+
 	dtex::RenderAPI::Callback render_cb;
 	render_cb.clear_color_part = clear_color_part;
 	render_cb.set_program      = set_program;

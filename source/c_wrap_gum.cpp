@@ -8,6 +8,7 @@
 #include "StringHelper.h"
 #include "RenderTargetMgr.h"
 #include "RenderTarget.h"
+#include "DTexC2Strategy.h"
 
 #include <unirender/RenderContext.h>
 #include <gimg_typedef.h>
@@ -278,6 +279,12 @@ int gum_rt_get_texid(void* rt)
 }
 
 extern "C"
+void gum_dtex_add_c2_blacklist(uint32_t sym_id)
+{
+	DTexC2Strategy::Instance()->AddToBlacklist(sym_id);
+}
+
+extern "C"
 void* gum_create_img(const char* filepath)
 {
 	return ImageMgr::Instance()->Create(filepath);
@@ -293,13 +300,13 @@ int gum_get_img_texid(void* img)
 extern "C"
 void gum_debug_draw()
 {
-//	DTex::Instance();
-
-//	DTex::Instance()->DebugDraw();
-
+// 	DTex::Instance();
+// 
+ 	DTex::Instance()->DebugDraw();
+// 
 // 	Sprite2::Instance()->DebugDraw();
-
-//	RenderTargetMgr::Instance()->DebugDraw();
+// 
+// 	RenderTargetMgr::Instance()->DebugDraw();
 }
 
 }
