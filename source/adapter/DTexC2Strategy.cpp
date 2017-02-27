@@ -62,16 +62,6 @@ void DTexC2Strategy::Clear()
 	m_pkgs.clear();
 }
 
-void DTexC2Strategy::AddToBlacklist(uint32_t id)
-{
-	m_blacklist.insert(id);
-}
-
-bool DTexC2Strategy::IsInBlacklist(uint32_t id)
-{
-	return m_blacklist.find(id) != m_blacklist.end();
-}
-
 void DTexC2Strategy::LoadPackage(Package* pkg)
 {
 	pkg->Load();

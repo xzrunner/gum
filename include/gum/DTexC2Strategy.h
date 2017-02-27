@@ -21,9 +21,6 @@ public:
 
 	void Clear();
 
-	void AddToBlacklist(uint32_t id);
-	bool IsInBlacklist(uint32_t id);
-	
 private:
 	struct Symbol
 	{
@@ -78,8 +75,6 @@ private:
 	int m_single_max_count;
 	int m_diff_spr_count;
 	int m_tot_count;
-
-	std::set<uint32_t> m_blacklist;
 
 	SINGLETON_DECLARATION(DTexC2Strategy)
 

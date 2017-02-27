@@ -226,9 +226,9 @@ ext_sym_render(void* ext_sym, float x, float y, void* ud) {
 	if (!ext_sym) {
 		return;
 	}
-	s2::RenderParams params;
-	params.mt = *((S2_MAT*)ud);
-	s2::DrawNode::Draw(static_cast<s2::Symbol*>(ext_sym), params, sm::vec2(x, y));
+	s2::RenderParams rp;
+	rp.mt = *((S2_MAT*)ud);
+	s2::DrawNode::Draw(static_cast<s2::Symbol*>(ext_sym), rp, sm::vec2(x, y));
 }
 
 float* 

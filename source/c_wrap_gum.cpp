@@ -26,6 +26,12 @@ namespace gum
 {
 
 extern "C"
+void gum_init()
+{
+	Sprite2::Init();
+}
+
+extern "C"
 void* gum_get_render_context()
 {
 	return RenderContext::Instance()->GetImpl();
@@ -279,9 +285,21 @@ int gum_rt_get_texid(void* rt)
 }
 
 extern "C"
-void gum_dtex_add_c2_blacklist(uint32_t sym_id)
+void gum_dtex_c2_enable(void* spr, bool enable)
+{	
+	Sprite2::SetUseDTex(static_cast<s2::Sprite*>(spr), enable);
+}
+
+extern "C"
+void gum_dtex_c2_force_cached(void* spr, bool cache)
 {
-	DTexC2Strategy::Instance()->AddToBlacklist(sym_id);
+	Sprite2::SetDTexForceCached(static_cast<s2::Sprite*>(spr), cache);
+}
+
+extern "C"
+void gum_dtex_c2_force_cached_set_dirty(void* spr, bool dirty)
+{
+	Sprite2::SetDTexForceCachedDirty(static_cast<s2::Sprite*>(spr), dirty);
 }
 
 extern "C"

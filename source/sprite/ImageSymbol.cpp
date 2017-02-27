@@ -41,9 +41,9 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	}
 }
 
-bool ImageSymbol::QueryTexcoords(const s2::RenderParams& params, float* texcoords, int& texid) const
+bool ImageSymbol::QueryTexcoords(const s2::RenderParams& rp, float* texcoords, int& texid) const
 {
-	if (!params.use_dtex) {
+	if (rp.IsDisableDTexC2()) {
 		texid = m_img->GetTexID();
 		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
 		return true;
