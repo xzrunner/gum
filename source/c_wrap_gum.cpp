@@ -122,11 +122,37 @@ int gum_compare_snapshot(const char* filepath)
 }
 
 extern "C"
+void* gum_create_img(const char* filepath)
+{
+	return ImageMgr::Instance()->Create(filepath);
+}
+
+extern "C"
+int gum_get_img_texid(void* img)
+{
+	Image* gum_img = static_cast<Image*>(img);
+	return gum_img->GetTexID();
+}
+
+extern "C"
+void gum_debug_draw()
+{
+	//DTex::Instance();
+	//DTex::Instance()->DebugDraw();
+	//Sprite2::Instance()->DebugDraw();
+	//RenderTargetMgr::Instance()->DebugDraw();
+}
+
+extern "C"
 bool gum_pkg_exists(const char* name)
 {
 	std::string gbk_name = StringHelper::UTF8ToGBK(name);
 	return simp::NodeFactory::Instance()->QueryPkg(gbk_name) != NULL;
 }
+
+/************************************************************************/
+/* pkg                                                                  */
+/************************************************************************/
 
 extern "C"
 bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path)
@@ -202,6 +228,10 @@ void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* file
 	const_cast<timp::Package*>(pkg)->SetTexPath(tex, lod, gbk_filepath);
 }
 
+/************************************************************************/
+/* sprite                                                               */
+/************************************************************************/
+
 extern "C"
 void* gum_create_spr(const char* pkg, const char* spr)
 {
@@ -249,6 +279,10 @@ void gum_draw_text(const char* str, int x, int y, int w)
 	GTxt::Instance()->Draw(mat, gbk_str, w);
 }
 
+/************************************************************************/
+/* rt                                                                   */
+/************************************************************************/
+
 extern "C"
 void* gum_rt_fetch()
 {
@@ -291,29 +325,14 @@ int gum_rt_get_texid(void* rt)
 	return static_cast<RenderTarget*>(rt)->GetTexID();
 }
 
-extern "C"
-void* gum_create_img(const char* filepath)
-{
-	return ImageMgr::Instance()->Create(filepath);
-}
+/************************************************************************/
+/* dtex                                                                 */
+/************************************************************************/
 
 extern "C"
-int gum_get_img_texid(void* img)
+void gum_dtex_set_c2_max_edge(int max_edge)
 {
-	Image* gum_img = static_cast<Image*>(img);
-	return gum_img->GetTexID();
-}
-
-extern "C"
-void gum_debug_draw()
-{
-// 	DTex::Instance();
-// 
-// 	DTex::Instance()->DebugDraw();
-// 
-// 	Sprite2::Instance()->DebugDraw();
-// 
-// 	RenderTargetMgr::Instance()->DebugDraw();
+	DTexC2Strategy::Instance()->SetMaxC2Edge(max_edge);
 }
 
 }

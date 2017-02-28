@@ -21,6 +21,8 @@ public:
 
 	void Clear();
 
+	void SetMaxC2Edge(int max_edge) { m_max_c2_edge = max_edge; }
+
 private:
 	struct Symbol
 	{
@@ -75,6 +77,8 @@ private:
 	int m_single_max_count;
 	int m_diff_spr_count;
 	int m_tot_count;
+
+	int m_max_c2_edge;
 
 	SINGLETON_DECLARATION(DTexC2Strategy)
 

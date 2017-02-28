@@ -12,16 +12,22 @@ SINGLETON_DEFINITION(DTexC2Strategy);
 DTexC2Strategy::DTexC2Strategy()
 {
 	m_max_no_update_count = 128;
-	m_no_update_count = 0;
-	m_discount = 1;
+	m_no_update_count     = 0;
+	m_discount            = 1;
 
 	m_single_max_count	= 512;
 	m_diff_spr_count	= 256;
 	m_tot_count			= 10240;
+
+	m_max_c2_edge = -1;
 }
 
 void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
 {
+	if (m_max_c2_edge > 0 && (region.Width() > m_max_c2_edge || region.Height() > m_max_c2_edge)) {
+		return;
+	}
+
 	Package* pkg = NULL;
 	int pkg_id = simp::NodeID::GetPkgID(id);
 	int node_id = simp::NodeID::GetNodeID(id);
