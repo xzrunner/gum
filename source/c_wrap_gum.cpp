@@ -1,3 +1,5 @@
+#include "c_wrap_gum.h"
+
 #include "SpriteFactory.h"
 #include "SymbolPool.h"
 #include "Image.h"
@@ -273,9 +275,14 @@ void gum_rt_unbind(void* rt)
 }
 
 extern "C"
-void gum_rt_draw(void* rt)
+void gum_rt_draw(void* rt, struct gum_region* src)
 {
-	static_cast<RenderTarget*>(rt)->Draw();
+	RenderTarget* gum_rt = static_cast<RenderTarget*>(rt);
+	if (src) {
+		gum_rt->Draw(src->xmin, src->ymin, src->xmax, src->ymax);
+	} else {
+		gum_rt->Draw();
+	}
 }
 
 extern "C"
@@ -301,9 +308,9 @@ extern "C"
 void gum_debug_draw()
 {
 // 	DTex::Instance();
-
-	DTex::Instance()->DebugDraw();
-
+// 
+// 	DTex::Instance()->DebugDraw();
+// 
 // 	Sprite2::Instance()->DebugDraw();
 // 
 // 	RenderTargetMgr::Instance()->DebugDraw();

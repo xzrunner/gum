@@ -11,7 +11,7 @@ class RenderTarget : public s2::RenderTarget
 public:
 	RenderTarget(int width, int height);
 
-	void Draw() const;
+	void Draw(float xmin = 0, float ymin = 0, float xmax = 1, float ymax = 1) const;
 
 }; // RenderTarget
 

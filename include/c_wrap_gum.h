@@ -7,7 +7,9 @@ extern "C"
 #define _gum_wrap_c_h_
 
 #include <stdint.h>
+#ifndef __cplusplus
 #include <stdbool.h>
+#endif // __cplusplus
 
 void  gum_init();
 
@@ -43,11 +45,17 @@ void  gum_init_gtxt(int cap_bitmap, int cap_layout);
 void  gum_draw_text(const char* str, int x, int y, int w);
 
 // rt
+
+struct gum_region {
+	float xmin, ymin;
+	float xmax, ymax;
+};
+
 void* gum_rt_fetch();
 void  gum_rt_return(void* rt);
 void  gum_rt_bind(void* rt);
 void  gum_rt_unbind(void* rt);
-void  gum_rt_draw(void* rt);
+void  gum_rt_draw(void* rt, struct gum_region* src);
 int   gum_rt_get_texid(void* rt);
 
 void* gum_create_img(const char* filepath);
