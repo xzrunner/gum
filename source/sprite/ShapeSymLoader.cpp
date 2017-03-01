@@ -62,7 +62,8 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 		return;
 	}
 
-	s2::Color col(node->color);
+	s2::Color col;
+	col.FromRGBA(node->color);
 
 	std::vector<sm::vec2> vertices;
 	ArrayLoader::Load(vertices, node->vertices, node->vertices_n);

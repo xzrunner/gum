@@ -300,7 +300,7 @@ void SpriteIO::StoreColor(const s2::RenderColor& color)
 
 void SpriteIO::LoadColor(const Json::Value& val)
 {
-	m_col.SetMul(s2::Color(0xffffffff));
+	m_col.SetMul(s2::Color(255, 255, 255, 255));
 	if (val.isMember("multi color")) {
 		std::string str = val["multi color"].asString();
 		if (!str.empty()) {
@@ -308,7 +308,7 @@ void SpriteIO::LoadColor(const Json::Value& val)
 		}
 	}
 
-	m_col.SetAdd(s2::Color(0));
+	m_col.SetAdd(s2::Color(0, 0, 0, 0));
 	if (val.isMember("add color")) {
 		std::string str = val["add color"].asString();
 		if (!str.empty()) {
@@ -343,21 +343,21 @@ void SpriteIO::LoadColor(const Json::Value& val)
 
 void SpriteIO::StoreColor(Json::Value& val)
 {
-	if (!m_compress || m_col.GetMul() != s2::Color(0xffffffff)) {
+	if (!m_compress || m_col.GetMul() != s2::Color(255, 255, 255, 255)) {
 		val["multi color"]	= color2str(m_col.GetMul(), BGRA);
 	}
-	if (!m_compress || m_col.GetAdd() != s2::Color(0)) {
+	if (!m_compress || m_col.GetAdd() != s2::Color(0, 0, 0, 0)) {
 		val["add color"]	= color2str(m_col.GetAdd(), ABGR);
 	}
 
-	if (!m_compress || m_col.GetMapR().r != 255 || m_col.GetMapR().g != 0 || m_col.GetMapR().b != 0) {
-		val["r trans"]		= color2str(m_col.GetMapR(), RGBA);
+	if (!m_compress || m_col.GetRMap().r != 255 || m_col.GetRMap().g != 0 || m_col.GetRMap().b != 0) {
+		val["r trans"]		= color2str(m_col.GetRMap(), RGBA);
 	}
-	if (!m_compress || m_col.GetMapG().r != 0 || m_col.GetMapG().g != 255 || m_col.GetMapG().b != 0) {
-		val["g trans"]		= color2str(m_col.GetMapG(), RGBA);
+	if (!m_compress || m_col.GetGMap().r != 0 || m_col.GetGMap().g != 255 || m_col.GetGMap().b != 0) {
+		val["g trans"]		= color2str(m_col.GetGMap(), RGBA);
 	}
-	if (!m_compress || m_col.GetMapB().r != 0 || m_col.GetMapB().g != 0 || m_col.GetMapB().b != 255) {
-		val["b trans"]		= color2str(m_col.GetMapB(), RGBA);
+	if (!m_compress || m_col.GetBMap().r != 0 || m_col.GetBMap().g != 0 || m_col.GetBMap().b != 255) {
+		val["b trans"]		= color2str(m_col.GetBMap(), RGBA);
 	}
 }
 

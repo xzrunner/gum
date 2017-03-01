@@ -80,13 +80,13 @@ render_glyph(int id, const float* _texcoords, float x, float y, float w, float h
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
 	if (sl_mgr->GetShaderType() == sl::FILTER) {
 		sl::FilterShader* filter = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
-		filter->SetColor(color.GetMul().ToABGR(), color.GetAdd().ToABGR());
+		filter->SetColor(color.GetMulABGR(), color.GetAddABGR());
 		filter->Draw(&vertices[0].x, &texcoords[0].x, id);
 	} else {
 		sl_mgr->SetShader(sl::SPRITE2);
 	 	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
-	 	sl_shader->SetColor(color.GetMul().ToABGR(), color.GetAdd().ToABGR());
-	 	sl_shader->SetColorMap(color.GetMapR().ToABGR(), color.GetMapG().ToABGR(), color.GetMapB().ToABGR());
+	 	sl_shader->SetColor(color.GetMulABGR(), color.GetAddABGR());
+	 	sl_shader->SetColorMap(color.GetRMapABGR(), color.GetGMapABGR(), color.GetBMapABGR());
 	 	sl_shader->Draw(&vertices[0].x, &texcoords[0].x, id);
 	}
 }
