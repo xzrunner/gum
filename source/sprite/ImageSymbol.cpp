@@ -4,7 +4,7 @@
 #include "GUM_DTex.h"
 #include "DTexC2Strategy.h"
 
-#include <sprite2/Texture.h>
+#include <sprite2/S2_Texture.h>
 #include <sprite2/RenderParams.h>
 
 namespace gum

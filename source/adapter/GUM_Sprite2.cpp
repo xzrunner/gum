@@ -1,8 +1,8 @@
 #include "GUM_Sprite2.h"
 #include "GUM_DTex.h"
 
-#include <sprite2/RenderTargetMgr.h>
-#include <sprite2/RenderTarget.h>
+#include <sprite2/S2_RenderTargetMgr.h>
+#include <sprite2/S2_RenderTarget.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/S2_Symbol.h>
 #include <sprite2/RenderParams.h>

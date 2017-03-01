@@ -4,7 +4,7 @@
 #include "Resource.h"
 #include "ResourceManager.h"
 //
-//#include <sprite2/Texture.h>
+//#include <sprite2/S2_Texture.h>
 //#include <bimp/FileLoader.h>
 //
 #include <SM_Vector.h>

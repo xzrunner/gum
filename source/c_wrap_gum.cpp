@@ -12,7 +12,7 @@
 #include "RenderTarget.h"
 #include "DTexC2Strategy.h"
 
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
 #include <simp/SIMP_Package.h>
 #include <simp/NodeFactory.h>

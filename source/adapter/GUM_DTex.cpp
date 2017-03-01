@@ -5,7 +5,7 @@
 #include "DTexC2Strategy.h"
 
 #include <logger.h>
-#include <bimp/ImportStream.h>
+#include <bimp/BIMP_ImportStream.h>
 #include <timp/TIMP_Package.h>
 #include <timp/PkgMgr.h>
 #include <timp/TextureLoader.h>
@@ -27,11 +27,11 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <sprite2/S2_RVG.h>
-#include <sprite2/RenderContext.h>
+#include <sprite2/S2_RenderContext.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>
 #include <sprite2/DrawNode.h>
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 
 #include <string>
 

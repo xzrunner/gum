@@ -1,7 +1,7 @@
 #ifndef _GUM_RENDER_TARGET_H_
 #define _GUM_RENDER_TARGET_H_
 
-#include <sprite2/RenderTarget.h>
+#include <sprite2/S2_RenderTarget.h>
 
 namespace gum
 {

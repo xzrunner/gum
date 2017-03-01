@@ -2,8 +2,8 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
 
-#include <sprite2/Texture.h>
-#include <unirender/RenderContext.h>
+#include <sprite2/S2_Texture.h>
+#include <unirender/UR_RenderContext.h>
 
 #include <assert.h>
 

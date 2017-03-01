@@ -8,7 +8,9 @@
 #include <gimg_etc2.h>
 #include <timp/TextureFormat.h>
 #include <timp/TextureLoader.h>
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
+
+#include <stdlib.h>
 
 namespace gum
 {
