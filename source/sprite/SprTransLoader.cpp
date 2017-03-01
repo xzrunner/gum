@@ -4,6 +4,7 @@
 #include <sprite2/RenderColor.h>
 #include <sprite2/RenderShader.h>
 #include <sprite2/RenderCamera.h>
+#include <sprite2/s2_trans_color.h>
 #include <simp/NodeTrans.h>
 
 #include <sprite2/S2_Symbol.h>
@@ -16,7 +17,7 @@ void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 	int idx = 0;
 	if (trans->type & simp::NodeTrans::SCALE_MASK) {
 		float x = ToFloat(trans->data[idx++]),
-			y = ToFloat(trans->data[idx++]);
+			  y = ToFloat(trans->data[idx++]);
 		spr->SetScale(sm::vec2(x, y));
 	}
 	if (trans->type & simp::NodeTrans::SHEAR_MASK) {
@@ -41,19 +42,19 @@ void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 
 	s2::RenderColor rc;
 	if (trans->type & simp::NodeTrans::COL_MUL_MASK) {
-		rc.SetMul(s2::Color(trans->data[idx++]));
+		rc.SetMulABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_ADD_MASK) {
-		rc.SetAdd(s2::Color(trans->data[idx++]));
+		rc.SetAddABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_R_MASK) {
-		rc.SetMapR(s2::Color(trans->data[idx++]));
+		rc.SetRMapABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_G_MASK) {
-		rc.SetMapG(s2::Color(trans->data[idx++]));
+		rc.SetGMapABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_B_MASK) {
-		rc.SetMapB(s2::Color(trans->data[idx++]));
+		rc.SetBMapABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
 	}
 	spr->SetColor(rc);
 

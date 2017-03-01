@@ -129,13 +129,13 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 		{
 			const simp::NodeTrail::Component& src = node->components[i];
 			CompImage dst;
-			dst.sym_id			= src.mode.A.sym_id;
-			dst.scale_begin		= simp::int2float(src.mode.A.scale_begin, 100);
-			dst.scale_end		= simp::int2float(src.mode.A.scale_end, 100);
-			dst.mul_col_begin	= src.col_begin;
-			dst.mul_col_end		= src.col_end;
-			dst.add_col_begin	= src.mode.A.add_col_begin;
-			dst.add_col_end		= src.mode.A.add_col_end;
+			dst.sym_id      = src.mode.A.sym_id;
+			dst.scale_begin	= simp::int2float(src.mode.A.scale_begin, 100);
+			dst.scale_end   = simp::int2float(src.mode.A.scale_end, 100);
+			dst.mul_col_begin.FromRGBA(src.col_begin);
+			dst.mul_col_end.FromRGBA(src.col_end);
+			dst.add_col_begin.FromRGBA(src.mode.A.add_col_begin);
+			dst.add_col_end.FromRGBA(src.mode.A.add_col_end);
 			comp_images.push_back(dst);
 		}
 	}
@@ -147,10 +147,10 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 		{
 			const simp::NodeTrail::Component& src = node->components[i];
 			CompShape dst;
-			dst.linewidth		= simp::int2float(src.mode.B.size, 100);
-			dst.acuity			= simp::int2float(src.mode.B.acuity, 100);
-			dst.col_begin		= src.col_begin;
-			dst.col_end			= src.col_end;
+			dst.linewidth = simp::int2float(src.mode.B.size, 100);
+			dst.acuity	  = simp::int2float(src.mode.B.acuity, 100);
+			dst.col_begin.FromRGBA(src.col_begin);
+			dst.col_end.FromRGBA(src.col_end);
 			comp_shapes.push_back(dst);
 		}
 	}
