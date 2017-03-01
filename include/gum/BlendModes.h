@@ -6,6 +6,7 @@
 #include <sprite2/BlendMode.h>
 
 #include <vector>
+#include <string>
 
 namespace gum
 {
@@ -35,4 +36,4 @@ private:
 
 }
 
-#endif // _EASYEDITOR_BLEND_MODES_H_
+#endif // _GUM_BLEND_MODES_H_

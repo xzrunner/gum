@@ -5,8 +5,8 @@
 #include <sstream>
 #include <algorithm>
 #include <string>
-#include <cctype>
 #include <fstream>
+
 #include <stdint.h>
 
 namespace gum
@@ -38,12 +38,12 @@ public:
 
 	static void ToLower(std::string& str)
 	{
-		std::transform(str.begin(), str.end(), str.begin(), std::tolower);
+		std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 	}
 
 	static void ToUpper(std::string& str)
 	{
-		std::transform(str.begin(), str.end(), str.begin(), std::toupper);
+		std::transform(str.begin(), str.end(), str.begin(), ::toupper);
 	}
 
 	static std::string GetLine(std::ifstream& fin)

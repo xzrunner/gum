@@ -31,7 +31,7 @@ inline ResourceManager<T>::~ResourceManager()
 template<class T>
 inline T* ResourceManager<T>::Create(const std::string& filepath)
 {
-	std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
+	typename std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
 	if (itr == m_res_map.end())
 	{
 		T* res = new T;
@@ -58,7 +58,7 @@ inline T* ResourceManager<T>::Create(const std::string& filepath)
 template<class T>
 inline T* ResourceManager<T>::Query(const std::string& filepath)
 {
-	std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
+	typename std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
 	if (itr != m_res_map.end()) {
 		return itr->second;
 	} else {
@@ -69,7 +69,7 @@ inline T* ResourceManager<T>::Query(const std::string& filepath)
 template<class T>
 inline bool ResourceManager<T>::Add(const std::string& filepath, T* res)
 {
-	std::pair<std::map<std::string, T*>::iterator, bool> ret 
+	std::pair<typename std::map<std::string, T*>::iterator, bool> ret 
 		= m_res_map.insert(std::make_pair(filepath, res));
 	if (ret.second) {
 		res->AddReference();
@@ -80,7 +80,7 @@ inline bool ResourceManager<T>::Add(const std::string& filepath, T* res)
 template<class T>
 inline bool ResourceManager<T>::Delete(const std::string& filepath)
 {
-	std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
+	typename std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
 	if (itr == m_res_map.end()) {
 		return false;
 	}
@@ -97,12 +97,12 @@ inline void ResourceManager<T>::GC()
 	{
 		bool dirty = false;
 
-		std::map<std::string, T*>::iterator itr = m_res_map.begin();
-		for ( ; itr != m_res_map.end(); )
+		typename std::map<std::string, T*>::iterator itr = m_res_map.begin();
+		while (itr != m_res_map.end())
 		{
 			if (itr->second->GetRefCount() == 1) {
 				itr->second->RemoveReference();
-				itr = m_res_map.erase(itr);
+				m_res_map.erase(itr++);
 				dirty = true;
 			} else {
 				++itr;
@@ -118,7 +118,7 @@ inline void ResourceManager<T>::GC()
 template<class T>
 inline void ResourceManager<T>::Clear()
 {
-	std::map<std::string, T*>::iterator itr = m_res_map.begin();
+	typename std::map<std::string, T*>::iterator itr = m_res_map.begin();
 	for ( ; itr != m_res_map.end(); ++itr) {
 		itr->second->RemoveReference();
 	}

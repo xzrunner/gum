@@ -6,6 +6,7 @@
 #include <sprite2/FastBlendMode.h>
 
 #include <vector>
+#include <string>
 
 namespace gum
 {
@@ -32,7 +33,6 @@ private:
 	SINGLETON_DECLARATION(FastBlendModes);
 
 }; // FastBlendModes
-
 
 }
 
