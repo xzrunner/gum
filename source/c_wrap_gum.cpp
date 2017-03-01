@@ -14,9 +14,9 @@
 
 #include <unirender/RenderContext.h>
 #include <gimg_typedef.h>
-#include <simp/Package.h>
+#include <simp/SIMP_Package.h>
 #include <simp/NodeFactory.h>
-#include <timp/Package.h>
+#include <timp/TIMP_Package.h>
 #include <timp/PkgMgr.h>
 #include <gimg_export.h>
 #include <gimg_import.h>

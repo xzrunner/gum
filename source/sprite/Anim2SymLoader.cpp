@@ -6,7 +6,7 @@
 
 #include <sprite2/Anim2Symbol.h>
 #include <simp/NodeAnim2.h>
-#include <bimp/typedef.h>
+#include <bimp/bimp_typedef.h>
 
 #include <fstream>
 

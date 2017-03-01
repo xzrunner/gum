@@ -24,7 +24,7 @@
 #include <simp/simp_types.h>
 #include <simp/NodePicture.h>
 #include <timp/PkgMgr.h>
-#include <timp/Package.h>
+#include <timp/TIMP_Package.h>
 
 #include <sprite2/Scale9Symbol.h>
 #include <sprite2/IconSymbol.h>
