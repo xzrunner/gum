@@ -94,6 +94,8 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	case simp::MESH_SKIN2:
 		mesh = LoadSkin2Mesh(base_sym, static_cast<simp::Skin2Mesh*>(node->shape));
 		break;
+	default:
+		break;
 	}
 	m_sym->SetMesh(mesh);
 }

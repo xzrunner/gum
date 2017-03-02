@@ -209,6 +209,8 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string&
 			case SpineParser::SKIN_MESH:
 				CreateMeshSkin(skin, src, img_dir);
 				break;
+			default:
+				break;
 			}
 
 			m_skins.push_back(skin);

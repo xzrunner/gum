@@ -471,6 +471,8 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 					}
 				}
 				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -531,6 +533,8 @@ void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
 				fval["distortion"] = distortion;
 				fval["rise"] = rise;
 			}
+			break;
+		default:
 			break;
 		}
 		val["filter"] = fval;

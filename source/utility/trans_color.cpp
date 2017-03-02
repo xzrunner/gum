@@ -29,6 +29,31 @@ int char2channel(char high, char low)
 	return col;
 }
 
+#ifdef __APPLE__
+
+static inline 
+char* _itoa(unsigned i, char *a, unsigned r)
+{
+	if (i/r > 0) a = _itoa(i/r,a,r);
+	*a = "0123456789ABCDEF"[i%r];
+	return a+1;
+}
+
+static inline
+char* itoa(int i, char *a, int r)
+{
+	if ((r < 2) || (r > 16)) r = 10;
+	if (i < 0)
+	{
+		*a = '-';
+		*_itoa(-i,a+1,r) = 0;
+	}
+	else *_itoa(i,a,r) = 0;
+	return a;
+}
+
+#endif // __APPLE__
+
 s2::Color str2color(const std::string& str, s2::PIXEL_TYPE type)
 {
 	std::string snum = str;
@@ -44,7 +69,7 @@ s2::Color str2color(const std::string& str, s2::PIXEL_TYPE type)
 	{
 		int n = atoi(snum.c_str());
 		char buffer[33];
-		_itoa(n, buffer, 16);
+		itoa(n, buffer, 16);
 		snum = "0x" + std::string(buffer);
 	}
 

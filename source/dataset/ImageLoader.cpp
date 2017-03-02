@@ -106,7 +106,7 @@ bool ImageLoader::DecodePVR2(const void* data)
 #if defined( __APPLE__ ) && !defined(__MACOSX)
 //	int internal_format = 0;
 //	internal_format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(TEXTURE_PVR2, m_width, m_height, data, 0, 0);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, ur::TEXTURE_PVR2);
 	return true;
 #else
 	return false;
@@ -118,7 +118,7 @@ bool ImageLoader::DecodePVR4(const void* data)
 #if defined( __APPLE__ ) && !defined(__MACOSX)
 //	int internal_format = 0;
 //	internal_format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
-	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, TEXTURE_PVR4);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, ur::TEXTURE_PVR4);
 #else
 	uint8_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(data), m_width, m_height);
 	gimg_revert_y(uncompressed, m_width, m_height, GPF_RGBA);

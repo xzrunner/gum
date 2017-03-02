@@ -100,6 +100,8 @@ void Scale9SymLoader::LoadJson(const std::string& filepath)
 		grids[s2::S9_TOP_CENTER]	= m_spr_loader->Create(spr_val[idx++], dir);
 		grids[s2::S9_TOP_RIGHT]		= m_spr_loader->Create(spr_val[idx++], dir);
 		break;
+	default:
+		break;
 	}
 
 	int w = val["width"].asInt(),
@@ -191,6 +193,8 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 		grids[s2::S9_TOP_CENTER]	= LoadSprite(grid->sym, grid->dir, grid->mirror);
 		grid = &node->grids[idx++];
 		grids[s2::S9_TOP_RIGHT]		= LoadSprite(grid->sym, grid->dir, grid->mirror);
+		break;
+	default:
 		break;
 	}
 

@@ -150,6 +150,8 @@ draw(const float _vertices[8], const float _texcoords[8], int texid)
 			shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
 		}
 		break;
+	default:
+		break;
 	}
 }
 

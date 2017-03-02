@@ -55,6 +55,8 @@ void RenderTarget::Draw(float xmin, float ymin, float xmax, float ymax) const
 			shader->Draw(vertices, texcoords, GetTexID());
 		}
 		break;
+	default:
+		break;
 	}
 }
 

@@ -203,7 +203,7 @@ void P3dSymLoader::LoadJson(const std::string& filepath)
 		ground = val["ground"].asInt();
 	}
 
-	start_radius = abs(static_cast<float>(val["start_pos"]["radius"].asInt()));
+	start_radius = fabs(static_cast<float>(val["start_pos"]["radius"].asInt()));
 	start_height = static_cast<float>(val["start_pos"]["height"].asInt());
 
 	orient_to_movement = val["orient_to_movement"].asBool();

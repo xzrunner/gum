@@ -139,6 +139,8 @@ void SpineParser::ParseSkins(const Json::Value& val)
 			case SKIN_MESH:
 				ParseMesh(item, src_item);
 				break;
+			default:
+				break;
 			}
 
 			skin.items.push_back(item);
