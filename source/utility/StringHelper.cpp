@@ -2,6 +2,8 @@
 
 #include <boost/locale/encoding.hpp>
 
+#include <cstring>
+
 //#include <Windows.h>
 
 namespace gum

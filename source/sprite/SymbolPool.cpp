@@ -20,11 +20,11 @@ void SymbolPool::GC()
 		bool dirty = false;
 
 		std::map<std::string, s2::Symbol*>::iterator itr0 = m_path_cache.begin();
-		for ( ; itr0 != m_path_cache.end(); ) 
+		while (itr0 != m_path_cache.end())
 		{
 			if (itr0->second->GetRefCount() == 1) {
 				itr0->second->RemoveReference();
-				itr0 = m_path_cache.erase(itr0);
+				m_path_cache.erase(itr0++);
 				dirty = true;
 			} else {
 				++itr0;
@@ -32,11 +32,11 @@ void SymbolPool::GC()
 		}
 
 		std::map<uint32_t, s2::Symbol*>::iterator itr1 = m_id_cache.begin();
-		for ( ; itr1 != m_id_cache.end(); ) 
+		while (itr1 != m_id_cache.end())
 		{
 			if (itr1->second->GetRefCount() == 1) {
 				itr1->second->RemoveReference();
-				itr1 = m_id_cache.erase(itr1);
+				m_id_cache.erase(itr1++);
 				dirty = true;
 			} else {
 				++itr1;

@@ -2,6 +2,8 @@
 
 #include <cstdarg>
 
+#include <stdio.h>
+
 namespace gum
 {
 

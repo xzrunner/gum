@@ -1,6 +1,7 @@
 #include "trans_color.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 namespace gum
 {
