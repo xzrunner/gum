@@ -4,7 +4,7 @@
 #include "SymbolPool.h"
 #include "MeshIO.h"
 
-#include <sprite2/Mesh.h>
+#include <sprite2/S2_Mesh.h>
 #include <sprite2/MeshSprite.h>
 #include <sprite2/MeshSymbol.h>
 #include <simp/NodeMeshSpr.h>

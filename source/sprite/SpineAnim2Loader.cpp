@@ -9,7 +9,7 @@
 #include <sprite2/Anim2Symbol.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/MeshSymbol.h>
-#include <sprite2/Mesh.h>
+#include <sprite2/S2_Mesh.h>
 #include <sprite2/ImageSymbol.h>
 
 #include <assert.h>
@@ -577,9 +577,9 @@ void SpineAnim2Loader::LoadTimelineDeforms(const SpineParser::AnimDeform* deform
 		sample.count  = src.vertices.size();
 		sample.data   = (float*)malloc(sizeof(float) * 2 * sample.count);
 		int ptr = 0;
-		for (int i = 0, n = sample.count; i < n; ++i) {
-			sample.data[ptr++] = src.vertices[i].x;
-			sample.data[ptr++] = src.vertices[i].y;
+		for (int j = 0, m = sample.count; j < m; ++j) {
+			sample.data[ptr++] = src.vertices[j].x;
+			sample.data[ptr++] = src.vertices[j].y;
 		}
 		ret->samples[i] = sample;
 	}

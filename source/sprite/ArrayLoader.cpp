@@ -2,6 +2,8 @@
 
 #include <simp/from_int.h>
 
+#include <string.h>
+
 namespace gum
 {
 

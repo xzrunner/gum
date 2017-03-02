@@ -1,4 +1,4 @@
-#include "ImageSymbol.h"
+#include "GUM_ImageSymbol.h"
 #include "Image.h"
 #include "RenderContext.h"
 #include "GUM_DTex.h"

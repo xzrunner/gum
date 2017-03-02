@@ -4,7 +4,7 @@
 
 #include <SM_Vector.h>
 #include <polymesh/MeshTransform.h>
-#include <sprite2/Mesh.h>
+#include <sprite2/S2_Mesh.h>
 
 #include <queue>
 

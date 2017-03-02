@@ -1,5 +1,5 @@
 #include "ImageSymLoader.h"
-#include "ImageSymbol.h"
+#include "GUM_ImageSymbol.h"
 #include "Image.h"
 
 namespace gum

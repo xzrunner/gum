@@ -1,7 +1,7 @@
 #include "GUM_GTxt.h"
 #include "StringHelper.h"
 #include "SymbolPool.h"
-#include "ImageSymbol.h"
+#include "GUM_ImageSymbol.h"
 #include "Image.h"
 #include "GlyphStyle.h"
 #include "GUM_DTex.h"

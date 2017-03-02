@@ -1,4 +1,4 @@
-#include "TexturePolygon.h"
+#include "GUM_TexturePolygon.h"
 #include "SymbolPool.h"
 
 #include <sprite2/ImageSymbol.h>

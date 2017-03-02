@@ -2,7 +2,7 @@
 #include "FilepathHelper.h"
 #include "ShapeType.h"
 #include "SymbolPool.h"
-#include "ImageSymbol.h"
+#include "GUM_ImageSymbol.h"
 #include "Image.h"
 #include "ArrayLoader.h"
 
