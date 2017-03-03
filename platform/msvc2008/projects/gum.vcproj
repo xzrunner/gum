@@ -288,14 +288,6 @@
 			Name="utility"
 			>
 			<File
-				RelativePath="..\..\..\source\utility\AsyncTask.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gum\AsyncTask.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\utility\Config.cpp"
 				>
 			</File>
@@ -317,6 +309,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gum\FilepathHelper.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\utility\GUM_AsyncTask.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gum\GUM_AsyncTask.h"
 				>
 			</File>
 			<File
@@ -359,11 +359,11 @@
 				Name="01.picture"
 				>
 				<File
-					RelativePath="..\..\..\source\sprite\ImageSymbol.cpp"
+					RelativePath="..\..\..\source\sprite\GUM_ImageSymbol.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\gum\ImageSymbol.h"
+					RelativePath="..\..\..\include\gum\GUM_ImageSymbol.h"
 					>
 				</File>
 				<File
@@ -443,6 +443,14 @@
 				Name="05.label"
 				>
 				<File
+					RelativePath="..\..\..\source\sprite\GUM_TextboxSymbol.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\GUM_TextboxSymbol.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprite\TextboxLoader.cpp"
 					>
 				</File>
@@ -456,14 +464,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\TextboxSprLoader.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprite\TextboxSymbol.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\gum\TextboxSymbol.h"
 					>
 				</File>
 			</Filter>
@@ -567,6 +567,14 @@
 				Name="10.shape"
 				>
 				<File
+					RelativePath="..\..\..\source\sprite\GUM_TexturePolygon.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\GUM_TexturePolygon.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprite\ShapeLoader.cpp"
 					>
 				</File>
@@ -584,14 +592,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\ShapeType.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprite\TexturePolygon.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\gum\TexturePolygon.h"
 					>
 				</File>
 			</Filter>
