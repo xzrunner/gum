@@ -83,7 +83,7 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 
 	s2::Mesh* mesh = NULL;
-	switch (node->shape->Type())
+	switch (node->shape->type)
 	{
 	case simp::MESH_POINTS:
 		mesh = LoadPointsMesh(base_sym, static_cast<simp::PointsMesh*>(node->shape));
