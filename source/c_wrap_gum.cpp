@@ -18,6 +18,7 @@
 #include <gimg_typedef.h>
 #include <simp/SIMP_Package.h>
 #include <simp/NodeFactory.h>
+#include <simp/PkgIDMgr.h>
 #include <timp/TIMP_Package.h>
 #include <timp/PkgMgr.h>
 #include <gimg_export.h>
@@ -152,6 +153,22 @@ bool gum_pkg_exists(const char* name)
 {
 	std::string gbk_name = StringHelper::UTF8ToGBK(name);
 	return simp::NodeFactory::Instance()->QueryPkg(gbk_name) != NULL;
+}
+
+/************************************************************************/
+/* simp id                                                              */
+/************************************************************************/
+
+extern "C"
+void gum_load_pkg_ids(const char* filepath)
+{
+	simp::PkgIDMgr::Instance()->LoadPkgIDs(filepath);
+}
+
+extern "C"
+int gum_query_pkg_id(const char* name)
+{
+	return simp::PkgIDMgr::Instance()->QueryPkgID(name);
 }
 
 /************************************************************************/
