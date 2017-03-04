@@ -14,6 +14,7 @@
 #include <fstream>
 
 #include <assert.h>
+#include <string.h>
 
 namespace gum
 {

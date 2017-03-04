@@ -15,6 +15,7 @@
 #include <sprite2/ImageSymbol.h>
 
 #include <assert.h>
+#include <string.h>
 
 namespace gum
 {

@@ -26,6 +26,8 @@
 #include <sprite2/RenderCtxStack.h>
 #include <SM_Matrix.h>
 
+#include <string.h>
+
 namespace gum
 {
 

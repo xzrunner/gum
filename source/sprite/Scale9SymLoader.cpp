@@ -13,6 +13,8 @@
 
 #include <fstream>
 
+#include <string.h>
+
 namespace gum
 {
 
