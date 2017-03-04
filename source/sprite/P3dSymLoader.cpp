@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "P3dSymLoader.h"
 #include "FilepathHelper.h"
 #include "JsonSerializer.h"

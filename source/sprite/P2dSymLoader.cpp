@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "P2dSymLoader.h"
 #include "Exception.h"
 #include "FilepathHelper.h"

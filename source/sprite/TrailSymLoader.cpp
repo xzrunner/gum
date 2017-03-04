@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "TrailSymLoader.h"
 #include "FilepathHelper.h"
 #include "JsonSerializer.h"

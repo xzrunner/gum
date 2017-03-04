@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "c_wrap_gum.h"
 
 #include "SpriteFactory.h"

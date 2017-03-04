@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "SpineAnim2Loader.h"
 #include "SymbolLoader.h"
 #include "SpineParser.h"

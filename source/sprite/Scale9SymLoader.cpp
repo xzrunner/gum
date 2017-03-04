@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "Scale9SymLoader.h"
 #include "FilepathHelper.h"
 #include "SpriteFactory.h"
