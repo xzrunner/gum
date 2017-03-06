@@ -23,6 +23,8 @@ public:
 	
 	s2::Symbol* Fetch(const std::string& filepath, int type = s2::SYM_UNKNOWN);
 	s2::Symbol* Fetch(const uint32_t id);
+
+	void Clear();
 	
 private:
 	std::map<std::string, s2::Symbol*> m_path_cache;

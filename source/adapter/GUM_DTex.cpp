@@ -455,8 +455,6 @@ void DTex::LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key)
 
 void DTex::Clear()
 {
-	// todo
-	// dtexf_c2_clear();
 }
 
 void DTex::Flush()

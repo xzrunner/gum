@@ -84,4 +84,19 @@ s2::Symbol* SymbolPool::Fetch(const uint32_t id)
 	return ret;
 }
 
+void SymbolPool::Clear()
+{
+	std::map<std::string, s2::Symbol*>::iterator itr = m_path_cache.begin();
+	for ( ; itr != m_path_cache.end(); ++itr) {
+		itr->second->RemoveReference();
+	}
+	m_path_cache.clear();
+
+	std::map<uint32_t, s2::Symbol*>::iterator itr2 = m_id_cache.begin();
+	for ( ; itr2 != m_id_cache.end(); ++itr2) {
+		itr2->second->RemoveReference();
+	}
+	m_id_cache.clear();
+}
+
 }

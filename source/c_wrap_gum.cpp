@@ -13,18 +13,24 @@
 #include "RenderTargetMgr.h"
 #include "RenderTarget.h"
 #include "DTexC2Strategy.h"
+#include "GUM_Facade.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
+#include <gimg_export.h>
+#include <gimg_import.h>
 #include <simp/SIMP_Package.h>
 #include <simp/NodeFactory.h>
 #include <simp/PkgIDMgr.h>
+#include <simp/SIMP_Facade.h>
 #include <timp/TIMP_Package.h>
 #include <timp/PkgMgr.h>
-#include <gimg_export.h>
-#include <gimg_import.h>
+#include <timp/TIMP_Facade.h>
+#include <dtex2/DTEX_Facade.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/RenderCtxStack.h>
+#include <sprite2/S2_Facade.h>
+#include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 
 #include <string.h>
@@ -149,10 +155,17 @@ void gum_debug_draw()
 }
 
 extern "C"
-bool gum_pkg_exists(const char* name)
+void gum_clear()
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
-	return simp::NodeFactory::Instance()->QueryPkg(gbk_name) != NULL;
+	Facade::Clear();
+
+	sl::Facade::Clear();
+	s2::Facade::Clear();
+	dtex::Facade::Clear();
+	timp::Facade::Clear();
+	simp::Facade::Clear();
+
+	// todo: clear sprites
 }
 
 /************************************************************************/
@@ -168,12 +181,20 @@ void gum_load_pkg_ids(const char* filepath)
 extern "C"
 int gum_query_pkg_id(const char* name)
 {
-	return simp::PkgIDMgr::Instance()->QueryPkgID(name);
+	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	return simp::PkgIDMgr::Instance()->QueryPkgID(gbk_name);
 }
 
 /************************************************************************/
 /* pkg                                                                  */
 /************************************************************************/
+
+extern "C"
+bool gum_pkg_exists(const char* name)
+{
+	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	return simp::NodeFactory::Instance()->QueryPkg(gbk_name) != NULL;
+}
 
 extern "C"
 bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path)
