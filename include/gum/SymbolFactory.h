@@ -32,6 +32,9 @@ public:
 
 	SINGLETON_DECLARATION(SymbolFactory);
 
+private:
+	mutable s2::Symbol* m_dummy_sym;
+
 }; // SymbolFactory
 
 }
