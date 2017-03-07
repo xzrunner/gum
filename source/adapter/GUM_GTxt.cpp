@@ -174,6 +174,8 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 		if (gs->font < ft_count) {
 			struct gtxt_glyph_layout layout;
 			uint32_t* bmp = gtxt_glyph_get_bitmap(unicode, gs, &layout);
+			w = layout.sizer.width;
+			h = layout.sizer.height;
 			DTex::Instance()->LoadGlyph(bmp, w, h, uid);
 		}
 	}
