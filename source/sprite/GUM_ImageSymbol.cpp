@@ -141,9 +141,9 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm
 void ImageSymbol::InitTexcoords()
 {
 	m_texcoords[0] = 0; m_texcoords[1] = 0;
-	m_texcoords[2] = 0; m_texcoords[3] = 1;
+	m_texcoords[2] = 1; m_texcoords[3] = 0;
 	m_texcoords[4] = 1; m_texcoords[5] = 1;
-	m_texcoords[6] = 1; m_texcoords[7] = 0;
+	m_texcoords[6] = 0; m_texcoords[7] = 1;
 }
 
 }

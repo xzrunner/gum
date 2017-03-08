@@ -24,6 +24,9 @@ DTexC2Strategy::DTexC2Strategy()
 
 void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
 {
+	if (id == 0xffffffff) {
+		return;
+	}
 	if (m_max_c2_edge > 0 && (region.Width() > m_max_c2_edge || region.Height() > m_max_c2_edge)) {
 		return;
 	}
