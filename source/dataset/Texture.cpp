@@ -2,8 +2,8 @@
 #include "RenderContext.h"
 #include "StringHelper.h"
 #include "Exception.h"
-#include "Config.h"
 
+#include <gum/Config.h>
 #include <gimg_import.h>
 #include <gimg_typedef.h>
 #include <unirender/UR_RenderContext.h>

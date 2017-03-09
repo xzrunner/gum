@@ -1,4 +1,4 @@
-#include "Config.h"
+#include <gum/Config.h>
 
 namespace gum
 {

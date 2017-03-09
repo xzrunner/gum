@@ -1,6 +1,6 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
-#include "Config.h"
+#include <gum/Config.h>
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
