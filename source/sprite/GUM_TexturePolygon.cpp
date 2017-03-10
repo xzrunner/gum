@@ -13,7 +13,7 @@ TexturePolygon::TexturePolygon(const std::string& filepath)
 {
 	s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
 	assert(sym->Type() == s2::SYM_IMAGE);
-	m_img = dynamic_cast<s2::ImageSymbol*>(sym);
+	m_img = VI_DOWNCASTING<s2::ImageSymbol*>(sym);
 }
 
 }
