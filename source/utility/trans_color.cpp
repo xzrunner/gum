@@ -29,7 +29,7 @@ int char2channel(char high, char low)
 	return col;
 }
 
-#ifdef __APPLE__
+//#ifdef __APPLE__
 
 static inline 
 char* _itoa(unsigned i, char *a, unsigned r)
@@ -52,7 +52,7 @@ char* itoa(int i, char *a, int r)
 	return a;
 }
 
-#endif // __APPLE__
+//#endif // __APPLE__
 
 s2::Color str2color(const std::string& str, s2::PIXEL_TYPE type)
 {
