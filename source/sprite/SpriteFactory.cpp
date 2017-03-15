@@ -30,7 +30,7 @@
 #include <simp/NodeAnim2Spr.h>
 
 #include <sprite2/S2_Symbol.h>
-#include <sprite2/DummySprite.h>
+#include <sprite2/AnchorSprite.h>
 #include <sprite2/ImageSprite.h>
 #include <sprite2/Scale9Sprite.h>
 #include <sprite2/IconSprite.h>
@@ -222,7 +222,7 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 s2::Sprite* SpriteFactory::Create(uint32_t id)
 {
 	if (id == 0xffffffff) {
-		return new s2::DummySprite(SymbolFactory::Instance()->Create(id));
+		return new s2::AnchorSprite(SymbolFactory::Instance()->Create(id));
 	}
 
 	s2::Sprite* spr = NULL;

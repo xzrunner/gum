@@ -26,7 +26,7 @@
 #include <timp/PkgMgr.h>
 #include <timp/TIMP_Package.h>
 
-#include <sprite2/DummySymbol.h>
+#include <sprite2/AnchorSymbol.h>
 #include <sprite2/Scale9Symbol.h>
 #include <sprite2/IconSymbol.h>
 #include <sprite2/TextureSymbol.h>
@@ -53,7 +53,7 @@ namespace gum
 SINGLETON_DEFINITION(SymbolFactory);
 
 SymbolFactory::SymbolFactory()
-	: m_dummy_sym(NULL)
+	: m_anchor_sym(NULL)
 {
 }
 
@@ -198,10 +198,10 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 s2::Symbol* SymbolFactory::Create(uint32_t id) const
 {
 	if (id == 0xffffffff) {
-		if (!m_dummy_sym) {
-			m_dummy_sym = new s2::DummySymbol();
+		if (!m_anchor_sym) {
+			m_anchor_sym = new s2::AnchorSymbol();
 		}
-		return m_dummy_sym;
+		return m_anchor_sym;
 	}
 
 	s2::Symbol* ret = NULL;
