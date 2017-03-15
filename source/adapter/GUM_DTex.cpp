@@ -10,6 +10,9 @@
 #include <timp/PkgMgr.h>
 #include <timp/TextureLoader.h>
 #include <simp/RelocateTexcoords.h>
+#include <simp/PageVisitor.h>
+#include <simp/RelocateTexcoords.h>
+#include <simp/NodeFactory.h>
 #include <dtex2/RenderAPI.h>
 #include <dtex2/ResourceAPI.h>
 #include <dtex2/DTEX_Package.h>
@@ -317,6 +320,23 @@ relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_fmt, int dst_w, i
 	}
 }
 
+class RelocatePageVisitor : public simp::PageVisitor
+{
+public:
+	virtual void Visit(const simp::Page* page) 
+	{
+		simp::RelocateTexcoords::Instance()->Do(page);
+	}
+
+}; // RelocatePageVisitor
+
+static void
+relocate_pkg_finish()
+{
+	RelocatePageVisitor visitor;
+	simp::NodeFactory::Instance()->Traverse(visitor);
+}
+
 /************************************************************************/
 /* Glyph                                                                */
 /************************************************************************/
@@ -376,7 +396,8 @@ DTex::DTex()
 	dtex::ResourceAPI::InitCallback(res_cb);
 
 	dtex::CacheAPI::Callback cache_cb;
-	cache_cb.relocate_pkg = relocate_pkg;
+	cache_cb.relocate_pkg        = relocate_pkg;
+	cache_cb.relocate_pkg_finish = relocate_pkg_finish;
 	dtex::CacheAPI::InitCallback(cache_cb);
 
 	m_c2 = new dtex::CacheSymbol(2048, 2048);
