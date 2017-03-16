@@ -320,7 +320,9 @@ void SpriteIO::LoadColor(const Json::Value& val)
 	if (val.isMember("r trans")) {
 		std::string str = val["r trans"].asString();
 		if (!str.empty()) {
-			m_col.SetRMap(str2color(str, s2::RGBA));
+			s2::Color col(str2color(str, s2::RGBA));
+			col.a = 0;
+			m_col.SetRMap(col);
 		}
 	}
 
@@ -328,7 +330,9 @@ void SpriteIO::LoadColor(const Json::Value& val)
 	if (val.isMember("g trans")) {
 		std::string str = val["g trans"].asString();
 		if (!str.empty()) {
-			m_col.SetGMap(str2color(str, s2::RGBA));
+			s2::Color col(str2color(str, s2::RGBA));
+			col.a = 0;
+			m_col.SetGMap(col);
 		}
 	}
 
@@ -336,7 +340,9 @@ void SpriteIO::LoadColor(const Json::Value& val)
 	if (val.isMember("b trans")) {
 		std::string str = val["b trans"].asString();
 		if (!str.empty()) {
-			m_col.SetBMap(str2color(str, s2::RGBA));
+			s2::Color col(str2color(str, s2::RGBA));
+			col.a = 0;
+			m_col.SetBMap(col);
 		}
 	}
 }

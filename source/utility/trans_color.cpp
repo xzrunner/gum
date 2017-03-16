@@ -75,7 +75,7 @@ s2::Color str2color(const std::string& str, s2::PIXEL_TYPE type)
 
 	int len = snum.length();
 
-	s2::Color ret(0, 0, 0, 1);
+	s2::Color ret(0, 0, 0, 0);
 	if (len == 4)
 	{
 		if (type == s2::RGBA || s2::BGRA)
