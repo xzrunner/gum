@@ -377,4 +377,14 @@ void gum_dtex_set_c2_max_edge(int max_edge)
 	DTexC2Strategy::Instance()->SetMaxC2Edge(max_edge);
 }
 
+/************************************************************************/
+/* gtxt                                                                 */
+/************************************************************************/
+
+extern "C"
+void gum_gtxt_add_user_font_char(const char* str, const char* pkg, const char* node)
+{
+	GTxt::Instance()->LoadUserFontChar(str, pkg, node);
+}
+
 }

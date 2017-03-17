@@ -86,6 +86,12 @@ int   gum_rt_get_texid(void* rt);
 
 void  gum_dtex_set_c2_max_edge(int max_edge);
 
+/************************************************************************/
+/* gtxt                                                                 */
+/************************************************************************/
+
+void  gum_gtxt_add_user_font_char(const char* str, const char* pkg, const char* node);
+
 #endif // _gum_wrap_c_h_
 
 #ifdef __cplusplus

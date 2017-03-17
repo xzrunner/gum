@@ -8,10 +8,12 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 struct gtxt_label_style;
+struct gtxt_glyph_layout;
 
-namespace s2 { class Color; }
+namespace s2 { class Color; class Symbol; }
 
 namespace gum
 {
@@ -26,6 +28,7 @@ public:
 
 	void LoadFont(const std::string& name, const std::string& filepath);
 	void LoadUserFont(const std::string& name, const std::string& filepath);
+	void LoadUserFontChar(const std::string& str, const std::string& pkg, const std::string& node);
 
 	void Draw(const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, 
 		const s2::Color& add, const std::string& text, int time, bool richtext) const;
@@ -33,10 +36,17 @@ public:
 
 //	void Reload(const Sprite* spr);
 
+	void Clear();
+
+	void GetUFLayout(int unicode, int font, struct gtxt_glyph_layout* layout) const;
+	void DrawUFChar(int unicode, int font, float x, float y, void* ud) const;
+
 	static void SetCap(int cap_bitmap, int cap_layout);
 
 private:
 	static int m_cap_bitmap, m_cap_layout;
+
+	std::map<int, s2::Symbol*> m_user_font_chars;
 	
 	SINGLETON_DECLARATION(GTxt)
 
