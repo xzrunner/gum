@@ -197,8 +197,13 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 
 static void*
 ext_sym_create(const char* str) {
+	std::string src = StringHelper::UTF8ToGBK(str);
+	std::string::size_type pos = src.find("export");
+	if (pos != std::string::npos) {
+		src.insert(pos, " ");
+	}
 	std::vector<std::string> tokens;
-	StringHelper::Split(str, " =", tokens);
+	StringHelper::Split(src, " =", tokens);
 	s2::Symbol* sym = NULL;
 	if (tokens.size() == 2) {
 		if (tokens[0] == "path") {
