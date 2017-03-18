@@ -182,7 +182,7 @@ draw_flush()
 static void
 scissor_push(int x, int y, int w, int h)
 {
-	s2::RenderScissor::Instance()->Push(x, y, w, h, false);
+	s2::RenderScissor::Instance()->Push(x, y, w, h, false, true);
 }
 
 static void 
