@@ -1,6 +1,7 @@
 #include "AnimSprLoader.h"
 
 #include <sprite2/AnimSprite.h>
+#include <sprite2/SprTreePath.h>
 #include <simp/from_int.h>
 #include <simp/NodeAnimationSpr.h>
 
@@ -35,10 +36,10 @@ void AnimSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	m_spr->SetFPS(anim_val["fps"].asInt());
 
-	m_spr->SetStartRandom(anim_val["start_random"].asBool());
+	m_spr->SetStartRandom(anim_val["start_random"].asBool(), s2::SprTreePath());
 
 	if (anim_val.isMember("active")) {
-		m_spr->SetActive(anim_val["active"].asBool());
+		m_spr->SetActive(anim_val["active"].asBool(), s2::SprTreePath());
 	}
 }
 
