@@ -48,6 +48,8 @@ int   gum_query_pkg_id(const char* name);
 
 bool  gum_pkg_exists(const char* name);
 bool  gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path);
+void  gum_pkg_set_release_tag();
+void  gum_pkg_release_after_last_tag();
 int   gum_pkg_get_page_count(const char* name);
 void  gum_pkg_set_page_filepath(const char* name, int page, const char* filepath);
 void  gum_pkg_get_texture_count(int pkg_id, int* tex_count, int* lod_count);
