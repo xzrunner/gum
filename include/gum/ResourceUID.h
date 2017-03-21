@@ -33,7 +33,7 @@ public:
 	static UID Sprite(int spr_id);
 
 private:
-	static const int DATA_SIZE = 62;
+	static const int DATA_SIZE = 56;
 
 	static const uint64_t DATA_MASK = 0x00ffffffffffffff;
 	static const uint64_t TYPE_MASK = 0xff00000000000000;
