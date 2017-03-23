@@ -181,6 +181,18 @@ void gum_load_pkg_ids(const char* filepath)
 }
 
 extern "C"
+int gum_get_pkg_num()
+{
+	return simp::PkgIDMgr::Instance()->GetPkgSize();
+}
+
+extern "C"
+void gum_get_all_pkg_names(const char* names[])
+{
+	simp::PkgIDMgr::Instance()->GetAllPkgNames(names);
+}
+
+extern "C"
 int gum_query_pkg_id(const char* name)
 {
 	std::string gbk_name = StringHelper::UTF8ToGBK(name);

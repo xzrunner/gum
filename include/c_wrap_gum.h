@@ -40,6 +40,8 @@ void  gum_clear();
 /************************************************************************/
 
 void  gum_load_pkg_ids(const char* filepath);
+int   gum_get_pkg_num();
+void  gum_get_all_pkg_names(const char* names[]);
 int   gum_query_pkg_id(const char* name);
 
 /************************************************************************/
