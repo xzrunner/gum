@@ -48,6 +48,8 @@
 #include <sprite2/SkeletonSprite.h>
 #include <sprite2/SymType.h>
 
+#include <fault.h>
+
 #include <assert.h>
 
 namespace gum
@@ -228,7 +230,11 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 	s2::Sprite* spr = NULL;
 	int type;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
-	assert(data);
+	if (!data) {
+		int pkg_id = simp::NodeID::GetPkgID(id);
+		int node_id = simp::NodeID::GetNodeID(id);
+		fault("Create spr fail id %d, pkg %d, node %d\n", id, pkg_id, node_id);
+	}
 	switch (type)
 	{
 	case simp::TYPE_IMAGE:
