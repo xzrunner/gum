@@ -4,6 +4,7 @@
 #include "GUM_DTex.h"
 #include "DTexC2Strategy.h"
 
+#include <shaderlab/ShaderMgr.h>
 #include <sprite2/S2_Texture.h>
 #include <sprite2/RenderParams.h>
 
@@ -62,11 +63,16 @@ bool ImageSymbol::QueryTexcoords(const s2::RenderParams& rp, float* texcoords, i
 			texcoords[0] = x;           texcoords[1] = y;
 		}
 	} else {
+		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+		sl::ShaderType type = mgr->GetShaderType();
+
 		texid = m_img->GetTexID();
 		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
 
 		sm::ivec2 sz = m_img->GetSize();
 		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_region);
+
+		mgr->SetShader(type);
 	}
 
 	return true;
