@@ -5,14 +5,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstring>
+#include <errno.h>
 
 //#include <Windows.h>
 
 extern "C" {
 	typedef void* iconv_t;
-	extern iconv_t iconv_open (const char* tocode, const char* fromcode);
-	extern size_t iconv (iconv_t cd,  char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);
-	extern int iconv_close (iconv_t cd);	
+	extern iconv_t libiconv_open (const char* tocode, const char* fromcode);
+	extern size_t libiconv (iconv_t cd,  char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);
+	extern int libiconv_close (iconv_t cd);	
 }
 
 namespace gum
@@ -35,9 +36,9 @@ void StringHelper::Split(const std::string& src, const std::string& mid,
 
 static std::string code_convert(const char* source_charset, const char* to_charset, const std::string& str)
 {
-    iconv_t cd = iconv_open(to_charset, source_charset);
+    iconv_t cd = libiconv_open(to_charset, source_charset);
     if (cd == (iconv_t)-1) {
-    	printf("iconv_open error !!!\n");
+    	printf("iconv_open error  %d %s %s!!!\n", errno, source_charset, to_charset);
         return "";
     }
 
@@ -50,7 +51,7 @@ static std::string code_convert(const char* source_charset, const char* to_chars
     size_t outbuff_len = raw_outbuff_len;
 
     std::string ret = "";
-    size_t ncov = iconv(cd, &inbuff, &inbuff_len, &outbuff, &outbuff_len);
+    size_t ncov = libiconv(cd, &inbuff, &inbuff_len, &outbuff, &outbuff_len);
     if(ncov != (size_t)-1 ) {
         size_t len = raw_outbuff_len-outbuff_len;
         ret = std::string(raw_outbuff, len);
@@ -59,7 +60,7 @@ static std::string code_convert(const char* source_charset, const char* to_chars
     }
 
     free(raw_outbuff);
-    iconv_close(cd);
+    libiconv_close(cd);
     return ret;
 }
 
@@ -83,13 +84,13 @@ static std::string code_convert(const char* source_charset, const char* to_chars
 
 std::string StringHelper::UTF8ToGBK(const std::string& str)
 {
-	return code_convert("utf8", "GBK", str);
+	return code_convert("UTF-8", "GBK", str);
 	// return boost::locale::conv::from_utf(str, "GBK");
 }
 
 std::string StringHelper::GBKToUTF8(const std::string& str)
 {
-	return code_convert("GBK", "utf8", str);
+	return code_convert("GBK", "UTF-8", str);
 	// return boost::locale::conv::to_utf<char>(str, "GBK");
 }
 
