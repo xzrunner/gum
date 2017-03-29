@@ -77,7 +77,9 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 			poly->SetOutline(vertices);
 			poly->Build();
 			polygon->SetPolygon(poly);
+			poly->RemoveReference();
 			m_sym->SetShape(polygon);
+			polygon->RemoveReference();
 		}
 		break;
 	case gum::SHAPE_POLYGON_TEXTURE:
@@ -93,7 +95,9 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 			poly->SetOutline(vertices);
 			poly->Build();
 			polygon->SetPolygon(poly);
+			poly->RemoveReference();
 			m_sym->SetShape(polygon);
+			polygon->RemoveReference();
 		}
 		break;
 	}
