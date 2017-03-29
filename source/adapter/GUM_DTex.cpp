@@ -464,6 +464,14 @@ const float* DTex::QuerySymbol(UID sym_id, int* tex_id) const
 	}
 }
 
+void DTex::ClearSymbolCache()
+{
+	if (m_c2) {
+		m_c2->Clear();
+	}
+	DTexC2Strategy::Instance()->Clear();
+}
+
 void DTex::DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key)
 {
 	m_c2->Load(tex_id, tex_w, tex_h, r, key, 1, 0);

@@ -31,6 +31,7 @@ public:
 		int padding = 0, int extrude = 0, int src_extrude = 0);
 	void LoadSymFinish();
 	const float* QuerySymbol(UID sym_id, int* tex_id) const;
+	void ClearSymbolCache();
 
 	// CG
 	void DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key);

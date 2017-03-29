@@ -236,7 +236,6 @@ bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* 
 extern "C"
 void gum_pkg_set_release_tag()
 {
-	simp::NodeFactory::Instance()->SetReleaseTag();
 	simp::RelocateTexcoords::Instance()->SetReleaseTag();
 	timp::PkgMgr::Instance()->SetReleaseTag();
 	dtex::PkgMgr::Instance()->SetReleaseTag();
@@ -245,10 +244,11 @@ void gum_pkg_set_release_tag()
 extern "C"
 void gum_pkg_release_after_last_tag()
 {
-	simp::NodeFactory::Instance()->ReleaseAfterLastTag();
 	simp::RelocateTexcoords::Instance()->ReleaseAfterLastTag();
 	timp::PkgMgr::Instance()->ReleaseAfterLastTag();
 	dtex::PkgMgr::Instance()->ReleaseAfterLastTag();
+
+	DTex::Instance()->ClearSymbolCache();
 }
 
 extern "C"
