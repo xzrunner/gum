@@ -8,6 +8,8 @@
 #include <sprite2/S2_Texture.h>
 #include <sprite2/RenderParams.h>
 
+#include <string.h>
+
 namespace gum
 {
  
