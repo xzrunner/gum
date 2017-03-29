@@ -11,9 +11,15 @@
 
 extern "C" {
 	typedef void* iconv_t;
+
+	#if defined(__APPLE__)
+		#define libiconv_open iconv_open 
+		#define libiconv iconv
+		#define libiconv_close iconv_close
+	#endif
 	extern iconv_t libiconv_open (const char* tocode, const char* fromcode);
 	extern size_t libiconv (iconv_t cd,  char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);
-	extern int libiconv_close (iconv_t cd);	
+	extern int libiconv_close (iconv_t cd);
 }
 
 namespace gum
