@@ -4,7 +4,7 @@
 #ifndef NO_BOOST
 	#include <boost/filesystem/operations.hpp>
 	#include <boost/algorithm/string.hpp>
-#endif
+#endif // NO_BOOST
 
 #include <assert.h>
 

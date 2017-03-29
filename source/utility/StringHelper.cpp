@@ -1,6 +1,8 @@
 #include "StringHelper.h"
 
-// #include <boost/locale/encoding.hpp>
+#ifndef NO_BOOST
+	#include <boost/locale/encoding.hpp>
+#endif // NO_BOOST
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +11,7 @@
 
 //#include <Windows.h>
 
+#ifdef NO_BOOST
 extern "C" {
 	typedef void* iconv_t;
 
@@ -21,6 +24,7 @@ extern "C" {
 	extern size_t libiconv (iconv_t cd,  char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);
 	extern int libiconv_close (iconv_t cd);
 }
+#endif // NO_BOOST
 
 namespace gum
 {
@@ -39,6 +43,7 @@ void StringHelper::Split(const std::string& src, const std::string& mid,
 	delete[] cstr;
 }
 
+#ifdef NO_BOOST
 
 static std::string code_convert(const char* source_charset, const char* to_charset, const std::string& str)
 {
@@ -70,6 +75,8 @@ static std::string code_convert(const char* source_charset, const char* to_chars
     return ret;
 }
 
+#endif // NO_BOOST
+
 //std::string StringHelper::ToUtf8(const std::string& str)
 //{
 //	int size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(),
@@ -90,14 +97,20 @@ static std::string code_convert(const char* source_charset, const char* to_chars
 
 std::string StringHelper::UTF8ToGBK(const std::string& str)
 {
+#ifdef NO_BOOST
 	return code_convert("UTF-8", "GBK", str);
-	// return boost::locale::conv::from_utf(str, "GBK");
+#else
+	return boost::locale::conv::from_utf(str, "GBK");
+#endif // NO_BOOST
 }
 
 std::string StringHelper::GBKToUTF8(const std::string& str)
 {
+#ifdef NO_BOOST
 	return code_convert("GBK", "UTF-8", str);
-	// return boost::locale::conv::to_utf<char>(str, "GBK");
+#else
+	return boost::locale::conv::to_utf<char>(str, "GBK");
+#endif // NO_BOOST
 }
 
 }
