@@ -95,6 +95,24 @@ static std::string code_convert(const char* source_charset, const char* to_chars
 //	return utf8_str;
 //}
 
+std::string StringHelper::UTF8ToGBK(const char *c_str)
+{
+	if(!c_str) {
+		return std::string();
+	} else {
+		return UTF8ToGBK(std::string(c_str));
+	}
+}
+
+std::string StringHelper::GBKToUTF8(const char *c_str)
+{
+	if(!c_str) {
+		return std::string();
+	} else {
+		return GBKToUTF8(std::string(c_str));
+	}
+}
+
 std::string StringHelper::UTF8ToGBK(const std::string& str)
 {
 #ifdef NO_BOOST
