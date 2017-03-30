@@ -2,6 +2,7 @@
 
 #include <sprite2/AnimSprite.h>
 #include <sprite2/SprTreePath.h>
+#include <sprite2/UpdateParams.h>
 #include <simp/from_int.h>
 #include <simp/NodeAnimationSpr.h>
 
@@ -36,7 +37,7 @@ void AnimSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	m_spr->SetFPS(anim_val["fps"].asInt());
 
-	m_spr->SetStartRandom(anim_val["start_random"].asBool(), NULL);
+	m_spr->SetStartRandom(s2::UpdateParams(), anim_val["start_random"].asBool());
 
 	if (anim_val.isMember("active")) {
 		m_spr->SetActive(anim_val["active"].asBool(), NULL);
