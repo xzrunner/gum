@@ -30,6 +30,8 @@ LOCAL_C_INCLUDES  := \
 	${TASKS_SRC_PATH} \
 
 
+LOCAL_CPPFLAGS  := -DNO_BOOST -g
+
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH)/source/ -name "*.cpp" -print)) \
 
