@@ -178,16 +178,24 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 	else
 	{
 		int ft_count = gtxt_ft_get_font_cout();
-		if (gs->font < ft_count) {
-			struct gtxt_glyph_layout layout;
-			uint32_t* bmp = gtxt_glyph_get_bitmap(unicode, gs, &layout);
-			if (!bmp) {
-				return;
+		if (gs->font < ft_count) 
+		{
+			float texcoords[8];
+			if (DTex::Instance()->QueryGlyph(uid, texcoords, tex_id)) {
+				render(tex_id, texcoords, x, y, w, h, ds, ud);
+			} else {
+				struct gtxt_glyph_layout layout;
+				uint32_t* bmp = gtxt_glyph_get_bitmap(unicode, gs, &layout);
+				if (!bmp) {
+					return;
+				}
+				w = layout.sizer.width;
+				h = layout.sizer.height;
+				DTex::Instance()->LoadGlyph(bmp, w, h, uid);
 			}
-			w = layout.sizer.width;
-			h = layout.sizer.height;
-			DTex::Instance()->LoadGlyph(bmp, w, h, uid);
-		} else {
+		} 
+		else 
+		{
 			int uf_font = gs->font - ft_count;
 			GTxt::Instance()->DrawUFChar(unicode, uf_font, x, y, ud);
 		}
