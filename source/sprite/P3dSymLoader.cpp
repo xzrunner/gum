@@ -225,9 +225,6 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 {
 	name.clear();
 
-	loop				= true;
-	local				= true;
-
 	static_mode			= simp::int2bool(node->static_mode);
 
 	count				= node->count;
@@ -269,6 +266,9 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 
 	orient_to_movement	= simp::int2bool(node->orient_to_movement);
 	orient_to_parent	= false;
+
+	loop                = simp::int2bool(node->loop);
+	local               = simp::int2bool(node->local);
 
 	blend				= node->blend;
 
