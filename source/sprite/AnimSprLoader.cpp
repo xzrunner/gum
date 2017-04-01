@@ -1,7 +1,6 @@
 #include "AnimSprLoader.h"
 
 #include <sprite2/AnimSprite.h>
-#include <sprite2/SprTreePath.h>
 #include <sprite2/UpdateParams.h>
 #include <simp/from_int.h>
 #include <simp/NodeAnimationSpr.h>
