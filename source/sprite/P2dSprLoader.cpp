@@ -31,7 +31,7 @@ void P2dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	const Json::Value& p_val = val["particle2d"];
 
 	m_spr->SetLoop(p_val["loop"].asBool());
-	m_spr->SetLocalModeDraw(p_val["local_mode_draw"].asBool());
+	m_spr->SetLocal(p_val["local_mode_draw"].asBool());
 }
 
 void P2dSprLoader::LoadBin(const simp::NodeParticle2dSpr* node)
@@ -41,7 +41,7 @@ void P2dSprLoader::LoadBin(const simp::NodeParticle2dSpr* node)
 	}
 
 	m_spr->SetLoop(simp::int2bool(node->loop));
-	m_spr->SetLocalModeDraw(simp::int2bool(node->local));
+	m_spr->SetLocal(simp::int2bool(node->local));
 }
 
 }

@@ -40,7 +40,7 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	if (p_val.isMember("loop")) {
 		local_mode_draw = p_val["local_mode_draw"].asBool();
 	}
-	m_spr->SetLocalModeDraw(local_mode_draw);
+	m_spr->SetLocal(local_mode_draw);
 
 	bool alone = false;
 	if (p_val.isMember("alone")) {
@@ -67,7 +67,7 @@ void P3dSprLoader::LoadBin(const simp::NodeParticle3dSpr* node)
 	}
 
 	m_spr->SetLoop(simp::int2bool(node->loop));
-	m_spr->SetLocalModeDraw(simp::int2bool(node->local));
+	m_spr->SetLocal(simp::int2bool(node->local));
 	m_spr->SetAlone(simp::int2bool(node->alone));
 	m_spr->SetReuse(simp::int2bool(node->reuse));
 
