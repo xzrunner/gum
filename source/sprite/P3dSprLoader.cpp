@@ -48,11 +48,11 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	}
 	m_spr->SetAlone(alone);
 
-	bool reuse = false;
-	if (p_val.isMember("reuse")) {
-		reuse = p_val["reuse"].asBool();
-	}
-	m_spr->SetReuse(reuse);
+// 	bool reuse = false;
+// 	if (p_val.isMember("reuse")) {
+// 		reuse = p_val["reuse"].asBool();
+// 	}
+// 	m_spr->SetReuse(reuse);
 
 	if (p_val.isMember("start_radius")) {
 		float start_radius = p_val["start_radius"].asDouble();
@@ -69,7 +69,7 @@ void P3dSprLoader::LoadBin(const simp::NodeParticle3dSpr* node)
 	m_spr->SetLoop(simp::int2bool(node->loop));
 	m_spr->SetLocal(simp::int2bool(node->local));
 	m_spr->SetAlone(simp::int2bool(node->alone));
-	m_spr->SetReuse(simp::int2bool(node->reuse));
+//	m_spr->SetReuse(simp::int2bool(node->reuse));
 
 	m_spr->SetStartRadius(node->radius);
 }
