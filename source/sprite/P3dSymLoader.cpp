@@ -9,6 +9,7 @@
 #include <sm_const.h>
 #include <ps_3d.h>
 #include <sprite2/Particle3dSymbol.h>
+#include <sprite2/P3dEmitterCfg.h>
 #include <simp/NodeParticle3d.h>
 #include <simp/from_int.h>
 
@@ -22,10 +23,12 @@ namespace gum
 void P3dSymLoader::Store(s2::Particle3dSymbol* sym) const
 {
 	int sz = SIZEOF_P3D_EMITTER_CFG + SIZEOF_P3D_SYMBOL * components.size();
-	p3d_emitter_cfg* cfg = (p3d_emitter_cfg*) operator new(sz);
-	memset(cfg, 0, sz);
-	Store(cfg);
+	p3d_emitter_cfg* cfg_impl = (p3d_emitter_cfg*) operator new(sz);
+	memset(cfg_impl, 0, sz);
+	Store(cfg_impl);
+	s2::P3dEmitterCfg* cfg = new s2::P3dEmitterCfg(cfg_impl);
 	sym->SetEmitterCfg(cfg);
+	cfg->RemoveReference();
 
 	sym->SetLoop(loop);
 	sym->SetLocal(local);
