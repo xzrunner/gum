@@ -85,6 +85,7 @@ public:
 
 	// info
 	std::string			m_name;
+	bool                m_need_actor;
 
 	// edit
 	bool				m_visible;

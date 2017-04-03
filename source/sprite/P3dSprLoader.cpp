@@ -48,11 +48,11 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	}
 	m_spr->SetAlone(alone);
 
-// 	bool reuse = false;
-// 	if (p_val.isMember("reuse")) {
-// 		reuse = p_val["reuse"].asBool();
-// 	}
-// 	m_spr->SetReuse(reuse);
+	s2::Particle3dSprite::ReuseType reuse = s2::Particle3dSprite::REUSE_COMMON;
+	if (p_val.isMember("reuse")) {
+		reuse = s2::Particle3dSprite::ReuseType(p_val["reuse"].asInt());
+	}
+	m_spr->SetReuse(reuse);
 
 	if (p_val.isMember("start_radius")) {
 		float start_radius = p_val["start_radius"].asDouble();

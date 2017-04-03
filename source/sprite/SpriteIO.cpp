@@ -37,6 +37,8 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_filter		= NULL;
 	m_camera		= s2::CM_ORTHO;
 
+	m_need_actor    = false;
+
 	m_visible		= true;
 	m_editable		= true;
 }
@@ -221,11 +223,13 @@ void SpriteIO::StoreRender(Json::Value& val, const std::string& dir)
 void SpriteIO::LoadInfo(s2::Sprite* spr)
 {
 	spr->SetName(m_name);
+	spr->SetNeedActor(m_need_actor);
 }
 
 void SpriteIO::StoreInfo(const s2::Sprite* spr)
 {
 	m_name = spr->GetName();
+	m_need_actor = spr->IsNeedActor();
 }
 
 void SpriteIO::LoadInfo(const Json::Value& val)
@@ -235,12 +239,20 @@ void SpriteIO::LoadInfo(const Json::Value& val)
 	} else {
 		m_name = "";
 	}
+	if (val.isMember("actor")) {
+		m_need_actor = val["actor"].asBool();
+	} else {
+		m_need_actor = false;
+	}
 }
 
 void SpriteIO::StoreInfo(Json::Value& val)
 {
 	if (!m_compress || !m_name.empty()) {
 		val["name"] = m_name;
+	}
+	if (!m_compress || m_need_actor) {
+		val["actor"] = m_need_actor;
 	}
 }
 
