@@ -42,17 +42,17 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	}
 	m_spr->SetLocal(local_mode_draw);
 
-	bool alone = false;
-	if (p_val.isMember("alone")) {
-		alone = p_val["alone"].asBool();
-	}
-	m_spr->SetAlone(alone);
-
 	s2::Particle3dSprite::ReuseType reuse = s2::Particle3dSprite::REUSE_COMMON;
 	if (p_val.isMember("reuse")) {
 		reuse = s2::Particle3dSprite::ReuseType(p_val["reuse"].asInt());
 	}
 	m_spr->SetReuse(reuse);
+
+	bool alone = false;
+	if (p_val.isMember("alone")) {
+		alone = p_val["alone"].asBool();
+	}
+	m_spr->SetAlone(alone);
 
 	if (p_val.isMember("start_radius")) {
 		float start_radius = p_val["start_radius"].asDouble();
