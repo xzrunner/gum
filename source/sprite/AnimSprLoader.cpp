@@ -52,6 +52,8 @@ void AnimSprLoader::LoadBin(const simp::NodeAnimationSpr* node)
 	m_spr->SetLoop(simp::int2bool(node->loop));
 	m_spr->SetInterval(simp::int2float(node->interval, 1024));
 
+	m_spr->SetStartRandom(s2::UpdateParams(), simp::int2bool(node->start_random));
+
 	m_spr->SetFPS(node->fps);
 }
 

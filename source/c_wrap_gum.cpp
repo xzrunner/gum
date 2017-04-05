@@ -31,6 +31,10 @@
 #include <sprite2/SprTimer.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/S2_Facade.h>
+#include <sprite2/ResetActorFlagVisitor.h>
+#include <sprite2/CreateActorsVisitor.h>
+#include <sprite2/S2_Sprite.h>
+#include <sprite2/SprVisitorParams.h>
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
@@ -312,11 +316,26 @@ void* gum_create_spr(const char* pkg, const char* spr)
 	std::string gbk_pkg = StringHelper::UTF8ToGBK(pkg);
 	std::string gbk_spr = StringHelper::UTF8ToGBK(spr);
 
+	if (gbk_spr == "btn2_actor") {
+		int zz = 0;
+	}
+
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
 	if (id == 0xffffffff) {
 		return NULL;
 	}
-	return SpriteFactory::Instance()->CreateFromSym(id);
+	s2::Sprite* s2_spr = SpriteFactory::Instance()->CreateFromSym(id);
+	if (!s2_spr) {
+		return s2_spr;
+	}
+
+	s2::ResetActorFlagVisitor v0;
+	s2_spr->Traverse(v0, s2::SprVisitorParams());
+
+	s2::CreateActorsVisitor v1;
+	s2_spr->Traverse(v1, s2::SprVisitorParams());
+
+	return s2_spr;
 }
 
 extern "C"
