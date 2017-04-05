@@ -2,6 +2,7 @@
 #include "TextboxLoader.h"
 
 #include <sprite2/TextboxSprite.h>
+#include <sprite2/UpdateParams.h>
 #include <simp/NodeLabel.h>
 
 namespace gum
@@ -33,7 +34,7 @@ void TextboxSprLoader::LoadJson(const Json::Value& val)
 	TextboxLoader loader(m_spr->GetTextbox());
 	loader.LoadJson(text_val);
 
-	m_spr->SetText(text_val["text"].asString());
+	m_spr->SetText(s2::UpdateParams(), text_val["text"].asString());
 }
 
 void TextboxSprLoader::LoadBin(const simp::NodeLabel* node)
@@ -46,7 +47,7 @@ void TextboxSprLoader::LoadBin(const simp::NodeLabel* node)
 	loader.LoadBin(node);
 	
 	if (node->text) {
-		m_spr->SetText(node->text);
+		m_spr->SetText(s2::UpdateParams(), node->text);
 	}
 }
 
