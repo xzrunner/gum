@@ -69,7 +69,7 @@ void P3dSprLoader::LoadBin(const simp::NodeParticle3dSpr* node)
 	m_spr->SetLoop(simp::int2bool(node->loop));
 	m_spr->SetLocal(simp::int2bool(node->local));
 	m_spr->SetAlone(simp::int2bool(node->alone));
-//	m_spr->SetReuse(simp::int2bool(node->reuse));
+	m_spr->SetReuse(s2::Particle3dSprite::ReuseType(node->reuse));
 
 	m_spr->SetStartRadius(node->radius);
 }
