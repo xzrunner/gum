@@ -330,10 +330,12 @@ void* gum_create_spr(const char* pkg, const char* spr)
 	}
 
 	s2::ResetActorFlagVisitor v0;
-	s2_spr->Traverse(v0, s2::SprVisitorParams());
+	s2::SprVisitorParams vp0;
+	s2_spr->Traverse(v0, vp0);
 
 	s2::CreateActorsVisitor v1;
-	s2_spr->Traverse(v1, s2::SprVisitorParams());
+	s2::SprVisitorParams vp1;
+	s2_spr->Traverse(v1, vp1);
 
 	return s2_spr;
 }
