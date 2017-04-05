@@ -77,6 +77,8 @@ void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 		spr->SetCamera(rc);
 	}
 
+	spr->SetNeedActor(trans->IsNeedActor());
+
 	if (trans->name) {
 		spr->SetName(trans->name);
 	}
