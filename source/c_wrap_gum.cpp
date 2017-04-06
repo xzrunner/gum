@@ -315,11 +315,6 @@ void* gum_create_spr(const char* pkg, const char* spr)
 {
 	std::string gbk_pkg = StringHelper::UTF8ToGBK(pkg);
 	std::string gbk_spr = StringHelper::UTF8ToGBK(spr);
-
-	if (gbk_spr == "btn2_actor") {
-		int zz = 0;
-	}
-
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
 	if (id == 0xffffffff) {
 		return NULL;
