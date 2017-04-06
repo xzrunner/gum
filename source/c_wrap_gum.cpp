@@ -14,6 +14,8 @@
 #include "RenderTarget.h"
 #include "DTexC2Strategy.h"
 #include "GUM_Facade.h"
+#include "ActorPool.h"
+#include "SpritePool.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -34,6 +36,7 @@
 #include <sprite2/ResetActorFlagVisitor.h>
 #include <sprite2/CreateActorsVisitor.h>
 #include <sprite2/S2_Sprite.h>
+#include <sprite2/S2_Actor.h>
 #include <sprite2/SprVisitorParams.h>
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
@@ -65,6 +68,8 @@ void gum_on_size(int w, int h)
 extern "C"
 void gum_gc()
 {
+	ActorPool::Instance()->GC();
+	SpritePool::Instance()->GC();
 	SymbolPool::Instance()->GC();
 	ImageMgr::Instance()->GC();
 }
@@ -318,27 +323,15 @@ void* gum_create_spr(const char* pkg, const char* spr)
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
 	if (id == 0xffffffff) {
 		return NULL;
+	} else {
+		return gum_create_spr_by_id(id);
 	}
-	s2::Sprite* s2_spr = SpriteFactory::Instance()->CreateFromSym(id);
-	if (!s2_spr) {
-		return s2_spr;
-	}
-
-	s2::ResetActorFlagVisitor v0;
-	s2::SprVisitorParams vp0;
-	s2_spr->Traverse(v0, vp0);
-
-	s2::CreateActorsVisitor v1;
-	s2::SprVisitorParams vp1;
-	s2_spr->Traverse(v1, vp1);
-
-	return s2_spr;
 }
 
 extern "C"
 void* gum_create_spr_by_id(int id)
 {
-	return SpriteFactory::Instance()->CreateFromSym(id);
+	return SpriteFactory::Instance()->CreateFromSym(id, true);
 }
 
 extern "C"
@@ -346,6 +339,27 @@ void* gum_create_spr_from_file(const char* filepath)
 {
 	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 	return SpriteFactory::Instance()->Create(gbk_filepath);
+}
+
+extern "C"
+void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new)
+{
+	std::string gbk_pkg = StringHelper::UTF8ToGBK(pkg);
+	std::string gbk_spr = StringHelper::UTF8ToGBK(spr);
+	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
+	if (id == 0xffffffff) {
+		return NULL;
+	} else {
+		return gum::ActorPool::Instance()->Fetch(id, *is_new);
+	}
+}
+
+extern "C"
+void gum_return_actor_cached(void* actor)
+{
+	s2::Actor* s2_actor = static_cast<s2::Actor*>(actor);
+	ActorPool::Instance()->Return(s2_actor);
+	s2_actor->GetSpr()->RemoveReference();
 }
 
 extern "C"

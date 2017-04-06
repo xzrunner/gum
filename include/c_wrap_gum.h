@@ -65,6 +65,9 @@ void* gum_create_spr(const char* pkg, const char* spr);
 void* gum_create_spr_by_id(int id);
 void* gum_create_spr_from_file(const char* filepath);
 
+void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new);
+void  gum_return_actor_cached(void* actor);
+
 void  gum_init_gtxt(int cap_bitmap, int cap_layout);
 void  gum_draw_text(const char* str, int x, int y, int w);
 

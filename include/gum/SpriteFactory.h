@@ -17,7 +17,7 @@ namespace gum
 class SpriteFactory
 {
 public:
-	s2::Sprite* Create(s2::Symbol* sym, uint32_t id = -1) const;
+	s2::Sprite* Create(s2::Symbol* sym, uint32_t id = -1, bool create_actors = true) const;
 
 	/**
 	 *  @brief
@@ -31,7 +31,10 @@ public:
 	 *    pack, binary res
 	 */	
 	s2::Sprite* Create(uint32_t id);
-	s2::Sprite* CreateFromSym(uint32_t id);
+	s2::Sprite* CreateFromSym(uint32_t id, bool create_actors = true);
+
+private:
+	static void CreateSprActors(const s2::Sprite* spr);
 
 	SINGLETON_DECLARATION(SpriteFactory);
 

@@ -47,6 +47,9 @@
 #include <sprite2/TrailSprite.h>
 #include <sprite2/SkeletonSprite.h>
 #include <sprite2/SymType.h>
+#include <sprite2/ResetActorFlagVisitor.h>
+#include <sprite2/CreateActorsVisitor.h>
+#include <sprite2/SprVisitorParams.h>
 
 #include <fault.h>
 
@@ -61,7 +64,7 @@ SpriteFactory::SpriteFactory()
 {
 }
 
-s2::Sprite* SpriteFactory::Create(s2::Symbol* sym, uint32_t id) const
+s2::Sprite* SpriteFactory::Create(s2::Symbol* sym, uint32_t id, bool create_actors) const
 {
 	s2::Sprite* spr = NULL;
 	switch (sym->Type())
@@ -114,6 +117,9 @@ s2::Sprite* SpriteFactory::Create(s2::Symbol* sym, uint32_t id) const
 	default:
 		assert(0);
 	}
+	if (create_actors && spr) {
+		CreateSprActors(spr);
+	}
 	return spr;
 }
 
@@ -123,7 +129,10 @@ s2::Sprite* SpriteFactory::Create(const std::string& filepath) const
 	if (!sym) {
 		return NULL;
 	} else {
-		s2::Sprite* spr = Create(sym);
+		s2::Sprite* spr = Create(sym, -1, false);
+		if (spr) {
+			CreateSprActors(spr);
+		}
 		sym->RemoveReference();
 		return spr;
 	}
@@ -216,6 +225,10 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 		break;
 	default:
 		assert(0);
+	}
+
+	if (spr) {
+		CreateSprActors(spr);
 	}
 
 	return spr;
@@ -417,25 +430,40 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 	case simp::TYPE_SCALE9: case simp::TYPE_ICON: case simp::TYPE_TEXTURE: case simp::TYPE_COMPLEX: case simp::TYPE_ANIMATION:
 	case simp::TYPE_PARTICLE3D: case simp::TYPE_PARTICLE2D: case simp::TYPE_SHAPE: case simp::TYPE_MESH: case simp::TYPE_MASK:
 	case simp::TYPE_TRAIL:
-		spr = CreateFromSym(id);
+		spr = CreateFromSym(id, false);
 		break;
 	default:
 		assert(0);
 	}
 
+	if (spr) {
+		CreateSprActors(spr);
+	}
+
 	return spr;
 }
 
-s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id)
+s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id, bool create_actors)
 {
 	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 	if (!sym) {
 		return NULL;
 	} else {
-		s2::Sprite* spr = Create(sym);
+		s2::Sprite* spr = Create(sym, -1, create_actors);
 		sym->RemoveReference();
 		return spr;
 	}
+}
+
+void SpriteFactory::CreateSprActors(const s2::Sprite* spr)
+{
+	s2::ResetActorFlagVisitor v0;
+	s2::SprVisitorParams vp0;
+	spr->Traverse(v0, vp0);
+
+	s2::CreateActorsVisitor v1;
+	s2::SprVisitorParams vp1;
+	spr->Traverse(v1, vp1);
 }
 
 }
