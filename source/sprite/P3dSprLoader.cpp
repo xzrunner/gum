@@ -44,7 +44,11 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 
 	s2::Particle3dSprite::ReuseType reuse = s2::Particle3dSprite::REUSE_COMMON;
 	if (p_val.isMember("reuse")) {
-		reuse = s2::Particle3dSprite::ReuseType(p_val["reuse"].asInt());
+		if (p_val["reuse"].isBool()) {
+			reuse = p_val["reuse"].asBool() ? s2::Particle3dSprite::REUSE_ALL : s2::Particle3dSprite::REUSE_COMMON;
+		} else {
+			reuse = s2::Particle3dSprite::ReuseType(p_val["reuse"].asInt());
+		}
 	}
 	m_spr->SetReuse(reuse);
 
