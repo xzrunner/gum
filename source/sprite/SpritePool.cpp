@@ -2,7 +2,7 @@
 #include "SpriteFactory.h"
 
 #include <sprite2/S2_Sprite.h>
-#include <Sprite2/S2_Symbol.h>
+#include <sprite2/S2_Symbol.h>
 
 namespace gum
 {
