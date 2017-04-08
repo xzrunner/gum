@@ -50,6 +50,7 @@ int   gum_query_pkg_id(const char* name);
 
 bool  gum_pkg_exists(const char* name);
 bool  gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path);
+void  gum_release_pkg(int pkg_id);
 void  gum_pkg_set_release_tag();
 void  gum_pkg_release_after_last_tag();
 int   gum_pkg_get_page_count(const char* name);

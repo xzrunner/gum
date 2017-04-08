@@ -243,6 +243,14 @@ bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* 
 }
 
 extern "C"
+void gum_release_pkg(int pkg_id)
+{
+	simp::RelocateTexcoords::Instance()->Delete(pkg_id);
+	timp::PkgMgr::Instance()->Delete(pkg_id);
+	dtex::PkgMgr::Instance()->Delete(pkg_id);
+}
+
+extern "C"
 void gum_pkg_set_release_tag()
 {
 	simp::RelocateTexcoords::Instance()->SetReleaseTag();
