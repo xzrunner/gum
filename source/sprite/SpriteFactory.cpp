@@ -50,6 +50,7 @@
 #include <sprite2/ResetActorFlagVisitor.h>
 #include <sprite2/CreateActorsVisitor.h>
 #include <sprite2/SprVisitorParams.h>
+#include <sprite2/UpdateParams.h>
 
 #include <fault.h>
 
@@ -119,6 +120,7 @@ s2::Sprite* SpriteFactory::Create(s2::Symbol* sym, uint32_t id, bool create_acto
 	}
 	if (create_actors && spr) {
 		CreateSprActors(spr);
+		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
 	}
 	return spr;
 }
@@ -132,6 +134,7 @@ s2::Sprite* SpriteFactory::Create(const std::string& filepath) const
 		s2::Sprite* spr = Create(sym, -1, false);
 		if (spr) {
 			CreateSprActors(spr);
+			spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
 		}
 		sym->RemoveReference();
 		return spr;
@@ -229,6 +232,7 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 
 	if (spr) {
 		CreateSprActors(spr);
+		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
 	}
 
 	return spr;
@@ -438,6 +442,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id)
 
 	if (spr) {
 		CreateSprActors(spr);
+		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
 	}
 
 	return spr;
