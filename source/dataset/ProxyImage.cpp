@@ -13,8 +13,8 @@ ProxyImage::ProxyImage(int id, int w, int h, int format)
 
 ProxyImage::~ProxyImage()
 {
-// 	m_id = 0; // avoid release in Image
-// 	          // managed by other
+	m_id = 0; // avoid release in Image
+	          // managed by other
 }
 
 void ProxyImage::Init(int id, int w, int h, int format)
