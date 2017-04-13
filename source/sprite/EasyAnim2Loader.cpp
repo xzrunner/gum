@@ -144,8 +144,6 @@ void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 		const Joint& src = dst_joints[i];
 		rg_joint* dst = (rg_joint*)malloc(sizeof(struct rg_joint) + sizeof(uint8_t) * src.children.size());
 
-		dst->name = NULL;
-
 //		CopyJointPose(&dst->skin.local, src.skin_pose);
 //		dst->skin.ud = src.skin;
 

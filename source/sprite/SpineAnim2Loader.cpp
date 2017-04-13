@@ -335,7 +335,6 @@ void SpineAnim2Loader::CreateJoints()
 	{
 		const JointData& src = m_joints_data[i];
 		rg_joint* dst = (rg_joint*)malloc(SIZEOF_RG_JOINT + sizeof(uint16_t) * src.children.size());
-		dst->name           = strdup(src.name.c_str());
 		dst->parent         = RG_JOINT_UNKNOWN;
 		dst->children_count = src.children.size();
 		for (int j = 0; j < dst->children_count; ++j) {

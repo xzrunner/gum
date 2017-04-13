@@ -111,7 +111,6 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 
 		const simp::NodeAnim2::Joint& src = node->joints[i];
 		rg_joint* dst = sk->joints[i];
-		dst->name = NULL;
 		rg_pose_mat_identity(&dst->world_pose);
 		LoadBinSRT(dst->local_pose, src.local);
 		dst->parent = src.parent;
