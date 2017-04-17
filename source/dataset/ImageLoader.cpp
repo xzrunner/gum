@@ -2,6 +2,7 @@
 #include "RenderContext.h"
 #include "GUM_AsyncTask.h"
 #include <gum/Config.h>
+#include "Image.h"
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
@@ -70,14 +71,15 @@ void _parser_cb(const void* data, size_t size, void* ud)
 	timp::TextureLoader loader(static_cast<const char*>(data), size);
 	loader.Load();
 
-	int texid = reinterpret_cast<int>(ud);
+	Image* img = static_cast<Image*>(ud);
 	const void* pixels = loader.GetData();
 	int width = loader.GetWidth(),
 		height = loader.GetHeight();
-	RenderContext::Instance()->GetImpl()->UpdateTexture(texid, pixels, width, height);	
+	RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+	img->SetLoadFinished(true);
 }
 
-bool ImageLoader::AsyncLoad(int format, int width, int height)
+bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 {
 	if (m_filepath.find(".ept") == std::string::npos) {
 		return false;
@@ -88,8 +90,8 @@ bool ImageLoader::AsyncLoad(int format, int width, int height)
 	m_width = width;
 	m_height = height;
 
-	void* ud = reinterpret_cast<void*>(m_id);
-	AsyncTask::Instance()->Load(m_filepath, _load_cb, _parser_cb, ud);
+	img->SetLoadFinished(false);
+	AsyncTask::Instance()->Load(m_filepath, _load_cb, _parser_cb, img);
 
 	return true;
 }

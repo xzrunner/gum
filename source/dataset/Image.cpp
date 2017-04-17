@@ -53,8 +53,24 @@ void Image::AsyncLoad(int format, int width, int height)
 	}
 
 	ImageLoader loader(m_filepath);
-	if (loader.AsyncLoad(format, width, height)) {
+	if (loader.AsyncLoad(format, width, height, this)) {
 		LoadFromLoader(loader);	
+	}
+}
+
+bool Image::IsLoadFinished() const 
+{ 
+	if (m_s2_tex) {
+		return m_s2_tex->IsLoadFinished();
+	} else {
+		return true;
+	}
+}
+
+void Image::SetLoadFinished(bool finished) 
+{ 
+	if (m_s2_tex) {
+		m_s2_tex->SetLoadFinished(finished);
 	}
 }
 

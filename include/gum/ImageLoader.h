@@ -6,13 +6,15 @@
 namespace gum
 {
 
+class Image;
+
 class ImageLoader
 {
 public:
 	ImageLoader(const std::string& filepath);
 
 	bool Load();
-	bool AsyncLoad(int format, int width, int height);
+	bool AsyncLoad(int format, int width, int height, Image* img);
 
 	int GetID() const { return m_id; }
 	int GetFormat() const { return m_format; }

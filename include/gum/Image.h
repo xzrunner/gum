@@ -37,6 +37,9 @@ public:
 
 	const std::string& GetFilepath() const { return m_filepath; }
 
+	bool IsLoadFinished() const;
+	void SetLoadFinished(bool finished);
+
 private:
 	void LoadFromLoader(const ImageLoader& loader);
 
