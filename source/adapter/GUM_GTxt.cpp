@@ -89,7 +89,7 @@ render_glyph(int id, const float* _texcoords, float x, float y, float w, float h
 	 	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
 	 	sl_shader->SetColor(color.GetMulABGR(), color.GetAddABGR());
 	 	sl_shader->SetColorMap(color.GetRMapABGR(), color.GetGMapABGR(), color.GetBMapABGR());
-	 	sl_shader->Draw(&vertices[0].x, &texcoords[0].x, id);
+	 	sl_shader->DrawQuad(&vertices[0].x, &texcoords[0].x, id);
 	}
 }
 

@@ -144,7 +144,7 @@ draw(const float _vertices[8], const float _texcoords[8], int texid)
 	case sl::SPRITE2:
 		{
 			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
-			shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+			shader->DrawQuad(&vertices[0].x, &texcoords[0].x, texid);
 		}
 		break;
 	case sl::FILTER:

@@ -45,7 +45,7 @@ void RenderTarget::Draw(float xmin, float ymin, float xmax, float ymax) const
 			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
 			shader->SetColor(0xffffffff, 0);
 			shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
-			shader->Draw(vertices, texcoords, GetTexID());
+			shader->DrawQuad(vertices, texcoords, GetTexID());
 		}
 		break;
 	case sl::FILTER:
