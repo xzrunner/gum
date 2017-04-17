@@ -227,7 +227,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 
 				bool async = true;
 				loader.Load(filepath, async);
-				const timp::Package::TextureDesc& tex = pkg->GetTexDesc(pic->texid, 0);
+				const timp::Package::TextureDesc& tex = pkg->GetTexDesc(pic->texid);
 				Image* img = const_cast<Image*>(sym->GetImage());
 				if (img && async) {
 					img->AsyncLoad(tex.type, tex.w, tex.h);
