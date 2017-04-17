@@ -237,9 +237,9 @@ private:
 }; // FileLoader
 
 static void 
-load_file(const std::string& filepath, bool async, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+load_file(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 {
-	FileLoader loader(filepath, async, parser_cb, ud);
+	FileLoader loader(filepath, use_cache, parser_cb, ud);
 	loader.Load();
 }
 
@@ -509,7 +509,7 @@ void DTex::DebugDraw() const
 	//////////////////////////////////////////////////////////////////////////
 
 	m_c2->DebugDraw();
-	m_cg->DebugDraw();
+//	m_cg->DebugDraw();
 }
 
 }

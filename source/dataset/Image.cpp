@@ -26,10 +26,14 @@ Image::~Image()
 	}
 }
 
-bool Image::LoadFromFile(const std::string& filepath)
+bool Image::LoadFromFile(const std::string& filepath, bool async)
 {
 	assert(m_filepath != filepath);
 	m_filepath = filepath;
+
+	if (async) {
+		return true;
+	}
 
 	ImageLoader loader(m_filepath);
 	bool ret = loader.Load();
@@ -37,6 +41,25 @@ bool Image::LoadFromFile(const std::string& filepath)
 		return false;
 	}
 
+	LoadFromLoader(loader);
+
+	return true;
+}
+
+void Image::AsyncLoad(int format, int width, int height)
+{
+	if (m_id != 0) {
+		return;
+	}
+
+	ImageLoader loader(m_filepath);
+	if (loader.AsyncLoad(format, width, height)) {
+		LoadFromLoader(loader);	
+	}
+}
+
+void Image::LoadFromLoader(const ImageLoader& loader)
+{
 	m_id     = loader.GetID();
 	m_format = loader.GetFormat();
 	m_width  = loader.GetWidth();
@@ -44,8 +67,6 @@ bool Image::LoadFromFile(const std::string& filepath)
 
 	m_s2_tex->Init(m_width, m_height, m_id);
 	m_s2_tex->InitOri(m_width, m_height);
-
-	return true;
 }
 
 }

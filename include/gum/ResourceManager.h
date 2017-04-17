@@ -10,7 +10,7 @@ template<class T>
 class ResourceManager
 {
 public:
-	T* Create(const std::string& filepath);
+	T* Create(const std::string& filepath, bool async = false);
 
 	T* Query(const std::string& filepath);
 	bool Add(const std::string& filepath, T* res);

@@ -12,6 +12,7 @@ public:
 	ImageLoader(const std::string& filepath);
 
 	bool Load();
+	bool AsyncLoad(int format, int width, int height);
 
 	int GetID() const { return m_id; }
 	int GetFormat() const { return m_format; }
@@ -27,6 +28,8 @@ private:
 	bool DecodePVR4(const void* data);
 	bool DecodeETC2(const void* data);
 	
+	static void LoadTextureCB(int format, int w, int h, const void* data, void* ud);
+
 private:
 	std::string m_filepath;
 

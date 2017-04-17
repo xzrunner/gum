@@ -41,6 +41,7 @@
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
+#include <gum/GUM_AsyncTask.h>
 
 #include <string.h>
 
@@ -88,6 +89,7 @@ extern "C"
 void gum_update(float dt)
 {
 	s2::SprTimer::Instance()->Update(dt);
+	gum::AsyncTask::Instance()->Update();
 }
 
 extern "C"

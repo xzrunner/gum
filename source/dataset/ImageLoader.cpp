@@ -1,11 +1,14 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
+#include "GUM_AsyncTask.h"
 #include <gum/Config.h>
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
 #include <gimg_pvr.h>
 #include <gimg_etc2.h>
+#include <bimp/FileLoader.h>
+#include <bimp/BIMP_ImportStream.h>
 #include <timp/TextureFormat.h>
 #include <timp/TextureLoader.h>
 #include <unirender/UR_RenderContext.h>
@@ -31,6 +34,64 @@ bool ImageLoader::Load()
 	} else {
 		return LoadRaw();
 	}
+}
+
+class FileLoader : public bimp::FileLoader
+{
+public:
+	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+		: bimp::FileLoader(filepath, use_cache)
+		, m_parser_cb(parser_cb)
+		, m_ud(ud)
+	{}
+
+protected:
+	virtual void OnLoad(bimp::ImportStream& is) 
+	{
+		m_parser_cb(is.Stream(), is.Size(), m_ud);
+	}
+
+private:
+	void (*m_parser_cb)(const void* data, size_t size, void* ud);
+	void* m_ud;
+
+}; // FileLoader
+
+static 
+void _load_cb(const char* filepath, void (*unpack)(const void* data, size_t size, void* ud), void* ud)
+{
+	FileLoader loader(filepath, false, unpack, ud);
+	loader.Load();
+}
+
+static 
+void _parser_cb(const void* data, size_t size, void* ud)
+{
+	timp::TextureLoader loader(static_cast<const char*>(data), size);
+	loader.Load();
+
+	int texid = reinterpret_cast<int>(ud);
+	const void* pixels = loader.GetData();
+	int width = loader.GetWidth(),
+		height = loader.GetHeight();
+	RenderContext::Instance()->GetImpl()->UpdateTexture(texid, pixels, width, height);	
+}
+
+bool ImageLoader::AsyncLoad(int format, int width, int height)
+{
+	if (m_filepath.find(".ept") == std::string::npos) {
+		return false;
+	}
+
+	m_id = RenderContext::Instance()->GetImpl()->CreateTextureID(width, height, format);
+	m_format = format;
+	m_width = width;
+	m_height = height;
+
+	void* ud = reinterpret_cast<void*>(m_id);
+	AsyncTask::Instance()->Load(m_filepath, _load_cb, _parser_cb, ud);
+
+	return true;
 }
 
 bool ImageLoader::LoadRaw()

@@ -9,7 +9,7 @@ SINGLETON_DEFINITION(AsyncTask);
 
 AsyncTask::AsyncTask()
 {
-	m_loader = tasks_loader_create(1);
+	m_loader = tasks_loader_create(4);
 }
 
 AsyncTask::~AsyncTask()

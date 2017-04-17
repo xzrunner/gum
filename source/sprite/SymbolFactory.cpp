@@ -70,7 +70,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		{
 			ImageSymbol* sym = new ImageSymbol;
 			ImageSymLoader loader(sym);
-			loader.Load(filepath);
+			loader.Load(filepath, false);
 			ret = sym;
 		}
 		break;
@@ -224,7 +224,15 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 
 				sym = new ImageSymbol(id);
 				ImageSymLoader loader(sym);
-				loader.Load(filepath);
+
+				bool async = true;
+				loader.Load(filepath, async);
+				const timp::Package::TextureDesc& tex = pkg->GetTexDesc(pic->texid, 0);
+				Image* img = const_cast<Image*>(sym->GetImage());
+				if (img && async) {
+					img->AsyncLoad(tex.type, tex.w, tex.h);
+				}
+
 				sym->SetRegion(
 					sm::ivec2(pic->region[0], pic->region[1]), 
 					sm::ivec2(pic->region[2], pic->region[3]),

@@ -3,10 +3,7 @@
 
 #include "Resource.h"
 #include "ResourceManager.h"
-//
-//#include <sprite2/S2_Texture.h>
-//#include <bimp/FileLoader.h>
-//
+
 #include <SM_Vector.h>
 
 #include <stdint.h>
@@ -17,6 +14,7 @@ namespace gum
 {
 
 class Image;
+class ImageLoader;
 typedef ResourceManager<Image> ImageMgr;
 
 class Image : public Resource
@@ -25,7 +23,9 @@ public:
 	Image();
 	virtual ~Image();
 
-	virtual bool LoadFromFile(const std::string& filepath);
+	virtual bool LoadFromFile(const std::string& filepath, bool async);
+
+	void AsyncLoad(int format, int width, int height);
 
 	sm::ivec2 GetSize() const {
 		return sm::ivec2(m_width, m_height);
@@ -36,6 +36,9 @@ public:
 	s2::Texture* GetS2Tex() const { return m_s2_tex; }
 
 	const std::string& GetFilepath() const { return m_filepath; }
+
+private:
+	void LoadFromLoader(const ImageLoader& loader);
 
 protected:
 	std::string m_filepath;

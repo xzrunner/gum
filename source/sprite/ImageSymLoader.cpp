@@ -20,9 +20,9 @@ ImageSymLoader::~ImageSymLoader()
 	}
 }
 
-void ImageSymLoader::Load(const std::string& filepath)
+void ImageSymLoader::Load(const std::string& filepath, bool async)
 {
-	Image* img = ImageMgr::Instance()->Create(filepath);
+	Image* img = ImageMgr::Instance()->Create(filepath, async);
 	if (img) {
 		m_sym->SetImage(img);
 		img->RemoveReference();
