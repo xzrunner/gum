@@ -41,6 +41,7 @@
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
+#include <dtex2/AsyncTask.h>
 #include <gum/GUM_AsyncTask.h>
 
 #include <string.h>
@@ -179,6 +180,13 @@ void gum_clear()
 	simp::Facade::Clear();
 
 	// todo: clear sprites
+}
+
+extern "C"
+bool gum_is_async_task_empty()
+{
+	return dtex::AsyncTask::Instance()->IsEmpty()
+		&& AsyncTask::Instance()->IsEmpty();
 }
 
 /************************************************************************/

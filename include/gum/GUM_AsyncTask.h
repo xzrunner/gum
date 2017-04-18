@@ -23,6 +23,8 @@ public:
 
 	void Clear();
 
+	bool IsEmpty() const;
+
 private:
 	tasks_loader* m_loader;
 

@@ -39,4 +39,9 @@ void AsyncTask::Clear()
 	tasks_loader_clear(m_loader);
 }
 
+bool AsyncTask::IsEmpty() const
+{
+	return tasks_loader_empty(m_loader);
+}
+
 }
