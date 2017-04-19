@@ -86,7 +86,7 @@ inline bool ResourceManager<T>::Delete(const std::string& filepath)
 	}
 
 	itr->second->RemoveReference();
-	m_res_map.erase(itr->second);
+	m_res_map.erase(itr);
 	return true;
 }
 

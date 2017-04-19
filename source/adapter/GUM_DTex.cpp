@@ -13,6 +13,7 @@
 #include <simp/PageVisitor.h>
 #include <simp/RelocateTexcoords.h>
 #include <simp/NodeFactory.h>
+#include <simp/NodePicture.h>
 #include <dtex2/RenderAPI.h>
 #include <dtex2/ResourceAPI.h>
 #include <dtex2/DTEX_Package.h>
@@ -316,7 +317,8 @@ relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_fmt, int dst_w, i
 		std::string filepath = ProxyImage::GetFilepath(dst_tex_id);
 		bool succ = ImageMgr::Instance()->Add(filepath, img);
 		assert(succ);
-		img->RemoveReference();
+		// no GC in ImageMgr 
+//		img->RemoveReference();
 	}
 }
 
@@ -335,6 +337,16 @@ relocate_pkg_finish()
 {
 	RelocatePageVisitor visitor;
 	simp::NodeFactory::Instance()->Traverse(visitor);
+}
+
+static void
+remove_tex(int tex_id)
+{
+	std::string filepath = ProxyImage::GetFilepath(tex_id);
+	Image* img = ImageMgr::Instance()->Query(filepath);
+	assert(img->GetRefCount() == 2);
+	img->RemoveReference();
+	ImageMgr::Instance()->Delete(filepath);
 }
 
 /************************************************************************/
@@ -398,6 +410,7 @@ DTex::DTex()
 	dtex::CacheAPI::Callback cache_cb;
 	cache_cb.relocate_pkg        = relocate_pkg;
 	cache_cb.relocate_pkg_finish = relocate_pkg_finish;
+	cache_cb.remove_tex          = remove_tex;
 	dtex::CacheAPI::InitCallback(cache_cb);
 
 	m_c2 = new dtex::CacheSymbol(2048, 2048);
