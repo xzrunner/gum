@@ -344,8 +344,7 @@ remove_tex(int tex_id)
 {
 	std::string filepath = ProxyImage::GetFilepath(tex_id);
 	Image* img = ImageMgr::Instance()->Query(filepath);
-	assert(img->GetRefCount() == 2);
-	img->RemoveReference();
+	img->RemoveReference();	// other ref will be removed at gum_gc()
 	ImageMgr::Instance()->Delete(filepath);
 }
 
