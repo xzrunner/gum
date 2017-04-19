@@ -39,7 +39,9 @@ void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h
 		pkg = itr->second;
 	} else {
 		const simp::Package* p = simp::NodeFactory::Instance()->QueryPkg(id);
-		assert(p);
+		if (!p) {
+			return;
+		}
 		pkg = new Package(pkg_id, p->GetMaxNodeID() + 1);
 		m_pkgs.insert(std::make_pair(pkg_id, pkg));
 	}
