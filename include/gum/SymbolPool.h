@@ -15,6 +15,8 @@ namespace s2 { class Symbol; }
 namespace gum
 {
 
+class Image;
+
 class SymbolPool
 {
 public:
@@ -25,6 +27,9 @@ public:
 	s2::Symbol* Fetch(const uint32_t id);
 
 	void Clear();
+
+	void PrintSymRef(uint32_t sym_id) const;
+	void PrintImgRef(const Image* img) const;
 	
 private:
 	std::map<std::string, s2::Symbol*> m_path_cache;
