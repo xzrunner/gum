@@ -264,17 +264,12 @@ extern "C"
 void gum_pkg_set_release_tag()
 {
 	simp::RelocateTexcoords::Instance()->SetReleaseTag();
-	timp::PkgMgr::Instance()->SetReleaseTag();
-	dtex::PkgMgr::Instance()->SetReleaseTag();
 }
 
 extern "C"
 void gum_pkg_release_after_last_tag()
 {
 	simp::RelocateTexcoords::Instance()->ReleaseAfterLastTag();
-	timp::PkgMgr::Instance()->ReleaseAfterLastTag();
-	dtex::PkgMgr::Instance()->ReleaseAfterLastTag();
-
 	DTex::Instance()->ClearSymbolCache();
 }
 
