@@ -93,7 +93,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 	m_sym->SetActions(dst);
 
 #ifdef S2_USE_FLATTEN
-	m_sym->BuildFlatten();
+	m_sym->BuildFlatten(NULL);
 #endif // S2_USE_FLATTEN
 }
 
