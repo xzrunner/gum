@@ -29,7 +29,7 @@ public:
 	 *  @interface
 	 *    s2::ImageSymbol
 	 */
-	virtual bool QueryTexcoords(const s2::RenderParams& rp, float* texcoords, int& texid) const;
+	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const;
 
 	void SetImage(Image* img);
 	const Image* GetImage() const { return m_img; }

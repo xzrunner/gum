@@ -44,9 +44,9 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	}
 }
 
-bool ImageSymbol::QueryTexcoords(const s2::RenderParams& rp, float* texcoords, int& texid) const
+bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const
 {
-	if (rp.IsDisableDTexC2()) {
+	if (!use_dtex) {
 		texid = m_img->GetTexID();
 		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
 		return true;
@@ -62,7 +62,7 @@ bool ImageSymbol::QueryTexcoords(const s2::RenderParams& rp, float* texcoords, i
 			texcoords[6] = texcoords[4]; texcoords[7] = texcoords[5];
 			texcoords[4] = texcoords[2]; texcoords[5] = texcoords[3];
 			texcoords[2] = texcoords[0]; texcoords[3] = texcoords[1];
-			texcoords[0] = x;           texcoords[1] = y;
+			texcoords[0] = x;            texcoords[1] = y;
 		}
 	} else {
 		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

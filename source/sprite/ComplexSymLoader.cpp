@@ -91,6 +91,10 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		dst.push_back(dst_action);
 	}
 	m_sym->SetActions(dst);
+
+#ifdef S2_USE_FLATTEN
+	m_sym->BuildFlatten();
+#endif // S2_USE_FLATTEN
 }
 
 //void ComplexSymLoader::LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym)
