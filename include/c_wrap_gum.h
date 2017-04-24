@@ -16,6 +16,7 @@ void  gum_init();
 void* gum_get_render_context();
 
 void  gum_on_size(int w, int h);
+void  gum_get_screen_size(int* w, int* h);
 
 void  gum_gc();
 

@@ -68,6 +68,14 @@ void gum_on_size(int w, int h)
 }
 
 extern "C"
+void gum_get_screen_size(int* w, int* h)
+{
+	RenderContext* ctx = RenderContext::Instance();
+	*w = ctx->GetWidth();
+	*h = ctx->GetHeight();
+}
+
+extern "C"
 void gum_gc()
 {
 	ActorPool::Instance()->GC();
