@@ -223,7 +223,9 @@ ext_sym_create(const char* str) {
 	} else if (tokens.size() == 4) {
 		if (tokens[0] == "pkg" && tokens[2] == "export") {
 			uint32_t id = simp::NodeFactory::Instance()->GetNodeID(tokens[1], tokens[3]);
-			sym = SymbolPool::Instance()->Fetch(id);
+			if (id != 0xffffffff) {
+				sym = SymbolPool::Instance()->Fetch(id);
+			}
 		}
 	}
 	return sym;
