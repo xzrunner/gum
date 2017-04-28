@@ -14,7 +14,7 @@
 //	Load();
 //}
 //
-//void ImageSymbol::Draw(const sm::mat4& mt) const
+//void ImageSymbol::Draw(const S2_MAT& mt) const
 //{
 //	int texid = m_tex->GetID();
 //
@@ -83,7 +83,7 @@
 ////	}
 //}
 //
-//void ImageSymbol::Draw25(const sm::mat4& mt) const
+//void ImageSymbol::Draw25(const S2_MAT& mt) const
 //{
 //	int texid = m_tex->GetID(); 
 //

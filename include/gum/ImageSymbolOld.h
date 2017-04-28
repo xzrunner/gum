@@ -15,9 +15,9 @@
 //public:
 //	ImageSymbol(const std::string& filepath);
 //
-//	virtual void Draw(const sm::mat4& mt) const;
+//	virtual void Draw(const S2_MAT& mt) const;
 //
-//	void Draw25(const sm::mat4& mt) const;
+//	void Draw25(const S2_MAT& mt) const;
 //
 //private:
 //	void Load();
