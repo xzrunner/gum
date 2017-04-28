@@ -72,7 +72,6 @@ void* gum_create_spr_from_file(const char* filepath);
 void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new);
 void  gum_return_actor_cached(void* actor);
 
-void  gum_init_gtxt(int cap_bitmap, int cap_layout);
 void  gum_draw_text(const char* str, int x, int y, int w);
 
 /************************************************************************/
@@ -101,6 +100,10 @@ void  gum_dtex_set_c2_max_edge(int max_edge);
 /* gtxt                                                                 */
 /************************************************************************/
 
+void  gum_gtxt_init(int cap_bitmap, int cap_layout);
+void  gum_gtxt_clear();
+void  gum_gtxt_add_font(const char* name, const char* path);
+void  gum_gtxt_add_color(const char* name, unsigned int color);
 void  gum_gtxt_add_user_font_char(const char* str, const char* pkg, const char* node);
 
 #endif // _gum_wrap_c_h_

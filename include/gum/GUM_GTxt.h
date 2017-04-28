@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 struct gtxt_label_style;
 struct gtxt_glyph_layout;
@@ -30,6 +31,8 @@ public:
 	void LoadUserFont(const std::string& name, const std::string& filepath);
 	void LoadUserFontChar(const std::string& str, const std::string& pkg, const std::string& node);
 
+	void AddColor(const std::string& name, unsigned int color);
+
 	void Draw(const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, 
 		const s2::Color& add, const std::string& text, int time, bool richtext) const;
 	void Draw(const S2_MAT& mt, const std::string& str, int width = 200) const;
@@ -46,8 +49,12 @@ public:
 private:
 	static int m_cap_bitmap, m_cap_layout;
 
+	std::set<std::string> m_fonts;
+
+	std::set<std::string> m_colors;
+
 	std::map<int, s2::Symbol*> m_user_font_chars;
-	
+		
 	SINGLETON_DECLARATION(GTxt)
 
 }; // GTxt

@@ -313,9 +313,14 @@ void GTxt::Init(const std::vector<std::pair<std::string, std::string> >& fonts,
 
 void GTxt::LoadFont(const std::string& name, const std::string& filepath)
 {
-	gtxt_ft_add_font(name.c_str(), filepath.c_str());
-}
+	std::set<std::string>::iterator itr = m_fonts.find(name);
+	if (itr != m_fonts.end()) {
+		return;
+	}
 
+	gtxt_ft_add_font(name.c_str(), filepath.c_str());
+	m_fonts.insert(name);
+}
 
 void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 {
@@ -361,6 +366,17 @@ void GTxt::LoadUserFontChar(const std::string& str, const std::string& pkg, cons
 		s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 		m_user_font_chars.insert(std::make_pair(unicode, sym));
 	}
+}
+
+void GTxt::AddColor(const std::string& name, unsigned int color)
+{
+	std::set<std::string>::iterator itr = m_colors.find(name);
+	if (itr != m_colors.end()) {
+		return;
+	}
+
+	gtxt_richtext_add_color(name.c_str(), color);
+	m_colors.insert(name);
 }
 
 void GTxt::Draw(const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, 
