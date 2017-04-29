@@ -23,10 +23,13 @@ ImageSymLoader::~ImageSymLoader()
 void ImageSymLoader::Load(const std::string& filepath, bool async)
 {
 	Image* img = ImageMgr::Instance()->Create(filepath, async);
-	if (img) {
-		m_sym->SetImage(img);
-		img->RemoveReference();
+	if (!img) {
+		return;
 	}
+	m_sym->SetImage(img);
+	sm::ivec2 sz = img->GetSize();
+	m_sym->SetRegion(sm::ivec2(0, 0), sz, sm::vec2(0, 0));
+	img->RemoveReference();
 }
 
 }
