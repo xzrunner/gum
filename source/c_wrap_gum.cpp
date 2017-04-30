@@ -38,11 +38,13 @@
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/S2_Actor.h>
 #include <sprite2/SprVisitorParams.h>
+#include <sprite2/Color.h>
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
 #include <dtex2/AsyncTask.h>
 #include <gum/GUM_AsyncTask.h>
+#include <gtxt_label.h>
 
 #include <string.h>
 
@@ -482,6 +484,39 @@ extern "C"
 void gum_gtxt_add_user_font_char(const char* str, const char* pkg, const char* node)
 {
 	GTxt::Instance()->LoadUserFontChar(str, pkg, node);
+}
+
+extern "C"
+void gum_gtxt_print(const char* str, float x, float y, int size)
+{
+	gtxt_label_style s;
+
+	s.width					= 200;
+	s.height				= 100;
+
+	s.gs.font				= 0;
+	s.gs.font_size			= size;
+	s.gs.font_color.integer = 0xffffffff;
+
+	s.gs.edge				= false;
+	s.gs.edge_size			= 0;
+	s.gs.edge_color.integer = 0xffffffff;
+
+	s.align_h				= HA_LEFT;
+	s.align_v				= VA_TOP;
+
+	s.space_h				= 0;
+	s.space_v				= 0;
+
+	s.overflow				= true;
+
+	S2_MAT mt;
+	mt.Translate(x, y);
+	std::string _str;
+	if (str) {
+		_str.assign(str);
+	}
+	GTxt::Instance()->Draw(s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), _str, 0, false);
 }
 
 }
