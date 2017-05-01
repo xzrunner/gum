@@ -16,6 +16,7 @@
 #include "GUM_Facade.h"
 #include "ActorPool.h"
 #include "SpritePool.h"
+#include "StringHelper.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -487,36 +488,61 @@ void gum_gtxt_add_user_font_char(const char* str, const char* pkg, const char* n
 }
 
 extern "C"
-void gum_gtxt_print(const char* str, float x, float y, int size)
+void gum_gtxt_print(const char* str, float x, float y, int font_size, uint32_t font_color)
 {
 	gtxt_label_style s;
 
 	s.width					= 200;
-	s.height				= 100;
+	s.height				= 200;
 
 	s.gs.font				= 0;
-	s.gs.font_size			= size;
+	s.gs.font_size			= font_size;
+	s.gs.font_color.integer = font_color;
+
+	s.gs.edge				= false;
+	s.gs.edge_size			= 0;
+	s.gs.edge_color.integer = 0xffffffff;
+
+	s.align_h				= HA_CENTER;
+	s.align_v				= VA_CENTER;
+
+	s.space_h				= 1;
+	s.space_v				= 1;
+
+	s.overflow				= true;
+
+	S2_MAT mt;
+	mt.Translate(x, y);
+	GTxt::Instance()->Draw(s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), StringHelper::FromChar(str), 0, false);
+}
+
+extern "C"
+void gum_gtxt_size(const char* str, int font_size, float* w, float* h)
+{
+	gtxt_label_style s;
+
+	s.width					= 200;
+	s.height				= 200;
+
+	s.gs.font				= 0;
+	s.gs.font_size			= font_size;
 	s.gs.font_color.integer = 0xffffffff;
 
 	s.gs.edge				= false;
 	s.gs.edge_size			= 0;
 	s.gs.edge_color.integer = 0xffffffff;
 
-	s.align_h				= HA_LEFT;
-	s.align_v				= VA_TOP;
+	s.align_h				= HA_CENTER;
+	s.align_v				= VA_CENTER;
 
-	s.space_h				= 0;
-	s.space_v				= 0;
+	s.space_h				= 1;
+	s.space_v				= 1;
 
 	s.overflow				= true;
 
-	S2_MAT mt;
-	mt.Translate(x, y);
-	std::string _str;
-	if (str) {
-		_str.assign(str);
-	}
-	GTxt::Instance()->Draw(s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), _str, 0, false);
+	sm::vec2 sz = GTxt::Instance()->GetSize(s, StringHelper::FromChar(str));
+	*w = sz.x;
+	*h = sz.y;
 }
 
 }

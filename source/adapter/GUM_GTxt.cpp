@@ -427,6 +427,13 @@ void GTxt::Draw(const S2_MAT& mt, const std::string& str, int width) const
 	gtxt_label_draw(str.c_str(), &style, (void*)&rp);
 }
 
+sm::vec2 GTxt::GetSize(const gtxt_label_style& style, const std::string& text) const
+{
+	float w, h;
+	gtxt_get_label_size(text.c_str(), &style, &w, &h);
+	return sm::vec2(w, h);
+}
+
 //void GTxt::Reload(const Sprite* spr) 
 //{
 //	if (spr->GetText().empty()) {

@@ -131,4 +131,13 @@ std::string StringHelper::GBKToUTF8(const std::string& str)
 #endif // NO_BOOST
 }
 
+std::string StringHelper::FromChar(const char* c_str)
+{
+	std::string str;
+	if (c_str) {
+		str.assign(c_str);
+	}
+	return str;
+}
+
 }

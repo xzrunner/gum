@@ -105,7 +105,8 @@ void  gum_gtxt_clear();
 void  gum_gtxt_add_font(const char* name, const char* path);
 void  gum_gtxt_add_color(const char* name, unsigned int color);
 void  gum_gtxt_add_user_font_char(const char* str, const char* pkg, const char* node);
-void  gum_gtxt_print(const char* str, float x, float y, int size);
+void  gum_gtxt_print(const char* str, float x, float y, int font_size, uint32_t font_color);
+void  gum_gtxt_size(const char* str, int font_size, float* w, float* h);
 
 #endif // _gum_wrap_c_h_
 

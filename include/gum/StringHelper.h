@@ -65,6 +65,8 @@ public:
 	static std::string UTF8ToGBK(const char * c_str);
 	static std::string GBKToUTF8(const char * c_str);
 
+	static std::string FromChar(const char* c_str);
+
 }; // StringHelper
 
 }

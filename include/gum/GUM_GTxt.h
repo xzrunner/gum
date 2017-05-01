@@ -37,6 +37,8 @@ public:
 		const s2::Color& add, const std::string& text, int time, bool richtext) const;
 	void Draw(const S2_MAT& mt, const std::string& str, int width = 200) const;
 
+	sm::vec2 GetSize(const gtxt_label_style& style, const std::string& text) const;
+
 //	void Reload(const Sprite* spr);
 
 	void Clear();
