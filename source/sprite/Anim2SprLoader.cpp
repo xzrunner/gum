@@ -1,6 +1,7 @@
 #include "Anim2SprLoader.h"
 
 #include <sprite2/Anim2Sprite.h>
+#include <sprite2/UpdateParams.h>
 #include <simp/from_int.h>
 #include <simp/NodeAnim2Spr.h>
 
@@ -29,7 +30,7 @@ void Anim2SprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	}
 
 	const Json::Value& anim_val = val["anim2"];
-	m_spr->SetStaticTime(anim_val["static_time"].asInt());
+	m_spr->SetStaticTime(s2::UpdateParams(), anim_val["static_time"].asInt());
 }
 
 void Anim2SprLoader::LoadBin(const simp::NodeAnim2Spr* node)
@@ -38,7 +39,7 @@ void Anim2SprLoader::LoadBin(const simp::NodeAnim2Spr* node)
 		return;
 	}
 
-	m_spr->SetStaticTime(node->static_time);
+	m_spr->SetStaticTime(s2::UpdateParams(), node->static_time);
 }
 
 }
