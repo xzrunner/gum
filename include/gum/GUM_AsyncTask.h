@@ -17,6 +17,7 @@ public:
 		const std::string& filepath, 
 		void (*load_cb)(const char* filepath, void (*unpack)(const void* data, size_t size, void* ud), void* ud), 
 		void (*parser_cb)(const void* data, size_t size, void* ud), 
+		void (*release_cb)(void* ud),
 		void* parser_ud);
 	
 	void Update();

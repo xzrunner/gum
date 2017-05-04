@@ -79,6 +79,13 @@ void _parser_cb(const void* data, size_t size, void* ud)
 	img->SetLoadFinished(true);
 }
 
+static
+void _release_cb(void* ud)
+{
+	Image* img = static_cast<Image*>(ud);
+	img->RemoveReference();
+}
+
 bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 {
 	if (m_filepath.find(".ept") == std::string::npos) {
@@ -91,7 +98,8 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 	m_height = height;
 
 	img->SetLoadFinished(false);
-	AsyncTask::Instance()->Load(m_filepath, _load_cb, _parser_cb, img);
+	img->AddReference();
+	AsyncTask::Instance()->Load(m_filepath, _load_cb, _parser_cb, _release_cb, img);
 
 	return true;
 }
