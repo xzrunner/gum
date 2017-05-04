@@ -62,6 +62,12 @@ void  gum_pkg_get_texture_count(int pkg_id, int* tex_count, int* lod_count);
 void  gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* filepath);
 
 /************************************************************************/
+/* symbol                                                               */
+/************************************************************************/
+
+void* gum_create_sym_model(const void* surface);
+
+/************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
 

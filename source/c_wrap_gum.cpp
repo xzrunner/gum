@@ -40,6 +40,8 @@
 #include <sprite2/S2_Actor.h>
 #include <sprite2/SprVisitorParams.h>
 #include <sprite2/Color.h>
+#include <sprite2/ModelSymbol.h>
+#include <model3/ModelParametric.h>
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
@@ -333,6 +335,21 @@ void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* file
 	}
 
 	const_cast<timp::Package*>(pkg)->SetTexPath(tex, lod, gbk_filepath);
+}
+
+/************************************************************************/
+/* symbol                                                               */
+/************************************************************************/
+
+extern "C"
+void* gum_create_sym_model(const void* surface)
+{
+	const m3::Surface* m3_surface = static_cast<const m3::Surface*>(surface);
+	m3::AABB aabb;
+	m3::Model* model = new m3::ModelParametric(m3_surface, aabb);
+	s2::ModelSymbol* sym = new s2::ModelSymbol();
+	sym->SetModel(model);
+	return sym;
 }
 
 /************************************************************************/
