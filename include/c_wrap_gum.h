@@ -65,7 +65,7 @@ void  gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* fil
 /* symbol                                                               */
 /************************************************************************/
 
-void* gum_create_sym_model(const void* surface);
+void* gum_create_sym_model(const void* model);
 
 /************************************************************************/
 /* sprite                                                               */

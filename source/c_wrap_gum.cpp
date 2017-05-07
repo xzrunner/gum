@@ -41,9 +41,6 @@
 #include <sprite2/SprVisitorParams.h>
 #include <sprite2/Color.h>
 #include <sprite2/ModelSymbol.h>
-#ifndef S2_DISABLE_MODEL
-#include <model3/ModelParametric.h>
-#endif // S2_DISABLE_MODEL
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
@@ -344,15 +341,13 @@ void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* file
 /************************************************************************/
 
 extern "C"
-void* gum_create_sym_model(const void* surface)
+void* gum_create_sym_model(const void* model)
 {
 #ifndef S2_DISABLE_MODEL
-	const m3::Surface* m3_surface = static_cast<const m3::Surface*>(surface);
-	m3::AABB aabb;
-	m3::Model* model = new m3::ModelParametric(m3_surface, aabb);
+	const m3::Model* m3_model = static_cast<const m3::Model*>(model);
 	s2::ModelSymbol* sym = new s2::ModelSymbol();
-	sym->SetModel(model);
-	return sym;
+	sym->SetModel(const_cast<m3::Model*>(m3_model));
+	return sym;	
 #else
 	return NULL;
 #endif // S2_DISABLE_MODEL
