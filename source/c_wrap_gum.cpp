@@ -353,6 +353,13 @@ void* gum_create_sym_model(const void* model)
 #endif // S2_DISABLE_MODEL
 }
 
+extern "C"
+void* gum_fetch_sym(uint32_t id)
+{
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
+	return sym;
+}
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/

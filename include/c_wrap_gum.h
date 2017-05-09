@@ -67,6 +67,8 @@ void  gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* fil
 
 void* gum_create_sym_model(const void* model);
 
+void* gum_fetch_sym(uint32_t id);
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
