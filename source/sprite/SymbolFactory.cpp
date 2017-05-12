@@ -208,7 +208,9 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 
 	int type;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
-	assert(data);
+	if(!data) {
+		return NULL;
+	}
 	switch (type)
 	{
 	case simp::TYPE_IMAGE:
