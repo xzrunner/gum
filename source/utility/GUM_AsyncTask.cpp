@@ -2,6 +2,8 @@
 
 #include <tasks_loader.h>
 
+#define THREAD_NUM  (4)
+
 namespace gum
 {
 
@@ -9,12 +11,14 @@ SINGLETON_DEFINITION(AsyncTask);
 
 AsyncTask::AsyncTask()
 {
-	m_loader = tasks_loader_create(4);
+	m_loader = tasks_loader_create(THREAD_NUM);
 }
 
 AsyncTask::~AsyncTask()
 {
 	tasks_loader_release(m_loader);
+	free(m_loader);
+	m_loader = NULL;
 }
 
 void AsyncTask::Load(const std::string& filepath, 
@@ -38,7 +42,10 @@ void AsyncTask::Update()
 
 void AsyncTask::Clear()
 {
-	tasks_loader_clear(m_loader);
+	// tasks_loader_clear(m_loader);
+	tasks_loader_release(m_loader);
+	free(m_loader);
+	m_loader = tasks_loader_create(THREAD_NUM);
 }
 
 bool AsyncTask::IsEmpty() const
