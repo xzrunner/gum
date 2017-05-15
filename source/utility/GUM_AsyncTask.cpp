@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "GUM_AsyncTask.h"
 
 #include <tasks_loader.h>
