@@ -441,7 +441,10 @@ void DTex::CreatePkg(int pkg_id)
 		dst->AddTexture(tex);
 	}
 
-	dtex::PkgMgr::Instance()->Add(dst, pkg_id);
+	bool succ = dtex::PkgMgr::Instance()->Add(dst, pkg_id);
+	if (!succ) {
+		delete dst;
+	}
 }
 
 void DTex::LoadSymStart()
