@@ -98,6 +98,9 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 		break;
 	}
 	m_sym->SetMesh(mesh);
+
+	base_sym->RemoveReference();
+	mesh->RemoveReference();
 }
 
 s2::Mesh* MeshSymLoader::LoadPointsMesh(s2::Symbol* base_sym, simp::PointsMesh* node)
