@@ -228,7 +228,7 @@ void SpriteIO::LoadInfo(s2::Sprite* spr)
 
 void SpriteIO::StoreInfo(const s2::Sprite* spr)
 {
-	m_name = spr->GetName();
+	s2::SprNameMap::Instance()->IDToStr(spr->GetName(), m_name);
 	m_need_actor = spr->IsNeedActor();
 }
 
