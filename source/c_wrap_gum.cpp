@@ -16,7 +16,7 @@
 #include "GUM_Facade.h"
 #include "ActorPool.h"
 #include "SpritePool.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
