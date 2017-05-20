@@ -1,5 +1,5 @@
 #include "SymbolFile.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 
 #include <sprite2/SymType.h>
 

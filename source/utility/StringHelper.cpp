@@ -1,4 +1,4 @@
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 
 #ifndef NO_BOOST
 	#include <boost/locale/encoding.hpp>

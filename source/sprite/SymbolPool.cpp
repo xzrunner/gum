@@ -1,5 +1,5 @@
 #include "SymbolPool.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 #include "SymbolFactory.h"
 #include "GUM_ImageSymbol.h"
 #include "Image.h"

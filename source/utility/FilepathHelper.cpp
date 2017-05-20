@@ -1,5 +1,5 @@
 #include "FilepathHelper.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 
 #ifndef NO_BOOST
 	#include <boost/filesystem/operations.hpp>

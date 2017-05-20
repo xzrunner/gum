@@ -9,7 +9,7 @@
 #include "GUM_DTex.h"
 #include "GUM_Sprite2.h"
 #include "RenderContext.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 #include "RenderTargetMgr.h"
 #include "RenderTarget.h"
 #include "DTexC2Strategy.h"

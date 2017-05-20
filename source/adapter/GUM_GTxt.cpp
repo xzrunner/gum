@@ -1,5 +1,5 @@
 #include "GUM_GTxt.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 #include "SymbolPool.h"
 #include "GUM_ImageSymbol.h"
 #include "Image.h"

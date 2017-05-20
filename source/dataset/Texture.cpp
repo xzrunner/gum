@@ -1,6 +1,6 @@
 #include "Texture.h"
 #include "RenderContext.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 #include "Exception.h"
 
 #include <gum/Config.h>

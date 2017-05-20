@@ -1,6 +1,6 @@
 #include "GUM_TextboxSymbol.h"
 #include "GUM_GTxt.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 
 namespace gum
 {
