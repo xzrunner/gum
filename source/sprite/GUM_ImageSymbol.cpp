@@ -54,9 +54,11 @@ bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) co
 
 	UID uid = ResourceUID::BinNode(GetID());
 	const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, &texid);
-	if (c2_texcoords) {
+	if (c2_texcoords) 
+	{
 		memcpy(texcoords, c2_texcoords, sizeof(float) * 8);
-		if (m_rotate) {
+		if (m_rotate) 
+		{
 			float x, y;
 			x = texcoords[6]; y = texcoords[7];
 			texcoords[6] = texcoords[4]; texcoords[7] = texcoords[5];
@@ -64,20 +66,29 @@ bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) co
 			texcoords[2] = texcoords[0]; texcoords[3] = texcoords[1];
 			texcoords[0] = x;            texcoords[1] = y;
 		}
-	} else {
-		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-		sl::ShaderType type = mgr->GetShaderType();
-
+		return true;
+	} 
+	else 
+	{
 		texid = m_img->GetTexID();
 		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
+		return false;
+	}
+}
 
-		sm::ivec2 sz = m_img->GetSize();
-		DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), texid, sz.x, sz.y, m_region);
+bool ImageSymbol::OnQueryTexcoordsFail() const
+{
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderType type = mgr->GetShaderType();
 
+	sm::ivec2 sz = m_img->GetSize();
+	bool loaded = DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
+
+	if (loaded) {
 		mgr->SetShader(type);
 	}
 
-	return true;
+	return loaded;
 }
 
 void ImageSymbol::SetImage(Image* img)

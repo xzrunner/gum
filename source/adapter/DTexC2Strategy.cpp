@@ -22,13 +22,13 @@ DTexC2Strategy::DTexC2Strategy()
 	m_max_c2_edge = -1;
 }
 
-void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
+bool DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
 {
 	if (id == 0xffffffff) {
-		return;
+		return false;
 	}
 	if (m_max_c2_edge > 0 && (region.Width() > m_max_c2_edge || region.Height() > m_max_c2_edge)) {
-		return;
+		return false;
 	}
 
 	Package* pkg = NULL;
@@ -40,20 +40,25 @@ void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h
 	} else {
 		const simp::Package* p = simp::NodeFactory::Instance()->QueryPkg(id);
 		if (!p) {
-			return;
+			return false;
 		}
 		pkg = new Package(pkg_id, p->GetMaxNodeID() + 1);
 		m_pkgs.insert(std::make_pair(pkg_id, pkg));
 	}
 	pkg->AddCount(node_id, tex_id, tex_w, tex_h, region);
 
+	bool loaded = false;
 	if (pkg->GetSingleMaxCount() > m_single_max_count) {
 		LoadPackage(pkg);
+		loaded = true;
 	} else if (pkg->GetDiffSprCount() > m_diff_spr_count) {
 		LoadPackage(pkg);
+		loaded = true;
 	} else if (pkg->GetTotCount() > m_tot_count) {
 		LoadPackage(pkg);
+		loaded = true;
 	}
+	return loaded;
 }
 
 void DTexC2Strategy::Update()

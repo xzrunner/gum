@@ -35,6 +35,7 @@
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>
 #include <sprite2/DrawNode.h>
+#include <sprite2/FlattenMgr.h>
 #include <unirender/UR_RenderContext.h>
 
 #include <string>
@@ -348,6 +349,12 @@ remove_tex(int tex_id)
 	ImageMgr::Instance()->Delete(filepath);
 }
 
+static void 
+on_clear_sym_block()
+{
+	s2::FlattenMgr::Instance()->UpdateTexcoords();
+}
+
 /************************************************************************/
 /* Glyph                                                                */
 /************************************************************************/
@@ -410,6 +417,7 @@ DTex::DTex()
 	cache_cb.relocate_pkg        = relocate_pkg;
 	cache_cb.relocate_pkg_finish = relocate_pkg_finish;
 	cache_cb.remove_tex          = remove_tex;
+	cache_cb.on_clear_sym_block  = on_clear_sym_block;
 	dtex::CacheAPI::InitCallback(cache_cb);
 
 	m_c2 = new dtex::CacheSymbol(2048, 2048);

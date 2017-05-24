@@ -15,7 +15,7 @@ namespace gum
 class DTexC2Strategy
 {
 public:
-	void OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region);
+	bool OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region);
 
 	void Update();
 
