@@ -4,6 +4,7 @@
 #include "SprTransLoader.h"
 
 #include <sprite2/S2_Sprite.h>
+#include <sprite2/RenderColor.h>
 #include <sprite2/ComplexSymbol.h>
 #include <simp/NodeComplex.h>
 
@@ -12,8 +13,9 @@
 namespace gum
 {
 
-ComplexSymLoader::ComplexSymLoader(s2::ComplexSymbol* sym)
+ComplexSymLoader::ComplexSymLoader(s2::ComplexSymbol* sym, bool flatten)
 	: m_sym(sym)
+	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -71,7 +73,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 
 	m_sym->Clear();
 	for (int i = 0; i < node->sprs_n; ++i) {
-		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i]);
+		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i], m_flatten);
 		SprTransLoader::Load(spr, node->trans[i]);
 		m_sym->Add(spr);
 		spr->RemoveReference();

@@ -390,7 +390,7 @@ void* gum_fetch_sym(uint32_t id)
 /************************************************************************/
 
 extern "C"
-void* gum_create_spr(const char* pkg, const char* spr)
+void* gum_create_spr(const char* pkg, const char* spr, bool flatten)
 {
 	std::string gbk_pkg = StringHelper::UTF8ToGBK(pkg);
 	std::string gbk_spr = StringHelper::UTF8ToGBK(spr);
@@ -398,14 +398,14 @@ void* gum_create_spr(const char* pkg, const char* spr)
 	if (id == 0xffffffff) {
 		return NULL;
 	} else {
-		return gum_create_spr_by_id(id);
+		return gum_create_spr_by_id(id, flatten);
 	}
 }
 
 extern "C"
-void* gum_create_spr_by_id(int id)
+void* gum_create_spr_by_id(int id, bool flatten)
 {
-	return SpriteFactory::Instance()->CreateFromSym(id, true);
+	return SpriteFactory::Instance()->CreateFromSym(id, true, flatten);
 }
 
 extern "C"

@@ -30,8 +30,8 @@ public:
 	 *  @brief
 	 *    pack, binary res
 	 */	
-	s2::Sprite* Create(uint32_t id);
-	s2::Sprite* CreateFromSym(uint32_t id, bool create_actors = true);
+	s2::Sprite* Create(uint32_t id, bool flatten = false);
+	s2::Sprite* CreateFromSym(uint32_t id, bool create_actors = true, bool flatten = false);
 
 private:
 	static void CreateSprActors(const s2::Sprite* spr);

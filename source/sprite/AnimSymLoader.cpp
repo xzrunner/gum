@@ -16,10 +16,12 @@ namespace gum
 
 AnimSymLoader::AnimSymLoader(s2::AnimSymbol* sym, 
 							 const SymbolLoader* sym_loader,
-							 const SpriteLoader* spr_loader)
+							 const SpriteLoader* spr_loader,
+							 bool flatten)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 	, m_sym_loader(sym_loader)
+	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -57,7 +59,11 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 		loader.LoadJson(val, dir);
 	}
 
-	m_sym->LoadCopy();
+	if (m_flatten) {
+		m_sym->BuildFlatten(NULL);
+	} else {
+		m_sym->LoadCopy();
+	}
 }
 
 void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
@@ -65,7 +71,12 @@ void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
 	EasyAnimLoader loader(m_sym, m_spr_loader);
 	loader.LoadBin(node);
 
-	m_sym->LoadCopy();
+	if (m_flatten) {
+		m_sym->BuildFlatten(NULL);
+	} else {
+		m_sym->LoadCopy();
+	}
+
 }
 
 }

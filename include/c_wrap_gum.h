@@ -74,8 +74,8 @@ void* gum_fetch_sym(uint32_t id);
 /* sprite                                                               */
 /************************************************************************/
 
-void* gum_create_spr(const char* pkg, const char* spr);
-void* gum_create_spr_by_id(int id);
+void* gum_create_spr(const char* pkg, const char* spr, bool flatten);
+void* gum_create_spr_by_id(int id, bool flatten);
 void* gum_create_spr_from_file(const char* filepath);
 
 void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new);

@@ -195,7 +195,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 	return ret;
 }
 
-s2::Symbol* SymbolFactory::Create(uint32_t id) const
+s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 {
 	if (id == 0xffffffff) {
 		if (!m_anchor_sym) {
@@ -291,7 +291,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_COMPLEX:
 		{
 			s2::ComplexSymbol* sym = new s2::ComplexSymbol(id);
-			ComplexSymLoader loader(sym);
+			ComplexSymLoader loader(sym, flatten);
 			loader.LoadBin((const simp::NodeComplex*)data);
 			ret = sym;
 		}
@@ -299,7 +299,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_ANIMATION:
 		{
 			s2::AnimSymbol* sym = new s2::AnimSymbol(id);
-			AnimSymLoader loader(sym);
+			AnimSymLoader loader(sym, NULL, NULL, flatten);
 			loader.LoadBin((const simp::NodeAnimation*)data);
 			ret = sym;
 		}

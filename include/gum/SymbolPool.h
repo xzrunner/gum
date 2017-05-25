@@ -24,7 +24,7 @@ public:
 	int Count() const { return m_path_cache.size() + m_id_cache.size(); }
 	
 	s2::Symbol* Fetch(const std::string& filepath, int type = s2::SYM_UNKNOWN);
-	s2::Symbol* Fetch(const uint32_t id);
+	s2::Symbol* Fetch(const uint32_t id, bool flatten = false);
 
 	void Clear();
 
