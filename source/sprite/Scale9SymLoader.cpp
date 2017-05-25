@@ -217,6 +217,7 @@ s2::Sprite* Scale9SymLoader::LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t 
 {
 	s2::Symbol* sym = SymbolPool::Instance()->Fetch(sym_id);
 	s2::Sprite* spr = SpriteFactory::Instance()->Create(sym);
+	sym->RemoveReference();
 	float angle = dir * SM_PI / 2;
 	spr->SetAngle(angle);
 	bool xmirror = mirror & 0x1,
