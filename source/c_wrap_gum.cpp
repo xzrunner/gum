@@ -336,6 +336,31 @@ void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* file
 	const_cast<timp::Package*>(pkg)->SetTexPath(tex, lod, gbk_filepath);
 }
 
+extern "C"
+char** gum_pkg_get_export_names(const char* name, int* count)
+{
+	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(gbk_name);
+	if (!pkg) {
+		*count = 0;
+		return NULL;
+	}
+
+	std::vector<std::string> names;
+	pkg->GetExportNames(names);
+	int sz = names.size();
+	char** ret = (char**)malloc(sizeof(char*) * sz);
+	for (int i = 0; i < sz; ++i) 
+	{
+		const std::string& src = names[i];
+		char* dst = (char*)malloc(src.size() + 1);
+		strcpy(dst, src.c_str());
+		ret[i] = dst;
+	}
+	*count = sz;
+	return ret;
+}
+
 /************************************************************************/
 /* symbol                                                               */
 /************************************************************************/

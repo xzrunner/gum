@@ -60,6 +60,7 @@ int   gum_pkg_get_page_count(const char* name);
 void  gum_pkg_set_page_filepath(const char* name, int page, const char* filepath);
 void  gum_pkg_get_texture_count(int pkg_id, int* tex_count, int* lod_count);
 void  gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* filepath);
+char** gum_pkg_get_export_names(const char* name, int* count);
 
 /************************************************************************/
 /* symbol                                                               */
