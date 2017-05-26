@@ -20,6 +20,8 @@ void RenderTarget::Draw(float xmin, float ymin, float xmax, float ymax) const
 	if (!s2_ctx) {
 		return;
 	}
+	const sm::vec2& old_offset = s2_ctx->GetMVOffset();
+	float old_scale = s2_ctx->GetMVScale();
 	s2_ctx->SetModelView(sm::vec2(0, 0), 1);
 
 	float vertices[8], texcoords[8];
@@ -58,6 +60,8 @@ void RenderTarget::Draw(float xmin, float ymin, float xmax, float ymax) const
 	default:
 		break;
 	}
+
+	s2_ctx->SetModelView(old_offset, old_scale);
 }
 
 }
