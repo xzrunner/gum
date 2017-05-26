@@ -41,7 +41,8 @@ static void prepare_render_params(const s2::RenderParams& parent,
 	}
 }
 
-static void c2_insert_spr(const s2::Sprite* spr, int tex_id, int tex_w, int tex_h)
+static void 
+c2_insert_spr(const s2::Sprite* spr, int tex_id, int tex_w, int tex_h)
 {
 	DTex* dtex = DTex::Instance();
 	dtex->LoadSymStart();
@@ -60,15 +61,44 @@ static void c2_insert_spr(const s2::Sprite* spr, int tex_id, int tex_w, int tex_
 	dtex->LoadSymFinish();
 }
 
-static const float* c2_query_spr(const s2::Sprite* spr, int* tex_id)
+static const float* 
+c2_query_spr(const s2::Sprite* spr, int* tex_id)
 {
 	UID uid = ResourceUID::Sprite(spr->GetID());
 	return DTex::Instance()->QuerySymbol(uid, tex_id);
 }
 
+static void
+c2_insert_sym(const s2::Symbol* sym, int tex_id, int tex_w, int tex_h)
+{
+	DTex* dtex = DTex::Instance();
+	dtex->LoadSymStart();
+
+	UID uid = ResourceUID::BinNode(sym->GetID());
+
+	sm::rect r_src = sym->GetBounding();
+	sm::i16_rect r_dst;
+	r_dst.xmin = r_src.xmin + tex_w * 0.5f;
+	r_dst.ymin = r_src.ymin + tex_h * 0.5f;
+	r_dst.xmax = r_src.xmax + tex_w * 0.5f;
+	r_dst.ymax = r_src.ymax + tex_h * 0.5f;
+
+	dtex->LoadSymbol(uid, tex_id, tex_w, tex_h, r_dst, 1, 0, 0);
+
+	dtex->LoadSymFinish();
+}
+
+static const float* 
+c2_query_sym(const s2::Symbol* sym, int* tex_id)
+{
+	UID uid = ResourceUID::BinNode(sym->GetID());
+	return DTex::Instance()->QuerySymbol(uid, tex_id);
+}
+
 void Sprite2::Init()
 {
-	s2::DrawNode::InitDTexCB(prepare_render_params, c2_insert_spr, c2_query_spr);
+	s2::DrawNode::InitDTexCB(prepare_render_params, c2_insert_spr, 
+		c2_query_spr, c2_insert_sym, c2_query_sym);
 }
 
 }
