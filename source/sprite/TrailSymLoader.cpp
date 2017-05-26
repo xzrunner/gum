@@ -8,6 +8,7 @@
 
 #include <mt_2d.h>
 #include <sprite2/TrailSymbol.h>
+#include <sprite2/TrailEmitterCfg.h>
 #include <simp/NodeTrail.h>
 #include <simp/from_int.h>
 
@@ -23,10 +24,13 @@ void TrailSymLoader::Store(s2::TrailSymbol* sym) const
 {
 	int comp_sz = mode == T2D_MODE_IMAGE ? comp_images.size() : comp_shapes.size();
 	int sz = SIZEOF_T2D_EMITTER_CFG + SIZEOF_T2D_SYMBOL * comp_sz;
-	t2d_emitter_cfg* cfg = (t2d_emitter_cfg*) operator new(sz);
-	memset(cfg, 0, sz);
-	Store(cfg);
+	t2d_emitter_cfg* cfg_impl = (t2d_emitter_cfg*) operator new(sz);
+	memset(cfg_impl, 0, sz);
+	Store(cfg_impl);
+
+	s2::TrailEmitterCfg* cfg = new s2::TrailEmitterCfg(cfg_impl);
 	sym->SetEmitterCfg(cfg);
+	cfg->RemoveReference();
 }
 
 void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
