@@ -406,7 +406,7 @@ void GTxt::Draw(const S2_MAT& mt, const std::string& str, int width) const
 	style.width = width;
 	style.height = 50;
 
-	style.align_h = HA_CENTER;
+	style.align_h = HA_LEFT;
 	style.align_v = VA_CENTER;
 
 	style.space_h = style.space_v = 1;
