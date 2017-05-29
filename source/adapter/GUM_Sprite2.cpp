@@ -41,7 +41,7 @@ static void prepare_render_params(const s2::RenderParams& parent,
 	}
 }
 
-static void 
+static bool 
 c2_insert_spr(const s2::Sprite* spr, int tex_id, int tex_w, int tex_h)
 {
 	DTex* dtex = DTex::Instance();
@@ -59,6 +59,8 @@ c2_insert_spr(const s2::Sprite* spr, int tex_id, int tex_w, int tex_h)
 	dtex->LoadSymbol(uid, tex_id, tex_w, tex_h, r_dst, 1, 0, 0);
 
 	dtex->LoadSymFinish();
+
+	return true;
 }
 
 static const float* 
