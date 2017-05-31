@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 
+namespace s2 { class Actor; }
+
 namespace gum
 {
 
@@ -22,6 +24,7 @@ public:
 		RES_RAW_FILE = 2,
 		RES_GLYPH    = 3,
 		RES_SPRITE   = 4,
+		RES_ACTOR    = 5,
 	};
 	
 public:
@@ -31,6 +34,7 @@ public:
 	static UID Glyph(int unicode, const GlyphStyle& gs);
 	static UID BinNode(uint32_t node_id);
 	static UID Sprite(int spr_id);
+	static UID Actor(const s2::Actor* actor);
 
 private:
 	static const int DATA_SIZE = 56;

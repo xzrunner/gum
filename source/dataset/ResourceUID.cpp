@@ -47,6 +47,12 @@ UID ResourceUID::Sprite(int spr_id)
 	return Compose(spr_id, RES_SPRITE);
 }
 
+UID ResourceUID::Actor(const s2::Actor* actor)
+{
+	uint64_t actor_id = reinterpret_cast<uint64_t>(actor);
+	return Compose(actor_id, RES_ACTOR);
+}
+
 uint64_t ResourceUID::HashString(const std::string& str)
 {
 	const char* c = str.c_str();
