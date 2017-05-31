@@ -41,49 +41,17 @@ static void prepare_render_params(const s2::RenderParams& parent,
 	}
 }
 
-static bool 
-c2_insert_spr(const s2::Sprite* spr, int tex_id, int tex_w, int tex_h)
-{
-	DTex* dtex = DTex::Instance();
-	dtex->LoadSymStart();
-
-	UID uid = ResourceUID::Sprite(spr->GetID());
-
-	sm::rect r_src = spr->GetSymbol()->GetBounding(spr);
-	sm::i16_rect r_dst;
-	r_dst.xmin = r_src.xmin + tex_w * 0.5f;
-	r_dst.ymin = r_src.ymin + tex_h * 0.5f;
-	r_dst.xmax = r_src.xmax + tex_w * 0.5f;
-	r_dst.ymax = r_src.ymax + tex_h * 0.5f;
-
-	dtex->LoadSymbol(uid, tex_id, tex_w, tex_h, r_dst, 1, 0, 0);
-
-	dtex->LoadSymFinish();
-
-	return true;
-}
-
-static const float* 
-c2_query_spr(const s2::Sprite* spr, int* tex_id)
-{
-	UID uid = ResourceUID::Sprite(spr->GetID());
-	return DTex::Instance()->QuerySymbol(uid, tex_id);
-}
-
 static void
-c2_insert_sym(const s2::Symbol* sym, int tex_id, int tex_w, int tex_h)
+dtex_sym_insert(UID uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h)
 {
 	DTex* dtex = DTex::Instance();
 	dtex->LoadSymStart();
 
-	UID uid = ResourceUID::BinNode(sym->GetID());
-
-	sm::rect r_src = sym->GetBounding();
 	sm::i16_rect r_dst;
-	r_dst.xmin = r_src.xmin + tex_w * 0.5f;
-	r_dst.ymin = r_src.ymin + tex_h * 0.5f;
-	r_dst.xmax = r_src.xmax + tex_w * 0.5f;
-	r_dst.ymax = r_src.ymax + tex_h * 0.5f;
+	r_dst.xmin = bounding.xmin + tex_w * 0.5f;
+	r_dst.ymin = bounding.ymin + tex_h * 0.5f;
+	r_dst.xmax = bounding.xmax + tex_w * 0.5f;
+	r_dst.ymax = bounding.ymax + tex_h * 0.5f;
 
 	dtex->LoadSymbol(uid, tex_id, tex_w, tex_h, r_dst, 1, 0, 0);
 
@@ -91,16 +59,33 @@ c2_insert_sym(const s2::Symbol* sym, int tex_id, int tex_w, int tex_h)
 }
 
 static const float* 
-c2_query_sym(const s2::Symbol* sym, int* tex_id)
+dtex_sym_query(UID uid, int* tex_id)
 {
-	UID uid = ResourceUID::BinNode(sym->GetID());
 	return DTex::Instance()->QuerySymbol(uid, tex_id);
+}
+
+static uint64_t 
+get_sym_uid(const s2::Symbol* sym)
+{
+	return ResourceUID::BinNode(sym->GetID());
+}
+
+static uint64_t 
+get_spr_uid(const s2::Sprite* spr)
+{
+	return ResourceUID::Sprite(spr->GetID());
+}
+
+static uint64_t 
+get_actor_uid(const s2::Actor* actor)
+{
+	return ResourceUID::Actor(actor);
 }
 
 void Sprite2::Init()
 {
-	s2::DrawNode::InitDTexCB(prepare_render_params, c2_insert_spr, 
-		c2_query_spr, c2_insert_sym, c2_query_sym);
+	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
+	s2::DrawNode::InitUIDCB(get_sym_uid, get_spr_uid, get_actor_uid);
 }
 
 }
