@@ -21,6 +21,8 @@ namespace gum
 class P3dSymLoader : private cu::Uncopyable
 {
 public:
+	P3dSymLoader(bool flatten);
+
 	void Store(s2::Particle3dSymbol* sym) const;
 	void Store(p3d_emitter_cfg* cfg) const;
 
@@ -109,6 +111,9 @@ public:
 	int blend;
 
 	std::vector<Component> components;
+
+private:
+	bool m_flatten;
 
 }; // P3dSymLoader
 

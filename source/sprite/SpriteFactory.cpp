@@ -141,7 +141,7 @@ s2::Sprite* SpriteFactory::Create(const std::string& filepath) const
 	}
 }
 
-s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir) const
+s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir, bool flatten) const
 {
 	s2::Sprite* spr = NULL;
 
@@ -210,7 +210,7 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 		break;
 	case s2::SYM_MESH:
 		{
-			MeshSprLoader loader(VI_DOWNCASTING<s2::MeshSprite*>(spr));
+			MeshSprLoader loader(VI_DOWNCASTING<s2::MeshSprite*>(spr), flatten);
 			loader.LoadJson(val, dir);
 		}
 		break;
@@ -241,7 +241,7 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 {
 	if (id == 0xffffffff) {
-		return new s2::AnchorSprite(SymbolFactory::Instance()->Create(id));
+		return new s2::AnchorSprite(SymbolFactory::Instance()->Create(id, flatten));
 	}
 
 	s2::Sprite* spr = NULL;
@@ -256,7 +256,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	{
 	case simp::TYPE_IMAGE:
 		{
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, flatten);
 			spr = new s2::ImageSprite(sym, id);
 			sym->RemoveReference();
 		}
@@ -304,7 +304,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 		{
 			const simp::NodeLabel* node = (const simp::NodeLabel*)data;
 
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, flatten);
 			s2::TextboxSprite* tb_spr = VI_DOWNCASTING<s2::TextboxSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
 			sym->RemoveReference();
 
@@ -399,11 +399,11 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 		{
 			const simp::NodeMeshSpr* node = (const simp::NodeMeshSpr*)data;
 
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->mesh_id);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->mesh_id, flatten);
 			s2::MeshSprite* mesh_spr = VI_DOWNCASTING<s2::MeshSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
 			sym->RemoveReference();
 
-			MeshSprLoader loader(mesh_spr);
+			MeshSprLoader loader(mesh_spr, flatten);
 			loader.LoadBin(node);
 
 			spr = mesh_spr;
@@ -448,7 +448,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	return spr;
 }
 
-s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id, bool create_actors, bool flatten)
+s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id, bool flatten, bool create_actors)
 {
 	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, flatten);
 	if (!sym) {

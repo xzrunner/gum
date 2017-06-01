@@ -14,9 +14,9 @@ s2::Sprite* SpriteLoader::Create(const std::string& filepath) const
 	return SpriteFactory::Instance()->Create(filepath);
 }
 
-s2::Sprite* SpriteLoader::Create(const Json::Value& val, const std::string& dir) const
+s2::Sprite* SpriteLoader::Create(const Json::Value& val, const std::string& dir, bool flatten) const
 {
-	return SpriteFactory::Instance()->Create(val, dir);
+	return SpriteFactory::Instance()->Create(val, dir, flatten);
 }
 
 }

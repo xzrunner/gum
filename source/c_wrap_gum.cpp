@@ -381,7 +381,8 @@ void* gum_create_sym_model(const void* model)
 extern "C"
 void* gum_fetch_sym(uint32_t id)
 {
-	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
+	// todo: flatten
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, false);
 	return sym;
 }
 
@@ -405,7 +406,7 @@ void* gum_create_spr(const char* pkg, const char* spr, bool flatten)
 extern "C"
 void* gum_create_spr_by_id(int id, bool flatten)
 {
-	return SpriteFactory::Instance()->CreateFromSym(id, true, flatten);
+	return SpriteFactory::Instance()->CreateFromSym(id, flatten, true);
 }
 
 extern "C"

@@ -19,6 +19,11 @@
 namespace gum
 {
 
+P2dSymLoader::P2dSymLoader(bool flatten)
+	: m_flatten(flatten)
+{
+}
+
 void P2dSymLoader::Store(s2::Particle2dSymbol* sym) const
 {
 	int sz = SIZEOF_P2D_EMITTER_CFG + SIZEOF_P2D_SYMBOL * components.size();
@@ -103,7 +108,7 @@ void P2dSymLoader::Store(p2d_emitter_cfg* cfg) const
 		if (!src.filepath.empty()) {
 			dst.ud = LoadSymbol(src.filepath);			
 		} else {
-			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id);
+			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
 		}
 		if (!dst.ud) {
 			throw Exception("Symbol doesn't exist: %s", src.filepath.c_str());

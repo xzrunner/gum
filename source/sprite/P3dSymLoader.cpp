@@ -20,6 +20,11 @@
 namespace gum
 {
 
+P3dSymLoader::P3dSymLoader(bool flatten)
+	: m_flatten(flatten)
+{
+}
+
 void P3dSymLoader::Store(s2::Particle3dSymbol* sym) const
 {
 	int sz = SIZEOF_P3D_EMITTER_CFG + SIZEOF_P3D_SYMBOL * components.size();
@@ -107,7 +112,7 @@ void P3dSymLoader::Store(p3d_emitter_cfg* cfg) const
 		if (!src.filepath.empty()) {
 			dst.ud = LoadSymbol(src.filepath);
 		} else {
-			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id);
+			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
 		}
 		if (!dst.ud) {
 			throw Exception("Symbol doesn't exist: %s", src.filepath.c_str());

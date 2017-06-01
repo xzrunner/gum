@@ -17,8 +17,8 @@ class SpriteLoader;
 class AnimSymLoader : private cu::Uncopyable
 {
 public:
-	AnimSymLoader(s2::AnimSymbol* sym, const SymbolLoader* sym_loader = NULL,
-		const SpriteLoader* spr_loader = NULL, bool flatten = false);
+	AnimSymLoader(s2::AnimSymbol* sym, bool flatten, const SymbolLoader* sym_loader = NULL,
+		const SpriteLoader* spr_loader = NULL);
 	~AnimSymLoader();
 
 	void LoadJson(const std::string& filepath);

@@ -23,7 +23,7 @@ class JointLoader;
 class Anim2SymLoader : private cu::Uncopyable
 {
 public:
-	Anim2SymLoader(s2::Anim2Symbol* sym, const SymbolLoader* sym_loader = NULL);
+	Anim2SymLoader(s2::Anim2Symbol* sym, bool flatten, const SymbolLoader* sym_loader = NULL);
 	~Anim2SymLoader();
 
 	void LoadJson(const std::string& filepath);
@@ -36,6 +36,8 @@ private:
 
 private:
 	s2::Anim2Symbol* m_sym;
+
+	bool m_flatten;
 
 	const SymbolLoader* m_sym_loader;
 

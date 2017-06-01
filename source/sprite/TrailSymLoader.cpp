@@ -20,6 +20,11 @@
 namespace gum
 {
 
+TrailSymLoader::TrailSymLoader(bool flatten)
+	: m_flatten(flatten)
+{
+}
+
 void TrailSymLoader::Store(s2::TrailSymbol* sym) const
 {
 	int comp_sz = mode == T2D_MODE_IMAGE ? comp_images.size() : comp_shapes.size();
@@ -63,7 +68,7 @@ void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
 			if (!src.filepath.empty()) {
 				dst.mode.A.ud = LoadSymbol(src.filepath);
 			} else {
-				dst.mode.A.ud = SymbolPool::Instance()->Fetch(src.sym_id);
+				dst.mode.A.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
 			}
 			if (!dst.mode.A.ud) {
 				throw Exception("TrailSymLoader::Store create sym fail: %s", src.filepath.c_str());

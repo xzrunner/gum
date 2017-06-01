@@ -14,7 +14,7 @@ namespace gum
 class MeshSprLoader : private cu::Uncopyable
 {
 public:
-	MeshSprLoader(s2::MeshSprite* spr);
+	MeshSprLoader(s2::MeshSprite* spr, bool flatten);
 	~MeshSprLoader();
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
@@ -22,6 +22,8 @@ public:
 
 private:
 	s2::MeshSprite* m_spr;
+
+	bool m_flatten;
 
 }; // MeshSprLoader
 

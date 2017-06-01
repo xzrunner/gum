@@ -16,7 +16,7 @@ namespace gum
 class ShapeSymLoader : private cu::Uncopyable
 {
 public:
-	ShapeSymLoader(s2::ShapeSymbol* sym);
+	ShapeSymLoader(s2::ShapeSymbol* sym, bool flatten);
 	~ShapeSymLoader();
 
 	void LoadJson(const std::string& filepath);	
@@ -24,6 +24,8 @@ public:
 
 private:
 	s2::ShapeSymbol* m_sym;
+
+	bool m_flatten;
 
 }; // ShapeSymLoader
 

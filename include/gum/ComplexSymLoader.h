@@ -16,7 +16,7 @@ namespace gum
 class ComplexSymLoader : private cu::Uncopyable
 {
 public:
-	ComplexSymLoader(s2::ComplexSymbol* sym, bool flatten = false);
+	ComplexSymLoader(s2::ComplexSymbol* sym, bool flatten);
 	~ComplexSymLoader();
 
 	void LoadJson(const std::string& filepath);

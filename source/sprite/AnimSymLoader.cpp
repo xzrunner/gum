@@ -15,9 +15,9 @@ namespace gum
 {
 
 AnimSymLoader::AnimSymLoader(s2::AnimSymbol* sym, 
+							 bool flatten,
 							 const SymbolLoader* sym_loader,
-							 const SpriteLoader* spr_loader,
-							 bool flatten)
+							 const SpriteLoader* spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 	, m_sym_loader(sym_loader)
@@ -55,7 +55,7 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 		SpineAnimLoader loader(m_sym, m_sym_loader, m_spr_loader);
 		loader.LoadJson(val, dir, filepath);
 	} else {
-		EasyAnimLoader loader(m_sym, m_spr_loader);
+		EasyAnimLoader loader(m_sym, m_flatten, m_spr_loader);
 		loader.LoadJson(val, dir);
 	}
 
@@ -68,7 +68,7 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 
 void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
 {
-	EasyAnimLoader loader(m_sym, m_spr_loader);
+	EasyAnimLoader loader(m_sym, m_flatten, m_spr_loader);
 	loader.LoadBin(node);
 
 	if (m_flatten) {

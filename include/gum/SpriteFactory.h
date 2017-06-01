@@ -24,14 +24,14 @@ public:
 	 *    raw, json res
 	 */	
 	s2::Sprite* Create(const std::string& filepath) const;
-	s2::Sprite* Create(const Json::Value& val, const std::string& dir) const;
+	s2::Sprite* Create(const Json::Value& val, const std::string& dir, bool flatten = false) const;
 
 	/**
 	 *  @brief
 	 *    pack, binary res
 	 */	
-	s2::Sprite* Create(uint32_t id, bool flatten = false);
-	s2::Sprite* CreateFromSym(uint32_t id, bool create_actors = true, bool flatten = false);
+	s2::Sprite* Create(uint32_t id, bool flatten);
+	s2::Sprite* CreateFromSym(uint32_t id, bool flatten, bool create_actors = true);
 
 private:
 	static void CreateSprActors(const s2::Sprite* spr);

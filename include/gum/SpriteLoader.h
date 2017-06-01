@@ -15,7 +15,7 @@ class SpriteLoader : public cu::RefCountObj
 public:
 	virtual s2::Sprite* Create(s2::Symbol* sym) const;	
 	virtual s2::Sprite* Create(const std::string& filepath) const;
-	virtual s2::Sprite* Create(const Json::Value& val, const std::string& dir) const;
+	virtual s2::Sprite* Create(const Json::Value& val, const std::string& dir, bool flatten = false) const;
 
 }; // SpriteLoader
 

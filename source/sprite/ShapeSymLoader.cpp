@@ -22,8 +22,9 @@
 namespace gum
 {
 
-ShapeSymLoader::ShapeSymLoader(s2::ShapeSymbol* sym)
+ShapeSymLoader::ShapeSymLoader(s2::ShapeSymbol* sym, bool flatten)
 	: m_sym(sym)
+	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -86,7 +87,7 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 		{
 			s2::PolygonShape* polygon = new s2::PolygonShape(vertices);
 
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->color);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->color, m_flatten);
 			assert(sym->Type() == s2::SYM_IMAGE);
 			gum::ImageSymbol* tex_sym = VI_DOWNCASTING<gum::ImageSymbol*>(sym);
 			s2::Polygon* poly = new s2::TexturePolygon(tex_sym);

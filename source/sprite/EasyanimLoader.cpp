@@ -14,9 +14,10 @@
 namespace gum
 {
 
-EasyAnimLoader::EasyAnimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
+EasyAnimLoader::EasyAnimLoader(s2::AnimSymbol* sym, bool flatten, const SpriteLoader* spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
+	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -71,7 +72,7 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 			for (int actor = 0; actor < actor_n; ++actor)
 			{
 				const simp::NodeAnimation::Actor* src_actor = src_frame->actors[actor];
-				s2::Sprite* spr = SpriteFactory::Instance()->Create(src_actor->sym_id);
+				s2::Sprite* spr = SpriteFactory::Instance()->Create(src_actor->sym_id, m_flatten);
 				SprTransLoader::Load(spr, src_actor->trans);
 				dst_frame->sprs.push_back(spr);
 			}

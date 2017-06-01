@@ -60,6 +60,10 @@ void ComplexSymLoader::LoadJson(const std::string& filepath)
 	}
 
 //	LoadJsonAction(value, m_sym);
+
+	if (m_flatten) {
+		m_sym->BuildFlatten(NULL);
+	}
 }
 
 void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
@@ -93,6 +97,10 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		dst.push_back(dst_action);
 	}
 	m_sym->SetActions(dst);
+
+	if (m_flatten) {
+		m_sym->BuildFlatten(NULL);
+	}
 }
 
 //void ComplexSymLoader::LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym)
