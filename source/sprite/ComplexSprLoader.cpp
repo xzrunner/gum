@@ -37,7 +37,11 @@ void ComplexSprLoader::LoadBin(const simp::NodeComplexSpr* node)
 		return;
 	}
 
-	m_spr->SetAction(node->action);
+	int action = node->action;
+	if (action == 0xffff) {
+		action = -1;
+	}
+	m_spr->SetAction(action);
 }
 
 }
