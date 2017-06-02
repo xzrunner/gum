@@ -64,6 +64,7 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 	} else {
 		m_sym->LoadCopy();
 	}
+	m_sym->BuildCurr();
 }
 
 void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
@@ -76,7 +77,7 @@ void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
 	} else {
 		m_sym->LoadCopy();
 	}
-
+	m_sym->BuildCurr();
 }
 
 }
