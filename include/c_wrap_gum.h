@@ -81,8 +81,6 @@ void* gum_create_spr_from_file(const char* filepath);
 void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new);
 void  gum_return_actor_cached(void* actor);
 
-void  gum_draw_text(const char* str, int x, int y, int w);
-
 /************************************************************************/
 /* rt                                                                   */
 /************************************************************************/
@@ -116,6 +114,28 @@ void  gum_gtxt_add_color(const char* name, unsigned int color);
 void  gum_gtxt_add_user_font_char(const char* str, const char* pkg, const char* node);
 void  gum_gtxt_print(const char* str, float x, float y, int font_size, uint32_t font_color);
 void  gum_gtxt_size(const char* str, int font_size, float* w, float* h);
+
+/************************************************************************/
+/* stat                                                                 */
+/************************************************************************/
+
+void  gum_stat_set_enable(bool enable);
+
+void  gum_stat_no_stat_begin();
+void  gum_stat_no_stat_end();
+
+void  gum_stat_fps_begin();
+void  gum_stat_fps_end();
+int   gum_stat_get_fps();
+
+void  gum_stat_opt_enable(bool enable);
+
+void  gum_stat_update();
+void  gum_stat_print_graph();
+void  gum_stat_print_file();
+void  gum_stat_reset();
+
+void  gum_stat_set_mem(float tot, float lua);
 
 #endif // _gum_wrap_c_h_
 

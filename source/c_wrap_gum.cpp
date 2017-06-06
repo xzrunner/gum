@@ -17,6 +17,8 @@
 #include "ActorPool.h"
 #include "SpritePool.h"
 #include "gum/StringHelper.h"
+#include "gum/Statistics.h"
+#include "gum/StatFPS.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -594,6 +596,82 @@ void gum_gtxt_size(const char* str, int font_size, float* w, float* h)
 	sm::vec2 sz = GTxt::Instance()->GetSize(s, StringHelper::FromChar(str));
 	*w = sz.x;
 	*h = sz.y;
+}
+
+/************************************************************************/
+/* stat                                                                 */
+/************************************************************************/
+
+extern "C"
+void gum_stat_set_enable(bool enable)
+{
+	Statistics::Instance()->SetEnable(enable);
+}
+
+extern "C"
+void gum_stat_no_stat_begin()
+{
+	Statistics::Instance()->NoStatBegin();
+}
+
+extern "C"
+void gum_stat_no_stat_end()
+{
+	Statistics::Instance()->NoStatEnd();
+}
+
+extern "C"
+void gum_stat_fps_begin()
+{
+	StatFPS::Instance()->Begin();
+}
+
+extern "C"
+void gum_stat_fps_end()
+{
+	StatFPS::Instance()->End();
+}
+
+extern "C"
+int gum_stat_get_fps()
+{
+	return StatFPS::Instance()->GetFPS();
+}
+
+extern "C"
+void gum_stat_opt_enable(bool enable)
+{
+	Statistics::Instance()->OptEnable(enable);
+}
+
+extern "C"
+void gum_stat_update()
+{
+	Statistics::Instance()->Update();
+}
+
+extern "C"
+void gum_stat_print_graph()
+{
+	Statistics::Instance()->PrintGraph();
+}
+
+extern "C"
+void gum_stat_print_file()
+{
+	Statistics::Instance()->PrintFile();
+}
+
+extern "C"
+void gum_stat_reset()
+{
+	Statistics::Instance()->Reset();
+}
+
+extern "C"
+void gum_stat_set_mem(float tot, float lua)
+{
+	Statistics::Instance()->SetMem(tot, lua);
 }
 
 }
