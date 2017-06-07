@@ -5,18 +5,24 @@
 
 #include <fstream>
 
+#include <stdint.h>
+
 namespace gum
 {
 
 class Statistics
 {
 public:
-	void SetEnable(bool enable) { m_enable = enable; }
-	bool GetEnable() const { return m_enable; }
+	void EnableGraph(bool enable);
+	void EnableConsole(bool enable);
+	void EnableFile(bool enable);
 
+	bool IsGraphEnable() const;
+	bool IsConsoleEnable() const;
+	bool IsFileEnable() const;
+	
 	void Update();
-	void PrintGraph() const;
-	void PrintFile();
+	void Print();
 	void Reset();
 
 	void NoStatBegin();
@@ -27,6 +33,15 @@ public:
 	void SetMem(float tot, float lua);
 
 private:
+	void PrintGraph() const;
+	void PrintConsole() const;
+	void PrintFile() const;
+
+private:
+	static const uint32_t FLAG_PRINT_GRAPH    = 0x00000001;
+	static const uint32_t FLAG_PRINT_CONSOLE  = 0x00000002;
+	static const uint32_t FLAG_PRINT_FILE     = 0x00000004;
+
 	struct Memory
 	{
 		float tot;
@@ -37,7 +52,7 @@ private:
 	};
 
 private:
-	bool m_enable;
+	uint32_t m_flags;
 
 	float m_tpf, m_tpf_smooth;
 
@@ -48,8 +63,7 @@ private:
 
 	bool m_opt_enable;
 
-	std::ofstream m_fout;
-	int m_fout_flush;
+	mutable std::ofstream m_fout;
 
 	SINGLETON_DECLARATION(Statistics);
 

@@ -26,29 +26,77 @@ SINGLETON_DEFINITION(Statistics);
 
 static const float FPS_SMOOTHING = 0.99f;
 
-static const int FLUSH_COUNT = 100;
-
 Statistics::Statistics()
-	: m_enable(false)
+	: m_flags(0)
 	, m_tpf(0)
 	, m_tpf_smooth(0)
 	, m_no_stat_begin(0)
 	, m_no_stat_tot(0)
 	, m_opt_enable(false)
-	, m_fout_flush(0)
 {
 	memset(&m_mem, 0, sizeof(m_mem));
+}
+
+void Statistics::EnableGraph(bool enable)
+{
+	if (enable) {
+		m_flags |= FLAG_PRINT_GRAPH;
+	} else {
+		m_flags &= ~FLAG_PRINT_GRAPH;
+	}
+}
+
+void Statistics::EnableConsole(bool enable)
+{
+	if (enable) {
+		m_flags |= FLAG_PRINT_CONSOLE;
+	} else {
+		m_flags &= ~FLAG_PRINT_CONSOLE;
+	}
+}
+
+void Statistics::EnableFile(bool enable)
+{
+	if (enable == IsFileEnable()) {
+		return;
+	}
+
+	if (enable) 
+	{
+		m_flags |= FLAG_PRINT_FILE;
 
 #ifdef __ANDROID__
-	m_fout.open("/sdcard/lr_stat.bin", std::ofstream::out | std::ofstream::binary);
+		m_fout.open("/sdcard/lr_stat.bin", std::ofstream::out | std::ofstream::binary);
 #else
-	m_fout.open("lr_stat.bin", std::ofstream::out | std::ofstream::binary);	
+		m_fout.open("lr_stat.bin", std::ofstream::out | std::ofstream::binary);	
 #endif // __ANDROID__
+	} 
+	else 
+	{
+		m_flags &= ~FLAG_PRINT_FILE;
+
+		m_fout.close();
+	}
+}
+
+bool Statistics::IsGraphEnable() const
+{
+	return (m_flags & FLAG_PRINT_GRAPH) != 0;
+}
+
+bool Statistics::IsConsoleEnable() const
+{
+	return (m_flags & FLAG_PRINT_CONSOLE) != 0;	
+}
+
+bool Statistics::IsFileEnable() const
+{
+	return (m_flags & FLAG_PRINT_FILE) != 0;
 }
 
 void Statistics::Update()
 {
-	if (!m_enable) {
+	if (m_flags == 0) {
 		return;
 	}
 
@@ -58,12 +106,61 @@ void Statistics::Update()
 	StatFPS::Instance()->Update();
 }
 
-void Statistics::PrintGraph() const
+void Statistics::Print()
 {
-	if (!m_enable) {
+	if (m_flags == 0) {
 		return;
 	}
 
+	if (m_flags & FLAG_PRINT_GRAPH) {
+		PrintGraph();
+	}
+	if (m_flags & FLAG_PRINT_CONSOLE) {
+		PrintConsole();
+	}
+	if (m_flags & FLAG_PRINT_FILE) {
+		PrintFile();
+	}
+}
+
+void Statistics::Reset()
+{
+	if (m_flags == 0) {
+		return;
+	}
+
+	m_tpf = 0;
+
+	sl::Statistics::Instance()->Reset();
+
+	s2::StatDrawCall::Instance()->Reset();
+	s2::StatPingPong::Instance()->Reset();
+	s2::StatTopNodes::Instance()->Reset();
+}
+
+void Statistics::NoStatBegin()
+{
+	m_no_stat_begin = glp_get_time();
+}
+
+void Statistics::NoStatEnd()
+{
+	m_no_stat_tot = (glp_get_time() - m_no_stat_begin);
+}
+
+void Statistics::OptEnable(bool enable)
+{
+	m_opt_enable = enable;
+}
+
+void Statistics::SetMem(float tot, float lua)
+{
+	m_mem.tot = tot;
+	m_mem.lua = lua;
+}
+
+void Statistics::PrintGraph() const
+{
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 
@@ -112,7 +209,18 @@ void Statistics::PrintGraph() const
 	mgr->FlushShader();
 }
 
-void Statistics::PrintFile()
+void Statistics::PrintConsole() const
+{
+	static const int PRINT_COUNT = 30;
+	static int count = 0;
+	++count;
+	if (count == PRINT_COUNT) {
+		count = 0;
+		printf("cost %.1f\n", m_tpf_smooth);
+	}
+}
+
+void Statistics::PrintFile() const
 {
 	sl::Statistics* sl_stat = sl::Statistics::Instance();
 
@@ -121,47 +229,13 @@ void Statistics::PrintFile()
 		time(NULL), m_tpf_smooth, sl_stat->GetVertices(), sl_stat->GetDrawCall());
 	m_fout << buf;
 
-	++m_fout_flush;
-	if (m_fout_flush == FLUSH_COUNT) {
-		m_fout_flush = 0;
+	static const int FLUSH_COUNT = 100;
+	static int count = 0;
+	++count;
+	if (count == FLUSH_COUNT) {
+		count = 0;
 		m_fout.flush();
 	}
-}
-
-void Statistics::Reset()
-{
-	if (!m_enable) {
-		return;
-	}
-
-	m_tpf = 0;
-
-	sl::Statistics::Instance()->Reset();
-
-	s2::StatDrawCall::Instance()->Reset();
-	s2::StatPingPong::Instance()->Reset();
-	s2::StatTopNodes::Instance()->Reset();
-}
-
-void Statistics::NoStatBegin()
-{
-	m_no_stat_begin = glp_get_time();
-}
-
-void Statistics::NoStatEnd()
-{
-	m_no_stat_tot = (glp_get_time() - m_no_stat_begin);
-}
-
-void Statistics::OptEnable(bool enable)
-{
-	m_opt_enable = enable;
-}
-
-void Statistics::SetMem(float tot, float lua)
-{
-	m_mem.tot = tot;
-	m_mem.lua = lua;
 }
 
 }

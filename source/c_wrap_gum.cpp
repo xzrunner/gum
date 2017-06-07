@@ -603,9 +603,39 @@ void gum_gtxt_size(const char* str, int font_size, float* w, float* h)
 /************************************************************************/
 
 extern "C"
-void gum_stat_set_enable(bool enable)
+void gum_stat_enable_graph(bool enable)
 {
-	Statistics::Instance()->SetEnable(enable);
+	Statistics::Instance()->EnableGraph(enable);
+}
+
+extern "C"
+void gum_stat_enable_console(bool enable)
+{
+	Statistics::Instance()->EnableConsole(enable);
+}
+
+extern "C"
+void gum_stat_enable_file(bool enable)
+{
+	Statistics::Instance()->EnableFile(enable);
+}
+
+extern "C"
+bool gum_stat_is_graph_enable()
+{
+	return Statistics::Instance()->IsGraphEnable();
+}
+
+extern "C"
+bool gum_stat_is_console_enable()
+{
+	return Statistics::Instance()->IsConsoleEnable();
+}
+
+extern "C"
+bool gum_stat_is_file_enable()
+{
+	return Statistics::Instance()->IsFileEnable();
 }
 
 extern "C"
@@ -651,15 +681,9 @@ void gum_stat_update()
 }
 
 extern "C"
-void gum_stat_print_graph()
+void gum_stat_print()
 {
-	Statistics::Instance()->PrintGraph();
-}
-
-extern "C"
-void gum_stat_print_file()
-{
-	Statistics::Instance()->PrintFile();
+	Statistics::Instance()->Print();
 }
 
 extern "C"

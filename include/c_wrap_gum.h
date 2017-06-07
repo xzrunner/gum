@@ -119,7 +119,13 @@ void  gum_gtxt_size(const char* str, int font_size, float* w, float* h);
 /* stat                                                                 */
 /************************************************************************/
 
-void  gum_stat_set_enable(bool enable);
+void  gum_stat_enable_graph(bool enable);
+void  gum_stat_enable_console(bool enable);
+void  gum_stat_enable_file(bool enable);
+
+bool  gum_stat_is_graph_enable();
+bool  gum_stat_is_console_enable();
+bool  gum_stat_is_file_enable();
 
 void  gum_stat_no_stat_begin();
 void  gum_stat_no_stat_end();
@@ -131,8 +137,7 @@ int   gum_stat_get_fps();
 void  gum_stat_opt_enable(bool enable);
 
 void  gum_stat_update();
-void  gum_stat_print_graph();
-void  gum_stat_print_file();
+void  gum_stat_print();
 void  gum_stat_reset();
 
 void  gum_stat_set_mem(float tot, float lua);
