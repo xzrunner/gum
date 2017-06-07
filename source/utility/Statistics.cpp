@@ -2,6 +2,7 @@
 #include "gum/StatFPS.h"
 #include "gum/GUM_GTxt.h"
 
+#include <logger.h>
 #include <glp_loop.h>
 #include <ps_3d.h>
 #include <sprite2/pre_defined.h>
@@ -223,7 +224,7 @@ void Statistics::PrintConsole() const
 	++count;
 	if (count == PRINT_COUNT) {
 		count = 0;
-		printf("cost %.1f\n", m_tpf_smooth);
+		LOGI("fps %.1f, cost %.1f\n", 1000.0f / m_tpf_smooth, m_tpf_smooth);
 	}
 }
 
