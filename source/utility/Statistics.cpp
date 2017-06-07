@@ -225,7 +225,7 @@ void Statistics::PrintFile() const
 	sl::Statistics* sl_stat = sl::Statistics::Instance();
 
 	static char buf[512];
-	sprintf(buf, "timestamp %" PRId64 ", cost %.1f, vertices %d, dc %d\n", 
+	sprintf(buf, "timestamp %lu, cost %.1f, vertices %d, dc %d\n", 
 		time(NULL), m_tpf_smooth, sl_stat->GetVertices(), sl_stat->GetDrawCall());
 	m_fout << buf;
 
