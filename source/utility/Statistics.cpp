@@ -9,6 +9,7 @@
 #include <sprite2/StatDrawCall.h>
 #include <sprite2/StatPingPong.h>
 #include <sprite2/StatTopNodes.h>
+#include <sprite2/StatSymbol.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Statistics.h>
 
@@ -136,6 +137,7 @@ void Statistics::Reset()
 	s2::StatDrawCall::Instance()->Reset();
 	s2::StatPingPong::Instance()->Reset();
 	s2::StatTopNodes::Instance()->Reset();
+	s2::StatSymbol::Instance()->Reset();
 }
 
 void Statistics::NoStatBegin()
@@ -196,13 +198,18 @@ void Statistics::PrintGraph() const
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
-	mt.Translate(0, -30);
+	mt.Translate(0, -40);
 	s2::StatPingPong::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
-
+ 
 	mt.Translate(0, -200);
 	s2::StatTopNodes::Instance()->Print(buf_str);
+	GTxt::Instance()->Draw(mt, buf_str, w);	
+	buf_str.clear();
+
+	mt.Translate(450, 180);
+	s2::StatSymbol::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
