@@ -13,13 +13,14 @@
 #include <sprite2/StatSymbol.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Statistics.h>
+#include <shaderlab/StatDrawCall.h>
 
 #include <string>
 
 #include <time.h>
 
-#define __STDC_FORMAT_MACROS
-#include <inttypes.h>
+// #define __STDC_FORMAT_MACROS
+// #include <inttypes.h>
 
 namespace gum
 {
@@ -134,6 +135,7 @@ void Statistics::Reset()
 	m_tpf = 0;
 
 	sl::Statistics::Instance()->Reset();
+	sl::StatDrawCall::Instance()->Reset();
 
 	s2::StatDrawCall::Instance()->Reset();
 	s2::StatPingPong::Instance()->Reset();
@@ -211,6 +213,11 @@ void Statistics::PrintGraph() const
 
 	mt.Translate(450, 180);
 	s2::StatSymbol::Instance()->Print(buf_str);
+	GTxt::Instance()->Draw(mt, buf_str, w);	
+	buf_str.clear();
+
+	mt.Translate(0, -230);
+	sl::StatDrawCall::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
