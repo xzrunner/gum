@@ -33,7 +33,7 @@ public:
 	void SetMem(float tot, float lua);
 
 private:
-	void PrintGraph() const;
+	void PrintScreen() const;
 	void PrintConsole() const;
 	void PrintFile() const;
 

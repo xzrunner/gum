@@ -127,6 +127,10 @@ bool  gum_stat_is_graph_enable();
 bool  gum_stat_is_console_enable();
 bool  gum_stat_is_file_enable();
 
+void  gum_stat_enable_tag(bool enable);
+bool  gum_stat_is_tag_enable();
+void  gum_stat_print_tag(const char* type, const char* msg);
+
 void  gum_stat_no_stat_begin();
 void  gum_stat_no_stat_end();
 

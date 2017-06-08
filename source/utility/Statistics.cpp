@@ -1,5 +1,6 @@
 #include "gum/Statistics.h"
 #include "gum/StatFPS.h"
+#include "gum/StatTag.h"
 #include "gum/GUM_GTxt.h"
 
 #include <logger.h>
@@ -18,9 +19,6 @@
 #include <string>
 
 #include <time.h>
-
-// #define __STDC_FORMAT_MACROS
-// #include <inttypes.h>
 
 namespace gum
 {
@@ -111,12 +109,14 @@ void Statistics::Update()
 
 void Statistics::Print()
 {
+	StatTag::Instance()->PrintScreen();
+
 	if (m_flags == 0) {
 		return;
 	}
 
 	if (m_flags & FLAG_PRINT_GRAPH) {
-		PrintGraph();
+		PrintScreen();
 	}
 	if (m_flags & FLAG_PRINT_CONSOLE) {
 		PrintConsole();
@@ -164,7 +164,7 @@ void Statistics::SetMem(float tot, float lua)
 	m_mem.lua = lua;
 }
 
-void Statistics::PrintGraph() const
+void Statistics::PrintScreen() const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);

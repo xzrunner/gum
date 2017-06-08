@@ -19,6 +19,7 @@
 #include "gum/StringHelper.h"
 #include "gum/Statistics.h"
 #include "gum/StatFPS.h"
+#include "gum/StatTag.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -636,6 +637,26 @@ extern "C"
 bool gum_stat_is_file_enable()
 {
 	return Statistics::Instance()->IsFileEnable();
+}
+
+extern "C"
+void gum_stat_enable_tag(bool enable)
+{
+	StatTag::Instance()->Enable(enable);
+}
+
+extern "C"
+bool gum_stat_is_tag_enable()
+{
+	return StatTag::Instance()->IsEnable();
+}
+
+extern "C"
+void gum_stat_print_tag(const char* type, const char* msg)
+{
+	StatTag::Instance()->Print(
+		StringHelper::FromChar(type),
+		StringHelper::FromChar(msg));
 }
 
 extern "C"
