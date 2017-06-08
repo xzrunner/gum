@@ -714,6 +714,12 @@ void gum_stat_reset()
 }
 
 extern "C"
+void gum_stat_flush()
+{
+	Statistics::Instance()->Flush();
+}
+
+extern "C"
 void gum_stat_set_mem(float tot, float lua)
 {
 	Statistics::Instance()->SetMem(tot, lua);

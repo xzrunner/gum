@@ -25,6 +25,8 @@ public:
 	void Print();
 	void Reset();
 
+	void Flush();
+
 	void NoStatBegin();
 	void NoStatEnd();
 

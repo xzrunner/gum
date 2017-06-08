@@ -143,6 +143,11 @@ void Statistics::Reset()
 	s2::StatSymbol::Instance()->Reset();
 }
 
+void Statistics::Flush()
+{
+	StatTag::Instance()->Flush();
+}
+
 void Statistics::NoStatBegin()
 {
 	m_no_stat_begin = glp_get_time();

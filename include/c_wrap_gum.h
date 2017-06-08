@@ -143,6 +143,7 @@ void  gum_stat_opt_enable(bool enable);
 void  gum_stat_update();
 void  gum_stat_print();
 void  gum_stat_reset();
+void  gum_stat_flush();
 
 void  gum_stat_set_mem(float tot, float lua);
 

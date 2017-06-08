@@ -17,6 +17,8 @@ public:
 	void Print(const std::string& type, const std::string& msg) const;
 	void PrintScreen() const;
 
+	void Flush();
+
 private:
 	void PrintFile() const;
 

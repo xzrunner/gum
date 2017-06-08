@@ -72,6 +72,13 @@ void StatTag::PrintScreen() const
 	mgr->FlushShader();
 }
 
+void StatTag::Flush()
+{
+	if (m_enable) {
+		m_fout.flush();
+	}
+}
+
 void StatTag::PrintFile() const
 {
 	m_fout << "timestamp " << time(NULL) << ", type " << m_type << ", msg " << m_msg << '\n';
