@@ -3,6 +3,7 @@
 #include "RenderContext.h"
 #include "GUM_DTex.h"
 #include "DTexC2Strategy.h"
+#include "ProxyImage.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <sprite2/S2_Texture.h>
@@ -155,6 +156,11 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm
 	m_size.ymin = -hh + offset.y;
 	m_size.xmax = hw + offset.x;
 	m_size.ymax = hh + offset.y;
+}
+
+bool ImageSymbol::IsProxyImg() const
+{
+	return dynamic_cast<ProxyImage*>(m_img) != NULL;
 }
 
 void ImageSymbol::InitTexcoords()

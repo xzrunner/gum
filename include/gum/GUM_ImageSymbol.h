@@ -38,6 +38,8 @@ public:
 	void SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm::vec2& offset);
 
 private:
+	virtual bool IsProxyImg() const;
+
 	void InitTexcoords();
 
 private:
