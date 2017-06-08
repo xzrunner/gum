@@ -30,7 +30,7 @@ void StatTag::Enable(bool enable)
 	if (enable) 
 	{
 #ifdef __ANDROID__
-		m_fout.open("/sdcard/lr_stat_timer.bin", std::ofstream::out | std::ofstream::binary);
+		m_fout.open("/sdcard/lr_stat_tag.bin", std::ofstream::out | std::ofstream::binary);
 #else
 		m_fout.open("lr_stat_tag.bin", std::ofstream::out | std::ofstream::binary);	
 #endif // __ANDROID__
