@@ -1,6 +1,8 @@
 #ifndef _GUM_IMAGE_SYMBOL_H_
 #define _GUM_IMAGE_SYMBOL_H_
 
+#include "gum_config.h"
+
 #include <sprite2/ImageSymbol.h>
 
 #include <string>
@@ -38,7 +40,9 @@ public:
 	void SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm::vec2& offset);
 
 private:
+#ifdef GUM_DEBUG
 	virtual bool IsProxyImg() const;
+#endif // GUM_DEBUG
 
 	void InitTexcoords();
 

@@ -158,10 +158,12 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm
 	m_size.ymax = hh + offset.y;
 }
 
+#ifdef GUM_DEBUG
 bool ImageSymbol::IsProxyImg() const
 {
 	return dynamic_cast<ProxyImage*>(m_img) != NULL;
 }
+#endif // GUM_DEBUG
 
 void ImageSymbol::InitTexcoords()
 {
