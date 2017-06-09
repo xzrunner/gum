@@ -211,20 +211,20 @@ void Statistics::PrintScreen() const
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
  
-	mt.Translate(0, -200);
+	mt.Translate(450, -100);
 	s2::StatTopNodes::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
-	mt.Translate(450, 180);
-	s2::StatSymbol::Instance()->Print(buf_str);
-	GTxt::Instance()->Draw(mt, buf_str, w);	
-	buf_str.clear();
+// 	mt.Translate(450, 180);
+// 	s2::StatSymbol::Instance()->Print(buf_str);
+// 	GTxt::Instance()->Draw(mt, buf_str, w);	
+// 	buf_str.clear();
 
-	mt.Translate(0, -230);
-	sl::StatDrawCall::Instance()->Print(buf_str);
-	GTxt::Instance()->Draw(mt, buf_str, w);	
-	buf_str.clear();
+// 	mt.Translate(0, -230);
+// 	sl::StatDrawCall::Instance()->Print(buf_str);
+// 	GTxt::Instance()->Draw(mt, buf_str, w);	
+// 	buf_str.clear();
 
 	mgr->FlushShader();
 }
