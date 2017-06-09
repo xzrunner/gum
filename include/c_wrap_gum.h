@@ -147,6 +147,16 @@ void  gum_stat_flush();
 
 void  gum_stat_set_mem(float tot, float lua);
 
+/************************************************************************/
+/* record screen                                                        */
+/************************************************************************/
+
+void  gum_record_screen_set_enable(bool enable);
+bool  gum_record_screen_is_enable();
+void  gum_record_screen_print(void* rt);
+void  gum_record_screen_flush();
+void  gum_record_screen_clear();
+
 #endif // _gum_wrap_c_h_
 
 #ifdef __cplusplus

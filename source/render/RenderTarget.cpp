@@ -1,9 +1,9 @@
 #include "RenderTarget.h"
-#include "RenderContext.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
+#include <sprite2/RenderScissor.h>
 #include <sprite2/RenderCtxStack.h>
 
 namespace gum
@@ -14,30 +14,35 @@ RenderTarget::RenderTarget(int width, int height)
 {
 }
 
-void RenderTarget::Draw(float xmin, float ymin, float xmax, float ymax) const
+void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int dst_h) const
 {
-	s2::RenderContext* s2_ctx = const_cast<s2::RenderContext*>(s2::RenderCtxStack::Instance()->Top());
-	if (!s2_ctx) {
-		return;
-	}
-	const sm::vec2& old_offset = s2_ctx->GetMVOffset();
-	float old_scale = s2_ctx->GetMVScale();
-	s2_ctx->SetModelView(sm::vec2(0, 0), 1);
+	sl::ShaderMgr::Instance()->FlushShader();
 
 	float vertices[8], texcoords[8];
 
-	RenderContext* ctx = RenderContext::Instance();
-	float hw = ctx->GetWidth() * 0.5f,
-		  hh = ctx->GetHeight() * 0.5f;
-	vertices[0] = -hw; vertices[1] = -hh;
-	vertices[2] =  hw; vertices[3] = -hh; 
-	vertices[4] =  hw; vertices[5] =  hh;
-	vertices[6] = -hw; vertices[7] =  hh;
+	float w, h;
+	if (dst_w != 0 && dst_h != 0) {
+		w = dst_w;
+		h = dst_h;
+	} else {
+		w = Width();
+		h = Height();
+	}
 
-	texcoords[0] = xmin; texcoords[1] = ymin;
-	texcoords[2] = xmax; texcoords[3] = ymin;
-	texcoords[4] = xmax; texcoords[5] = ymax;
-	texcoords[6] = xmin; texcoords[7] = ymax;
+	s2::RenderScissor::Instance()->Disable();
+	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(w, h, w, h));
+
+	float hw = w * 0.5f,
+		  hh = h * 0.5f;
+	vertices[0] = w * dst.xmin - hw; vertices[1] = h * dst.ymin - hh;
+	vertices[2] = w * dst.xmax - hw; vertices[3] = h * dst.ymin - hh; 
+	vertices[4] = w * dst.xmax - hw; vertices[5] = h * dst.ymax - hh;
+	vertices[6] = w * dst.xmin - hw; vertices[7] = h * dst.ymax - hh;
+
+	texcoords[0] = src.xmin; texcoords[1] = src.ymin;
+	texcoords[2] = src.xmax; texcoords[3] = src.ymin;
+	texcoords[4] = src.xmax; texcoords[5] = src.ymax;
+	texcoords[6] = src.xmin; texcoords[7] = src.ymax;
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
 	switch (sl_mgr->GetShaderType()) 
@@ -61,7 +66,8 @@ void RenderTarget::Draw(float xmin, float ymin, float xmax, float ymax) const
 		break;
 	}
 
-	s2_ctx->SetModelView(old_offset, old_scale);
+	s2::RenderCtxStack::Instance()->Pop();
+	s2::RenderScissor::Instance()->Enable();
 }
 
 }

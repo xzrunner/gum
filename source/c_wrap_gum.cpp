@@ -20,6 +20,7 @@
 #include "gum/Statistics.h"
 #include "gum/StatFPS.h"
 #include "gum/StatTag.h"
+#include "gum/StatScreen.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -181,6 +182,7 @@ void gum_debug_draw()
 	//DTex::Instance()->DebugDraw();
 	//Sprite2::Instance()->DebugDraw();
 	//RenderTargetMgr::Instance()->DebugDraw();
+	//StatScreen::Instance()->DebugDraw();
 }
 
 extern "C"
@@ -483,10 +485,21 @@ extern "C"
 void gum_rt_draw(void* rt, struct gum_region* src)
 {
 	RenderTarget* gum_rt = static_cast<RenderTarget*>(rt);
-	if (src) {
-		gum_rt->Draw(src->xmin, src->ymin, src->xmax, src->ymax);
-	} else {
-		gum_rt->Draw();
+	sm::rect normal;
+	normal.xmin = normal.ymin = 0;
+	normal.xmax = normal.ymax = 1;
+	if (src) 
+	{
+		sm::rect s;
+		s.xmin = src->xmin;
+		s.xmax = src->xmax;
+		s.ymin = src->ymin;
+		s.ymax = src->ymax;
+		gum_rt->Draw(s, normal);
+	} 
+	else 
+	{
+		gum_rt->Draw(normal, normal);
 	}
 }
 
@@ -723,6 +736,41 @@ extern "C"
 void gum_stat_set_mem(float tot, float lua)
 {
 	Statistics::Instance()->SetMem(tot, lua);
+}
+
+/************************************************************************/
+/* record screen                                                        */
+/************************************************************************/
+
+extern "C"
+void gum_record_screen_set_enable(bool enable)
+{
+	StatScreen::Instance()->Enable(enable);
+}
+
+extern "C"
+bool gum_record_screen_is_enable()
+{
+	return StatScreen::Instance()->IsEnable();	
+}
+
+extern "C"
+void gum_record_screen_print(void* rt)
+{
+	RenderTarget* gum_rt = static_cast<RenderTarget*>(rt);
+	StatScreen::Instance()->Print(gum_rt);
+}
+
+extern "C"
+void gum_record_screen_flush()
+{
+	StatScreen::Instance()->Flush();
+}
+
+extern "C"
+void gum_record_screen_clear()
+{
+	StatScreen::Instance()->Clear();
 }
 
 }

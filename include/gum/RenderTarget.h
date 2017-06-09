@@ -1,6 +1,7 @@
 #ifndef _GUM_RENDER_TARGET_H_
 #define _GUM_RENDER_TARGET_H_
 
+#include <SM_Rect.h>
 #include <sprite2/S2_RenderTarget.h>
 
 namespace gum
@@ -11,7 +12,7 @@ class RenderTarget : public s2::RenderTarget
 public:
 	RenderTarget(int width, int height);
 
-	void Draw(float xmin = 0, float ymin = 0, float xmax = 1, float ymax = 1) const;
+	void Draw(const sm::rect& src, const sm::rect& dst, int dst_w = 0, int dst_h = 0) const;
 
 }; // RenderTarget
 
