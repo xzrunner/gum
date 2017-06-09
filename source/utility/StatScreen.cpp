@@ -9,6 +9,7 @@
 #include <dtex2/DebugDraw.h>
 
 #include <time.h>
+#include <string.h>
 
 namespace gum
 {
