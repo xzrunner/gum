@@ -1,7 +1,7 @@
 #include "StatScreen.h"
 #include "RenderTarget.h"
 #include "RenderContext.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 
 #include <gimg_typedef.h>
 #include <gimg_export.h>
