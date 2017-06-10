@@ -37,7 +37,7 @@ public:
 	void SetImage(Image* img);
 	const Image* GetImage() const { return m_img; }
 
-	void SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm::vec2& offset);
+	void SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm::vec2& offset, int lod);
 
 private:
 #ifdef GUM_DEBUG

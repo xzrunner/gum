@@ -105,7 +105,8 @@ void ImageSymbol::SetImage(Image* img)
 	InitTex(m_img->GetS2Tex(), q);	
 }
 
-void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm::vec2& offset)
+void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, 
+							const sm::vec2& offset, int lod)
 {
 	m_packed = true;
 
@@ -150,6 +151,14 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, const sm
 		m_region.ymin = min.y;
 		m_region.xmax = max.x;
 		m_region.ymax = max.y;
+	}
+
+	if (lod == 1) {
+		hw *= 2;
+		hh *= 2;
+	} else if (lod == 2) {
+		hw *= 4;
+		hh *= 4;
 	}
 
 	m_size.xmin = -hw + offset.x;

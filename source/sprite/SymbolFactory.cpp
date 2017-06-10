@@ -238,7 +238,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 				sym->SetRegion(
 					sm::ivec2(pic->region[0], pic->region[1]), 
 					sm::ivec2(pic->region[2], pic->region[3]),
-					offset);
+					offset,
+					pic->lod);
 			}
 			else
 			{
@@ -251,7 +252,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 				sym->SetRegion(
 					sm::ivec2(pic->region[0], pic->region[1]), 
 					sm::ivec2(pic->region[2], pic->region[3]),
-					offset);
+					offset,
+					pic->lod);
 			}
 			ret = sym;
 		}

@@ -246,11 +246,11 @@ load_file(const std::string& filepath, bool use_cache, void (*parser_cb)(const v
 }
 
 static void 
-load_texture(int pkg_id, int tex_idx) 
+load_texture(int pkg_id, int tex_idx, int lod) 
 {
 	const timp::Package* t_pkg = timp::PkgMgr::Instance()->Query(pkg_id);
 	assert(t_pkg);
-	const std::string& filepath = t_pkg->GetTexPath(tex_idx, 0);
+	const std::string& filepath = t_pkg->GetTexPath(tex_idx, lod);
 	
 	ImageLoader loader(filepath);
 	bool ret = loader.Load();
@@ -294,11 +294,12 @@ load_texture_cb2(const void* data, size_t size, void (*cb)(int format, int w, in
 /************************************************************************/
 
 static void
-relocate_pkg(int src_pkg, int src_tex, int dst_tex_id, int dst_fmt, int dst_w, int dst_h, int dst_xmin, int dst_ymin, int dst_xmax, int dst_ymax)
+relocate_pkg(int src_pkg, int src_tex, int src_lod, int dst_tex_id, int dst_fmt, int dst_w, int dst_h, int dst_xmin, int dst_ymin, int dst_xmax, int dst_ymax)
 {
 	simp::RelocateTexcoords::Item item;
 	item.src_pkg = src_pkg;
 	item.src_tex = src_tex;
+	item.src_lod = src_lod;
 	item.dst_tex_id = dst_tex_id;
 	item.dst_w = dst_w;
 	item.dst_h = dst_h;
