@@ -103,8 +103,6 @@ void Statistics::Update()
 
 	m_tpf = glp_get_dt();
 	m_tpf_smooth = (m_tpf_smooth * FPS_SMOOTHING) + m_tpf * (1.0f - FPS_SMOOTHING);
-
-	StatFPS::Instance()->Update();
 }
 
 void Statistics::Print()

@@ -711,6 +711,7 @@ void gum_stat_opt_enable(bool enable)
 extern "C"
 void gum_stat_update()
 {
+	StatFPS::Instance()->Update();
 	Statistics::Instance()->Update();
 }
 
