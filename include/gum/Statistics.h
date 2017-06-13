@@ -58,8 +58,8 @@ private:
 
 	float m_tpf, m_tpf_smooth;
 
-	float m_no_stat_begin;
-	float m_no_stat_tot;
+	uint32_t m_no_stat_begin;
+	uint32_t m_no_stat_tot;
 
 	Memory m_mem;
 
