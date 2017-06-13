@@ -163,6 +163,14 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, bool flatten, int
 			ret = sym;
 		}
 		break;
+	case s2::SYM_MESH:
+		{
+			s2::MeshSymbol* sym = new s2::MeshSymbol;
+			MeshSymLoader loader(sym, flatten);
+			loader.LoadJson(filepath);
+			ret = sym;
+		}
+		break;
 	case s2::SYM_MASK:
 		{
 			s2::MaskSymbol* sym = new s2::MaskSymbol;
