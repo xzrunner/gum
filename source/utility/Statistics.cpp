@@ -247,6 +247,11 @@ void Statistics::PrintFile() const
 		time(NULL), m_tpf_smooth, sl_stat->GetVertices(), sl_stat->GetDrawCall());
 	m_fout << buf;
 
+	static std::string buf_str;
+	buf_str.reserve(1024);
+	s2::StatTopNodes::Instance()->Print(buf_str);
+	m_fout << buf_str;
+
 	static const int FLUSH_COUNT = 100;
 	static int count = 0;
 	++count;
