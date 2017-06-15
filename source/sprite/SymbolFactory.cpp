@@ -236,7 +236,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 				ImageSymLoader loader(sym);
 
 				bool async = true;
-				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkgByID(pkg_id);
+				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
 				loader.Load(filepath, s_pkg->GetScale(), async);
 				const timp::Package::TextureDesc& tex = t_pkg->GetTexDesc(pic->texid);
 				Image* img = const_cast<Image*>(sym->GetImage());
