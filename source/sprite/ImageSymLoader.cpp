@@ -20,7 +20,7 @@ ImageSymLoader::~ImageSymLoader()
 	}
 }
 
-void ImageSymLoader::Load(const std::string& filepath, bool async)
+void ImageSymLoader::Load(const std::string& filepath, float scale, bool async)
 {
 	Image* img = ImageMgr::Instance()->Create(filepath, async);
 	if (!img) {
@@ -28,7 +28,7 @@ void ImageSymLoader::Load(const std::string& filepath, bool async)
 	}
 	m_sym->SetImage(img);
 	sm::ivec2 sz = img->GetSize();
-	m_sym->SetRegion(sm::ivec2(0, 0), sz, sm::vec2(0, 0), 0);
+	m_sym->SetRegion(sm::ivec2(0, 0), sz, sm::vec2(0, 0), 0, scale);
 	img->RemoveReference();
 }
 

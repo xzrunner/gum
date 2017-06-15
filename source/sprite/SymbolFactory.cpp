@@ -70,7 +70,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, bool flatten, int
 		{
 			ImageSymbol* sym = new ImageSymbol;
 			ImageSymLoader loader(sym);
-			loader.Load(filepath, false);
+			loader.Load(filepath, 1, false);
 			ret = sym;
 		}
 		break;
@@ -229,15 +229,16 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 			if (pic->texid < simp::NodePicture::MAX_IN_PKG)
 			{
 				int pkg_id = simp::NodeID::GetPkgID(id);
-				const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
-				std::string filepath = pkg->GetTexPath(pic->texid, 0);
+				const timp::Package* t_pkg = timp::PkgMgr::Instance()->Query(pkg_id);
+				std::string filepath = t_pkg->GetTexPath(pic->texid, 0);
 
 				sym = new ImageSymbol(id);
 				ImageSymLoader loader(sym);
 
 				bool async = true;
-				loader.Load(filepath, async);
-				const timp::Package::TextureDesc& tex = pkg->GetTexDesc(pic->texid);
+				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkgByID(pkg_id);
+				loader.Load(filepath, s_pkg->GetScale(), async);
+				const timp::Package::TextureDesc& tex = t_pkg->GetTexDesc(pic->texid);
 				Image* img = const_cast<Image*>(sym->GetImage());
 				if (img && async) {
 					img->AsyncLoad(tex.type, tex.w, tex.h);
@@ -247,7 +248,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 					sm::ivec2(pic->region[0], pic->region[1]), 
 					sm::ivec2(pic->region[2], pic->region[3]),
 					offset,
-					pic->lod);
+					pic->lod,
+					s_pkg->GetScale());
 			}
 			else
 			{
@@ -261,7 +263,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 					sm::ivec2(pic->region[0], pic->region[1]), 
 					sm::ivec2(pic->region[2], pic->region[3]),
 					offset,
-					pic->lod);
+					pic->lod,
+					1);
 			}
 			ret = sym;
 		}

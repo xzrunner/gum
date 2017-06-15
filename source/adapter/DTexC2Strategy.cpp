@@ -38,7 +38,7 @@ bool DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h
 	if (itr != m_pkgs.end()) {
 		pkg = itr->second;
 	} else {
-		const simp::Package* p = simp::NodeFactory::Instance()->QueryPkg(id);
+		const simp::Package* p = simp::NodeFactory::Instance()->QueryPkgByID(pkg_id);
 		if (!p) {
 			return false;
 		}

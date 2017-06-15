@@ -106,7 +106,7 @@ void ImageSymbol::SetImage(Image* img)
 }
 
 void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, 
-							const sm::vec2& offset, int lod)
+							const sm::vec2& offset, int lod, float scale)
 {
 	m_packed = true;
 
@@ -153,6 +153,8 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max,
 		m_region.ymax = max.y;
 	}
 
+	hw /= scale;
+	hh /= scale;
 	if (lod == 1) {
 		hw *= 2;
 		hh *= 2;

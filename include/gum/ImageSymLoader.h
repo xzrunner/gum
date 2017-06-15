@@ -16,7 +16,7 @@ public:
 	ImageSymLoader(ImageSymbol* sym);
 	~ImageSymLoader();
 
-	void Load(const std::string& filepath, bool async);
+	void Load(const std::string& filepath, float scale, bool async);
 
 private:
 	ImageSymbol* m_sym;
