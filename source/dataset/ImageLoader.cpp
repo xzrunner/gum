@@ -75,7 +75,47 @@ void _parser_cb(const void* data, size_t size, void* ud)
 	const void* pixels = loader.GetData();
 	int width = loader.GetWidth(),
 		height = loader.GetHeight();
-	RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+	int format = loader.GetFormat();
+	switch (format)
+	{
+	case timp::TEXTURE_RGBA4: case timp::TEXTURE_RGBA8:
+		RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+		break;
+	case timp::TEXTURE_PVR2:
+#if defined( __APPLE__ ) && !defined(__MACOSX)
+		RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+#endif
+		break;
+	case timp::TEXTURE_PVR4:
+		{
+#if defined( __APPLE__ ) && !defined(__MACOSX)
+			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+#else
+			uint8_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(pixels), width, height);
+			gimg_revert_y(uncompressed, width, height, GPF_RGBA);
+			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), uncompressed, width, height);
+			free(uncompressed);
+#endif
+		}
+		break;
+	case timp::TEXTURE_ETC1:
+		break;
+	case timp::TEXTURE_ETC2:
+		{
+#ifdef __ANDROID__
+			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+#elif defined( __APPLE__ ) && !defined(__MACOSX)
+			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+#elif defined _WIN32
+			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
+#else
+			uint8_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(pixels), width, height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
+			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), uncompressed, width, height);
+			free(uncompressed);
+#endif // __ANDROID__
+		}
+		break;
+	}
 	img->SetLoadFinished(true);
 }
 
@@ -204,6 +244,8 @@ bool ImageLoader::DecodeETC2(const void* data)
 #ifdef __ANDROID__
 	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, timp::TEXTURE_ETC2);
 #elif defined( __APPLE__ ) && !defined(__MACOSX)
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, timp::TEXTURE_ETC2);
+#elif defined _WIN32
 	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, timp::TEXTURE_ETC2);
 #else
 	uint8_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(data), m_width, m_height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
