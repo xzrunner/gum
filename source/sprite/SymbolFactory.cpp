@@ -257,6 +257,9 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 				Image* img = ImageMgr::Instance()->Query(filepath);
 				assert(img);
 
+				int pkg_id = simp::NodeID::GetPkgID(id);
+				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
+
 				sym = new ImageSymbol(id);
 				sym->SetImage(img);
 				sym->SetRegion(
@@ -264,7 +267,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 					sm::ivec2(pic->region[2], pic->region[3]),
 					offset,
 					pic->lod,
-					1);
+					s_pkg->GetScale());
 			}
 			ret = sym;
 		}
