@@ -414,6 +414,8 @@ void GTxt::Draw(const S2_MAT& mt, const std::string& str, int width) const
 
 	style.space_h = style.space_v = 1;
 
+	style.overflow = true;
+
 	style.gs.font = 0;
 	style.gs.font_size = 16;
 	style.gs.font_color.integer = 0xffffffff;
