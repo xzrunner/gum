@@ -132,7 +132,14 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 		return false;
 	}
 
-	m_id = RenderContext::Instance()->GetImpl()->CreateTextureID(width, height, format);
+	int real_fmt = format;
+#if defined( __APPLE__ ) && defined(__MACOSX)
+	if (real_fmt == timp::TEXTURE_ETC2) {
+		real_fmt = timp::TEXTURE_RGBA8;
+	}
+#endif
+
+	m_id = RenderContext::Instance()->GetImpl()->CreateTextureID(width, height, real_fmt);
 	m_format = format;
 	m_width = width;
 	m_height = height;
