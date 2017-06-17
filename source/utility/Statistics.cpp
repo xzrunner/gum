@@ -234,7 +234,8 @@ void Statistics::PrintConsole() const
 	++count;
 	if (count == PRINT_COUNT) {
 		count = 0;
-		LOGI("fps %.1f, cost %.1f\n", 1000.0f / m_tpf_smooth, m_tpf_smooth);
+		int dc = sl::Statistics::Instance()->GetDrawCall();
+		LOGI("fps %.1f, cost %.1f, dc %d\n", 1000.0f / m_tpf_smooth, m_tpf_smooth, dc);
 	}
 }
 
