@@ -144,6 +144,8 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 	m_width = width;
 	m_height = height;
 
+	img->LoadFromLoader(*this);
+
 	img->SetLoadFinished(false);
 	img->AddReference();
 	AsyncTask::Instance()->Load(m_filepath, _load_cb, _parser_cb, _release_cb, img);

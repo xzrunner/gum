@@ -40,7 +40,7 @@ public:
 	bool IsLoadFinished() const;
 	void SetLoadFinished(bool finished);
 
-private:
+//private:
 	void LoadFromLoader(const ImageLoader& loader);
 
 protected:
