@@ -13,6 +13,7 @@ public:
 	static std::string Absolute(const std::string& base, const std::string& path);
 
 	static std::string Dir(const std::string& path);
+	static std::string Filename(const std::string& path);
 
 	static std::string Format(const std::string& path);
 

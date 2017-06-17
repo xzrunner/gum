@@ -41,6 +41,16 @@ std::string FilepathHelper::Dir(const std::string& path)
 #endif // NO_BOOST
 }
 
+std::string FilepathHelper::Filename(const std::string& path)
+{
+#ifndef NO_BOOST
+	return boost::filesystem::path(path).filename().string();
+#else
+	assert(0);
+	return "";
+#endif // NO_BOOST
+}
+
 std::string FilepathHelper::Format(const std::string& path)
 {	
 #ifndef NO_BOOST
