@@ -51,6 +51,9 @@
 #include <dtex2/AsyncTask.h>
 #include <gum/GUM_AsyncTask.h>
 #include <gtxt_label.h>
+#include <c_wrap_dtex.h>
+
+#include <queue>
 
 #include <string.h>
 
@@ -517,6 +520,36 @@ extern "C"
 void gum_dtex_set_c2_max_edge(int max_edge)
 {
 	DTexC2Strategy::Instance()->SetMaxC2Edge(max_edge);
+}
+
+extern "C"
+bool gum_dtex_cache_pkg_static_load(void* cache, int pkg_id, int lod, bool ref)
+{
+	if (!ref) {
+		return dtex_cache_pkg_static_load(cache, pkg_id, lod) == 0;
+	}
+
+	std::set<int> pkgs;
+	std::queue<int> buf;
+	buf.push(pkg_id);
+	while (!buf.empty())
+	{
+		int id = buf.front(); buf.pop();
+		pkgs.insert(id);
+		const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
+		const std::vector<int>& ref_pkgs = pkg->GetRefPkgs();
+		for (int i = 0, n = ref_pkgs.size(); i < n; ++i) {
+			buf.push(ref_pkgs[i]);
+		}
+	}
+
+	std::set<int>::iterator itr = pkgs.begin();
+	for ( ; itr != pkgs.end(); ++itr) {
+		if (dtex_cache_pkg_static_load(cache, *itr, lod) != 0) {
+			return false;
+		}
+	}
+	return true;
 }
 
 /************************************************************************/
