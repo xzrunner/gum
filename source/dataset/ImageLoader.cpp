@@ -19,8 +19,8 @@
 namespace gum
 {
 
-ImageLoader::ImageLoader(const std::string& filepath)
-	: m_filepath(filepath)
+ImageLoader::ImageLoader(const ResPath& res_path)
+	: m_res_path(res_path)
 	, m_id(0)
 	, m_format(0)
 	, m_width(0)
@@ -30,7 +30,9 @@ ImageLoader::ImageLoader(const std::string& filepath)
 
 bool ImageLoader::Load()
 {
-	if (m_filepath.find(".ept") != std::string::npos) {
+	const std::string& filepath = m_res_path.GetFilepath();
+	if (filepath.find(".ept") != std::string::npos ||
+		filepath.find(".pkg") != std::string::npos) {
 		return LoadBin();
 	} else {
 		return LoadRaw();
@@ -42,6 +44,11 @@ class FileLoader : public bimp::FileLoader
 public:
 	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 		: bimp::FileLoader(filepath, use_cache)
+		, m_parser_cb(parser_cb)
+		, m_ud(ud)
+	{}
+	FileLoader(fs_file* file, uint32_t offset, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+		: bimp::FileLoader(file, offset, use_cache)
 		, m_parser_cb(parser_cb)
 		, m_ud(ud)
 	{}
@@ -59,10 +66,19 @@ private:
 }; // FileLoader
 
 static 
-void _load_cb(const char* filepath, void (*unpack)(const void* data, size_t size, void* ud), void* ud)
+void _load_cb(const void* res_path, void (*unpack)(const void* data, size_t size, void* ud), void* ud)
 {
-	FileLoader loader(filepath, false, unpack, ud);
-	loader.Load();
+	ResPath path;
+	path.Deserialization(static_cast<const char*>(res_path));
+	if (path.IsSingleFile()) {
+		FileLoader loader(path.GetFilepath(), false, unpack, ud);
+		loader.Load();
+	} else {
+		fs_file* file = fs_open(path.GetFilepath().c_str(), "rb");
+		FileLoader loader(file, path.GetOffset(), false, unpack, ud);
+		loader.Load();
+		fs_close(file);
+	}
 }
 
 static 
@@ -128,7 +144,8 @@ void _release_cb(void* ud)
 
 bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 {
-	if (m_filepath.find(".ept") == std::string::npos) {
+	if (m_res_path.IsSingleFile() && 
+		m_res_path.GetFilepath().find(".ept") == std::string::npos) {
 		return false;
 	}
 
@@ -148,7 +165,8 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 
 	img->SetLoadFinished(false);
 	img->AddReference();
-	AsyncTask::Instance()->Load(m_filepath, _load_cb, _parser_cb, _release_cb, img);
+
+	AsyncTask::Instance()->Load(m_res_path, _load_cb, _parser_cb, _release_cb, img);
 
 	return true;
 }
@@ -156,7 +174,7 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 bool ImageLoader::LoadRaw()
 {
 	int w, h, fmt;
-	uint8_t* pixels = gimg_import(m_filepath.c_str(), &w, &h, &fmt);
+	uint8_t* pixels = gimg_import(m_res_path.GetFilepath().c_str(), &w, &h, &fmt);
 	if (!pixels) {
 		return false;
 	}
@@ -191,11 +209,26 @@ bool ImageLoader::LoadRaw()
 
 bool ImageLoader::LoadBin()
 {
+	if (m_res_path.IsSingleFile()) 
+	{
+		timp::TextureLoader loader(m_res_path.GetFilepath());
+		loader.Load();
+		return LoadBin(loader);
+	} 
+	else 
+	{
+		fs_file* file = fs_open(m_res_path.GetFilepath().c_str(), "rb");
+		timp::TextureLoader loader(file, m_res_path.GetOffset());
+		loader.Load();
+		fs_close(file);
+		return LoadBin(loader);
+	}
+}
+
+bool ImageLoader::LoadBin(const timp::TextureLoader& loader)
+{
 	bool ret = true;
 
-	timp::TextureLoader loader(m_filepath);
-	loader.Load();
-	
 	m_format = loader.GetFormat();
 	m_width  = loader.GetWidth();
 	m_height = loader.GetHeight();

@@ -1,6 +1,8 @@
 #ifndef _GUM_RESOURCE_MANAGER_H_
 #define _GUM_RESOURCE_MANAGER_H_
 
+#include "ResPath.h"
+
 #include <map>
 
 namespace gum
@@ -10,11 +12,11 @@ template<class T>
 class ResourceManager
 {
 public:
-	T* Create(const std::string& filepath, bool async = false);
+	T* Create(const ResPath& res_path, bool async = false);
 
-	T* Query(const std::string& filepath);
-	bool Add(const std::string& filepath, T* res);
-	bool Delete(const std::string& filepath);
+	T* Query(const ResPath& res_path);
+	bool Add(const ResPath& res_path, T* res);
+	bool Delete(const ResPath& res_path);
 
 	void Clear();
 
@@ -28,7 +30,7 @@ private:
 	~ResourceManager();
 
 private:
-	std::map<std::string, T*> m_res_map;
+	std::map<ResPath, T*> m_res_map;
 
 	static ResourceManager<T>* m_instance;
 

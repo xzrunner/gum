@@ -3,6 +3,7 @@
 
 #include "Resource.h"
 #include "ResourceManager.h"
+#include "ResPath.h"
 
 #include <SM_Vector.h>
 
@@ -23,7 +24,7 @@ public:
 	Image();
 	virtual ~Image();
 
-	virtual bool LoadFromFile(const std::string& filepath, bool async);
+	virtual bool LoadFromFile(const ResPath& res_path, bool async);
 
 	void AsyncLoad(int format, int width, int height);
 
@@ -34,9 +35,7 @@ public:
 	uint32_t GetTexID() const { return m_id; }
 
 	s2::Texture* GetS2Tex() const { return m_s2_tex; }
-
-	const std::string& GetFilepath() const { return m_filepath; }
-
+	
 	bool IsLoadFinished() const;
 	void SetLoadFinished(bool finished);
 
@@ -44,7 +43,7 @@ public:
 	void LoadFromLoader(const ImageLoader& loader);
 
 protected:
-	std::string m_filepath;
+	ResPath m_res_path;
 
 	int m_width, m_height;
 	int m_format;

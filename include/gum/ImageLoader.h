@@ -1,7 +1,9 @@
 #ifndef _GUM_IMAGE_LOADER_H_
 #define _GUM_IMAGE_LOADER_H_
 
-#include <string>
+#include "ResPath.h"
+
+namespace timp { class TextureLoader; }
 
 namespace gum
 {
@@ -11,7 +13,7 @@ class Image;
 class ImageLoader
 {
 public:
-	ImageLoader(const std::string& filepath);
+	ImageLoader(const ResPath& res_path);
 
 	bool Load();
 	bool AsyncLoad(int format, int width, int height, Image* img);
@@ -25,6 +27,7 @@ public:
 private:
 	bool LoadRaw();
 	bool LoadBin();
+	bool LoadBin(const timp::TextureLoader& loader);
 
 	bool DecodePVR2(const void* data);
 	bool DecodePVR4(const void* data);
@@ -33,7 +36,7 @@ private:
 	static void LoadTextureCB(int format, int w, int h, const void* data, void* ud);
 
 private:
-	std::string m_filepath;
+	ResPath m_res_path;
 
 	int m_id;
 	int m_format;

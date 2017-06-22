@@ -20,9 +20,9 @@ ImageSymLoader::~ImageSymLoader()
 	}
 }
 
-void ImageSymLoader::Load(const std::string& filepath, float scale, bool async)
+void ImageSymLoader::Load(const ResPath& res_path, float scale, bool async)
 {
-	Image* img = ImageMgr::Instance()->Create(filepath, async);
+	Image* img = ImageMgr::Instance()->Create(res_path, async);
 	if (!img) {
 		return;
 	}

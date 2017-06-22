@@ -70,7 +70,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, bool flatten, int
 		{
 			ImageSymbol* sym = new ImageSymbol;
 			ImageSymLoader loader(sym);
-			loader.Load(filepath, 1, false);
+			loader.Load(ResPath(filepath), 1, false);
 			ret = sym;
 		}
 		break;
@@ -230,14 +230,15 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 			{
 				int pkg_id = simp::NodeID::GetPkgID(id);
 				const timp::Package* t_pkg = timp::PkgMgr::Instance()->Query(pkg_id);
-				std::string filepath = t_pkg->GetTexPath(pic->texid, 0);
+
+				const bimp::FilePath& fp = t_pkg->GetTexPath(pic->texid, 0);
 
 				sym = new ImageSymbol(id);
 				ImageSymLoader loader(sym);
 
 				bool async = true;
 				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
-				loader.Load(filepath, s_pkg->GetScale(), async);
+				loader.Load(ResPath(fp.GetFilepath(), fp.GetOffset()), s_pkg->GetScale(), async);
 				const timp::Package::TextureDesc& tex = t_pkg->GetTexDesc(pic->texid);
 				Image* img = const_cast<Image*>(sym->GetImage());
 				if (img && async) {
@@ -254,7 +255,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 			else
 			{
 				std::string filepath = ProxyImage::GetFilepath(pic->texid - simp::NodePicture::MAX_IN_PKG);
-				Image* img = ImageMgr::Instance()->Query(filepath);
+				Image* img = ImageMgr::Instance()->Query(ResPath(filepath));
 				assert(img);
 
 				int pkg_id = simp::NodeID::GetPkgID(id);

@@ -26,16 +26,17 @@ Image::~Image()
 	}
 }
 
-bool Image::LoadFromFile(const std::string& filepath, bool async)
+bool Image::LoadFromFile(const ResPath& res_path, bool async)
 {
-	assert(m_filepath != filepath);
-	m_filepath = filepath;
+	assert(m_res_path != res_path);
+
+	m_res_path = res_path;
 
 	if (async) {
 		return true;
 	}
 
-	ImageLoader loader(m_filepath);
+	ImageLoader loader(m_res_path);
 	bool ret = loader.Load();
 	if (!ret) {
 		return false;
@@ -52,7 +53,7 @@ void Image::AsyncLoad(int format, int width, int height)
 		return;
 	}
 
-	ImageLoader loader(m_filepath);
+	ImageLoader loader(m_res_path);
 	loader.AsyncLoad(format, width, height, this);
 }
 

@@ -29,16 +29,16 @@ inline ResourceManager<T>::~ResourceManager()
 }
 
 template<class T>
-inline T* ResourceManager<T>::Create(const std::string& filepath, bool async)
+inline T* ResourceManager<T>::Create(const ResPath& res_path, bool async)
 {
-	typename std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
+	typename std::map<ResPath, T*>::iterator itr = m_res_map.find(res_path);
 	if (itr == m_res_map.end())
 	{
 		T* res = new T;
-		bool loaded = res->LoadFromFile(filepath, async);
+		bool loaded = res->LoadFromFile(res_path, async);
 		if (loaded)
 		{
-			m_res_map.insert(std::make_pair(filepath, res));
+			m_res_map.insert(std::make_pair(res_path, res));
 			res->AddReference();
 			return res;
 		}
@@ -56,9 +56,9 @@ inline T* ResourceManager<T>::Create(const std::string& filepath, bool async)
 }
 
 template<class T>
-inline T* ResourceManager<T>::Query(const std::string& filepath)
+inline T* ResourceManager<T>::Query(const ResPath& res_path)
 {
-	typename std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
+	typename std::map<ResPath, T*>::iterator itr = m_res_map.find(res_path);
 	if (itr != m_res_map.end()) {
 		return itr->second;
 	} else {
@@ -67,10 +67,10 @@ inline T* ResourceManager<T>::Query(const std::string& filepath)
 }
 
 template<class T>
-inline bool ResourceManager<T>::Add(const std::string& filepath, T* res)
+inline bool ResourceManager<T>::Add(const ResPath& res_path, T* res)
 {
-	std::pair<typename std::map<std::string, T*>::iterator, bool> ret 
-		= m_res_map.insert(std::make_pair(filepath, res));
+	std::pair<typename std::map<ResPath, T*>::iterator, bool> ret 
+		= m_res_map.insert(std::make_pair(res_path, res));
 	if (ret.second) {
 		res->AddReference();
 	}
@@ -78,9 +78,9 @@ inline bool ResourceManager<T>::Add(const std::string& filepath, T* res)
 }
 
 template<class T>
-inline bool ResourceManager<T>::Delete(const std::string& filepath)
+inline bool ResourceManager<T>::Delete(const ResPath& res_path)
 {
-	typename std::map<std::string, T*>::iterator itr = m_res_map.find(filepath);
+	typename std::map<ResPath, T*>::iterator itr = m_res_map.find(res_path);
 	if (itr == m_res_map.end()) {
 		return false;
 	}
@@ -97,7 +97,7 @@ inline void ResourceManager<T>::GC()
 	{
 		bool dirty = false;
 
-		typename std::map<std::string, T*>::iterator itr = m_res_map.begin();
+		typename std::map<ResPath, T*>::iterator itr = m_res_map.begin();
 		while (itr != m_res_map.end())
 		{
 			if (itr->second->GetRefCount() == 1) {
@@ -118,7 +118,7 @@ inline void ResourceManager<T>::GC()
 template<class T>
 inline void ResourceManager<T>::Clear()
 {
-	typename std::map<std::string, T*>::iterator itr = m_res_map.begin();
+	typename std::map<ResPath, T*>::iterator itr = m_res_map.begin();
 	for ( ; itr != m_res_map.end(); ++itr) {
 		itr->second->RemoveReference();
 	}

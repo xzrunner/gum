@@ -1,8 +1,9 @@
-#include <stdlib.h>
-
 #include "GUM_AsyncTask.h"
+#include "ResPath.h"
 
 #include <tasks_loader.h>
+
+#include <stdlib.h>
 
 #define THREAD_NUM  (4)
 
@@ -23,8 +24,8 @@ AsyncTask::~AsyncTask()
 	m_loader = NULL;
 }
 
-void AsyncTask::Load(const std::string& filepath, 
-					 void (*load_cb)(const char* filepath, void (*unpack)(const void* data, size_t size, void* ud), void* ud), 
+void AsyncTask::Load(const ResPath& res_path, 
+					 void (*load_cb)(const void* res_path, void (*unpack)(const void* data, size_t size, void* ud), void* ud), 
 					 void (*parser_cb)(const void* data, size_t size, void* ud), 
 					 void (*release_cb)(void* ud),
 					 void* parser_ud)
@@ -34,7 +35,10 @@ void AsyncTask::Load(const std::string& filepath,
 	params.parser    = parser_cb;
 	params.release   = release_cb;
 	params.parser_ud = parser_ud;
-	tasks_load_file(m_loader, filepath.c_str(), &params, "");
+
+	static char BUF[TASKS_RES_PATH_SIZE];
+	res_path.Serialize(BUF);
+	tasks_load_file(m_loader, BUF, &params, "");
 }
 
 void AsyncTask::Update()

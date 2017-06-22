@@ -170,7 +170,7 @@ void SymbolPool::PrintImgRef(const Image* img) const
 
 	}; // Visitor
 
-	LOGD("+++ query img %s ref begin\n", img->GetFilepath().c_str());
+//	LOGD("+++ query img %s ref begin\n", img->GetFilepath().c_str());
 	std::map<uint32_t, s2::Symbol*>::const_iterator itr 
 		= m_id_cache.begin();
 	for ( ; itr != m_id_cache.end(); ++itr) 
@@ -182,7 +182,7 @@ void SymbolPool::PrintImgRef(const Image* img) const
 			LOGD("+++ sym_id %d\n", sym->GetID());
 		}
 	}
-	LOGD("+++ query img %s ref end\n", img->GetFilepath().c_str());
+//	LOGD("+++ query img %s ref end\n", img->GetFilepath().c_str());
 }
 
 }

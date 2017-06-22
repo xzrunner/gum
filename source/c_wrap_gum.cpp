@@ -21,6 +21,8 @@
 #include "gum/StatFPS.h"
 #include "gum/StatTag.h"
 #include "gum/StatScreen.h"
+#include "gum/PkgFileParser.h"
+#include "gum/ResPath.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -56,6 +58,7 @@
 #include <queue>
 
 #include <string.h>
+#include <fault.h>
 
 namespace gum
 {
@@ -168,7 +171,8 @@ int gum_compare_snapshot(const char* filepath)
 extern "C"
 void* gum_create_img(const char* filepath)
 {
-	return ImageMgr::Instance()->Create(filepath);
+	ResPath res_path(filepath);
+	return ImageMgr::Instance()->Create(res_path);
 }
 
 extern "C"
@@ -273,6 +277,40 @@ bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* 
 }
 
 extern "C"
+bool gum_create_pkg2(const char* name, int id, const char* pkg_path)
+{
+	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	std::string gbk_pkg_path = StringHelper::UTF8ToGBK(pkg_path);
+
+	struct fs_file* file = fs_open(gbk_pkg_path.c_str(), "rb");
+	if (file == NULL) {
+		fault("Can't open pkg file: %s\n", gbk_pkg_path.c_str());
+	}
+
+	int epe_off = PkgFileParser::GetEpeIdxOffset(file);	
+	simp::Package* s_pkg = new simp::Package(file, epe_off, id);	
+ 	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, gbk_name, id);
+ 	if (!success) {
+ 		delete s_pkg;
+ 		return success;
+ 	}
+
+	int ept_off = PkgFileParser::GetEptIdxOffset(file);	
+	timp::Package* t_pkg = new timp::Package(file, ept_off);
+	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
+	assert(success);
+
+	DTex::Instance()->CreatePkg(id);
+
+	// set epe path
+	PkgFileParser::SetEPPath(file, gbk_pkg_path, id);
+
+	fs_close(file);
+
+	return true;
+}
+
+extern "C"
 void gum_release_pkg(int pkg_id)
 {
 	simp::RelocateTexcoords::Instance()->Delete(pkg_id);
@@ -315,7 +353,7 @@ void gum_pkg_set_page_filepath(const char* name, int page, const char* filepath)
 		return;
 	}
 
-	const_cast<simp::Package*>(pkg)->SetPagePath(page, gbk_filepath);
+	const_cast<simp::Package*>(pkg)->SetPagePath(page, bimp::FilePath(gbk_filepath));
 }
 
 extern "C"
@@ -341,7 +379,7 @@ void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* file
 		return;
 	}
 
-	const_cast<timp::Package*>(pkg)->SetTexPath(tex, lod, gbk_filepath);
+	const_cast<timp::Package*>(pkg)->SetTexPath(tex, lod, bimp::FilePath(gbk_filepath));
 }
 
 extern "C"

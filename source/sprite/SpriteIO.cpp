@@ -483,7 +483,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 							prog = static_cast<sl::HeatHazeProg*>(shader->GetProgram(sl::FM_HEAT_HAZE));
 						}
 						if (prog) {
-							Image* img = ImageMgr::Instance()->Create(filepath);
+							Image* img = ImageMgr::Instance()->Create(ResPath(filepath));
 							prog->SetDistortionMapTex(img->GetTexID());
 						}
 					}

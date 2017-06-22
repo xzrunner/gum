@@ -9,6 +9,7 @@ namespace gum
 {
 
 class ImageSymbol;
+class ResPath;
 
 class ImageSymLoader : private cu::Uncopyable
 {
@@ -16,7 +17,7 @@ public:
 	ImageSymLoader(ImageSymbol* sym);
 	~ImageSymLoader();
 
-	void Load(const std::string& filepath, float scale, bool async);
+	void Load(const ResPath& res_path, float scale, bool async);
 
 private:
 	ImageSymbol* m_sym;

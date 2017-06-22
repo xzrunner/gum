@@ -3,19 +3,19 @@
 
 #include <CU_Singleton.h>
 
-#include <string>
-
 struct tasks_loader;
 
 namespace gum
 {
 
+class ResPath;
+
 class AsyncTask
 {
 public:
 	void Load(
-		const std::string& filepath, 
-		void (*load_cb)(const char* filepath, void (*unpack)(const void* data, size_t size, void* ud), void* ud), 
+		const ResPath& res_path, 
+		void (*load_cb)(const void* res_path, void (*unpack)(const void* data, size_t size, void* ud), void* ud), 
 		void (*parser_cb)(const void* data, size_t size, void* ud), 
 		void (*release_cb)(void* ud),
 		void* parser_ud);

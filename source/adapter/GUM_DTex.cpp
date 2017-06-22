@@ -37,6 +37,7 @@
 #include <sprite2/DrawNode.h>
 #include <sprite2/FlattenMgr.h>
 #include <unirender/UR_RenderContext.h>
+#include <tasks_loader.h>
 
 #include <string>
 
@@ -209,12 +210,13 @@ scissor_enable()
 /* Resource                                                             */
 /************************************************************************/
 
-static const std::string& 
-get_tex_filepath(int pkg_id, int tex_idx, int lod_layer) 
+static void
+get_tex_filepath(int pkg_id, int tex_idx, int lod_layer, char* buf) 
 {
 	const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
 	assert(pkg);
-	return pkg->GetTexPath(tex_idx, lod_layer);
+	const bimp::FilePath& res_path = pkg->GetTexPath(tex_idx, lod_layer);
+	res_path.Serialize(buf);
 }
 
 class FileLoader : public bimp::FileLoader
@@ -222,6 +224,11 @@ class FileLoader : public bimp::FileLoader
 public:
 	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 		: bimp::FileLoader(filepath, use_cache)
+		, m_parser_cb(parser_cb)
+		, m_ud(ud)
+	{}
+	FileLoader(fs_file* file, uint32_t offset, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+		: bimp::FileLoader(file, offset, use_cache)
 		, m_parser_cb(parser_cb)
 		, m_ud(ud)
 	{}
@@ -239,10 +246,19 @@ private:
 }; // FileLoader
 
 static void 
-load_file(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+load_file(const void* res_path, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 {
-	FileLoader loader(filepath, use_cache, parser_cb, ud);
-	loader.Load();
+	bimp::FilePath file_path;
+	file_path.Deserialization(static_cast<const char*>(res_path));
+	if (file_path.IsSingleFile()) {
+		FileLoader loader(file_path.GetFilepath(), use_cache, parser_cb, ud);
+		loader.Load();
+	} else {
+		fs_file* file = fs_open(file_path.GetFilepath().c_str(), "rb");
+		FileLoader loader(file, file_path.GetOffset(), use_cache, parser_cb, ud);
+		loader.Load();
+		fs_close(file);
+	}
 }
 
 static void 
@@ -250,9 +266,9 @@ load_texture(int pkg_id, int tex_idx, int lod)
 {
 	const timp::Package* t_pkg = timp::PkgMgr::Instance()->Query(pkg_id);
 	assert(t_pkg);
-	const std::string& filepath = t_pkg->GetTexPath(tex_idx, lod);
+	const bimp::FilePath& filepath = t_pkg->GetTexPath(tex_idx, lod);
 	
-	ImageLoader loader(filepath);
+	ImageLoader loader(ResPath(filepath.GetFilepath(), filepath.GetOffset()));
 	bool ret = loader.Load();
 	if (!ret) {
 		return;
@@ -272,12 +288,21 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 {
 	const timp::Package* t_pkg = timp::PkgMgr::Instance()->Query(pkg_id);
 	assert(t_pkg);
-	const std::string& filepath = t_pkg->GetTexPath(tex_idx, 0);
-
-	timp::TextureLoader loader(filepath);
-	loader.Load();
-
-	cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
+	const bimp::FilePath& filepath = t_pkg->GetTexPath(tex_idx, 0);
+	if (filepath.IsSingleFile())
+	{
+		timp::TextureLoader loader(filepath.GetFilepath());
+		loader.Load();
+		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
+	}
+	else
+	{
+		fs_file* file = fs_open(filepath.GetFilepath().c_str(), "rb");
+		timp::TextureLoader loader(file, filepath.GetOffset());
+		loader.Load();
+		fs_close(file);
+		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
+	}
 }
 
 static void 
@@ -309,15 +334,15 @@ relocate_pkg(int src_pkg, int src_tex, int src_lod, int dst_tex_id, int dst_fmt,
 	item.dst_ymax = dst_ymax;
 	simp::RelocateTexcoords::Instance()->Add(item);
 
-	std::string filepath = ProxyImage::GetFilepath(dst_tex_id);
-	Image* img = ImageMgr::Instance()->Query(filepath);
+	ResPath res_path(ProxyImage::GetFilepath(dst_tex_id));
+	Image* img = ImageMgr::Instance()->Query(res_path);
 	if (img) {
 		ProxyImage* p_img = static_cast<ProxyImage*>(img);
 		p_img->Init(dst_tex_id, dst_w, dst_h, dst_fmt);
 	} else {
 		img = new ProxyImage(dst_tex_id, dst_w, dst_h, dst_fmt);
 		std::string filepath = ProxyImage::GetFilepath(dst_tex_id);
-		bool succ = ImageMgr::Instance()->Add(filepath, img);
+		bool succ = ImageMgr::Instance()->Add(res_path, img);
 		assert(succ);
 		// no GC in ImageMgr 
 //		img->RemoveReference();
@@ -344,11 +369,11 @@ relocate_pkg_finish()
 static void
 remove_tex(int tex_id)
 {
-	std::string filepath = ProxyImage::GetFilepath(tex_id);
-	Image* img = ImageMgr::Instance()->Query(filepath);
+	ResPath res_path(ProxyImage::GetFilepath(tex_id));
+	Image* img = ImageMgr::Instance()->Query(res_path);
 	if(img) {
 		img->RemoveReference();	// other ref will be removed at gum_gc()
-		ImageMgr::Instance()->Delete(filepath);
+		ImageMgr::Instance()->Delete(res_path);
 	}
 }
 

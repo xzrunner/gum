@@ -24,7 +24,7 @@ void ProxyImage::Init(int id, int w, int h, int format)
 	m_format = format;
 	m_id     = id;
 
-	m_filepath = GetFilepath(id);
+	m_res_path.SetFilepath(GetFilepath(id));
 
 	m_s2_tex->Init(w, h, id);	
 }
