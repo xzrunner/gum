@@ -12,6 +12,7 @@ LOCAL_C_INCLUDES  := \
 	${GUM_SRC_PATH}/include/gum \
 	${SM_SRC_PATH} \
 	${CU_SRC_PATH} \
+	${FS_SRC_PATH} \
 	${SIMP_SRC_PATH}/include \
 	${BIMP_SRC_PATH}/include \
 	${TIMP_SRC_PATH}/include \
