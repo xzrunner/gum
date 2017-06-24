@@ -555,6 +555,12 @@ int gum_rt_get_texid(void* rt)
 /************************************************************************/
 
 extern "C"
+void gum_dtex_c2_enable(bool enable)
+{
+	DTex::Instance()->SetC2Enable(enable);	
+}
+
+extern "C"
 void gum_dtex_set_c2_max_edge(int max_edge)
 {
 	DTexC2Strategy::Instance()->SetMaxC2Edge(max_edge);

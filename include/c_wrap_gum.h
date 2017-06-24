@@ -102,6 +102,7 @@ int   gum_rt_get_texid(void* rt);
 /* dtex                                                                 */
 /************************************************************************/
 
+void  gum_dtex_c2_enable(bool enable);
 void  gum_dtex_set_c2_max_edge(int max_edge);
 bool  gum_dtex_cache_pkg_static_load(void* cache, int pkg_id, int lod, bool ref);
 

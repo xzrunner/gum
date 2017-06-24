@@ -79,6 +79,10 @@ bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) co
 
 bool ImageSymbol::OnQueryTexcoordsFail() const
 {
+	if (!DTex::Instance()->IsC2Enable()) {
+		return false;
+	}
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();
 

@@ -314,6 +314,12 @@ load_texture_cb2(const void* data, size_t size, void (*cb)(int format, int w, in
 	cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
 }
 
+static void 
+cache_pkg_static_tex_ok()
+{
+	DTex::Instance()->SetC2Enable(true);
+}
+
 /************************************************************************/
 /* Cache                                                                */
 /************************************************************************/
@@ -439,6 +445,7 @@ DTex::DTex()
 	res_cb.load_texture     = load_texture;
 	res_cb.load_texture_cb  = load_texture_cb;
 	res_cb.load_texture_cb2 = load_texture_cb2;
+	res_cb.cache_pkg_static_tex_ok = cache_pkg_static_tex_ok;
 	dtex::ResourceAPI::InitCallback(res_cb);
 
 	dtex::CacheAPI::Callback cache_cb;
@@ -450,6 +457,7 @@ DTex::DTex()
 
 	m_c2 = new dtex::CacheSymbol(2048, 2048);
 	dtex::CacheMgr::Instance()->Add(m_c2, "C2");
+	m_c2_enable = true;
 
 	dtex::CacheGlyph::Callback glyph_cb;
 	glyph_cb.load_start  = glyph_load_start;
@@ -506,6 +514,10 @@ void DTex::LoadSymFinish()
 
 const float* DTex::QuerySymbol(UID sym_id, int* tex_id) const
 {
+	if (!m_c2_enable) {
+		return NULL;
+	}
+
 	const dtex::CS_Node* node = m_c2->Query(sym_id);
 	if (node) {
 		*tex_id = m_c2->GetTexID();

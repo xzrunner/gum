@@ -26,6 +26,8 @@ public:
 	void CreatePkg(int pkg_id);
 
 	// C2
+	void SetC2Enable(bool enable) { m_c2_enable = enable; }
+	bool IsC2Enable() const { return m_c2_enable; }
 	void LoadSymStart();
 	void LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region,
 		int padding = 0, int extrude = 0, int src_extrude = 0);
@@ -46,6 +48,7 @@ public:
 
 private:
 	dtex::CacheSymbol* m_c2;
+	bool m_c2_enable;
 
 	dtex::CacheGlyph* m_cg;
 
