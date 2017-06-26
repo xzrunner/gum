@@ -30,6 +30,7 @@ LOCAL_C_INCLUDES  := \
 	${BOOST_PATH}/include \
 	${TASKS_SRC_PATH} \
 	${GLP_SRC_PATH} \
+	${DS_SRC_PATH} \
 
 
 LOCAL_CPPFLAGS  := -DNO_BOOST -g
