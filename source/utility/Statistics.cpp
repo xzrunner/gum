@@ -232,10 +232,19 @@ void Statistics::PrintConsole() const
 	static const int PRINT_COUNT = 30;
 	static int count = 0;
 	++count;
-	if (count == PRINT_COUNT) {
+	if (count == PRINT_COUNT) 
+	{
 		count = 0;
-		int dc = sl::Statistics::Instance()->GetDrawCall();
-		LOGI("fps %.1f, cost %.1f, dc %d\n", 1000.0f / m_tpf_smooth, m_tpf_smooth, dc);
+		sl::Statistics* stat = sl::Statistics::Instance();
+		int dc = stat->GetDrawCall();
+		int count = stat->GetVertices();
+		float fps_curr = StatFPS::Instance()->GetFPSCurr();
+		float curr_cost = 0;
+		if (fps_curr != 0) {
+			curr_cost = 1000.0f / fps_curr;
+		}
+		LOGI("fps %.1f, cost %.1f, dc %d, vertices %d, cost avg %.1f\n", 
+			1000.0f / m_tpf_smooth, m_tpf_smooth, dc, count, curr_cost);
 	}
 }
 

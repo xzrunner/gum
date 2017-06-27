@@ -39,7 +39,7 @@ void StatFPS::Update()
 	}
 
 	if (!dtex::AsyncTask::Instance()->IsEmpty()) {
-		const int annealing = 10;	// 0.1s
+		const int annealing = 100;
 		m_annealing = annealing;
 	}
 
