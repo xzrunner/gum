@@ -36,6 +36,7 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_fast_blend	= s2::FBM_NULL;
 	m_filter		= NULL;
 	m_camera		= s2::CM_ORTHO;
+	m_downsample    = 1;
 
 	m_need_actor    = false;
 
@@ -385,6 +386,7 @@ void SpriteIO::LoadShader(s2::Sprite* spr)
 	rs.SetBlend(m_blend);
 	rs.SetFastBlend(m_fast_blend);
 	rs.SetFilter(m_filter);
+	rs.SetDownsample(m_downsample);
 	spr->SetShader(rs);
 }
 
@@ -397,6 +399,7 @@ void SpriteIO::StoreShader(const s2::RenderShader& shader)
 	} else {
 		m_filter = NULL;
 	}
+	m_downsample = shader.GetDownsample();
 }
 
 void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
@@ -407,6 +410,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 		delete m_filter;
 		m_filter = NULL;
 	}
+	m_downsample = 1;
 
 	if (!m_render_open) {
 		return;
@@ -498,6 +502,10 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 	{
 		m_filter = s2::FilterFactory::Instance()->Create(s2::FM_NULL);
 	}
+
+	if (val.isMember("downsample")) {
+		m_downsample = val["downsample"].asDouble();
+	}
 }
 
 void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
@@ -556,6 +564,10 @@ void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
 			break;
 		}
 		val["filter"] = fval;
+	}
+
+	if (m_downsample != 1) {
+		val["downsample"] = m_downsample;
 	}
 }
 

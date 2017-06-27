@@ -81,8 +81,9 @@ public:
 	s2::BlendMode		m_blend;
 	s2::FastBlendMode	m_fast_blend;
 	s2::RenderFilter*	m_filter;
+	float               m_downsample;
 	s2::CameraMode		m_camera;
-
+	
 	// info
 	std::string			m_name;
 	bool                m_need_actor;
