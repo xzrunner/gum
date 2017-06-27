@@ -15,9 +15,7 @@ public:
 	void Update();
 
 	float GetFPS() const { return m_fps; }
-	float GetFPSCurr() const {
-		return static_cast<float>(m_tot_fps / m_tot_frames);
-	}
+	float GetFPSCurr() const { return m_tot_fps / m_tot_frames; }
 
 private:
 	bool  m_enable;
