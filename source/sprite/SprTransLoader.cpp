@@ -69,6 +69,10 @@ void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 		s2::FilterMode mode = s2::FilterMode(trans->data[idx++]);
 		rs.SetFilter(mode);
 	}
+	if (trans->type & simp::NodeTrans::DOWNSMAPLE_MASK) {
+		float downsample = static_cast<float>(trans->data[idx++]) / 0xffffffff;
+		rs.SetDownsample(downsample);
+	}
 	spr->SetShader(rs);
 
 	if (trans->type & simp::NodeTrans::CAMERA_MASK) {
