@@ -2,6 +2,8 @@
 #include "gum/StatFPS.h"
 #include "gum/StatTag.h"
 #include "gum/GUM_GTxt.h"
+#include "gum/SymbolPool.h"
+#include "gum/Image.h"
 
 #include <logger.h>
 #include <glp_loop.h>
@@ -12,6 +14,8 @@
 #include <sprite2/StatPingPong.h>
 #include <sprite2/StatTopNodes.h>
 #include <sprite2/StatSymbol.h>
+#include <sprite2/S2_Sprite.h>
+#include <sprite2/S2_Actor.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Statistics.h>
 #include <shaderlab/StatDrawCall.h>
@@ -208,7 +212,15 @@ void Statistics::PrintScreen() const
 	s2::StatPingPong::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
- 
+
+	mt.Translate(0, -50);
+	sprintf(buf, "COUNT: sym %d, spr %d, actor %d, img %d", 
+		SymbolPool::Instance()->Count(), 
+		s2::Sprite::GetAllSprCount(), 
+		s2::Actor::GetAllActorCount(), 
+		ImageMgr::Instance()->Count());
+	GTxt::Instance()->Draw(mt, buf, w);	
+
 	mt.Translate(450, -100);
 	s2::StatTopNodes::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
