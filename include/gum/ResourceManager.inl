@@ -91,6 +91,16 @@ inline bool ResourceManager<T>::Delete(const ResPath& res_path)
 }
 
 template<class T>
+inline void ResourceManager<T>::Clear()
+{
+	typename std::map<ResPath, T*>::iterator itr = m_res_map.begin();
+	for ( ; itr != m_res_map.end(); ++itr) {
+		itr->second->RemoveReference();
+	}
+	m_res_map.clear();
+}
+
+template<class T>
 inline void ResourceManager<T>::GC()
 {
 	while (true)
@@ -113,16 +123,6 @@ inline void ResourceManager<T>::GC()
 			break;
 		}
 	}
-}
-
-template<class T>
-inline void ResourceManager<T>::Clear()
-{
-	typename std::map<ResPath, T*>::iterator itr = m_res_map.begin();
-	for ( ; itr != m_res_map.end(); ++itr) {
-		itr->second->RemoveReference();
-	}
-	m_res_map.clear();
 }
 
 }

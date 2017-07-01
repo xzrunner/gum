@@ -104,6 +104,18 @@ int gum_get_sym_count() {
 }
 
 extern "C"
+int gum_get_spr_count()
+{
+	return s2::Sprite::GetAllSprCount();
+}
+
+extern "C"
+int gum_get_actor_count()
+{
+	return s2::Actor::GetAllActorCount();
+}
+
+extern "C"
 int gum_get_img_count() {
 	return ImageMgr::Instance()->Count();
 }

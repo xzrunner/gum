@@ -21,6 +21,8 @@ void  gum_get_screen_size(int* w, int* h);
 void  gum_gc();
 
 int   gum_get_sym_count();
+int   gum_get_spr_count();
+int   gum_get_actor_count();
 int   gum_get_img_count();
 
 void  gum_update(float dt);
