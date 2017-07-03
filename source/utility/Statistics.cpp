@@ -13,7 +13,8 @@
 #include <sprite2/StatDrawCall.h>
 #include <sprite2/StatPingPong.h>
 #include <sprite2/StatTopNodes.h>
-#include <sprite2/StatSymbol.h>
+#include <sprite2/StatSymDraw.h>
+#include <sprite2/StatSymCount.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/S2_Actor.h>
 #include <shaderlab/ShaderMgr.h>
@@ -142,7 +143,8 @@ void Statistics::Reset()
 	s2::StatDrawCall::Instance()->Reset();
 	s2::StatPingPong::Instance()->Reset();
 	s2::StatTopNodes::Instance()->Reset();
-	s2::StatSymbol::Instance()->Reset();
+	s2::StatSymDraw::Instance()->Reset();
+	s2::StatSymCount::Instance()->Reset();
 }
 
 void Statistics::Flush()
@@ -220,6 +222,11 @@ void Statistics::PrintScreen() const
 		s2::Actor::GetAllActorCount(), 
 		ImageMgr::Instance()->Count());
 	GTxt::Instance()->Draw(mt, buf, w);	
+
+	mt.Translate(0, -30);
+	s2::StatSymCount::Instance()->Print(buf_str);
+	GTxt::Instance()->Draw(mt, buf_str, w);	
+	buf_str.clear();
 
 	mt.Translate(450, -100);
 	s2::StatTopNodes::Instance()->Print(buf_str);
