@@ -14,6 +14,8 @@ public:
 
 	void Draw(const sm::rect& src, const sm::rect& dst, int dst_w = 0, int dst_h = 0) const;
 
+	void Clear();
+
 }; // RenderTarget
 
 }

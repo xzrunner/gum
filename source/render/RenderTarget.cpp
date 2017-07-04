@@ -1,8 +1,10 @@
 #include "RenderTarget.h"
 
+#include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
+#include <shaderlab/ShaderMgr.h>
 #include <sprite2/RenderScissor.h>
 #include <sprite2/RenderCtxStack.h>
 
@@ -68,6 +70,16 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 
 	s2::RenderCtxStack::Instance()->Pop();
 	s2::RenderScissor::Instance()->Enable();
+}
+
+void RenderTarget::Clear()
+{
+	Bind();
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	mgr->GetContext()->Clear(0);
+
+	Unbind();
 }
 
 }

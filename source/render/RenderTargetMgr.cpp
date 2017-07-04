@@ -42,6 +42,7 @@ void RenderTargetMgr::Return(RenderTarget* rt)
 
 	for (int i = 0, n = m_items.size(); i < n; ++i) {
 		if (m_items[i].rt == rt) {
+			m_items[i].rt->Clear();
 			m_items[i].available = true;
 			return;
 		}
