@@ -96,6 +96,8 @@ void gum_gc()
 	SpritePool::Instance()->GC();
 	SymbolPool::Instance()->GC();
 	ImageMgr::Instance()->GC();
+
+	DTexC2Strategy::Instance()->Clear();
 }
 
 extern "C"

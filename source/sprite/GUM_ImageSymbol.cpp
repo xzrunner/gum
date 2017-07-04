@@ -47,7 +47,7 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 
 bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const
 {
-	if (!use_dtex) {
+	if (!use_dtex || !m_tex->IsLoadFinished()) {
 		texid = m_img->GetTexID();
 		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
 		return true;
