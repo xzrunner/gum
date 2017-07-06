@@ -36,6 +36,7 @@
 #include <sprite2/RenderScissor.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/FlattenMgr.h>
+#include <sprite2/StatImages.h>
 #include <unirender/UR_RenderContext.h>
 #include <tasks_loader.h>
 
@@ -281,6 +282,9 @@ load_texture(int pkg_id, int tex_idx, int lod)
 	raw_tex->SetID(loader.GetID());
 	raw_tex->SetSize(loader.GetWidth(), loader.GetHeight());
 	raw_tex->SetFormat(loader.GetFormat());
+
+	s2::StatImages::Instance()->Add(loader.GetWidth(), loader.GetHeight(), 
+		loader.GetFormat());
 }
 
 static void 
@@ -293,6 +297,8 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 	{
 		timp::TextureLoader loader(filepath.GetFilepath());
 		loader.Load();
+		s2::StatImages::Instance()->Add(loader.GetWidth(), loader.GetHeight(), 
+			loader.GetFormat());
 		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
 	}
 	else
@@ -301,6 +307,8 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 		timp::TextureLoader loader(file, filepath.GetOffset());
 		loader.Load();
 		fs_close(file);
+		s2::StatImages::Instance()->Add(loader.GetWidth(), loader.GetHeight(), 
+			loader.GetFormat());
 		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
 	}
 }
@@ -318,6 +326,18 @@ static void
 cache_pkg_static_tex_ok()
 {
 	DTex::Instance()->SetC2Enable(true);
+}
+
+static void
+stat_tex_add(int width, int height, int format)
+{
+	s2::StatImages::Instance()->Add(width, height, format);
+}
+
+static void
+stat_tex_remove(int width, int height, int format)
+{
+	s2::StatImages::Instance()->Remove(width, height, format);
 }
 
 /************************************************************************/
@@ -433,19 +453,21 @@ DTex::DTex()
 	render_cb.draw_flush       = draw_flush;
 	render_cb.scissor_push     = scissor_push;
 	render_cb.scissor_pop      = scissor_pop;
-	render_cb.scissor_disable    = scissor_disable;
-	render_cb.scissor_enable     = scissor_enable;
+	render_cb.scissor_disable  = scissor_disable;
+	render_cb.scissor_enable   = scissor_enable;
 
 	dtex::RenderAPI::InitCallback(render_cb);
 	dtex::RenderAPI::InitRenderContext(RenderContext::Instance()->GetImpl());
 
 	dtex::ResourceAPI::Callback res_cb;
-	res_cb.get_tex_filepath = get_tex_filepath;
-	res_cb.load_file        = load_file;
-	res_cb.load_texture     = load_texture;
-	res_cb.load_texture_cb  = load_texture_cb;
-	res_cb.load_texture_cb2 = load_texture_cb2;
+	res_cb.get_tex_filepath        = get_tex_filepath;
+	res_cb.load_file               = load_file;
+	res_cb.load_texture            = load_texture;
+	res_cb.load_texture_cb         = load_texture_cb;
+	res_cb.load_texture_cb2        = load_texture_cb2;
 	res_cb.cache_pkg_static_tex_ok = cache_pkg_static_tex_ok;
+	res_cb.stat_tex_add            = stat_tex_add;
+	res_cb.stat_tex_remove         = stat_tex_remove;
 	dtex::ResourceAPI::InitCallback(res_cb);
 
 	dtex::CacheAPI::Callback cache_cb;

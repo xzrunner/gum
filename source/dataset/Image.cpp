@@ -3,6 +3,7 @@
 #include "RenderContext.h"
 
 #include <sprite2/S2_Texture.h>
+#include <sprite2/StatImages.h>
 #include <unirender/UR_RenderContext.h>
 
 #include <assert.h>
@@ -20,6 +21,10 @@ Image::Image()
 
 Image::~Image()
 {
+	if (m_id != 0) {
+		s2::StatImages::Instance()->Remove(m_width, m_height, m_format);
+	}
+
 	RenderContext::Instance()->GetImpl()->ReleaseTexture(m_id);
 	if (m_s2_tex) {
 		m_s2_tex->RemoveReference();
@@ -44,6 +49,8 @@ bool Image::LoadFromFile(const ResPath& res_path, bool async)
 
 	LoadFromLoader(loader);
 
+	s2::StatImages::Instance()->Add(m_width, m_height, m_format);
+
 	return true;
 }
 
@@ -55,6 +62,8 @@ void Image::AsyncLoad(int format, int width, int height)
 
 	ImageLoader loader(m_res_path);
 	loader.AsyncLoad(format, width, height, this);
+
+	s2::StatImages::Instance()->Add(width, height, format);
 }
 
 bool Image::IsLoadFinished() const 

@@ -16,6 +16,7 @@
 #include <sprite2/StatSymDraw.h>
 #include <sprite2/StatSymCount.h>
 #include <sprite2/StatSprCount.h>
+#include <sprite2/StatImages.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/S2_Actor.h>
 #include <shaderlab/ShaderMgr.h>
@@ -226,6 +227,11 @@ void Statistics::PrintScreen() const
 
 	mt.Translate(0, -30);
 	s2::StatSprCount::Instance()->Print(buf_str);
+	GTxt::Instance()->Draw(mt, buf_str, w);	
+	buf_str.clear();
+
+	mt.Translate(0, -30);
+	s2::StatImages::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
