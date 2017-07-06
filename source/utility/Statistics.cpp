@@ -132,10 +132,6 @@ void Statistics::Print()
 
 void Statistics::Reset()
 {
-	if (m_flags == 0) {
-		return;
-	}
-
 	m_tpf = 0;
 
 	sl::Statistics::Instance()->Reset();
