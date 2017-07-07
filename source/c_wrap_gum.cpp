@@ -595,6 +595,9 @@ bool gum_dtex_cache_pkg_static_load(void* cache, int pkg_id, int lod, bool ref)
 		int id = buf.front(); buf.pop();
 		pkgs.insert(id);
 		const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(id);
+		if (!pkg) {
+			continue;
+		}
 		const std::vector<int>& ref_pkgs = pkg->GetRefPkgs();
 		for (int i = 0, n = ref_pkgs.size(); i < n; ++i) {
 			buf.push(ref_pkgs[i]);
