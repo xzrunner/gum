@@ -23,6 +23,7 @@
 #include "gum/StatScreen.h"
 #include "gum/PkgFileParser.h"
 #include "gum/ResPath.h"
+#include "gum/GUM_Model3.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -67,6 +68,8 @@ extern "C"
 void gum_init()
 {
 	Sprite2::Init();
+
+	Model3::Instance();
 }
 
 extern "C"

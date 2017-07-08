@@ -3,9 +3,15 @@
 #include "GUM_AsyncTask.h"
 #include "SymbolPool.h"
 #include "GUM_GTxt.h"
+#include "GUM_Model3.h"
 
 namespace gum
 {
+
+void Facade::Init()
+{
+	Model3::Instance();
+}
 
 void Facade::Clear()
 {
