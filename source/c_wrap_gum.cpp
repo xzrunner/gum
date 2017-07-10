@@ -23,7 +23,9 @@
 #include "gum/StatScreen.h"
 #include "gum/PkgFileParser.h"
 #include "gum/ResPath.h"
+#ifndef S2_DISABLE_MODEL
 #include "gum/GUM_Model3.h"
+#endif // S2_DISABLE_MODEL
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -69,7 +71,9 @@ void gum_init()
 {
 	Sprite2::Init();
 
+#ifndef S2_DISABLE_MODEL
 	Model3::Instance();
+#endif // S2_DISABLE_MODEL
 }
 
 extern "C"
