@@ -1,3 +1,6 @@
+#include <sprite2/s2_config.h>
+#ifndef S2_DISABLE_MODEL
+
 #include "GUM_Model3.h"
 #include "Image.h"
 
@@ -43,3 +46,5 @@ Model3::Model3()
 }
 
 }
+
+#endif // S2_DISABLE_MODEL

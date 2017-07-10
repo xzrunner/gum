@@ -1,6 +1,8 @@
 #ifndef _GUM_MODEL3_H_
 #define _GUM_MODEL3_H_
 
+#ifndef S2_DISABLE_MODEL
+
 #include <CU_Singleton.h>
 
 namespace gum
@@ -17,5 +19,7 @@ private:
 }; // Model3
 
 }
+
+#endif // S2_DISABLE_MODEL
 
 #endif // _GUM_MODEL3_H_
