@@ -50,6 +50,7 @@
 #include <sprite2/SprVisitorParams.h>
 #include <sprite2/Color.h>
 #include <sprite2/ModelSymbol.h>
+#include <sprite2/StatImages.h>
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
@@ -193,7 +194,7 @@ extern "C"
 void* gum_create_img(const char* filepath)
 {
 	ResPath res_path(filepath);
-	return ImageMgr::Instance()->Create(res_path);
+	return ImageMgr::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, res_path);
 }
 
 extern "C"

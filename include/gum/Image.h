@@ -24,9 +24,9 @@ public:
 	Image();
 	virtual ~Image();
 
-	virtual bool LoadFromFile(const ResPath& res_path, bool async);
+	virtual bool LoadFromFile(int pkg_id, const ResPath& res_path, bool async);
 
-	void AsyncLoad(int format, int width, int height);
+	void AsyncLoad(int pkg_id, int format, int width, int height);
 
 	sm::ivec2 GetSize() const {
 		return sm::ivec2(m_width, m_height);
@@ -43,6 +43,8 @@ public:
 	void LoadFromLoader(const ImageLoader& loader);
 
 protected:
+	int m_pkg_id;
+
 	ResPath m_res_path;
 
 	int m_width, m_height;

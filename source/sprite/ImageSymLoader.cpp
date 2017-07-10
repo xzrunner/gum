@@ -2,6 +2,8 @@
 #include "GUM_ImageSymbol.h"
 #include "Image.h"
 
+#include <simp/NodeID.h>
+
 namespace gum
 {
 
@@ -22,7 +24,8 @@ ImageSymLoader::~ImageSymLoader()
 
 void ImageSymLoader::Load(const ResPath& res_path, float scale, bool async)
 {
-	Image* img = ImageMgr::Instance()->Create(res_path, async);
+	int pkg_id = simp::NodeID::GetPkgID(m_sym->GetID());
+	Image* img = ImageMgr::Instance()->Create(pkg_id, res_path, async);
 	if (!img) {
 		return;
 	}

@@ -235,7 +235,31 @@ void Statistics::PrintScreen() const
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
-	mt.Translate(450, -100);
+	// memory detail
+	{
+		const std::map<int, float>& pkg2mem = s2::StatImages::Instance()->GetID2Mem();
+		std::map<float, int> mem2pkg;
+		std::map<int, float>::const_iterator itr = pkg2mem.begin();
+		for ( ; itr != pkg2mem.end(); ++itr) {
+			mem2pkg.insert(std::make_pair(itr->second, itr->first));
+		}
+		std::map<float, int>::const_reverse_iterator itr2 = mem2pkg.rbegin();
+		static const int ROW_COUNT = 12;
+		mt.Translate(0, -10);
+		for (int i = 0; itr2 != mem2pkg.rend(); ++itr2, ++i)
+		{
+			if (i == ROW_COUNT) {
+				i = 0;
+				mt.Translate(150, 20 * ROW_COUNT - 20);
+			} else {
+				mt.Translate(0, -20);
+			}
+			sprintf(buf, "%d <-> %.1f", itr2->second, itr2->first);
+			GTxt::Instance()->Draw(mt, buf, w);	
+		}
+	}
+
+	mt.SetTransformation(450, 100, 0, 1, 1, 0, 0, 0, 0);
 	s2::StatTopNodes::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();

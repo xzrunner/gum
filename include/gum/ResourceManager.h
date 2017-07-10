@@ -12,7 +12,7 @@ template<class T>
 class ResourceManager
 {
 public:
-	T* Create(const ResPath& res_path, bool async = false);
+	T* Create(int pkg_id, const ResPath& res_path, bool async = false);
 
 	T* Query(const ResPath& res_path);
 	bool Add(const ResPath& res_path, T* res);

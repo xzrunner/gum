@@ -242,7 +242,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 				const timp::Package::TextureDesc& tex = t_pkg->GetTexDesc(pic->texid);
 				Image* img = const_cast<Image*>(sym->GetImage());
 				if (img && async) {
-					img->AsyncLoad(tex.type, tex.w, tex.h);
+					img->AsyncLoad(pkg_id, tex.type, tex.w, tex.h);
 				}
 
 				sym->SetRegion(

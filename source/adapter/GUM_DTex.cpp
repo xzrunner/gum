@@ -51,6 +51,8 @@ namespace gum
 
 SINGLETON_DEFINITION(DTex);
 
+static const int IMG_ID = -3;
+
 static void (*DRAW_BEGIN)() = NULL;
 static void (*DRAW_END)() = NULL;
 
@@ -283,8 +285,7 @@ load_texture(int pkg_id, int tex_idx, int lod)
 	raw_tex->SetSize(loader.GetWidth(), loader.GetHeight());
 	raw_tex->SetFormat(loader.GetFormat());
 
-	s2::StatImages::Instance()->Add(loader.GetWidth(), loader.GetHeight(), 
-		loader.GetFormat());
+	s2::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
 }
 
 static void 
@@ -297,8 +298,7 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 	{
 		timp::TextureLoader loader(filepath.GetFilepath());
 		loader.Load();
-		s2::StatImages::Instance()->Add(loader.GetWidth(), loader.GetHeight(), 
-			loader.GetFormat());
+		s2::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
 		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
 	}
 	else
@@ -307,8 +307,7 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 		timp::TextureLoader loader(file, filepath.GetOffset());
 		loader.Load();
 		fs_close(file);
-		s2::StatImages::Instance()->Add(loader.GetWidth(), loader.GetHeight(), 
-			loader.GetFormat());
+		s2::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
 		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
 	}
 }
@@ -331,13 +330,13 @@ cache_pkg_static_tex_ok()
 static void
 stat_tex_add(int width, int height, int format)
 {
-	s2::StatImages::Instance()->Add(width, height, format);
+	s2::StatImages::Instance()->Add(IMG_ID, width, height, format);
 }
 
 static void
 stat_tex_remove(int width, int height, int format)
 {
-	s2::StatImages::Instance()->Remove(width, height, format);
+	s2::StatImages::Instance()->Remove(IMG_ID, width, height, format);
 }
 
 /************************************************************************/

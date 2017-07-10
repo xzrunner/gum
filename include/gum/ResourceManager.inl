@@ -29,13 +29,13 @@ inline ResourceManager<T>::~ResourceManager()
 }
 
 template<class T>
-inline T* ResourceManager<T>::Create(const ResPath& res_path, bool async)
+inline T* ResourceManager<T>::Create(int pkg_id, const ResPath& res_path, bool async)
 {
 	typename std::map<ResPath, T*>::iterator itr = m_res_map.find(res_path);
 	if (itr == m_res_map.end())
 	{
 		T* res = new T;
-		bool loaded = res->LoadFromFile(res_path, async);
+		bool loaded = res->LoadFromFile(pkg_id, res_path, async);
 		if (loaded)
 		{
 			m_res_map.insert(std::make_pair(res_path, res));

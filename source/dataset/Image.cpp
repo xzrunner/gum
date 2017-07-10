@@ -12,7 +12,8 @@ namespace gum
 {
 
 Image::Image()
-	: m_width(0)
+	: m_pkg_id(s2::StatImages::UNKNOWN_IMG_ID)
+	, m_width(0)
 	, m_height(0)
 	, m_id(0)
 	, m_s2_tex(new s2::Texture(0, 0, 0))
@@ -22,7 +23,7 @@ Image::Image()
 Image::~Image()
 {
 	if (m_id != 0) {
-		s2::StatImages::Instance()->Remove(m_width, m_height, m_format);
+		s2::StatImages::Instance()->Remove(m_pkg_id, m_width, m_height, m_format);
 	}
 
 	RenderContext::Instance()->GetImpl()->ReleaseTexture(m_id);
@@ -31,10 +32,11 @@ Image::~Image()
 	}
 }
 
-bool Image::LoadFromFile(const ResPath& res_path, bool async)
+bool Image::LoadFromFile(int pkg_id, const ResPath& res_path, bool async)
 {
-	assert(m_res_path != res_path);
+	m_pkg_id = pkg_id;
 
+	assert(m_res_path != res_path);
 	m_res_path = res_path;
 
 	if (async) {
@@ -49,21 +51,23 @@ bool Image::LoadFromFile(const ResPath& res_path, bool async)
 
 	LoadFromLoader(loader);
 
-	s2::StatImages::Instance()->Add(m_width, m_height, m_format);
+	s2::StatImages::Instance()->Add(pkg_id, m_width, m_height, m_format);
 
 	return true;
 }
 
-void Image::AsyncLoad(int format, int width, int height)
+void Image::AsyncLoad(int pkg_id, int format, int width, int height)
 {
 	if (m_id != 0) {
 		return;
 	}
 
+	m_pkg_id = pkg_id;
+
 	ImageLoader loader(m_res_path);
 	loader.AsyncLoad(format, width, height, this);
 
-	s2::StatImages::Instance()->Add(width, height, format);
+	s2::StatImages::Instance()->Add(pkg_id, width, height, format);
 }
 
 bool Image::IsLoadFinished() const 

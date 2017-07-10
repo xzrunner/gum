@@ -14,7 +14,7 @@ class Resource : public cu::RefCountObj
 {
 public:
 	virtual ~Resource() {}
-	virtual bool LoadFromFile(const ResPath& res_path, bool async) = 0;
+	virtual bool LoadFromFile(int pkg_id, const ResPath& res_path, bool async) = 0;
 
 }; // Resource
 
