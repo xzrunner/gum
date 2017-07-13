@@ -6,6 +6,7 @@
 #include "Exception.h"
 #include "SymbolPool.h"
 
+#include <logger.h>
 #include <sm_const.h>
 #include <ps_3d.h>
 #include <sprite2/Particle3dSymbol.h>
@@ -111,11 +112,14 @@ void P3dSymLoader::Store(p3d_emitter_cfg* cfg) const
 
 		if (!src.filepath.empty()) {
 			dst.ud = LoadSymbol(src.filepath);
+			if (!dst.ud) {
+				LOGW("P3dSymLoader::Store err comp %s\n", src.filepath.c_str());
+			}
 		} else {
 			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
-		}
-		if (!dst.ud) {
-			throw Exception("Symbol doesn't exist: %s", src.filepath.c_str());
+			if (!dst.ud) {
+				LOGW("P3dSymLoader::Store err comp %d\n", src.sym_id);
+			}
 		}
 	}
 }

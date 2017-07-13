@@ -20,6 +20,7 @@
 #include "TrailSymLoader.h"
 #include "SkeletonSymLoader.h"
 
+#include <logger.h>
 #include <simp/NodeFactory.h>
 #include <simp/simp_types.h>
 #include <simp/NodePicture.h>
@@ -197,7 +198,8 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, bool flatten, int
 		}
 		break;
 	default:
-		assert(0);
+//		assert(0);
+		LOGW("SymbolFactory::Create err sym path %s", filepath.c_str());
 	}
 
 	return ret;
@@ -381,7 +383,8 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 		}
 		break;
 	default:
-		assert(0);
+//		assert(0);
+		LOGW("SymbolFactory::Create err sym id %d", id);
 	}
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE

@@ -6,6 +6,7 @@
 #include "JsonSerializer.h"
 #include "SymbolPool.h"
 
+#include <logger.h>
 #include <sm_const.h>
 #include <ps_2d.h>
 #include <sprite2/Particle2dSymbol.h>
@@ -106,12 +107,15 @@ void P2dSymLoader::Store(p2d_emitter_cfg* cfg) const
 		memcpy(&dst.add_col_end.r, &src.add_col_end.r, sizeof(src.add_col_end));
 
 		if (!src.filepath.empty()) {
-			dst.ud = LoadSymbol(src.filepath);			
+			dst.ud = LoadSymbol(src.filepath);
+			if (!dst.ud) {
+				LOGW("P2dSymLoader::Store err comp %s\n", src.filepath.c_str());
+			}
 		} else {
 			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
-		}
-		if (!dst.ud) {
-			throw Exception("Symbol doesn't exist: %s", src.filepath.c_str());
+			if (!dst.ud) {
+				LOGW("P2dSymLoader::Store err comp %d\n", src.sym_id);
+			}
 		}
 	}
 }
