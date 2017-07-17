@@ -55,6 +55,7 @@ static const int IMG_ID = -3;
 
 static void (*DRAW_BEGIN)() = NULL;
 static void (*DRAW_END)() = NULL;
+static void (*ERROR_RELOAD)() = NULL;
 
 /************************************************************************/
 /* draw                                                                 */
@@ -212,6 +213,14 @@ scissor_enable()
 /************************************************************************/
 /* Resource                                                             */
 /************************************************************************/
+
+static void
+error_reload()
+{
+	if (ERROR_RELOAD) {
+		ERROR_RELOAD();
+	}
+}
 
 static void
 get_tex_filepath(int pkg_id, int tex_idx, int lod_layer, char* buf) 
@@ -434,10 +443,11 @@ glyph_load_finish()
 /*                                                                      */
 /************************************************************************/
 
-void DTex::InitHook(void (*draw_begin)(), void (*draw_end)())
+void DTex::InitHook(void (*draw_begin)(), void (*draw_end)(), void (*error_reload)())
 {
- 	DRAW_BEGIN = draw_begin;
- 	DRAW_END = draw_end;
+ 	DRAW_BEGIN   = draw_begin;
+ 	DRAW_END     = draw_end;
+	ERROR_RELOAD = error_reload;
 }
 
 DTex::DTex()
@@ -459,6 +469,7 @@ DTex::DTex()
 	dtex::RenderAPI::InitRenderContext(RenderContext::Instance()->GetImpl());
 
 	dtex::ResourceAPI::Callback res_cb;
+	res_cb.error_reload            = error_reload;
 	res_cb.get_tex_filepath        = get_tex_filepath;
 	res_cb.load_file               = load_file;
 	res_cb.load_texture            = load_texture;

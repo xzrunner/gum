@@ -68,8 +68,10 @@ namespace gum
 {
 
 extern "C"
-void gum_init()
+void gum_init(void (*error_reload)())
 {
+	DTex::Instance()->InitHook(NULL, NULL, error_reload);
+
 	Sprite2::Init();
 
 #ifndef S2_DISABLE_MODEL

@@ -20,7 +20,7 @@ namespace gum
 class DTex
 {
 public:
-	void InitHook(void (*draw_begin)(), void (*draw_end)());
+	void InitHook(void (*draw_begin)(), void (*draw_end)(), void (*error_reload)());
 
 	// C3
 	void CreatePkg(int pkg_id);

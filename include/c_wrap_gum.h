@@ -11,7 +11,7 @@ extern "C"
 #include <stdbool.h>
 #endif // __cplusplus
 
-void  gum_init();
+void  gum_init(void (*error_reload)());
 
 void* gum_get_render_context();
 
