@@ -384,6 +384,14 @@
 			Name="sprite"
 			>
 			<File
+				RelativePath="..\..\..\source\sprite\ExtendSymFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gum\ExtendSymFile.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\sprite\SymbolFile.cpp"
 				>
 			</File>
@@ -540,6 +548,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\AnimSymLoader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\BodymovinAnimLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\BodymovinAnimLoader.h"
 					>
 				</File>
 				<File
@@ -739,14 +755,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprite\SpineParser.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\gum\SpineParser.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\sprite\SpriteIO.cpp"
 					>
 				</File>
@@ -787,6 +795,26 @@
 					</File>
 					<File
 						RelativePath="..\..\..\include\gum\SymbolLoader.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="parser"
+					>
+					<File
+						RelativePath="..\..\..\source\sprite\BodymovinParser.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\gum\BodymovinParser.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprite\SpineParser.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\gum\SpineParser.h"
 						>
 					</File>
 				</Filter>

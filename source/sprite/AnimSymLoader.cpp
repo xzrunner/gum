@@ -2,6 +2,8 @@
 #include "FilepathHelper.h"
 #include "EasyAnimLoader.h"
 #include "SpineAnimLoader.h"
+#include "ExtendSymFile.h"
+#include "BodymovinAnimLoader.h"
 
 #include <sprite2/AnimSymbol.h>
 
@@ -51,12 +53,27 @@ void AnimSymLoader::LoadJson(const std::string& filepath)
 	reader.parse(fin, val);
 	fin.close();
 
-	if (val.isMember("skeleton") && val["skeleton"].isMember("spine")) {
-		SpineAnimLoader loader(m_sym, m_sym_loader, m_spr_loader);
-		loader.LoadJson(val, dir, filepath);
-	} else {
-		EasyAnimLoader loader(m_sym, m_flatten, m_spr_loader);
-		loader.LoadJson(val, dir);
+	int type = ExtendSymFile::GetType(val);
+	switch (type)
+	{
+	case SYM_SPINE:
+		{
+			SpineAnimLoader loader(m_sym, m_sym_loader, m_spr_loader);
+			loader.LoadJson(val, dir, filepath);
+		}
+		break;
+	case SYM_BODYMOVIN:
+		{
+			BodymovinAnimLoader loader(m_sym, m_sym_loader, m_spr_loader);
+			loader.LoadJson(val, dir);
+		}
+		break;
+	case SYM_UNKNOWN:
+		{
+			EasyAnimLoader loader(m_sym, m_flatten, m_spr_loader);
+			loader.LoadJson(val, dir);
+		}
+		break;
 	}
 
 	if (m_flatten) {

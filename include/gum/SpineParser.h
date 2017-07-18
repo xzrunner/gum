@@ -6,7 +6,6 @@
 #include <json/json.h>
 
 #include <string>
-#include <map>
 
 namespace gum
 {

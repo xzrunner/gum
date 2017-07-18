@@ -3,6 +3,7 @@
 #include "EasyAnim2Loader.h"
 #include "SpineAnim2Loader.h"
 #include "SymbolPool.h"
+#include "ExtendSymFile.h"
 
 #include <sprite2/Anim2Symbol.h>
 #include <simp/NodeAnim2.h>
@@ -50,12 +51,21 @@ void Anim2SymLoader::LoadJson(const std::string& filepath)
 	reader.parse(fin, val);
 	fin.close();
 
-	if (val.isMember("skeleton") && !val["skeleton"].isArray() && val["skeleton"].isMember("spine")) {
-		SpineAnim2Loader loader(m_sym, m_sym_loader);
-		loader.LoadJson(val, dir);
-	} else {
-		EasyAnim2Loader loader(m_sym, m_sym_loader);
-		loader.LoadJson(val, dir);
+	int type = ExtendSymFile::GetType(val);
+	switch (type)
+	{
+	case SYM_SPINE:
+		{
+			SpineAnim2Loader loader(m_sym, m_sym_loader);
+			loader.LoadJson(val, dir);
+		}
+		break;
+	case SYM_UNKNOWN:
+		{
+			EasyAnim2Loader loader(m_sym, m_sym_loader);
+			loader.LoadJson(val, dir);
+		}
+		break;
 	}
 }
 
