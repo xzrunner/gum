@@ -62,6 +62,9 @@ void MeshSymLoader::LoadJson(const std::string& filepath)
 	std::string dir = FilepathHelper::Dir(filepath);
 	std::string base_path = FilepathHelper::Absolute(dir, value["base_symbol"].asString());
 	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(base_path);
+	if (!base_sym) {
+		return;
+	}
 
 	std::string type = value["type"].asString();
 	s2::Mesh* mesh = NULL;
@@ -71,8 +74,10 @@ void MeshSymLoader::LoadJson(const std::string& filepath)
 		mesh = CreatePointsMesh(value, base_sym);
 	}
 
-	m_sym->SetMesh(mesh);
-	mesh->RemoveReference();
+	if (mesh) {
+		m_sym->SetMesh(mesh);
+		mesh->RemoveReference();
+	}
 }
 
 void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
@@ -82,6 +87,9 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	}
 
 	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id, m_flatten);
+	if (!base_sym) {
+		return;
+	}
 
 	s2::Mesh* mesh = NULL;
 	switch (node->shape->type)
@@ -101,7 +109,9 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	m_sym->SetMesh(mesh);
 
 	base_sym->RemoveReference();
-	mesh->RemoveReference();
+	if (mesh) {
+		mesh->RemoveReference();
+	}
 }
 
 s2::Mesh* MeshSymLoader::LoadPointsMesh(s2::Symbol* base_sym, simp::PointsMesh* node)

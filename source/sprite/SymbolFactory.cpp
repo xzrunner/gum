@@ -198,8 +198,11 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, bool flatten, int
 		}
 		break;
 	default:
-//		assert(0);
-		LOGW("SymbolFactory::Create err sym path %s", filepath.c_str());
+		LOGW("Error Sym Type: filepath %s, type %d", filepath.c_str(), type);
+	}
+
+	if (!ret) {
+		LOGW("Create sym fail: filepath %s", filepath.c_str());
 	}
 
 	return ret;
@@ -219,6 +222,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 	int type;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
 	if(!data) {
+		LOGW("Create sym fail: id %u", id);
 		return NULL;
 	}
 	switch (type)
@@ -383,8 +387,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
 		}
 		break;
 	default:
-//		assert(0);
-		LOGW("SymbolFactory::Create err sym id %d", id);
+		LOGW("Create sym fail: id %u, type %d", id, type);
 	}
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -392,6 +395,10 @@ s2::Symbol* SymbolFactory::Create(uint32_t id, bool flatten) const
  		ret->Traverse(s2::CacheMatVisitor());
  	}
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
+
+	if (!ret) {
+		LOGW("Create sym fail: id %u", id);
+	}
 
 	return ret;
 }
@@ -402,6 +409,8 @@ s2::Symbol* SymbolFactory::Create(const std::string& pkg_name, const std::string
 	if (id != 0xffffffff) {
 		return Create(id, flatten);
 	} else {
+		LOGW("Create sym fail: pkg %s, node %s", 
+			pkg_name.c_str(), node_name.c_str());
 		return NULL;
 	}
 }

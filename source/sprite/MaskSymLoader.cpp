@@ -53,13 +53,17 @@ void MaskSymLoader::LoadJson(const std::string& filepath)
 
 	std::string base_path = FilepathHelper::Absolute(dir, value["base"]["filepath"].asString());
 	s2::Sprite* base = SpriteFactory::Instance()->Create(base_path);
-	psym->SetBase(base);
-	base->RemoveReference();
+	if (base) {
+		psym->SetBase(base);
+		base->RemoveReference();
+	}
 
 	std::string mask_path = FilepathHelper::Absolute(dir, value["mask"]["filepath"].asString());
 	s2::Sprite* mask = SpriteFactory::Instance()->Create(mask_path);
-	psym->SetMask(mask);
-	mask->RemoveReference();
+	if (mask) {
+		psym->SetMask(mask);
+		mask->RemoveReference();
+	}
 }
 
 void MaskSymLoader::LoadBin(const simp::NodeMask* node)
@@ -71,12 +75,16 @@ void MaskSymLoader::LoadBin(const simp::NodeMask* node)
 	s2::MaskSymbol* psym = VI_DOWNCASTING<s2::MaskSymbol*>(m_sym);
 
 	s2::Sprite* base = SpriteFactory::Instance()->Create(node->base_id, m_flatten);
-	psym->SetBase(base);
-	base->RemoveReference();
+	if (base) {
+		psym->SetBase(base);
+		base->RemoveReference();
+	}
 
 	s2::Sprite* mask = SpriteFactory::Instance()->Create(node->mask_id, m_flatten);
-	psym->SetMask(mask);
-	mask->RemoveReference();
+	if (mask) {
+		psym->SetMask(mask);
+		mask->RemoveReference();
+	}
 }
 
 }

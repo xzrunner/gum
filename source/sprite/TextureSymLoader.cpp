@@ -64,10 +64,13 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 	for (int i = 0; i < node->n; ++i) 
 	{
 		s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->polys[i], m_flatten);
-		s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<s2::ShapeSymbol*>(sym);
-		const s2::PolygonShape* poly = VI_DOWNCASTING<const s2::PolygonShape*>(shape_sym->GetShape());
-		m_sym->AddPolygon(const_cast<s2::PolygonShape*>(poly));
-		sym->RemoveReference();
+		if (sym)
+		{
+			s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<s2::ShapeSymbol*>(sym);
+			const s2::PolygonShape* poly = VI_DOWNCASTING<const s2::PolygonShape*>(shape_sym->GetShape());
+			m_sym->AddPolygon(const_cast<s2::PolygonShape*>(poly));
+			sym->RemoveReference();			
+		}
 	}
 }
 

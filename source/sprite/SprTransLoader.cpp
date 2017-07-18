@@ -14,6 +14,10 @@ namespace gum
 
 void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
 {
+	if (!spr) {
+		return;
+	}
+
 	int idx = 0;
 	if (trans->type & simp::NodeTrans::SCALE_MASK) {
 		float x = ToFloat(trans->data[idx++]),

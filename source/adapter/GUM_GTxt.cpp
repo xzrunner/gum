@@ -345,7 +345,9 @@ void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 		std::map<int, s2::Symbol*>::iterator itr = m_user_font_chars.find(unicode);
 		if (itr != m_user_font_chars.end()) {
 			s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
-			m_user_font_chars.insert(std::make_pair(unicode, sym));
+			if (sym) {
+				m_user_font_chars.insert(std::make_pair(unicode, sym));
+			}
 		}
 	}
 }
@@ -360,14 +362,19 @@ void GTxt::LoadUserFontChar(const std::string& str, const std::string& pkg, cons
 		if (itr->second->GetID() == id) {
 			return;
 		} else {
-			itr->second->RemoveReference();
-			// todo: flatten
-			itr->second = SymbolPool::Instance()->Fetch(id, false);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, false);
+			if (sym) {
+				itr->second->RemoveReference();
+				// todo: flatten
+				itr->second = sym;
+			}
 		}
 	} else {
 		// todo: flatten
 		s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, false);
-		m_user_font_chars.insert(std::make_pair(unicode, sym));
+		if (sym) {
+			m_user_font_chars.insert(std::make_pair(unicode, sym));
+		}
 	}
 }
 

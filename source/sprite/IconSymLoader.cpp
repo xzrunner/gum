@@ -102,9 +102,11 @@ void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 	}
 
 	s2::Symbol* base = SymbolPool::Instance()->Fetch(node->base_id, m_flatten);
-	assert(base->Type() == s2::SYM_IMAGE);
-	icon->SetImage(VI_DOWNCASTING<s2::ImageSymbol*>(base));
-	base->RemoveReference();
+	if (base) {
+		assert(base->Type() == s2::SYM_IMAGE);
+		icon->SetImage(VI_DOWNCASTING<s2::ImageSymbol*>(base));
+		base->RemoveReference();
+	}
 
 	if (icon) {
 		m_sym->SetIcon(icon);

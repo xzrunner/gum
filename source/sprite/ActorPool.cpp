@@ -36,7 +36,11 @@ s2::Actor* ActorPool::Fetch(const uint32_t sym_id, bool& is_new)
 	} else {
 		is_new = true;
 		s2::Sprite* spr = SpriteFactory::Instance()->CreateFromSym(sym_id, true);
-		return s2::ActorFactory::Instance()->Create(NULL, spr);
+		if (spr) {
+			return s2::ActorFactory::Instance()->Create(NULL, spr);
+		} else {
+			return NULL;
+		}
 	}
 }
 

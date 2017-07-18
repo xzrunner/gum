@@ -55,8 +55,10 @@ void ComplexSymLoader::LoadJson(const std::string& filepath)
 	m_sym->Clear();
 	for (int i = 0, n = value["sprite"].size(); i < n; ++i) {
 		s2::Sprite* spr = SpriteFactory::Instance()->Create(value["sprite"][i], dir);
-		m_sym->Add(spr);
-		spr->RemoveReference();
+		if (spr) {
+			m_sym->Add(spr);
+			spr->RemoveReference();
+		}
 	}
 
 //	LoadJsonAction(value, m_sym);
@@ -78,9 +80,11 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 	m_sym->Clear();
 	for (int i = 0; i < node->sprs_n; ++i) {
 		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i], m_flatten);
-		SprTransLoader::Load(spr, node->trans[i]);
-		m_sym->Add(spr);
-		spr->RemoveReference();
+		if (spr) {
+			SprTransLoader::Load(spr, node->trans[i]);
+			m_sym->Add(spr);
+			spr->RemoveReference();
+		}
 	}
 
 	const std::vector<s2::Sprite*>& children = m_sym->GetAllChildren();

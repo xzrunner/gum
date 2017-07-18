@@ -73,8 +73,10 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 			{
 				const simp::NodeAnimation::Actor* src_actor = src_frame->actors[actor];
 				s2::Sprite* spr = SpriteFactory::Instance()->Create(src_actor->sym_id, m_flatten);
-				SprTransLoader::Load(spr, src_actor->trans);
-				dst_frame->sprs.push_back(spr);
+				if (spr) {
+					SprTransLoader::Load(spr, src_actor->trans);
+					dst_frame->sprs.push_back(spr);
+				}
 			}
 			dst_layer->frames.push_back(dst_frame);
 		}

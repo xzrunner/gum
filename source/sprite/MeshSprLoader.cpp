@@ -47,8 +47,10 @@ void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	if (mesh_val.isMember("base_symbol")) {
 		std::string base_path = FilepathHelper::Absolute(dir, mesh_val["base_symbol"].asString());
 		s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(base_path);
-		m_spr->SetBaseSym(base_sym);
-		base_sym->RemoveReference();
+		if (base_sym) {
+			m_spr->SetBaseSym(base_sym);
+			base_sym->RemoveReference();
+		}
 	}
 }
 
@@ -59,8 +61,10 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 	}
 
 	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id, m_flatten);
-	m_spr->SetBaseSym(base_sym);
-	base_sym->RemoveReference();
+	if (base_sym) {
+		m_spr->SetBaseSym(base_sym);
+		base_sym->RemoveReference();
+	}
 
 	assert(m_spr->GetSymbol()->Type() == s2::SYM_MESH);
 	s2::MeshSymbol* mesh_sym = VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol());
