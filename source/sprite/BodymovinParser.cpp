@@ -77,8 +77,12 @@ void BodymovinParser::ParseAssets(const Json::Value& val, const std::string& dir
 
 void BodymovinParser::ParseLayers(const Json::Value& val)
 {
+	if (val.size() == 0) {
+		return;
+	}
+
 	m_layers.reserve(val.size());
-	for (int i = 0, n = val.size(); i < n; ++i) 
+	for (int i = val.size() - 1; i >= 0; --i) 
 	{
 		Layer layer;
 		layer.Load(val[i]);

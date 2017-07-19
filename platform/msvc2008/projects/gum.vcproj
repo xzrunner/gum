@@ -555,7 +555,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprite\BodymovinAnimLoader.h"
+					RelativePath="..\..\..\include\gum\BodymovinAnimLoader.h"
 					>
 				</File>
 				<File

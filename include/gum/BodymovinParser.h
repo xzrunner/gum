@@ -20,6 +20,9 @@ public:
 
 	int GetFrameRate() const { return m_frame_rate; }
 
+	int GetWidth() const { return m_width; }
+	int GetHeight() const { return m_height; }
+
 public:
 	struct Asset
 	{
@@ -51,8 +54,8 @@ public:
 			{
 				int start_frame, end_frame;
 				float start_val[3], end_val[3];
-				float cp1[2], cp2[2];
-				float tcp1[2], tcp2[2];
+				float cp1[3], cp2[3];
+				float tcp1[3], tcp2[3];
 			} KEY;
 		} D;
 

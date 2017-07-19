@@ -56,6 +56,10 @@ void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& di
 
 	int frame_rate = parser.GetFrameRate();
 
+	sm::vec2 left_top;
+	left_top.x = - parser.GetWidth() * 0.5f;
+	left_top.y = parser.GetHeight() * 0.5f;
+
 	const std::vector<BodymovinParser::Layer>& layers = parser.GetLayers();
 	for (int i = 0, n = layers.size(); i < n; ++i)
 	{
@@ -101,6 +105,10 @@ void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& di
 
 		// filling frames
 		LoadAnchor(dst->frames, src.trans.anchor, frame_rate);
+		LoadOpacity(dst->frames, src.trans.opacity, frame_rate);
+		LoadPosition(dst->frames, src.trans.position, frame_rate, left_top);
+		LoadRotate(dst->frames, src.trans.rotate, frame_rate);
+		LoadScale(dst->frames, src.trans.scale, frame_rate);
 
 		m_sym->AddLayer(dst);
 	}
@@ -164,6 +172,7 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
+			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
 			sm::vec2 offset = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
@@ -203,6 +212,7 @@ void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
+			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
 			int opacity = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
@@ -251,6 +261,7 @@ void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::Frame*>& fram
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
+			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
 			sm::vec2 anchor_pos = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
@@ -292,6 +303,7 @@ void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::Frame*>& frames
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
+			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
 			int angle = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
@@ -329,6 +341,7 @@ void BodymovinAnimLoader::LoadScale(std::vector<s2::AnimSymbol::Frame*>& frames,
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
+			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
 			sm::vec2 scale = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
