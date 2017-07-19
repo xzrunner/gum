@@ -7,6 +7,8 @@
 #include <sprite2/ImageSymbol.h>
 #include <sprite2/RenderColor.h>
 
+#include <cmath>
+
 #include <assert.h>
 
 namespace gum
