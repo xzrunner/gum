@@ -137,7 +137,7 @@ void BodymovinParser::FloatVal::Load(const Json::Value& val)
 			D.KEY.tcp2[i] = val["k"][IDX_0]["ti"][i].asDouble();
 		}
 
-		D.KEY.start_frame = val["k"][1]["t"].asInt();
+		D.KEY.end_frame = val["k"][1]["t"].asInt();
 		assert(!val["k"][1].isMember("e") 
 			&& !val["k"][1].isMember("i")
 			&& !val["k"][1].isMember("n")

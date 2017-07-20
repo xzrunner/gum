@@ -131,7 +131,21 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& fr
 		return;
 	}
 
-	int time = Frame2Time(val.D.KEY.start_frame, frame_rate);
+	InsertKeyframe(frames, Frame2Time(val.D.KEY.start_frame, frame_rate));
+	InsertKeyframe(frames, Frame2Time(val.D.KEY.end_frame, frame_rate));
+}
+
+void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, int time)
+{
+	if (frames.size() < 2) {
+		return;
+	}
+
+	if (time <= frames[0]->index ||
+		time >= frames[frames.size() - 1]->index) {
+		return;
+	}
+
 	for (int i = 0, n = frames.size() - 1; i < n; ++i) 
 	{
 		const s2::AnimSymbol::Frame* frame = frames[i];
@@ -174,8 +188,15 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 			s2::AnimSymbol::Frame* frame = frames[i];
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
-			sm::vec2 offset = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
+			s2::Sprite* spr = frame->sprs[0];			
+			sm::vec2 offset;
+			if (frame->index <= s_time) {
+				offset = s_val;
+			} else if (frame->index >= e_time) {
+				offset = e_val;
+			} else {
+				offset = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
+			}
 			spr->SetOffset(offset);
 		}
 	}
@@ -215,7 +236,14 @@ void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
-			int opacity = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
+			int opacity;
+			if (frame->index <= s_time) {
+				opacity = s_val;
+			} else if (frame->index >= e_time) {
+				opacity = e_val;
+			} else {
+				opacity = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
+			}
 
 			s2::RenderColor rc = spr->GetColor();
 			s2::Color col = spr->GetColor().GetMul();
@@ -264,10 +292,17 @@ void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::Frame*>& fram
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
-			sm::vec2 anchor_pos = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
+			sm::vec2 anchor_pos;
+			if (frame->index <= s_time) {
+				anchor_pos = s_val;
+			} else if (frame->index >= e_time) {
+				anchor_pos = e_val;
+			} else {
+				anchor_pos = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
+			}
 			anchor_pos.x = left_top.x + anchor_pos.x;
 			anchor_pos.y = left_top.y - anchor_pos.y;
-			spr->Translate(anchor_pos - spr->GetCenter());
+			spr->Translate(anchor_pos - (spr->GetPosition() + spr->GetOffset()));
 		}
 	}
 	else
@@ -280,7 +315,7 @@ void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::Frame*>& fram
 			s2::AnimSymbol::Frame* frame = frames[i];
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
-			spr->Translate(anchor_pos - spr->GetCenter());
+			spr->Translate(anchor_pos - (spr->GetPosition() + spr->GetOffset()));
 		}
 	}
 }
@@ -306,8 +341,15 @@ void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::Frame*>& frames
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
-			int angle = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
-			spr->SetAngle(angle * SM_DEG_TO_RAD);
+			int angle;
+			if (frame->index <= s_time) {
+				angle = s_val;
+			} else if (frame->index >= e_time) {
+				angle = e_val;
+			} else {
+				angle = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
+			}
+			spr->SetAngle(- angle * SM_DEG_TO_RAD);
 		}
 	}
 	else
@@ -318,7 +360,7 @@ void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::Frame*>& frames
 			s2::AnimSymbol::Frame* frame = frames[i];
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
-			spr->SetAngle(angle * SM_DEG_TO_RAD);
+			spr->SetAngle(- angle * SM_DEG_TO_RAD);
 		}
 	}
 }
@@ -344,8 +386,15 @@ void BodymovinAnimLoader::LoadScale(std::vector<s2::AnimSymbol::Frame*>& frames,
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			s2::Sprite* spr = frame->sprs[0];
-			sm::vec2 scale = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
-			spr->SetOffset(scale / 100.0f);
+			sm::vec2 scale;
+			if (frame->index <= s_time) {
+				scale = s_val;
+			} else if (frame->index >= e_time) {
+				scale = e_val;
+			} else {
+				scale = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
+			}
+			spr->SetScale(scale / 100.0f);
 		}
 	}
 	else
