@@ -1,11 +1,15 @@
 #include "BodymovinAnimLoader.h"
 #include "SymbolLoader.h"
 #include "SpriteLoader.h"
+#include "StringHelper.h"
 
 #include <sm_const.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/ImageSymbol.h>
 #include <sprite2/RenderColor.h>
+#include <sprite2/ShapeSymbol.h>
+#include <sprite2/ColorPolygon.h>
+#include <sprite2/PolygonShape.h>
 
 #include <cmath>
 
@@ -75,8 +79,8 @@ void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& di
 		}
 		else if (src.layer_type == BodymovinParser::LAYER_SOLID)
 		{
-			// todo
-			continue;
+			s_spr = CreateSolidSpr(src.solid_color, src.solid_width, src.solid_height);
+			e_spr = VI_CLONE(s2::Sprite, s_spr);
 		}
 		assert(s_spr && e_spr);
 
@@ -173,8 +177,30 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 {
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
-	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
-	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
+	sm::vec2 ori_sz;
+	const s2::Symbol* sym = frames[0]->sprs[0]->GetSymbol();
+	switch (sym->Type())
+	{
+	case s2::SYM_IMAGE:
+		ori_sz = VI_DOWNCASTING<const s2::ImageSymbol*>(sym)->GetNoTrimedSize();
+		break;
+	case s2::SYM_SHAPE:
+		{
+ 			const s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<const s2::ShapeSymbol*>(sym);
+ 			const s2::Shape* shape = shape_sym->GetShape();
+ 			const s2::PolygonShape* poly_shape = VI_DOWNCASTING<const s2::PolygonShape*>(shape);
+			const std::vector<sm::vec2>& tris = poly_shape->GetPolygon()->GetTriangles();
+			sm::rect r;
+			for (int i = 0, n = tris.size(); i < n; ++i) {
+				r.Combine(tris[i]);
+			}
+			ori_sz.x = r.Width();
+			ori_sz.y = r.Height();
+		}
+		break;
+	default:
+		assert(0);
+	}
 
 	if (val.frames.size() > 1)
 	{
@@ -212,10 +238,6 @@ void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 									  int frame_rate)
 {
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
-
-	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
-	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
-
 	if (val.frames.size() > 1)
 	{
 		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
@@ -261,10 +283,6 @@ void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::Frame*>& fram
 									   const sm::vec2& left_top)
 {
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
-
-	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
-	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
-
 	if (val.frames.size() > 1)
 	{
 		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
@@ -304,10 +322,6 @@ void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::Frame*>& frames
 									 int frame_rate)
 {
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
-
-	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
-	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
-
 	if (val.frames.size() > 1)
 	{
 		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
@@ -342,10 +356,6 @@ void BodymovinAnimLoader::LoadScale(std::vector<s2::AnimSymbol::Frame*>& frames,
 									int frame_rate)
 {
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
-
-	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
-	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
-
 	if (val.frames.size() > 1)
 	{
 		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
@@ -414,6 +424,39 @@ BodymovinAnimLoader::GetLerpVal(const std::vector<BodymovinParser::FloatVal::Key
 
 	assert(0);
 	return frames.front().s_val;
+}
+
+s2::Sprite* BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int width, int height) const
+{
+	s2::Symbol* sym = m_sym_loader->Create(s2::SYM_SHAPE);
+	assert(sym);
+	s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<s2::ShapeSymbol*>(sym);
+
+	// set color
+	int r, g, b;
+	StringHelper::FromString(color.substr(1, 2), r);
+	StringHelper::FromString(color.substr(3, 2), g);
+	StringHelper::FromString(color.substr(5, 2), b);
+	s2::ColorPolygon* poly = new s2::ColorPolygon(s2::Color(r, g, b));
+
+	// region
+	float hw = width * 0.5f,
+		  hh = height * 0.5f;
+	std::vector<sm::vec2> outline(4);
+	outline[0].Set(-hw, -hh);
+	outline[1].Set( hw, -hh);
+	outline[2].Set( hw,  hh);
+	outline[3].Set(-hw,  hh);
+	poly->SetOutline(outline);
+	poly->Build();
+
+	s2::PolygonShape* poly_shape = new s2::PolygonShape();
+	poly_shape->SetPolygon(poly);
+	shape_sym->SetShape(poly_shape);
+
+	s2::Sprite* spr = m_spr_loader->Create(sym);
+	spr->UpdateBounding();
+	return spr;
 }
 
 }

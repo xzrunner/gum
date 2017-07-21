@@ -47,6 +47,8 @@ private:
 	static BodymovinParser::FloatVal::Float3 GetLerpVal(
 		const std::vector<BodymovinParser::FloatVal::KeyFrame>& frames, int frame, int frame_rate);
 
+	s2::Sprite* CreateSolidSpr(const std::string& color, int width, int height) const;
+
 private:
 	s2::AnimSymbol* m_sym;
 
