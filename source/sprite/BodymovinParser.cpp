@@ -24,23 +24,12 @@ void BodymovinParser::Parse(const Json::Value& val, const std::string& dir)
 
 	ParseHeader(val);
 	ParseAssets(val["assets"], dir);
-	ParseLayers(val["layers"]);
-}
-
-const BodymovinParser::Asset* BodymovinParser::QueryAsset(const std::string& id) const
-{
-	std::map<std::string, Asset>::const_iterator itr 
-		= m_map2assets.find(id);
-	if (itr == m_map2assets.end()) {
-		return NULL;
-	} else {
-		return &itr->second;
-	}
+	ParseLayers(val["layers"], m_layers);
 }
 
 void BodymovinParser::Clear()
 {
-	m_map2assets.clear();
+	m_assets.clear();
 	m_layers.clear();
 }
 
@@ -65,28 +54,36 @@ void BodymovinParser::ParseAssets(const Json::Value& val, const std::string& dir
 		const Json::Value& cval = val[i];
 
 		Asset a;
-		a.w = cval["w"].asInt();
-		a.h = cval["h"].asInt();
-		a.filepath = dir + "\\" + cval["u"].asString() + cval["p"].asString();
 
-		std::string id = cval["id"].asString();
+		a.id = cval["id"].asString();
 
-		m_map2assets.insert(std::make_pair(id, a));
+		if (cval.isMember("layers"))
+		{
+			ParseLayers(cval["layers"], a.layers);
+		}
+		else
+		{
+			a.w = cval["w"].asInt();
+			a.h = cval["h"].asInt();
+			a.filepath = dir + "\\" + cval["u"].asString() + cval["p"].asString();
+		}
+
+		m_assets.push_back(a);
 	}
 }
 
-void BodymovinParser::ParseLayers(const Json::Value& val)
+void BodymovinParser::ParseLayers(const Json::Value& val, std::vector<Layer>& layers)
 {
 	if (val.size() == 0) {
 		return;
 	}
 
-	m_layers.reserve(val.size());
+	layers.reserve(val.size());
 	for (int i = val.size() - 1; i >= 0; --i) 
 	{
 		Layer layer;
 		layer.Load(val[i]);
-		m_layers.push_back(layer);
+		layers.push_back(layer);
 	}
 }
 

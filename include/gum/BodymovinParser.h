@@ -24,10 +24,17 @@ public:
 	int GetHeight() const { return m_height; }
 
 public:
+	struct Layer;
 	struct Asset
 	{
+		std::string id;
+
+		// single
 		std::string filepath;
 		int w, h;
+
+		// compose
+		std::vector<Layer> layers;
 	};
 
 	enum LayerType 
@@ -111,16 +118,15 @@ public:
 	};
 
 public:
+	const std::vector<Asset>& GetAssets() const { return m_assets; }
 	const std::vector<Layer>& GetLayers() const { return m_layers; }
-
-	const Asset* QueryAsset(const std::string& id) const;
 
 private:
 	void Clear();
 
 	void ParseHeader(const Json::Value& val);
 	void ParseAssets(const Json::Value& val, const std::string& dir);
-	void ParseLayers(const Json::Value& val);
+	static void ParseLayers(const Json::Value& val, std::vector<Layer>& layers);
 
 private:
 	std::string m_version;
@@ -132,8 +138,7 @@ private:
 
 	int m_start_frame, m_end_frame;
 
-	std::map<std::string, Asset> m_map2assets;
-
+	std::vector<Asset> m_assets;
 	std::vector<Layer> m_layers;
 
 }; // BodymovinParser

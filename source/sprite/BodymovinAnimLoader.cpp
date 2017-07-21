@@ -10,6 +10,7 @@
 #include <sprite2/ShapeSymbol.h>
 #include <sprite2/ColorPolygon.h>
 #include <sprite2/PolygonShape.h>
+#include <sprite2/BoundingBox.h>
 
 #include <cmath>
 
@@ -53,29 +54,56 @@ BodymovinAnimLoader::~BodymovinAnimLoader()
 
 void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
 {
-	m_sym->SetFPS(static_cast<int>(FPS));
-
 	BodymovinParser parser;
 	parser.Parse(val, dir);
 
-	int frame_rate = parser.GetFrameRate();
+	LoadAssets(parser.GetAssets(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight());
+	LoadLayers(parser.GetLayers(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight(), m_sym);
+}
+
+void BodymovinAnimLoader::LoadAssets(const std::vector<BodymovinParser::Asset>& assets,
+									 int frame_rate, int width, int height)
+{
+	for (int i = 0, n = assets.size(); i < n; ++i)
+	{
+		const BodymovinParser::Asset& a = assets[i];
+		s2::Sprite* spr = NULL;
+		if (a.layers.empty()) 
+		{
+			spr = m_spr_loader->Create(a.filepath);
+		} 
+		else 
+		{
+			s2::Symbol* sym = m_sym_loader->Create(s2::SYM_ANIMATION);
+			s2::AnimSymbol* anim_sym = VI_DOWNCASTING<s2::AnimSymbol*>(sym);
+			LoadLayers(a.layers, frame_rate, width, height, anim_sym);
+			spr = m_spr_loader->Create(sym);
+		}
+		m_map_assets.insert(std::make_pair(a.id, spr));
+	}
+}
+
+void BodymovinAnimLoader::LoadLayers(const std::vector<BodymovinParser::Layer>& layers, 
+									 int frame_rate, int width, int height, s2::AnimSymbol* sym)
+{
+	sym->SetFPS(static_cast<int>(FPS));
 
 	sm::vec2 left_top;
-	left_top.x = - parser.GetWidth() * 0.5f;
-	left_top.y = parser.GetHeight() * 0.5f;
+	left_top.x = - width * 0.5f;
+	left_top.y = height * 0.5f;
 
-	const std::vector<BodymovinParser::Layer>& layers = parser.GetLayers();
 	for (int i = 0, n = layers.size(); i < n; ++i)
 	{
 		const BodymovinParser::Layer& src = layers[i];
 
 		s2::Sprite *s_spr = NULL, *e_spr = NULL;
-		if (src.layer_type == BodymovinParser::LAYER_IMAGE)
+		if (src.layer_type == BodymovinParser::LAYER_PRE_COMP ||
+			src.layer_type == BodymovinParser::LAYER_IMAGE)
 		{
-			const BodymovinParser::Asset* asset = parser.QueryAsset(src.ref_id);
-			assert(asset);
-			s_spr = m_spr_loader->Create(asset->filepath);
-			e_spr = VI_CLONE(s2::Sprite, s_spr);
+			std::map<std::string, s2::Sprite*>::iterator itr = m_map_assets.find(src.ref_id);
+			assert(itr != m_map_assets.end());
+			s_spr = VI_CLONE(s2::Sprite, itr->second);
+			e_spr = VI_CLONE(s2::Sprite, itr->second);
 		}
 		else if (src.layer_type == BodymovinParser::LAYER_SOLID)
 		{
@@ -90,7 +118,7 @@ void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& di
 		s2::AnimSymbol::Frame* e_frame = new s2::AnimSymbol::Frame;
 		dst->frames.push_back(s_frame);
 		dst->frames.push_back(e_frame);
-		
+
 		s_frame->sprs.push_back(s_spr);
 		e_frame->sprs.push_back(e_spr);
 
@@ -114,7 +142,7 @@ void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& di
 		LoadRotate(dst->frames, src.trans.rotate, frame_rate);
 		LoadScale(dst->frames, src.trans.scale, frame_rate);
 
-		m_sym->AddLayer(dst);
+		sym->AddLayer(dst);
 	}
 }
 
@@ -185,18 +213,8 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 		ori_sz = VI_DOWNCASTING<const s2::ImageSymbol*>(sym)->GetNoTrimedSize();
 		break;
 	case s2::SYM_SHAPE:
-		{
- 			const s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<const s2::ShapeSymbol*>(sym);
- 			const s2::Shape* shape = shape_sym->GetShape();
- 			const s2::PolygonShape* poly_shape = VI_DOWNCASTING<const s2::PolygonShape*>(shape);
-			const std::vector<sm::vec2>& tris = poly_shape->GetPolygon()->GetTriangles();
-			sm::rect r;
-			for (int i = 0, n = tris.size(); i < n; ++i) {
-				r.Combine(tris[i]);
-			}
-			ori_sz.x = r.Width();
-			ori_sz.y = r.Height();
-		}
+	case s2::SYM_ANIMATION:
+		ori_sz = frames[0]->sprs[0]->GetBounding()->GetSize().Size();
 		break;
 	default:
 		assert(0);

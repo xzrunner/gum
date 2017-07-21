@@ -27,6 +27,11 @@ public:
 	void LoadJson(const Json::Value& val, const std::string& dir);
 
 private:
+	void LoadAssets(const std::vector<BodymovinParser::Asset>& assets,
+		int frame_rate, int width, int height);
+	void LoadLayers(const std::vector<BodymovinParser::Layer>& layers, 
+		int frame_rate, int width, int height, s2::AnimSymbol* sym);
+
 	static int Frame2Time(int frame, int frame_rate);
 
 	static void InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, 
@@ -54,6 +59,8 @@ private:
 
 	const SymbolLoader* m_sym_loader;
 	const SpriteLoader* m_spr_loader;
+
+	std::map<std::string, s2::Sprite*> m_map_assets;
 
 }; // BodymovinAnimLoader
 
