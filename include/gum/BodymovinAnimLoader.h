@@ -44,6 +44,9 @@ private:
 	static void LoadScale(std::vector<s2::AnimSymbol::Frame*>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
 
+	static BodymovinParser::FloatVal::Float3 GetLerpVal(
+		const std::vector<BodymovinParser::FloatVal::KeyFrame>& frames, int frame, int frame_rate);
+
 private:
 	s2::AnimSymbol* m_sym;
 

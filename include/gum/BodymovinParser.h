@@ -43,25 +43,27 @@ public:
 
 	struct FloatVal
 	{
-		union 
+		struct Float3
 		{
-			struct 
-			{
-				float val[3];
-			} RAW;
+			float data[3];
 
-			struct 
-			{
-				int start_frame, end_frame;
-				float start_val[3], end_val[3];
-				float cp1[3], cp2[3];
-				float tcp1[3], tcp2[3];
-			} KEY;
-		} D;
+			Float3();
+			Float3(const Json::Value& val);
 
-		bool keyframe;
+			bool operator == (const Float3& f) const;
+		};
 
-		FloatVal();
+		struct KeyFrame
+		{
+			int frame;
+			Float3 s_val, e_val;
+			Float3 ix, iy, ox, oy;
+			Float3 ti, to;
+
+			KeyFrame() { memset(this, 0, sizeof(*this)); }
+		};
+
+		std::vector<KeyFrame> frames;
 
 		void Load(const Json::Value& val);		
 	};

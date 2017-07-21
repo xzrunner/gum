@@ -91,71 +91,98 @@ void BodymovinParser::ParseLayers(const Json::Value& val)
 }
 
 /************************************************************************/
+/* class BodymovinParser::FloatVal::Float3                              */
+/************************************************************************/
+
+BodymovinParser::FloatVal::Float3::Float3()
+{
+	memset(data, 0, sizeof(data));
+}
+
+BodymovinParser::FloatVal::Float3::Float3(const Json::Value& val)
+{
+	memset(data, 0, sizeof(data));
+
+	if (val.isArray()) {
+		assert(val.size() <= 3);
+		int n = std::min(3, static_cast<int>(val.size()));
+		for (int i = 0; i < n; ++i) {
+			data[i] = val[i].asDouble();
+		}		
+	} else {
+		data[0] = val.asDouble();
+	}
+}
+
+bool BodymovinParser::FloatVal::Float3::operator == (const Float3& f) const
+{
+	for (int i = 0; i < 3; ++i) {
+		if (fabs(data[i] - f.data[i]) > FLT_EPSILON) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/************************************************************************/
 /* class BodymovinParser::FloatVal                                      */
 /************************************************************************/
 
-BodymovinParser::FloatVal::FloatVal()
-	: keyframe(false)
-{
-	memset(D.RAW.val, 0, sizeof(D.RAW.val));
-}
-
 void BodymovinParser::FloatVal::Load(const Json::Value& val)
 {
-	keyframe = val["a"].asInt() == 1;
-	if (keyframe)
+	bool anim = val["a"].asInt() == 1;
+	if (!anim) 
 	{
-		assert(val["k"].size() == 2);
-
-		int IDX_0 = 0;
-		D.KEY.start_frame = val["k"][IDX_0]["t"].asInt();
-		for (int i = 0, n = val["k"][IDX_0]["s"].size(); i < n; ++i) {
-			D.KEY.start_val[i] = val["k"][IDX_0]["s"][i].asDouble();
-			D.KEY.end_val[i] = val["k"][IDX_0]["e"][i].asDouble();
-		}
-
-		if (val["k"][IDX_0]["i"]["x"].isArray()) {
-			D.KEY.cp1[0] = val["k"][IDX_0]["o"]["x"][IDX_0].asDouble();
-			D.KEY.cp1[1] = val["k"][IDX_0]["o"]["y"][IDX_0].asDouble();
-			D.KEY.cp2[0] = val["k"][IDX_0]["i"]["x"][IDX_0].asDouble();
-			D.KEY.cp2[1] = val["k"][IDX_0]["i"]["y"][IDX_0].asDouble();
-			for (int i = 1, n = val["k"][IDX_0]["i"]["x"].size(); i < n; ++i) {
-				assert(fabs(val["k"][IDX_0]["o"]["x"][i].asDouble() - D.KEY.cp1[0]) < FLT_EPSILON);
-				assert(fabs(val["k"][IDX_0]["o"]["y"][i].asDouble() - D.KEY.cp1[1]) < FLT_EPSILON);
-				assert(fabs(val["k"][IDX_0]["i"]["x"][i].asDouble() - D.KEY.cp2[0]) < FLT_EPSILON);
-				assert(fabs(val["k"][IDX_0]["i"]["y"][i].asDouble() - D.KEY.cp2[1]) < FLT_EPSILON);
-			}
-		} else {
- 			D.KEY.cp1[0] = val["k"][IDX_0]["o"]["x"].asDouble();
-			D.KEY.cp1[1] = val["k"][IDX_0]["o"]["y"].asDouble();
- 			D.KEY.cp2[0] = val["k"][IDX_0]["i"]["x"].asDouble();
-			D.KEY.cp2[1] = val["k"][IDX_0]["i"]["y"].asDouble();
-		}
-
-		for (int i = 0, n = val["k"][IDX_0]["to"].size(); i < n; ++i) {
-			D.KEY.tcp1[i] = val["k"][IDX_0]["to"][i].asDouble();
-			D.KEY.tcp2[i] = val["k"][IDX_0]["ti"][i].asDouble();
-		}
-
-		D.KEY.end_frame = val["k"][1]["t"].asInt();
-		assert(!val["k"][1].isMember("e") 
-			&& !val["k"][1].isMember("i")
-			&& !val["k"][1].isMember("n")
-			&& !val["k"][1].isMember("o")
-			&& !val["k"][1].isMember("s")
-			&& !val["k"][1].isMember("ti")
-			&& !val["k"][1].isMember("to"));
+		KeyFrame kf;
+		kf.s_val = Float3(val["k"]);
+		frames.push_back(kf);
+		return;
 	}
-	else
+
+	int n = val["k"].size();
+	frames.resize(n);
+	for (int i = 0; i < n; ++i)
 	{
-		if (val["k"].isArray()) {
-			for (int i = 0, n = val["k"].size(); i < n; ++i) {
-				D.RAW.val[i] = val["k"][i].asDouble();
+		const Json::Value& src = val["k"][i];
+		KeyFrame& dst = frames[i];
+		
+		dst.frame = src["t"].asInt();
+
+		if (src.isMember("s")) {
+			dst.s_val = Float3(src["s"]);
+		}
+		if (src.isMember("e")) {
+			dst.e_val = Float3(src["e"]);
+			if (i != n - 1) {
+				frames[i + 1].s_val = dst.e_val;
 			}
-		} else {
-			D.RAW.val[0] = val["k"].asDouble();
+		}
+
+		if (src.isMember("i")) {
+			assert(src["i"].isMember("x") && src["i"].isMember("y"));
+			dst.ix = Float3(src["i"]["x"]);
+			dst.iy = Float3(src["i"]["y"]);
+		}
+		if (src.isMember("o")) {
+			assert(src["o"].isMember("x") && src["o"].isMember("y"));
+			dst.ox = Float3(src["o"]["x"]);
+			dst.oy = Float3(src["o"]["y"]);
+		}
+		if (src.isMember("ti")) {
+			dst.ti = Float3(src["ti"]);
+		}
+		if (src.isMember("to")) {
+			dst.to = Float3(src["to"]);
 		}
 	}
+
+#ifndef NDEBUG
+	if (n > 1) {
+		for (int i = 0; i < n - 1; ++i) {
+			assert(frames[i].e_val == frames[i + 1].s_val);
+		}
+	}
+#endif // NDEBUG
 }
 
 /************************************************************************/

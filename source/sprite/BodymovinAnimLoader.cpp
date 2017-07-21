@@ -126,13 +126,12 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& fr
 	if (frames.size() < 2) {
 		return;
 	}
-
-	if (!val.keyframe) {
+	if (val.frames.size() <= 1) {
 		return;
 	}
-
-	InsertKeyframe(frames, Frame2Time(val.D.KEY.start_frame, frame_rate));
-	InsertKeyframe(frames, Frame2Time(val.D.KEY.end_frame, frame_rate));
+	for (int i = 0, n = val.frames.size(); i < n; ++i) {
+		InsertKeyframe(frames, Frame2Time(val.frames[i].frame, frame_rate));
+	}
 }
 
 void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, int time)
@@ -172,39 +171,32 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 									 const BodymovinParser::FloatVal& val, 
 									 int frame_rate)
 {
-	assert(frames.size() >= 2 && !frames[0]->sprs.empty());
+	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
 	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
 	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
 
-	if (val.keyframe)
+	if (val.frames.size() > 1)
 	{
-		int s_time = Frame2Time(val.D.KEY.start_frame, frame_rate);
-		int e_time = Frame2Time(val.D.KEY.end_frame, frame_rate);
-		sm::vec2 s_val(val.D.KEY.start_val[0], val.D.KEY.start_val[1]);
-		sm::vec2 e_val(val.D.KEY.end_val[0], val.D.KEY.end_val[1]);
+		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
+		int e_time = Frame2Time(val.frames.back().frame, frame_rate);
+		sm::vec2 s_val(val.frames.front().s_val.data[0], val.frames.front().s_val.data[1]);
+		sm::vec2 e_val(val.frames.back().s_val.data[0], val.frames.back().s_val.data[1]);		
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];			
-			sm::vec2 offset;
-			if (frame->index <= s_time) {
-				offset = s_val;
-			} else if (frame->index >= e_time) {
-				offset = e_val;
-			} else {
-				offset = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
-			}
-			spr->SetOffset(offset);
+			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
+			sm::vec2 offset(data.data[0], data.data[1]);
+			frame->sprs[0]->SetOffset(offset);
 		}
 	}
 	else
 	{
 		sm::vec2 offset;
-		offset.x = - ori_sz.x * 0.5f + val.D.RAW.val[0];
-		offset.y =   ori_sz.y * 0.5f - val.D.RAW.val[1];
+		offset.x = - ori_sz.x * 0.5f + val.frames[0].s_val.data[0];
+		offset.y =   ori_sz.y * 0.5f - val.frames[0].s_val.data[1];
 		for (int i = 0, n = frames.size(); i < n; ++i) 
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
@@ -219,32 +211,25 @@ void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 									  const BodymovinParser::FloatVal& val, 
 									  int frame_rate)
 {
-	assert(frames.size() >= 2 && !frames[0]->sprs.empty());
+	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
 	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
 	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
 
-	if (val.keyframe)
+	if (val.frames.size() > 1)
 	{
-		int s_time = Frame2Time(val.D.KEY.start_frame, frame_rate);
-		int e_time = Frame2Time(val.D.KEY.end_frame, frame_rate);
-		int s_val = (int)(val.D.KEY.start_val[0]);
-		int e_val = (int)(val.D.KEY.end_val[0]);
+		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
+		int e_time = Frame2Time(val.frames.back().frame, frame_rate);
+		int s_val = (int)(val.frames.front().s_val.data[0]);
+		int e_val = (int)(val.frames.back().s_val.data[0]);
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
+			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
+			int opacity = data.data[0];
 			s2::Sprite* spr = frame->sprs[0];
-			int opacity;
-			if (frame->index <= s_time) {
-				opacity = s_val;
-			} else if (frame->index >= e_time) {
-				opacity = e_val;
-			} else {
-				opacity = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
-			}
-
 			s2::RenderColor rc = spr->GetColor();
 			s2::Color col = spr->GetColor().GetMul();
 			col.a = (uint8_t)(255 * opacity / 100.0f);
@@ -254,7 +239,7 @@ void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 	}
 	else
 	{
-		int opacity = (int)(val.D.RAW.val[0]);
+		int opacity = (int)(val.frames[0].s_val.data[0]);
 		for (int i = 0, n = frames.size(); i < n; ++i) 
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
@@ -275,31 +260,25 @@ void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::Frame*>& fram
 									   int frame_rate,
 									   const sm::vec2& left_top)
 {
-	assert(frames.size() >= 2 && !frames[0]->sprs.empty());
+	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
 	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
 	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
 
-	if (val.keyframe)
+	if (val.frames.size() > 1)
 	{
-		int s_time = Frame2Time(val.D.KEY.start_frame, frame_rate);
-		int e_time = Frame2Time(val.D.KEY.end_frame, frame_rate);
-		sm::vec2 s_val(val.D.KEY.start_val[0], val.D.KEY.start_val[1]);
-		sm::vec2 e_val(val.D.KEY.end_val[0], val.D.KEY.end_val[1]);
+		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
+		int e_time = Frame2Time(val.frames.back().frame, frame_rate);
+		sm::vec2 s_val(val.frames.front().s_val.data[0], val.frames.front().s_val.data[1]);
+		sm::vec2 e_val(val.frames.back().s_val.data[0], val.frames.back().s_val.data[1]);		
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
+			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
 			s2::Sprite* spr = frame->sprs[0];
-			sm::vec2 anchor_pos;
-			if (frame->index <= s_time) {
-				anchor_pos = s_val;
-			} else if (frame->index >= e_time) {
-				anchor_pos = e_val;
-			} else {
-				anchor_pos = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
-			}
+			sm::vec2 anchor_pos(data.data[0], data.data[1]);
 			anchor_pos.x = left_top.x + anchor_pos.x;
 			anchor_pos.y = left_top.y - anchor_pos.y;
 			spr->Translate(anchor_pos - (spr->GetPosition() + spr->GetOffset()));
@@ -308,8 +287,8 @@ void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::Frame*>& fram
 	else
 	{
 		sm::vec2 anchor_pos;
-		anchor_pos.x = left_top.x + val.D.RAW.val[0];
-		anchor_pos.y = left_top.y - val.D.RAW.val[1];
+		anchor_pos.x = left_top.x + val.frames[0].s_val.data[0];
+		anchor_pos.y = left_top.y - val.frames[0].s_val.data[1];
 		for (int i = 0, n = frames.size(); i < n; ++i) 
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
@@ -324,37 +303,30 @@ void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::Frame*>& frames
 									 const BodymovinParser::FloatVal& val, 
 									 int frame_rate)
 {
-	assert(frames.size() >= 2 && !frames[0]->sprs.empty());
+	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
 	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
 	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
 
-	if (val.keyframe)
+	if (val.frames.size() > 1)
 	{
-		int s_time = Frame2Time(val.D.KEY.start_frame, frame_rate);
-		int e_time = Frame2Time(val.D.KEY.end_frame, frame_rate);
-		int s_val = (int)(val.D.KEY.start_val[0]);
-		int e_val = (int)(val.D.KEY.end_val[0]);
+		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
+		int e_time = Frame2Time(val.frames.back().frame, frame_rate);
+		int s_val = (int)(val.frames.front().s_val.data[0]);
+		int e_val = (int)(val.frames.back().s_val.data[0]);
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
-			int angle;
-			if (frame->index <= s_time) {
-				angle = s_val;
-			} else if (frame->index >= e_time) {
-				angle = e_val;
-			} else {
-				angle = (int)((e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val);
-			}
-			spr->SetAngle(- angle * SM_DEG_TO_RAD);
+			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
+			int angle = data.data[0];
+			frame->sprs[0]->SetAngle(- angle * SM_DEG_TO_RAD);
 		}
 	}
 	else
 	{
-		int angle = (int)(val.D.RAW.val[0]);
+		int angle = (int)(val.frames[0].s_val.data[0]);
 		for (int i = 0, n = frames.size(); i < n; ++i) 
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
@@ -369,37 +341,30 @@ void BodymovinAnimLoader::LoadScale(std::vector<s2::AnimSymbol::Frame*>& frames,
 									const BodymovinParser::FloatVal& val, 
 									int frame_rate)
 {
-	assert(frames.size() >= 2 && !frames[0]->sprs.empty());
+	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
 	const s2::ImageSymbol* img_sym = VI_DOWNCASTING<const s2::ImageSymbol*>(frames[0]->sprs[0]->GetSymbol());
 	sm::vec2 ori_sz = img_sym->GetNoTrimedSize();
 
-	if (val.keyframe)
+	if (val.frames.size() > 1)
 	{
-		int s_time = Frame2Time(val.D.KEY.start_frame, frame_rate);
-		int e_time = Frame2Time(val.D.KEY.end_frame, frame_rate);
-		sm::vec2 s_val(val.D.KEY.start_val[0], val.D.KEY.start_val[1]);
-		sm::vec2 e_val(val.D.KEY.end_val[0], val.D.KEY.end_val[1]);
+		int s_time = Frame2Time(val.frames.front().frame, frame_rate);
+		int e_time = Frame2Time(val.frames.back().frame, frame_rate);
+		sm::vec2 s_val(val.frames.front().s_val.data[0], val.frames.front().s_val.data[1]);
+		sm::vec2 e_val(val.frames.back().s_val.data[0], val.frames.back().s_val.data[1]);		
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
 			s2::AnimSymbol::Frame* frame = frames[i];
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
-			sm::vec2 scale;
-			if (frame->index <= s_time) {
-				scale = s_val;
-			} else if (frame->index >= e_time) {
-				scale = e_val;
-			} else {
-				scale = (e_val - s_val) * (float)(frame->index - s_time) / (e_time - s_time) + s_val;
-			}
-			spr->SetScale(scale / 100.0f);
+			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
+			sm::vec2 scale(data.data[0], data.data[1]);
+			frame->sprs[0]->SetScale(scale / 100.0f);
 		}
 	}
 	else
 	{
-		sm::vec2 scale(val.D.RAW.val[0], val.D.RAW.val[1]);
+		sm::vec2 scale(val.frames[0].s_val.data[0], val.frames[0].s_val.data[1]);
 		scale /= 100.0f;
 		for (int i = 0, n = frames.size(); i < n; ++i) 
 		{
@@ -409,6 +374,46 @@ void BodymovinAnimLoader::LoadScale(std::vector<s2::AnimSymbol::Frame*>& frames,
 			spr->SetScale(scale);
 		}
 	}
+}
+
+BodymovinParser::FloatVal::Float3 
+BodymovinAnimLoader::GetLerpVal(const std::vector<BodymovinParser::FloatVal::KeyFrame>& frames, 
+								int frame, int frame_rate)
+{
+	if (frame <= Frame2Time(frames.front().frame, frame_rate)) 
+	{
+		return frames.front().s_val;
+	} 
+	else if (frame >= Frame2Time(frames.back().frame, frame_rate))
+	{
+		return frames.back().s_val;
+	}
+	else
+	{
+		for (int i = 1, n = frames.size(); i < n; ++i) 
+		{
+			const BodymovinParser::FloatVal::KeyFrame& f = frames[i];
+			int time = Frame2Time(f.frame, frame_rate);
+			if (frame == time) 
+			{
+				return f.s_val;
+			} 
+			else if (frame < time) 
+			{
+				int s_time = Frame2Time(frames[i - 1].frame, frame_rate);
+				int e_time = time;
+				BodymovinParser::FloatVal::Float3 ret;
+				const BodymovinParser::FloatVal::KeyFrame& pf = frames[i - 1];
+				for (int i = 0; i < 3; ++i) {
+					ret.data[i] = (f.s_val.data[i] - pf.s_val.data[i]) * (float)(frame - s_time) / (e_time - s_time) + pf.s_val.data[i];
+				}
+				return ret;
+			}
+		}
+	}
+
+	assert(0);
+	return frames.front().s_val;
 }
 
 }
