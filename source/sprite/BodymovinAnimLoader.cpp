@@ -480,8 +480,11 @@ s2::Sprite* BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int wi
 	poly->Build();
 
 	s2::PolygonShape* poly_shape = new s2::PolygonShape();
+	poly_shape->SetVertices(outline);
 	poly_shape->SetPolygon(poly);
+	poly->RemoveReference();
 	shape_sym->SetShape(poly_shape);
+	poly_shape->RemoveReference();
 
 	s2::Sprite* spr = m_spr_loader->Create(sym);
 	spr->UpdateBounding();

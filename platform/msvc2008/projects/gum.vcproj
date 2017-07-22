@@ -635,6 +635,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprite\ShapeSaver.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\ShapeSaver.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprite\ShapeSymLoader.cpp"
 					>
 				</File>
