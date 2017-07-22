@@ -57,11 +57,20 @@ void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& di
 	BodymovinParser parser;
 	parser.Parse(val, dir);
 
-	LoadAssets(parser.GetAssets(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight());
-	LoadLayers(parser.GetLayers(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight(), m_sym);
+	std::map<std::string, s2::Sprite*> map_assets;
+	LoadAssets(map_assets, parser.GetAssets(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight());
+	LoadLayers(map_assets, parser.GetLayers(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight(), m_sym);
 }
 
-void BodymovinAnimLoader::LoadAssets(const std::vector<BodymovinParser::Asset>& assets,
+void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
+									 const std::vector<BodymovinParser::Layer>& layers, 
+									 int frame_rate, int width, int height)
+{
+	LoadLayers(map_assets, layers, frame_rate, width, height, m_sym);
+}
+
+void BodymovinAnimLoader::LoadAssets(std::map<std::string, s2::Sprite*>& map_assets,
+									 const std::vector<BodymovinParser::Asset>& assets,
 									 int frame_rate, int width, int height)
 {
 	for (int i = 0, n = assets.size(); i < n; ++i)
@@ -76,14 +85,15 @@ void BodymovinAnimLoader::LoadAssets(const std::vector<BodymovinParser::Asset>& 
 		{
 			s2::Symbol* sym = m_sym_loader->Create(s2::SYM_ANIMATION);
 			s2::AnimSymbol* anim_sym = VI_DOWNCASTING<s2::AnimSymbol*>(sym);
-			LoadLayers(a.layers, frame_rate, width, height, anim_sym);
+			LoadLayers(map_assets, a.layers, frame_rate, width, height, anim_sym);
 			spr = m_spr_loader->Create(sym);
 		}
-		m_map_assets.insert(std::make_pair(a.id, spr));
+		map_assets.insert(std::make_pair(a.id, spr));
 	}
 }
 
-void BodymovinAnimLoader::LoadLayers(const std::vector<BodymovinParser::Layer>& layers, 
+void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
+									 const std::vector<BodymovinParser::Layer>& layers, 
 									 int frame_rate, int width, int height, s2::AnimSymbol* sym)
 {
 	sym->SetFPS(static_cast<int>(FPS));
@@ -100,8 +110,9 @@ void BodymovinAnimLoader::LoadLayers(const std::vector<BodymovinParser::Layer>& 
 		if (src.layer_type == BodymovinParser::LAYER_PRE_COMP ||
 			src.layer_type == BodymovinParser::LAYER_IMAGE)
 		{
-			std::map<std::string, s2::Sprite*>::iterator itr = m_map_assets.find(src.ref_id);
-			assert(itr != m_map_assets.end());
+			std::map<std::string, s2::Sprite*>::const_iterator itr 
+				= map_assets.find(src.ref_id);
+			assert(itr != map_assets.end());
 			s_spr = VI_CLONE(s2::Sprite, itr->second);
 			e_spr = VI_CLONE(s2::Sprite, itr->second);
 		}
