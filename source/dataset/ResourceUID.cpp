@@ -21,15 +21,15 @@ UID ResourceUID::Glyph(int unicode, const GlyphStyle& gs)
 		hash_style = 
 			(gs.font      * 97)  ^ 
 			(gs.font_size * 101) ^
-			(gs.font_color)      ^ 
+			(gs.font_color>>8)   ^ 
 			(gs.edge      * 233) ^
 			(gs.edge_size * 787) ^
-			(gs.edge_color);
+			(gs.edge_color>>8);
 	} else {
 		hash_style = 
 			(gs.font      * 97)  ^ 
 			(gs.font_size * 101) ^
-			(gs.font_color);
+			(gs.font_color>>8);
 	}
 
 	uint64_t hash = ((hash_style & 0xffffffff) << 32) | unicode;
