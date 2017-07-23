@@ -63,6 +63,10 @@ int SymbolFile::Type(const std::string& filepath) const
 			return s2::SYM_UNKNOWN;
 		}
 	}
+	else if (ext == "mp3")
+	{
+		return s2::SYM_AUDIO;
+	}
 	return s2::SYM_UNKNOWN;
 }
 

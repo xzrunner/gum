@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\gum;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\tasks\src\tasks;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;&quot;..\..\..\..\editor-external\cjson\include&quot;;..\..\..\..\editor-external\json\include;&quot;..\..\..\..\editor-external\lzma\include&quot;;&quot;..\..\..\..\editor-external\pthread\include&quot;;&quot;..\..\..\..\editor-external\c99&quot;;&quot;..\..\..\..\editor-external\gl\include&quot;;&quot;..\..\..\..\editor-external\libjpeg\include&quot;;&quot;..\..\..\..\editor-external\lua\include&quot;;&quot;..\..\..\..\editor-external\assimp\include&quot;;&quot;..\..\..\..\editor-external\boost\include&quot;"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\gum;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\tasks\src\tasks;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;&quot;..\..\..\..\editor-external\cjson\include&quot;;..\..\..\..\editor-external\json\include;&quot;..\..\..\..\editor-external\lzma\include&quot;;&quot;..\..\..\..\editor-external\pthread\include&quot;;&quot;..\..\..\..\editor-external\c99&quot;;&quot;..\..\..\..\editor-external\gl\include&quot;;&quot;..\..\..\..\editor-external\libjpeg\include&quot;;&quot;..\..\..\..\editor-external\lua\include&quot;;&quot;..\..\..\..\editor-external\assimp\include&quot;;&quot;..\..\..\..\editor-external\boost\include&quot;;..\..\..\..\editor-external\openal32\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -106,7 +106,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\gum;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\tasks\src\tasks;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;&quot;..\..\..\..\editor-external\cjson\include&quot;;..\..\..\..\editor-external\json\include;&quot;..\..\..\..\editor-external\lzma\include&quot;;&quot;..\..\..\..\editor-external\pthread\include&quot;;&quot;..\..\..\..\editor-external\c99&quot;;&quot;..\..\..\..\editor-external\gl\include&quot;;&quot;..\..\..\..\editor-external\libjpeg\include&quot;;&quot;..\..\..\..\editor-external\lua\include&quot;;&quot;..\..\..\..\editor-external\assimp\include&quot;;&quot;..\..\..\..\editor-external\boost\include&quot;"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\gum;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\tasks\src\tasks;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;&quot;..\..\..\..\editor-external\cjson\include&quot;;..\..\..\..\editor-external\json\include;&quot;..\..\..\..\editor-external\lzma\include&quot;;&quot;..\..\..\..\editor-external\pthread\include&quot;;&quot;..\..\..\..\editor-external\c99&quot;;&quot;..\..\..\..\editor-external\gl\include&quot;;&quot;..\..\..\..\editor-external\libjpeg\include&quot;;&quot;..\..\..\..\editor-external\lua\include&quot;;&quot;..\..\..\..\editor-external\assimp\include&quot;;&quot;..\..\..\..\editor-external\boost\include&quot;;..\..\..\..\editor-external\openal32\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -903,6 +903,22 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="15.model"
+				>
+			</Filter>
+			<Filter
+				Name="16.audio"
+				>
+				<File
+					RelativePath="..\..\..\source\sprite\AudioLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\AudioLoader.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="adapter"
@@ -953,6 +969,18 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\gum\GUM_Sprite2.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="audio"
+			>
+			<File
+				RelativePath="..\..\..\source\audio\AudioContext.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\gum\AudioContext.h"
 				>
 			</File>
 		</Filter>
