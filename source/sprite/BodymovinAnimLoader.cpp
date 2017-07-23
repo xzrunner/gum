@@ -1,7 +1,7 @@
 #include "BodymovinAnimLoader.h"
 #include "SymbolLoader.h"
 #include "SpriteLoader.h"
-#include "StringHelper.h"
+#include "gum/StringHelper.h"
 
 #include <sm_const.h>
 #include <sprite2/S2_Sprite.h>

@@ -1,6 +1,6 @@
 #include "ShapeSymLoader.h"
 #include "FilepathHelper.h"
-#include "ShapeType.h"
+#include "gum/ShapeType.h"
 #include "SymbolPool.h"
 #include "GUM_ImageSymbol.h"
 #include "Image.h"

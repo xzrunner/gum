@@ -8,6 +8,8 @@
 #include <string>
 #include <map>
 
+#include <string.h>
+
 namespace gum
 {
 
