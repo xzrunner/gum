@@ -20,6 +20,7 @@ LOCAL_C_INCLUDES  := \
 	${DTEX2_SRC_PATH}/include \
 	${SHADERLAB_SRC_PATH}/include \
 	${UNIRENDER_SRC_PATH}/include \
+	${UNIAUDIO_SRC_PATH}/include \
 	${SPRITE2_SRC_PATH}/include \
 	${JSON_SRC_PATH}/include \
 	${GTXT_SRC_PATH} \
@@ -31,6 +32,7 @@ LOCAL_C_INCLUDES  := \
 	${TASKS_SRC_PATH} \
 	${GLP_SRC_PATH} \
 	${DS_SRC_PATH} \
+	${OPENAL_SRC_PATH} \
 
 
 LOCAL_CPPFLAGS  := -DNO_BOOST -g
