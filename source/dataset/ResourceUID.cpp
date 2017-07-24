@@ -16,22 +16,24 @@ UID ResourceUID::RawFile(const std::string& filepath)
 
 UID ResourceUID::Glyph(int unicode, const GlyphStyle& gs)
 {
-	uint64_t hash_style;
-	if (gs.edge) {
-		hash_style = 
-			(gs.font      * 97)  ^ 
-			(gs.font_size * 101) ^
-			(gs.font_color)      ^ 
-			(gs.edge      * 233) ^
-			(gs.edge_size * 787) ^
-			(gs.edge_color);
-	} else {
-		hash_style = 
-			(gs.font      * 97)  ^ 
-			(gs.font_size * 101) ^
-			(gs.font_color);
-	}
+	uint64_t hash_style = 0;
+	uint64_t seed = 31;
 
+	hash_style = hash_style * seed + gs.font;
+	hash_style = hash_style * seed + gs.font_size;
+	hash_style = hash_style * seed + (gs.font_color >> 24) & 0xff;
+	hash_style = hash_style * seed + (gs.font_color >> 16) & 0xff;
+	hash_style = hash_style * seed + (gs.font_color >> 8) & 0xff;
+	hash_style = hash_style * seed + (gs.font_color) & 0xff;	
+	if (gs.edge) 
+	{
+		hash_style = hash_style * seed + gs.edge;
+		hash_style = hash_style * seed + gs.edge_size;
+		hash_style = hash_style * seed + (gs.edge_color >> 24) & 0xff;
+		hash_style = hash_style * seed + (gs.edge_color >> 16) & 0xff;
+		hash_style = hash_style * seed + (gs.edge_color >> 8) & 0xff;
+		hash_style = hash_style * seed + (gs.edge_color) & 0xff;
+	}
 	uint64_t hash = ((hash_style & 0xffffffff) << 32) | unicode;
 
 	return Compose(hash, RES_GLYPH);
