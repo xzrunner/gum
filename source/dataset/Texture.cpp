@@ -1,7 +1,7 @@
 #include "Texture.h"
 #include "RenderContext.h"
 #include "gum/StringHelper.h"
-#include "Exception.h"
+#include "gum/Exception.h"
 
 #include <gum/Config.h>
 #include <gimg_import.h>

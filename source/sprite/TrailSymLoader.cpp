@@ -3,7 +3,7 @@
 #include "TrailSymLoader.h"
 #include "FilepathHelper.h"
 #include "JsonSerializer.h"
-#include "Exception.h"
+#include "gum/Exception.h"
 #include "SymbolPool.h"
 
 #include <logger.h>

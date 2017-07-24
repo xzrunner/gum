@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "P2dSymLoader.h"
-#include "Exception.h"
+#include "gum/Exception.h"
 #include "FilepathHelper.h"
 #include "JsonSerializer.h"
 #include "SymbolPool.h"
