@@ -123,6 +123,10 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		}
 		assert(s_spr && e_spr);
 
+		std::string spr_name = "_" + src.name;
+		s_spr->SetName(spr_name);
+		e_spr->SetName(spr_name);
+
 		s2::AnimSymbol::Layer* dst = new s2::AnimSymbol::Layer;
 
 		s2::AnimSymbol::Frame* s_frame = new s2::AnimSymbol::Frame;
