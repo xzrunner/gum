@@ -106,7 +106,7 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 	{
 		const BodymovinParser::Layer& src = layers[i];
 
-		int src_w, src_h;
+		int src_w = 0, src_h = 0;
 		if (src.layer_type == BodymovinParser::LAYER_PRE_COMP) {
 			src_w = src.comp_width;
 			src_h = src.comp_height;
@@ -146,8 +146,12 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		s_frame->sprs.push_back(s_spr);
 		e_frame->sprs.push_back(e_spr);
 
-		assert(src.start_frame <= src.in_frame);
-		int start_time = (int)(std::ceil((float)(src.start_frame) / frame_rate * FPS)) + 1;
+		int start_time;
+		if (src.start_frame > src.in_frame) {
+			start_time = (int)(std::ceil((float)(src.start_frame) / frame_rate * FPS)) + 1;
+		} else {
+			start_time = (int)(std::ceil((float)(src.in_frame) / frame_rate * FPS)) + 1;
+		}
 		int end_time = (int)(std::floor((float)(src.out_frame) / frame_rate * FPS)) + 1;
 
 		s_frame->index = start_time;
@@ -156,12 +160,15 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		// insert frame
 		if (src.start_frame < src.in_frame) 
 		{
-			s2::AnimSymbol::Frame* in_frame = new s2::AnimSymbol::Frame;
-			dst->frames.insert(dst->frames.begin() + 1, in_frame);
-			s2::Sprite* in_spr = VI_CLONE(s2::Sprite, s_spr);
-			in_frame->sprs.push_back(in_spr);
-			int in_time = (int)(std::floor((float)(src.in_frame) / frame_rate * FPS)) + 1;
-			in_frame->index = in_time;
+			s2::AnimSymbol::Frame* s_frame = new s2::AnimSymbol::Frame;
+			dst->frames.insert(dst->frames.begin(), s_frame);
+			int s_time = (int)(std::floor((float)(src.start_frame) / frame_rate * FPS)) + 1;
+			s_frame->index = s_time;
+			s_frame->tween = false;
+
+			s2::Sprite* tmp_spr = VI_CLONE(s2::Sprite, s_spr);
+			tmp_spr->SetVisible(false);
+			s_frame->sprs.push_back(tmp_spr);
 		}
 		InsertKeyframe(dst->frames, src.trans.anchor, frame_rate);
 		InsertKeyframe(dst->frames, src.trans.opacity, frame_rate);
@@ -175,6 +182,19 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		LoadPosition(dst->frames, src.trans.position, frame_rate, left_top);
 		LoadRotate(dst->frames, src.trans.rotate, frame_rate);
 		LoadScale(dst->frames, src.trans.scale, frame_rate);
+
+		// fix frames
+		s2::RenderColor col;
+		col.SetMul(s2::Color(0, 0, 0, 0));
+		for (int i = 0, n = dst->frames.size(); i < n; ++i) 
+		{
+			s2::AnimSymbol::Frame* frame = dst->frames[i];
+			s2::Sprite* spr = frame->sprs[0];
+			if (!spr->IsVisible()) {
+				spr->SetColor(col);
+				spr->SetVisible(true);
+			}
+		}
 
 		sym->AddLayer(dst);
 	}
@@ -215,19 +235,29 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& fr
 	{
 		const s2::AnimSymbol::Frame* frame = frames[i];
 		assert(time >= frame->index);
-		if (time == frame->index) {
+		if (time == frame->index) 
+		{
 			return;
-		} else if (time > frame->index && time < frames[i + 1]->index) {
+		} 
+		else if (time > frame->index && time < frames[i + 1]->index) 
+		{
+			const s2::AnimSymbol::Frame* clone_frame = frames[i];
+			if (clone_frame->sprs.empty()) {
+				clone_frame = frames[i + 1];
+				assert(!clone_frame->sprs.empty());
+			}
 			s2::AnimSymbol::Frame* new_frame = new s2::AnimSymbol::Frame;
 			new_frame->index = time;
-			new_frame->sprs.reserve(frame->sprs.size());
-			for (int j = 0, m = frame->sprs.size(); j < m; ++j) {
-				s2::Sprite* clone = VI_CLONE(s2::Sprite, frame->sprs[j]);
+			new_frame->sprs.reserve(clone_frame->sprs.size());
+			for (int j = 0, m = clone_frame->sprs.size(); j < m; ++j) {
+				s2::Sprite* clone = VI_CLONE(s2::Sprite, clone_frame->sprs[j]);
 				new_frame->sprs.push_back(clone);
 			}
 			frames.insert(frames.begin() + i + 1, new_frame);
 			return;
-		} else {
+		} 
+		else 
+		{
 			continue;
 		}
 	}
