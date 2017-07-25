@@ -158,17 +158,28 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		e_frame->index = end_time;
 
 		// insert frame
+		s2::Sprite *start_null = NULL, *pre_in_null = NULL;
 		if (src.start_frame < src.in_frame) 
 		{
+			// start frame
 			s2::AnimSymbol::Frame* s_frame = new s2::AnimSymbol::Frame;
 			dst->frames.insert(dst->frames.begin(), s_frame);
-			int s_time = (int)(std::floor((float)(src.start_frame) / frame_rate * FPS)) + 1;
+			int s_time = (int)(std::ceil((float)(src.start_frame) / frame_rate * FPS)) + 1;
 			s_frame->index = s_time;
-			s_frame->tween = false;
+			s_frame->tween = true;
 
-			s2::Sprite* tmp_spr = VI_CLONE(s2::Sprite, s_spr);
-			tmp_spr->SetVisible(false);
-			s_frame->sprs.push_back(tmp_spr);
+			start_null = VI_CLONE(s2::Sprite, s_spr);
+			s_frame->sprs.push_back(start_null);
+			
+			// pre in frame
+			s2::AnimSymbol::Frame* p_frame = new s2::AnimSymbol::Frame;
+			dst->frames.insert(dst->frames.begin() + 1, p_frame);
+			int p_time = (int)(std::ceil((float)(src.in_frame) / frame_rate * FPS)) + 1 - 1;
+			p_frame->index = p_time;
+			p_frame->tween = true;
+
+			pre_in_null = VI_CLONE(s2::Sprite, s_spr);
+			p_frame->sprs.push_back(pre_in_null);
 		}
 		InsertKeyframe(dst->frames, src.trans.anchor, frame_rate);
 		InsertKeyframe(dst->frames, src.trans.opacity, frame_rate);
@@ -183,17 +194,38 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		LoadRotate(dst->frames, src.trans.rotate, frame_rate);
 		LoadScale(dst->frames, src.trans.scale, frame_rate);
 
-		// fix frames
+		// parent
+		if (src.parent_id != -1)
+		{
+			const BodymovinParser::Layer* parent = NULL;
+			for (int i = 0, n = layers.size(); i < n; ++i) {
+				if (layers[i].layer_id == src.parent_id) {
+					parent = &layers[i];
+					break;
+				}
+			}
+			if (parent) 
+			{
+				InsertKeyframe(dst->frames, parent->trans.anchor, frame_rate);
+				InsertKeyframe(dst->frames, parent->trans.opacity, frame_rate);
+				InsertKeyframe(dst->frames, parent->trans.position, frame_rate);
+				InsertKeyframe(dst->frames, parent->trans.rotate, frame_rate);
+				InsertKeyframe(dst->frames, parent->trans.scale, frame_rate);
+
+				LoadAnchor(dst->frames, parent->trans.anchor, frame_rate, src_w, src_h);
+				LoadOpacity(dst->frames, parent->trans.opacity, frame_rate);
+				LoadPosition(dst->frames, parent->trans.position, frame_rate, left_top);
+				LoadRotate(dst->frames, parent->trans.rotate, frame_rate);
+				LoadScale(dst->frames, parent->trans.scale, frame_rate);
+			}
+		}
+
+		// fix null spr
 		s2::RenderColor col;
 		col.SetMul(s2::Color(0, 0, 0, 0));
-		for (int i = 0, n = dst->frames.size(); i < n; ++i) 
-		{
-			s2::AnimSymbol::Frame* frame = dst->frames[i];
-			s2::Sprite* spr = frame->sprs[0];
-			if (!spr->IsVisible()) {
-				spr->SetColor(col);
-				spr->SetVisible(true);
-			}
+		if (start_null) {
+			start_null->SetColor(col);
+			pre_in_null->SetColor(col);
 		}
 
 		sym->AddLayer(dst);

@@ -99,6 +99,8 @@ public:
 		int layer_id;
 		int layer_type;
 
+		int parent_id;
+
 		std::string cl;	// class
 
 		float in_frame, out_frame;
@@ -119,7 +121,7 @@ public:
 
 		Layer();
 
-		void Load(const Json::Value& val);
+		bool Load(const Json::Value& val);
 	};
 
 public:

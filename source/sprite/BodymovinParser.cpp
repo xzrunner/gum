@@ -82,8 +82,9 @@ void BodymovinParser::ParseLayers(const Json::Value& val, std::vector<Layer>& la
 	for (int i = val.size() - 1; i >= 0; --i) 
 	{
 		Layer layer;
-		layer.Load(val[i]);
-		layers.push_back(layer);
+		if (layer.Load(val[i])) {
+			layers.push_back(layer);
+		}
 	}
 }
 
@@ -218,7 +219,7 @@ BodymovinParser::Layer::Layer()
 {
 }
 
-void BodymovinParser::Layer::Load(const Json::Value& val)
+bool BodymovinParser::Layer::Load(const Json::Value& val)
 {
 	name = val["nm"].asString();
 	ref_id = val["refId"].asString();
@@ -232,10 +233,20 @@ void BodymovinParser::Layer::Load(const Json::Value& val)
 		comp_height = val["h"].asInt();
 		break;
 	case LAYER_SOLID:
+		// todo: not support mask now
+		if (val.isMember("hasMask") && val["hasMask"].asBool()) {
+			return false;
+		}
 		solid_width = val["sw"].asInt();
 		solid_height = val["sh"].asInt();
 		solid_color = val["sc"].asString();
 		break;
+	}
+
+	if (val.isMember("parent")) {
+		parent_id = val["parent"].asInt();
+	} else {
+		parent_id = -1;
 	}
 
 	cl = val["cl"].asString();
@@ -254,6 +265,8 @@ void BodymovinParser::Layer::Load(const Json::Value& val)
 	blend_mode = val["bm"].asInt();
 
 	trans.Load(val["ks"]);
+
+	return true;
 }
 
 }
