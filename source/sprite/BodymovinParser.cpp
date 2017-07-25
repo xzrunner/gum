@@ -225,11 +225,17 @@ void BodymovinParser::Layer::Load(const Json::Value& val)
 
 	layer_id = val["ind"].asInt();
 	layer_type = val["ty"].asInt();
-	if (layer_type == LAYER_SOLID)
+	switch (layer_type)
 	{
+	case LAYER_PRE_COMP:
+		comp_width = val["w"].asInt();
+		comp_height = val["h"].asInt();
+		break;
+	case LAYER_SOLID:
 		solid_width = val["sw"].asInt();
 		solid_height = val["sh"].asInt();
 		solid_color = val["sc"].asString();
+		break;
 	}
 
 	cl = val["cl"].asString();

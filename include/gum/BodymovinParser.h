@@ -108,6 +108,9 @@ public:
 		int auto_ori;	// Auto-Orient along path AE property.
 		int blend_mode;
 
+		// comp
+		int comp_width, comp_height;
+
 		// solid type
 		int solid_width, solid_height;
 		std::string solid_color;
