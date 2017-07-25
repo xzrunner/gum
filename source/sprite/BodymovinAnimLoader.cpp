@@ -106,6 +106,15 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 	{
 		const BodymovinParser::Layer& src = layers[i];
 
+		int src_w, src_h;
+		if (src.layer_type == BodymovinParser::LAYER_PRE_COMP) {
+			src_w = src.comp_width;
+			src_h = src.comp_height;
+		} else if (src.layer_type == BodymovinParser::LAYER_SOLID) {
+			src_w = src.solid_width;
+			src_h = src.solid_height;
+		}
+
 		s2::Sprite *s_spr = NULL, *e_spr = NULL;
 		if (src.layer_type == BodymovinParser::LAYER_PRE_COMP ||
 			src.layer_type == BodymovinParser::LAYER_IMAGE)
@@ -151,7 +160,7 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		InsertKeyframe(dst->frames, src.trans.scale, frame_rate);
 
 		// filling frames
-		LoadAnchor(dst->frames, src.trans.anchor, frame_rate, src.comp_width, src.comp_height);
+		LoadAnchor(dst->frames, src.trans.anchor, frame_rate, src_w, src_h);
 		LoadOpacity(dst->frames, src.trans.opacity, frame_rate);
 		LoadPosition(dst->frames, src.trans.position, frame_rate, left_top);
 		LoadRotate(dst->frames, src.trans.rotate, frame_rate);
@@ -216,7 +225,7 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& fr
 
 void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames, 
 									 const BodymovinParser::FloatVal& val, 
-									 int frame_rate, int comp_w, int comp_h)
+									 int frame_rate, int w, int h)
 {
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
@@ -229,8 +238,8 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 		break;
 	case s2::SYM_SHAPE:
 	case s2::SYM_ANIMATION:
-		ori_sz.x = comp_w;
-		ori_sz.y = comp_h;
+		ori_sz.x = w;
+		ori_sz.y = h;
 		break;
 	default:
 		assert(0);

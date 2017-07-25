@@ -45,7 +45,7 @@ private:
 	static void InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, int time);
 
 	static void LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames, 
-		const BodymovinParser::FloatVal& val, int frame_rate, int comp_w, int comp_h);	
+		const BodymovinParser::FloatVal& val, int frame_rate, int w, int h);	
 	static void LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
 	static void LoadPosition(std::vector<s2::AnimSymbol::Frame*>& frames, 
