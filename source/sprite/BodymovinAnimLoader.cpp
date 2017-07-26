@@ -130,6 +130,12 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 			s_spr = CreateSolidSpr(src.solid_color, src.solid_width, src.solid_height);
 			e_spr = VI_CLONE(s2::Sprite, s_spr);
 		}
+		else if (src.layer_type == BodymovinParser::LAYER_NULL)
+		{
+			s_spr = CreateSolidSpr("#000000", 1, 1);
+			e_spr = VI_CLONE(s2::Sprite, s_spr);
+		}
+
 		assert(s_spr && e_spr);
 
 		std::string spr_name = "_" + src.name;
@@ -207,13 +213,13 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 			if (parent) 
 			{
 				InsertKeyframe(dst->frames, parent->trans.anchor, frame_rate);
-				InsertKeyframe(dst->frames, parent->trans.opacity, frame_rate);
+//				InsertKeyframe(dst->frames, parent->trans.opacity, frame_rate);
 				InsertKeyframe(dst->frames, parent->trans.position, frame_rate);
 				InsertKeyframe(dst->frames, parent->trans.rotate, frame_rate);
 				InsertKeyframe(dst->frames, parent->trans.scale, frame_rate);
 
 				LoadAnchor(dst->frames, parent->trans.anchor, frame_rate, src_w, src_h);
-				LoadOpacity(dst->frames, parent->trans.opacity, frame_rate);
+//				LoadOpacity(dst->frames, parent->trans.opacity, frame_rate);
 				LoadPosition(dst->frames, parent->trans.position, frame_rate, left_top);
 				LoadRotate(dst->frames, parent->trans.rotate, frame_rate);
 				LoadScale(dst->frames, parent->trans.scale, frame_rate);
