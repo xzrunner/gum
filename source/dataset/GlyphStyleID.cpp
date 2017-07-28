@@ -26,7 +26,12 @@ int GlyphStyleID::Gen(const GlyphStyle& style)
 	}
 
 	int id = m_next_id++;
+
 	list.push_back(std::make_pair(style, id));
+
+	m_last.first = style;
+	m_last.second = id;
+
 	return id;
 }
 
