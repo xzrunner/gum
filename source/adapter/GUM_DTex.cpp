@@ -495,7 +495,7 @@ DTex::DTex()
 	glyph_cb.load_start  = glyph_load_start;
 	glyph_cb.load        = glyph_load;
 	glyph_cb.load_finish = glyph_load_finish;
-	m_cg = new dtex::CacheGlyph(512, 512, glyph_cb);
+	m_cg = new dtex::CacheGlyph(1024, 512, glyph_cb);
 	dtex::CacheMgr::Instance()->Add(m_cg, "CG");
 }
 
@@ -580,6 +580,11 @@ void DTex::LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key)
 bool DTex::QueryGlyph(uint64_t key, float* texcoords, int& tex_id) const
 {
 	return m_cg->QueryAndInsert(key, texcoords, tex_id);
+}
+
+bool DTex::ExistGlyph(uint64_t key) const 
+{
+	return m_cg->Exist(key);
 }
 
 void DTex::Clear()

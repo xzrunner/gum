@@ -169,17 +169,18 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 		   const gtxt_glyph_style* gs, const gtxt_draw_style* ds, void* ud) 
 {	
 	int tex_id;
+	int ft_count = gtxt_ft_get_font_cout();
 	UID uid = ResourceUID::Glyph(unicode, GlyphStyle(gs));
 	const float* texcoords = DTex::Instance()->QuerySymbol(uid, &tex_id);
-	if (texcoords)
-	{
-		render(tex_id, texcoords, x, y, w, h, ds, ud);
+
+	if( texcoords && (gs->font<ft_count) && !DTex::Instance()->ExistGlyph(uid) ) {
+		texcoords = NULL;
 	}
-	else
-	{
-		int ft_count = gtxt_ft_get_font_cout();
-		if (gs->font < ft_count) 
-		{
+
+	if (texcoords) {
+		render(tex_id, texcoords, x, y, w, h, ds, ud);
+	} else {
+		if (gs->font < ft_count) {
 			float texcoords[8];
 			if (DTex::Instance()->QueryGlyph(uid, texcoords, tex_id)) {
 				render(tex_id, texcoords, x, y, w, h, ds, ud);
@@ -193,9 +194,7 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 				h = layout.sizer.height;
 				DTex::Instance()->LoadGlyph(bmp, w, h, uid);
 			}
-		} 
-		else 
-		{
+		} else {
 			int uf_font = gs->font - ft_count;
 			GTxt::Instance()->DrawUFChar(unicode, uf_font, x, y, ud);
 		}

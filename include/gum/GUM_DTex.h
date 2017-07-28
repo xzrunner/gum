@@ -39,6 +39,7 @@ public:
 	void DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key);
 	void LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key);
 	bool QueryGlyph(uint64_t key, float* texcoords, int& tex_id) const;
+	bool ExistGlyph(uint64_t key) const;
 
 	void Clear();
 
