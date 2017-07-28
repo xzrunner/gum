@@ -8,6 +8,7 @@
 #include <sprite2/LerpCircle.h>
 #include <sprite2/LerpSpiral.h>
 #include <sprite2/LerpWiggle.h>
+#include <sprite2/LerpEase.h>
 #include <sprite2/AnimLerp.h>
 #include <simp/NodeAnimation.h>
 #include <simp/from_int.h>
@@ -125,6 +126,12 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
 					float amp = val["amp"].asDouble();
 					s2::LerpWiggle* wiggle = new s2::LerpWiggle(freq, amp);
 					dst_frame->lerps.push_back(std::make_pair(key, wiggle));
+				}
+				else if (val["type"].asString() == "ease")
+				{
+					int type = val["ease"].asInt();
+					s2::LerpEase* ease = new s2::LerpEase(type);
+					dst_frame->lerps.push_back(std::make_pair(key, ease));
 				}
 			}
 			int actor_n = frame_val["actor"].size();
