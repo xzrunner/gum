@@ -77,28 +77,44 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 	scissor.ymax = node->scissor[3];
 	m_sym->SetScissor(scissor);
 
+	std::vector<s2::Sprite*> children;
+	children.reserve(node->sprs_n);
+
 	m_sym->Clear();
-	for (int i = 0; i < node->sprs_n; ++i) {
+	for (int i = 0; i < node->sprs_n; ++i) 
+	{
 		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i], m_flatten);
-		if (spr) {
-			SprTransLoader::Load(spr, node->trans[i]);
-			m_sym->Add(spr);
-			spr->RemoveReference();
+		children.push_back(spr);
+		if (!spr) {
+			continue;
 		}
+
+		SprTransLoader::Load(spr, node->trans[i]);
+		m_sym->Add(spr);
+		spr->RemoveReference();
 	}
 
-	const std::vector<s2::Sprite*>& children = m_sym->GetAllChildren();
 	std::vector<s2::ComplexSymbol::Action> dst;
 	dst.reserve(node->actions_n);
-	for (int i = 0; i < node->actions_n; ++i) {
+	for (int i = 0; i < node->actions_n; ++i) 
+	{
 		const simp::NodeComplex::Action& src_action = node->actions[i];
 		s2::ComplexSymbol::Action dst_action;
 		dst_action.name = src_action.name;
 		dst_action.sprs.reserve(src_action.n);
-		for (int j = 0; j < src_action.n; ++j) {
-			dst_action.sprs.push_back(children[src_action.idx[j]]);
+		bool succ = true;
+		for (int j = 0; j < src_action.n; ++j) 
+		{
+			s2::Sprite* child = children[src_action.idx[j]];
+			if (!child) {
+				succ = false;
+				break;
+			}
+			dst_action.sprs.push_back(child);
 		}
-		dst.push_back(dst_action);
+		if (succ) {
+			dst.push_back(dst_action);
+		}
 	}
 	m_sym->SetActions(dst);
 
