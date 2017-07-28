@@ -60,6 +60,8 @@ private:
 
 	s2::Sprite* CreateSolidSpr(const std::string& color, int width, int height) const;
 
+	static void LoadBlendMode(std::vector<s2::AnimSymbol::Frame*>& frames, int bm);
+
 private:
 	s2::AnimSymbol* m_sym;
 

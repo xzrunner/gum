@@ -4,6 +4,7 @@
 #include "gum/StringHelper.h"
 
 #include <sm_const.h>
+#include <logger.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/ImageSymbol.h>
 #include <sprite2/RenderColor.h>
@@ -11,6 +12,8 @@
 #include <sprite2/ColorPolygon.h>
 #include <sprite2/PolygonShape.h>
 #include <sprite2/BoundingBox.h>
+#include <sprite2/BlendMode.h>
+#include <sprite2/RenderShader.h>
 
 #include <cmath>
 
@@ -226,6 +229,8 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 			}
 		}
 
+		LoadBlendMode(dst->frames, src.blend_mode);
+
 		// fix null spr
 		s2::RenderColor col;
 		col.SetMul(s2::Color(0, 0, 0, 0));
@@ -287,7 +292,7 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& fr
 			s2::AnimSymbol::Frame* new_frame = new s2::AnimSymbol::Frame;
 			new_frame->index = time;
 			new_frame->sprs.reserve(clone_frame->sprs.size());
-			for (int j = 0, m = clone_frame->sprs.size(); j < m; ++j) {
+			for (int j = 0, bm = clone_frame->sprs.size(); j < bm; ++j) {
 				s2::Sprite* clone = VI_CLONE(s2::Sprite, clone_frame->sprs[j]);
 				new_frame->sprs.push_back(clone);
 			}
@@ -581,6 +586,81 @@ s2::Sprite* BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int wi
 	s2::Sprite* spr = m_spr_loader->Create(sym);
 	spr->UpdateBounding();
 	return spr;
+}
+
+void BodymovinAnimLoader::LoadBlendMode(std::vector<s2::AnimSymbol::Frame*>& frames, int body_bm)
+{
+	if (body_bm == 0) {
+		return;
+	}
+
+	s2::BlendMode bm = s2::BM_NULL;
+	switch (body_bm)
+	{
+	case 0:
+		bm = s2::BM_NULL;
+		break;
+	case 1:
+		bm = s2::BM_MULTIPLY;
+		break;
+	case 2:
+		bm = s2::BM_SCREEN;
+		break;
+	case 3:
+		bm = s2::BM_OVERLAY;
+		break;
+	case 4:
+		bm = s2::BM_DARKEN;
+		break;
+	case 5:
+		bm = s2::BM_LIGHTEN;
+		break;
+	case 6:
+		bm = s2::BM_COLOR_DODGE;
+		break;
+	case 7:
+		bm = s2::BM_COLOR_BURN;
+		break;
+	case 8:
+		bm = s2::BM_HARD_LIGHT;
+		break;
+	case 9:
+		bm = s2::BM_SOFT_LIGHT;
+		break;
+	case 10:
+		bm = s2::BM_DIFFERENCE;
+		break;
+	case 11:
+		bm = s2::BM_EXCLUSION;
+		break;
+	case 12:
+		bm = s2::BM_HUE;
+		break;
+	case 13:
+		bm = s2::BM_SATURATION;
+		break;
+	case 14:
+		bm = s2::BM_COLOR;
+		break;
+	case 15:
+		bm = s2::BM_LUMINOSITY;
+		break;
+	default:
+		LOGW("Unknown blend type %d", bm);
+		return;
+	}
+
+	for (int i = 0, n = frames.size(); i < n; ++i)
+	{
+		s2::AnimSymbol::Frame* f = frames[i];
+		for (int j = 0, m = f->sprs.size(); j < m; ++j) 
+		{
+			s2::Sprite* spr = f->sprs[j];
+			s2::RenderShader rs = spr->GetShader();
+			rs.SetBlend(bm);
+			spr->SetShader(rs);
+		}
+	}
 }
 
 }
