@@ -20,7 +20,10 @@ public:
 	uint32_t edge_color;
 
 public:
+	GlyphStyle();
 	GlyphStyle(const gtxt_glyph_style* gs);
+
+	bool operator == (const GlyphStyle& style) const;
 
 }; // GlyphStyle
 

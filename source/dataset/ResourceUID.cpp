@@ -1,5 +1,6 @@
 #include "ResourceUID.h"
 #include "GlyphStyle.h"
+#include "GlyphStyleID.h"
 
 namespace gum
 {
@@ -16,27 +17,9 @@ UID ResourceUID::RawFile(const std::string& filepath)
 
 UID ResourceUID::Glyph(int unicode, const GlyphStyle& gs)
 {
-	uint64_t hash_style = 0;
-	uint64_t seed = 31;
-
-	hash_style = hash_style * seed + gs.font;
-	hash_style = hash_style * seed + gs.font_size;
-	hash_style = hash_style * seed + (gs.font_color >> 24) & 0xff;
-	hash_style = hash_style * seed + (gs.font_color >> 16) & 0xff;
-	hash_style = hash_style * seed + (gs.font_color >> 8) & 0xff;
-	hash_style = hash_style * seed + (gs.font_color) & 0xff;	
-	if (gs.edge) 
-	{
-		hash_style = hash_style * seed + gs.edge;
-		hash_style = hash_style * seed + gs.edge_size;
-		hash_style = hash_style * seed + (gs.edge_color >> 24) & 0xff;
-		hash_style = hash_style * seed + (gs.edge_color >> 16) & 0xff;
-		hash_style = hash_style * seed + (gs.edge_color >> 8) & 0xff;
-		hash_style = hash_style * seed + (gs.edge_color) & 0xff;
-	}
-	uint64_t hash = ((hash_style & 0xffffffff) << 32) | unicode;
-
-	return Compose(hash, RES_GLYPH);
+	uint64_t style_id = GlyphStyleID::Instance()->Gen(gs);
+	uint64_t id = ((style_id & 0xffffffff) << 32) | unicode;
+	return Compose(id, RES_GLYPH);
 }
 
 UID ResourceUID::BinNode(uint32_t node_id)
