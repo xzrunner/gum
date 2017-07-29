@@ -174,6 +174,8 @@ void BodymovinParser::FloatVal::Load(const Json::Value& val)
 		}
 	}
 
+	expression = val["x"].asString();
+
 #ifndef NDEBUG
 	if (n > 1) {
 		for (int i = 0; i < n - 1; ++i) {

@@ -14,6 +14,8 @@
 #include <sprite2/BoundingBox.h>
 #include <sprite2/BlendMode.h>
 #include <sprite2/RenderShader.h>
+#include <sprite2/LerpWiggle.h>
+#include <sprite2/LerpEase.h>
 
 #include <cmath>
 
@@ -230,6 +232,8 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		}
 
 		LoadBlendMode(dst->frames, src.blend_mode);
+
+		LoadExpression(dst->frames, src.trans);
 
 		// fix null spr
 		s2::RenderColor col;
@@ -659,6 +663,43 @@ void BodymovinAnimLoader::LoadBlendMode(std::vector<s2::AnimSymbol::Frame*>& fra
 			s2::RenderShader rs = spr->GetShader();
 			rs.SetBlend(bm);
 			spr->SetShader(rs);
+		}
+	}
+}
+
+void BodymovinAnimLoader::LoadExpression(std::vector<s2::AnimSymbol::Frame*>& frames, 
+										 const BodymovinParser::Transform& trans)
+{
+	if (frames.empty()) {
+		return;
+	}
+
+	// wiggle
+	if (trans.position.expression.find("wiggle") != std::string::npos)
+	{
+		const std::string& exp = trans.position.expression;
+		std::string params = exp.substr(exp.find("wiggle(") + 7);
+
+		int freq, amp;
+		sscanf(params.c_str(), "%d, %d", &freq, &amp);
+		for (int i = 0, n = frames.size(); i < n; ++i) {
+			s2::AnimSymbol::Frame* frame = frames[i];
+			for (int j = 0, m = frame->sprs.size(); j < m; ++j) {
+				s2::LerpWiggle* lerp = new s2::LerpWiggle(freq, amp);
+				frame->lerps.push_back(std::make_pair(s2::AnimLerp::SPR_POS, lerp));
+			}
+		}
+	}
+
+	// in out back
+	if (trans.scale.expression.find("easeandwizz_outBack") != std::string::npos)
+	{
+		for (int i = 0, n = frames.size(); i < n; ++i) {
+			s2::AnimSymbol::Frame* frame = frames[i];
+			for (int j = 0, m = frame->sprs.size(); j < m; ++j) {
+				s2::LerpEase* lerp = new s2::LerpEase(s2::LerpEase::EASE_IN_OUT_BACK);
+				frame->lerps.push_back(std::make_pair(s2::AnimLerp::SPR_SCALE, lerp));
+			}
 		}
 	}
 }

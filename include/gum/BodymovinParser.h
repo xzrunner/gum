@@ -74,6 +74,8 @@ public:
 
 		std::vector<KeyFrame> frames;
 
+		std::string expression;
+
 		void Load(const Json::Value& val);		
 	};
 

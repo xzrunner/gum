@@ -61,6 +61,9 @@ private:
 	s2::Sprite* CreateSolidSpr(const std::string& color, int width, int height) const;
 
 	static void LoadBlendMode(std::vector<s2::AnimSymbol::Frame*>& frames, int bm);
+	
+	static void LoadExpression(std::vector<s2::AnimSymbol::Frame*>& frames, 
+		const BodymovinParser::Transform& trans);
 
 private:
 	s2::AnimSymbol* m_sym;
