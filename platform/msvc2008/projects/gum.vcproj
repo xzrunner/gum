@@ -220,14 +220,6 @@
 			Name="dataset"
 			>
 			<File
-				RelativePath="..\..\..\source\dataset\GlyphStyle.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\gum\GlyphStyle.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\gum\Resource.h"
 				>
 			</File>
@@ -280,6 +272,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\gum\Texture.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="glyph"
+				>
+				<File
+					RelativePath="..\..\..\source\dataset\GlyphStyle.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\GlyphStyle.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\dataset\GlyphStyleID.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\GlyphStyleID.h"
 					>
 				</File>
 			</Filter>
