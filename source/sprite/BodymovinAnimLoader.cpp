@@ -143,7 +143,7 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 
 		assert(s_spr && e_spr);
 
-		std::string spr_name = "_" + src.name;
+		std::string spr_name = "_" + gum::StringHelper::UTF8ToGBK(src.name);
 		s_spr->SetName(spr_name);
 		e_spr->SetName(spr_name);
 
