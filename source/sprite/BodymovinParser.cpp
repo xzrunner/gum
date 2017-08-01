@@ -128,6 +128,8 @@ bool BodymovinParser::FloatVal::Float3::operator == (const Float3& f) const
 
 void BodymovinParser::FloatVal::Load(const Json::Value& val)
 {
+	expression = val["x"].asString();
+
 	bool anim = val["a"].asInt() == 1;
 	if (!anim) 
 	{
@@ -173,8 +175,6 @@ void BodymovinParser::FloatVal::Load(const Json::Value& val)
 			dst.to = Float3(src["to"]);
 		}
 	}
-
-	expression = val["x"].asString();
 
 #ifndef NDEBUG
 	if (n > 1) {
