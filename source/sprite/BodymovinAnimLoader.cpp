@@ -684,6 +684,7 @@ void BodymovinAnimLoader::LoadExpression(std::vector<s2::AnimSymbol::Frame*>& fr
 		sscanf(params.c_str(), "%d, %d", &freq, &amp);
 		for (int i = 0, n = frames.size(); i < n; ++i) {
 			s2::AnimSymbol::Frame* frame = frames[i];
+			frame->tween = true;
 			for (int j = 0, m = frame->sprs.size(); j < m; ++j) {
 				s2::LerpWiggle* lerp = new s2::LerpWiggle(freq, amp);
 				frame->lerps.push_back(std::make_pair(s2::AnimLerp::SPR_POS, lerp));
@@ -696,6 +697,7 @@ void BodymovinAnimLoader::LoadExpression(std::vector<s2::AnimSymbol::Frame*>& fr
 	{
 		for (int i = 0, n = frames.size(); i < n; ++i) {
 			s2::AnimSymbol::Frame* frame = frames[i];
+			frame->tween = true;
 			for (int j = 0, m = frame->sprs.size(); j < m; ++j) {
 				s2::LerpEase* lerp = new s2::LerpEase(s2::LerpEase::EASE_IN_OUT_BACK);
 				frame->lerps.push_back(std::make_pair(s2::AnimLerp::SPR_SCALE, lerp));
