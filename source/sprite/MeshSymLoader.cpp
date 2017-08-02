@@ -165,8 +165,8 @@ s2::Mesh* MeshSymLoader::LoadSkin2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* no
 		const simp::Skin2Mesh::Joint& src = node->joints[i];
 		pm::Skin2Joint dst;
 		dst.joint = src.joint;
-		dst.vertex.x = simp::int2float(src.vx, 128);
-		dst.vertex.y = simp::int2float(src.vy, 128);
+		dst.vertex.x = simp::int2float(src.vx, 16);
+		dst.vertex.y = simp::int2float(src.vy, 16);
 		dst.offset.Set(0, 0);
 		dst.weight = simp::int2float(src.weight, 2048) + 0.5f;
 		joints.push_back(dst);
