@@ -118,11 +118,9 @@ void _parser_cb(const void* data, size_t size, void* ud)
 		break;
 	case timp::TEXTURE_ETC2:
 		{
-#ifdef __ANDROID__
+#ifdef defined( __APPLE__ ) && !defined(__MACOSX)
 			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
-#elif defined( __APPLE__ ) && !defined(__MACOSX)
-			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
-#elif defined _WIN32
+#elif defined _WIN32 || defined __ANDROID__
 			ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
 			if (rc->IsSupportETC2()) {
 				rc->UpdateTexture(img->GetTexID(), pixels, width, height);
@@ -157,9 +155,8 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 	}
 
 	int real_fmt = format;
-#ifdef __ANDROID__
-#elif defined( __APPLE__ ) && !defined(__MACOSX)
-#elif defined _WIN32
+#ifdef defined( __APPLE__ ) && !defined(__MACOSX)
+#elif defined _WIN32 || defined __ANDROID__
 	ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
 	if (!rc->IsSupportETC2()) {
 		real_fmt = timp::TEXTURE_RGBA8;
