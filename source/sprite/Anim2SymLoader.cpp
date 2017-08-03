@@ -92,6 +92,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 	anim->sk = sk;
 	ptr += SIZEOF_RG_SKELETON;
 	sk->joint_count = node->joint_count;
+	sk->ik_count = node->ik_count;
 	sk->root = node->root;
 	sk->slot_count = node->slot_count;
 	sk->skin_count = node->skin_count;
@@ -113,6 +114,20 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 		sk->slots[i].skin  = node->slots[i].skin;
 	}
 	ptr += SIZEOF_RG_SLOT * sk->slot_count;
+	//// iks
+	sk->iks = (rg_ik*)ptr;
+	for (int i = 0; i < sk->ik_count; ++i)
+	{
+		const simp::NodeAnim2::IK& src = node->iks[i];
+		rg_ik* dst = &sk->iks[i];
+		dst->joints[0] = src.joints[0];
+		dst->joints[1] = src.joints[1];
+		dst->target = src.target;
+		dst->bend_positive = src.bend_positive;
+		dst->length[0] = src.length[0];
+		dst->length[1] = src.length[1];
+	}
+	ptr += SIZEOF_RG_IK * sk->ik_count;
 	//// joints
 	sk->joints = (rg_joint**)ptr;
 	ptr += sizeof(rg_joint*) * sk->joint_count;
@@ -225,6 +240,8 @@ int Anim2SymLoader::CalcNodeSize(const simp::NodeAnim2* node)
 		sz += SIZEOF_RG_JOINT;
 		sz += ALIGN_4BYTE(sizeof(uint16_t) * node->joints[i].chlidren_count);
 	}
+	// iks
+	sz += SIZEOF_RG_IK * node->ik_count;
 	// slots
 	sz += SIZEOF_RG_SLOT * node->slot_count;
 	// skins
