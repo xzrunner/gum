@@ -43,6 +43,7 @@ private:
 	void CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const;
 	void CreateSlots(const SpineParser& parser);
 	void CreateJoints();
+	void CreateIKs(const SpineParser& parser);
 	void CreateSkeleton();
 	void InitRoot();
  	void InitPose(const SpineParser& parser);
@@ -99,6 +100,7 @@ private:
 	std::map<std::string, int> m_map2skin;
 
 	// dst
+	std::vector<rg_ik>   m_iks;
 	std::vector<rg_skin> m_skins;
 	std::vector<rg_slot> m_slots;
 	int            m_joint_count;

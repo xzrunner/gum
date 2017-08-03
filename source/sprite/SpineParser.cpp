@@ -16,6 +16,9 @@ void SpineParser::Parse(const Json::Value& val)
 	ParseHeader(val["skeleton"]);
 	ParseBones(val["bones"]);
 	ParseSlots(val["slots"]);
+	if (val.isMember("ik")) {
+		ParseIK(val["ik"]);
+	}
 	ParseSkins(val["skins"]["default"]);
 	Json::Value::Members key_skins = val["skins"].getMemberNames();
 	for (int i = 0, n = key_skins.size(); i < n; ++i) {
@@ -77,6 +80,10 @@ void SpineParser::ParseBones(const Json::Value& val)
 		dst.pos.x = src["x"].asDouble();
 		dst.pos.y = src["y"].asDouble();
 		dst.angle = src["rotation"].asDouble() * SM_DEG_TO_RAD;
+		if (src.isMember("length")) {
+			dst.length = src["length"].asDouble();
+		}
+
 		bones.push_back(dst);
 	}
 }
@@ -91,6 +98,27 @@ void SpineParser::ParseSlots(const Json::Value& val)
 		dst.bone = src["bone"].asString();
 		dst.attachment = src["attachment"].asString();
 		slots.push_back(dst);
+	}
+}
+
+void SpineParser::ParseIK(const Json::Value& val)
+{
+	for (int i = 0, n = val.size(); i < n; ++i)
+	{
+		const Json::Value& src = val[i];
+		IK dst;
+		dst.name = src["name"].asString();
+		dst.bones.reserve(src["bones"].size());
+		for (int j = 0, m = src["bones"].size(); j < m; ++j) {
+			dst.bones.push_back(src["bones"][j].asString());
+		}
+		dst.target = src["target"].asString();
+		if (src.isMember("bendPositive")) {
+			dst.bend_positive = src["bendPositive"].asBool();
+		} else {
+			dst.bend_positive = true;
+		}
+		iks.push_back(dst);
 	}
 }
 

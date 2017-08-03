@@ -23,11 +23,12 @@ public:
 	{
 		std::string name;
 		std::string parent;
-		sm::vec2 pos;
-		float angle;
-		sm::vec2 scale;
+		sm::vec2	pos;
+		float		angle;
+		sm::vec2	scale;
+		float		length;
 
-		Bone() : angle(0), scale(1, 1) {}
+		Bone() : angle(0), scale(1, 1), length(0) {}
 	};
 
 	struct Slot
@@ -35,6 +36,14 @@ public:
 		std::string name;
 		std::string bone;
 		std::string attachment;
+	};
+
+	struct IK
+	{
+		std::string name;
+		std::vector<std::string> bones;
+		std::string target;
+		bool bend_positive;
 	};
 
 	enum SKIN_TYPE
@@ -153,6 +162,7 @@ private:
 	void ParseHeader(const Json::Value& val);
 	void ParseBones(const Json::Value& val);
 	void ParseSlots(const Json::Value& val);
+	void ParseIK(const Json::Value& val);
 	void ParseSkins(const Json::Value& val);
 	void ParseImage(SkinItem& dst, const Json::Value& src);
 	void ParseMesh(SkinItem& dst, const Json::Value& src);
@@ -171,6 +181,8 @@ public:
 	std::vector<Bone> bones;
 
 	std::vector<Slot> slots;
+
+	std::vector<IK> iks;
 
 	std::vector<Skin> skins;
 

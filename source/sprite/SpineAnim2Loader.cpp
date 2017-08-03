@@ -83,8 +83,9 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& 
 	CreateSkins(parser, img_dir);
 	CreateSlots(parser);
  	CreateJoints();
- 	CreateSkeleton();
-
+	CreateIKs(parser);
+	CreateSkeleton();
+	
 	InitRoot();
 	InitPose(parser);
 
@@ -350,11 +351,41 @@ void SpineAnim2Loader::CreateJoints()
 	}
 }
 
+void SpineAnim2Loader::CreateIKs(const SpineParser& parser)
+{
+	int num = parser.iks.size();
+	m_iks.reserve(num);
+	for (int i = 0; i < num; ++i)
+	{
+		const SpineParser::IK& src = parser.iks[i];
+		assert(src.bones.size() <= 3);
+		rg_ik dst;
+		memset(dst.joints, 0xff, sizeof(dst.joints));
+		memset(dst.length, 0, sizeof(dst.length));
+		for (int j = 0, m = src.bones.size(); j < m; ++j) 
+		{
+			std::map<std::string, int>::iterator itr_joint 
+				= m_bone2joint.find(src.bones[j]);
+			assert(itr_joint != m_bone2joint.end());
+			int id = itr_joint->second;
+			dst.joints[j] = id;
+			dst.length[j] = parser.bones[id].length;
+		}
+		std::map<std::string, int>::iterator itr_joint 
+			= m_bone2joint.find(src.target);
+		assert(itr_joint != m_bone2joint.end());
+		dst.target = itr_joint->second;
+		dst.bend_positive = src.bend_positive ? 1 : 0;
+		m_iks.push_back(dst);
+	}
+}
+
 void SpineAnim2Loader::CreateSkeleton()
 {
 	int skins_sz = SIZEOF_RG_SKIN * m_skins.size();
 	int slots_sz = SIZEOF_RG_SLOT * m_slots.size();
-	m_sk = (rg_skeleton*)malloc(SIZEOF_RG_SKELETON + skins_sz + slots_sz);
+	int iks_sz   = SIZEOF_RG_IK * m_iks.size();
+	m_sk = (rg_skeleton*)malloc(SIZEOF_RG_SKELETON + skins_sz + slots_sz + iks_sz);
 
 	m_sk->joints = m_joints;
 	m_sk->joint_count = m_joint_count;
@@ -369,6 +400,12 @@ void SpineAnim2Loader::CreateSkeleton()
 	m_sk->slots = (rg_slot*)((intptr_t)(m_sk) + SIZEOF_RG_SKELETON + skins_sz);
 	for (int i = 0; i < m_sk->slot_count; ++i) {
 		m_sk->slots[i] = m_slots[i];
+	}
+
+	m_sk->ik_count = m_iks.size();
+	m_sk->iks = (rg_ik*)((intptr_t)(m_sk) + SIZEOF_RG_SKELETON + skins_sz + slots_sz);
+	for (int i = 0; i < m_sk->ik_count; ++i) {
+		m_sk->iks[i] = m_iks[i];
 	}
 }
 
