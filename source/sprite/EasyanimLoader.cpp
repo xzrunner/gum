@@ -3,15 +3,15 @@
 #include "SprTransLoader.h"
 #include "SpriteLoader.h"
 
-#include <sprite2/AnimSymbol.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/LerpCircle.h>
 #include <sprite2/LerpSpiral.h>
 #include <sprite2/LerpWiggle.h>
 #include <sprite2/LerpEase.h>
 #include <sprite2/AnimLerp.h>
-#include <simp/NodeAnimation.h>
 #include <simp/from_int.h>
+
+#include <assert.h>
 
 namespace gum
 {
@@ -69,17 +69,8 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 			s2::AnimSymbol::Frame* dst_frame = new s2::AnimSymbol::Frame;
 			dst_frame->index = src_frame->index;
 			dst_frame->tween = simp::int2bool(src_frame->tween);
-			int actor_n = src_frame->n;
-			dst_frame->sprs.reserve(actor_n);
-			for (int actor = 0; actor < actor_n; ++actor)
-			{
-				const simp::NodeAnimation::Actor* src_actor = src_frame->actors[actor];
-				s2::Sprite* spr = SpriteFactory::Instance()->Create(src_actor->sym_id, m_flatten);
-				if (spr) {
-					SprTransLoader::Load(spr, src_actor->trans);
-					dst_frame->sprs.push_back(spr);
-				}
-			}
+			LoadActors(src_frame, dst_frame);
+			LoadLerps(src_frame, dst_frame);
 			dst_layer->frames.push_back(dst_frame);
 		}
 		m_sym->AddLayer(dst_layer);
@@ -102,49 +93,126 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
 			s2::AnimSymbol::Frame* dst_frame = new s2::AnimSymbol::Frame;
 			dst_frame->index = frame_val["time"].asInt();
 			dst_frame->tween = frame_val["tween"].asBool();
-			for (int i = 0, n = frame_val["lerp"].size(); i < n; ++i)
-			{
-				s2::AnimLerp::SprData key = s2::AnimLerp::SprData(frame_val["lerp"][i]["key"].asInt());
-				const Json::Value& val = frame_val["lerp"][i]["val"];
-				if (val["type"].asString() == "circle")
-				{
-					float scale = val["scale"].asInt() * 0.01f;
-					s2::LerpCircle* circle = new s2::LerpCircle(scale);
-					dst_frame->lerps.push_back(std::make_pair(key, circle));
-				}
-				else if (val["type"].asString() == "spiral") 
-				{
-					float begin = val["angle_begin"].asInt() * SM_DEG_TO_RAD,
-						  end   = val["angle_end"].asInt() * SM_DEG_TO_RAD;
-					float scale = val["scale"].asInt() * 0.01f;
-					s2::LerpSpiral* spiral = new s2::LerpSpiral(begin, end, scale);
-					dst_frame->lerps.push_back(std::make_pair(key, spiral));
-				}
-				else if (val["type"].asString() == "wiggle")
-				{
-					float freq = val["freq"].asDouble();
-					float amp = val["amp"].asDouble();
-					s2::LerpWiggle* wiggle = new s2::LerpWiggle(freq, amp);
-					dst_frame->lerps.push_back(std::make_pair(key, wiggle));
-				}
-				else if (val["type"].asString() == "ease")
-				{
-					int type = val["ease"].asInt();
-					s2::LerpEase* ease = new s2::LerpEase(type);
-					dst_frame->lerps.push_back(std::make_pair(key, ease));
-				}
-			}
-			int actor_n = frame_val["actor"].size();
-			dst_frame->sprs.reserve(actor_n);
-			for (int actor = 0; actor < actor_n; ++actor)
-			{
-				const Json::Value& actor_val = frame_val["actor"][actor];
-				s2::Sprite* spr = m_spr_loader->Create(actor_val, dir);
-				dst_frame->sprs.push_back(spr);
-			}
+			LoadActors(frame_val, dst_frame, dir);
+			LoadLerps(frame_val, dst_frame);
 			dst_layer->frames.push_back(dst_frame);
 		}
 		m_sym->AddLayer(dst_layer);
+	}
+}
+
+void EasyAnimLoader::LoadActors(const Json::Value& src, s2::AnimSymbol::Frame* dst,
+								const std::string& dir)
+{
+	int actor_n = src["actor"].size();
+	dst->sprs.reserve(actor_n);
+	for (int actor = 0; actor < actor_n; ++actor)
+	{
+		const Json::Value& actor_val = src["actor"][actor];
+		s2::Sprite* spr = m_spr_loader->Create(actor_val, dir);
+		dst->sprs.push_back(spr);
+	}
+}
+
+void EasyAnimLoader::LoadLerps(const Json::Value& src, s2::AnimSymbol::Frame* dst)
+{
+	for (int i = 0, n = src["lerp"].size(); i < n; ++i)
+	{
+		s2::ILerp* lerp = NULL;
+		const Json::Value& val = src["lerp"][i]["val"];
+		std::string type = val["type"].asString();
+		if (type == "circle")
+		{
+			float scale = val["scale"].asInt() * 0.01f;
+			lerp = new s2::LerpCircle(scale);
+		}
+		else if (type == "spiral") 
+		{
+			float begin = val["angle_begin"].asInt() * SM_DEG_TO_RAD,
+				  end   = val["angle_end"].asInt() * SM_DEG_TO_RAD;
+			float scale = val["scale"].asInt() * 0.01f;
+			lerp = new s2::LerpSpiral(begin, end, scale);
+		}
+		else if (type == "wiggle")
+		{
+			float freq = val["freq"].asDouble();
+			float amp = val["amp"].asDouble();
+			lerp = new s2::LerpWiggle(freq, amp);
+		}
+		else if (type == "ease")
+		{
+			int type = val["ease"].asInt();
+			lerp = new s2::LerpEase(type);
+		}
+		if (lerp) {
+			s2::AnimLerp::SprData key = s2::AnimLerp::SprData(src["lerp"][i]["key"].asInt());
+			dst->lerps.push_back(std::make_pair(key, lerp));
+		}
+	}
+}
+
+void EasyAnimLoader::LoadActors(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst)
+{
+	dst->sprs.reserve(src->actors_n);
+	for (int i = 0; i < src->actors_n; ++i)
+	{
+		const simp::NodeAnimation::Actor* src_actor = src->actors[i];
+		s2::Sprite* spr = SpriteFactory::Instance()->Create(src_actor->sym_id, m_flatten);
+		if (spr) {
+			SprTransLoader::Load(spr, src_actor->trans);
+			dst->sprs.push_back(spr);
+		}
+	}
+}
+
+void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst)
+{
+	dst->lerps.reserve(src->lerps_n);
+	for (int i = 0; i < src->lerps_n; ++i)
+	{
+		const simp::NodeAnimation::Lerp* s = src->lerps[i];
+		s2::ILerp* lerp = NULL;
+		switch (s->type)
+		{
+		case s2::LERP_CIRCLE:
+			{
+				assert(s->data_n == 1);
+				float scale = 0;
+				memcpy(&scale, &s->data[0], sizeof(float));
+				lerp = new s2::LerpCircle(scale);
+				break;
+			}
+		case s2::LERP_SPIRAL:
+			{
+				assert(s->data_n == 3);
+				float begin = 0, end = 0;
+				float scale = 0;
+				memcpy(&begin, &s->data[0], sizeof(float));
+				memcpy(&end, &s->data[1], sizeof(float));
+				memcpy(&scale, &s->data[2], sizeof(float));
+				lerp = new s2::LerpSpiral(begin, end, scale);
+				break;
+			}
+		case s2::LERP_WIGGLE:
+			{
+				assert(s->data_n == 2);
+				float freq = 0, amp = 0;
+				memcpy(&freq, &s->data[0], sizeof(float));
+				memcpy(&amp, &s->data[1], sizeof(float));
+				lerp = new s2::LerpWiggle(freq, amp);
+				break;
+			}
+		case s2::LERP_EASE:
+			{
+				assert(s->data_n == 1);
+				lerp = new s2::LerpEase(s->data[0]);
+				break;
+			}
+		}
+		if (lerp) {
+			s2::AnimLerp::SprData key = static_cast<s2::AnimLerp::SprData>(s->type);
+			dst->lerps.push_back(std::make_pair(key, lerp));
+		}
 	}
 }
 

@@ -2,6 +2,8 @@
 #define _GUM_EASYANIM_LOADER_H_
 
 #include <CU_Uncopyable.h>
+#include <simp/NodeAnimation.h>
+#include <sprite2/AnimSymbol.h>
 
 #include <json/json.h>
 
@@ -26,6 +28,11 @@ public:
 
 private:
 	void LoadLayers(const Json::Value& val, const std::string& dir);
+ 	void LoadActors(const Json::Value& src, s2::AnimSymbol::Frame* dst, const std::string& dir);
+ 	void LoadLerps(const Json::Value& src, s2::AnimSymbol::Frame* dst);
+
+	void LoadActors(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst);
+	void LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst);
 
 private:
 	s2::AnimSymbol* m_sym;
