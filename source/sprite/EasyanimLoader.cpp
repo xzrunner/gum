@@ -210,7 +210,7 @@ void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSy
 			}
 		}
 		if (lerp) {
-			s2::AnimLerp::SprData key = static_cast<s2::AnimLerp::SprData>(s->type);
+			s2::AnimLerp::SprData key = static_cast<s2::AnimLerp::SprData>(s->spr_data);
 			dst->lerps.push_back(std::make_pair(key, lerp));
 		}
 	}
