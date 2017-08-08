@@ -1,5 +1,7 @@
 #include "GUM_Sprite2.h"
 #include "GUM_DTex.h"
+#include "RenderTargetMgr.h"
+#include "RenderTarget.h"
 
 #include <sprite2/S2_RenderTargetMgr.h>
 #include <sprite2/S2_RenderTarget.h>
@@ -82,10 +84,24 @@ get_actor_uid(const s2::Actor* actor)
 	return ResourceUID::Actor(actor);
 }
 
+static s2::RenderTarget* 
+fetch_screen()
+{
+	return RenderTargetMgr::Instance()->Fetch();
+}
+
+static void 
+return_screen(s2::RenderTarget* rt)
+{
+	RenderTargetMgr::Instance()->Return(dynamic_cast<gum::RenderTarget*>(rt));	
+}
+
 void Sprite2::Init()
 {
 	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
 	s2::DrawNode::InitUIDCB(get_sym_uid, get_spr_uid, get_actor_uid);
+
+	s2::RenderTargetMgr::Instance()->InitScreenCB(fetch_screen, return_screen);
 }
 
 }
