@@ -93,7 +93,7 @@ fetch_screen()
 static void 
 return_screen(s2::RenderTarget* rt)
 {
-	RenderTargetMgr::Instance()->Return(dynamic_cast<gum::RenderTarget*>(rt));	
+	RenderTargetMgr::Instance()->Return(static_cast<gum::RenderTarget*>(rt));
 }
 
 void Sprite2::Init()
