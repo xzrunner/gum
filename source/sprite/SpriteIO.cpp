@@ -40,6 +40,7 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_downsample    = 1;
 
 	m_need_actor    = false;
+	m_integrate     = false;
 
 	m_visible		= true;
 	m_editable		= true;
@@ -226,12 +227,14 @@ void SpriteIO::LoadInfo(s2::Sprite* spr)
 {
 	spr->SetName(m_name);
 	spr->SetNeedActor(m_need_actor);
+	spr->SetIntegrate(m_integrate);
 }
 
 void SpriteIO::StoreInfo(const s2::Sprite* spr)
 {
 	s2::SprNameMap::Instance()->IDToStr(spr->GetName(), m_name);
 	m_need_actor = spr->IsNeedActor();
+	m_integrate  = spr->IsIntegrate();
 }
 
 void SpriteIO::LoadInfo(const Json::Value& val)
@@ -246,6 +249,11 @@ void SpriteIO::LoadInfo(const Json::Value& val)
 	} else {
 		m_need_actor = false;
 	}
+	if (val.isMember("integrate")) {
+		m_integrate = val["integrate"].asBool();
+	} else {
+		m_integrate = false;
+	}
 }
 
 void SpriteIO::StoreInfo(Json::Value& val)
@@ -255,6 +263,9 @@ void SpriteIO::StoreInfo(Json::Value& val)
 	}
 	if (!m_compress || m_need_actor) {
 		val["actor"] = m_need_actor;
+	}
+	if (!m_compress || m_integrate) {
+		val["integrate"] = m_integrate;
 	}
 }
 

@@ -87,6 +87,7 @@ public:
 	// info
 	std::string			m_name;
 	bool                m_need_actor;
+	bool                m_integrate;
 
 	// edit
 	bool				m_visible;
