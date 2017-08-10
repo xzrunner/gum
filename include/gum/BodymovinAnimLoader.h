@@ -46,7 +46,7 @@ private:
 
 	static void LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, int w, int h);	
-	static void LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static bool LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
 	static void LoadPosition(std::vector<s2::AnimSymbol::Frame*>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, const sm::vec2& left_top);	
@@ -61,6 +61,8 @@ private:
 	s2::Sprite* CreateSolidSpr(const std::string& color, int width, int height) const;
 
 	static void LoadBlendMode(std::vector<s2::AnimSymbol::Frame*>& frames, int bm);
+
+	static void LoadIntegrate(std::vector<s2::AnimSymbol::Frame*>& frames);
 	
 	static void LoadExpression(std::vector<s2::AnimSymbol::Frame*>& frames, 
 		const BodymovinParser::Transform& trans);

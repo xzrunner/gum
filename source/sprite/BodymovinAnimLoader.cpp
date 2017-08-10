@@ -200,7 +200,7 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 
 		// filling frames
 		LoadAnchor(dst->frames, src.trans.anchor, frame_rate, src_w, src_h);
-		LoadOpacity(dst->frames, src.trans.opacity, frame_rate);
+		bool opacity = LoadOpacity(dst->frames, src.trans.opacity, frame_rate);
 		LoadPosition(dst->frames, src.trans.position, frame_rate, left_top);
 		LoadRotate(dst->frames, src.trans.rotate, frame_rate);
 		LoadScale(dst->frames, src.trans.scale, frame_rate);
@@ -232,6 +232,10 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		}
 
 		LoadBlendMode(dst->frames, src.blend_mode);
+
+		if (opacity && src.layer_type == BodymovinParser::LAYER_PRE_COMP) {
+			LoadIntegrate(dst->frames);
+		}
 
 		LoadExpression(dst->frames, src.trans);
 
@@ -363,10 +367,11 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 	}
 }
 
-void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frames, 
+bool BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frames, 
 									  const BodymovinParser::FloatVal& val, 
 									  int frame_rate)
 {
+	bool ret = false;
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 	if (val.frames.size() > 1)
 	{
@@ -387,6 +392,8 @@ void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 			col.a = (uint8_t)(255 * opacity / 100.0f);
 			rc.SetMul(col);
 			spr->SetColor(rc);
+
+			ret = true;
 		}
 	}
 	else
@@ -403,8 +410,11 @@ void BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 			col.a = (uint8_t)(255 * opacity / 100.0f);
 			rc.SetMul(col);
 			spr->SetColor(rc);
+
+			ret = true;
 		}
 	}
+	return ret;
 }
 
 void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::Frame*>& frames, 
@@ -663,6 +673,17 @@ void BodymovinAnimLoader::LoadBlendMode(std::vector<s2::AnimSymbol::Frame*>& fra
 			s2::RenderShader rs = spr->GetShader();
 			rs.SetBlend(bm);
 			spr->SetShader(rs);
+		}
+	}
+}
+
+void BodymovinAnimLoader::LoadIntegrate(std::vector<s2::AnimSymbol::Frame*>& frames)
+{
+	for (int i = 0, n = frames.size(); i < n; ++i) {
+		s2::AnimSymbol::Frame* f = frames[i];
+		for (int j = 0, m = f->sprs.size(); j < m; ++j) {
+			s2::Sprite* spr = f->sprs[j];
+			spr->SetIntegrate(true);
 		}
 	}
 }
