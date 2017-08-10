@@ -237,6 +237,12 @@ bool gum_is_async_task_empty()
 		&& AsyncTask::Instance()->IsEmpty();
 }
 
+extern "C"
+bool gum_is_support_etc2()
+{
+	return RenderContext::Instance()->GetImpl()->IsSupportETC2();
+}
+
 /************************************************************************/
 /* simp id                                                              */
 /************************************************************************/
