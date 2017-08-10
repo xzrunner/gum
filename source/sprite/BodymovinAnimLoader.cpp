@@ -101,6 +101,14 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 									 const std::vector<BodymovinParser::Layer>& layers, 
 									 int frame_rate, int width, int height, s2::AnimSymbol* sym)
 {
+	LoadLayersPrev(map_assets, layers, frame_rate, width, height, sym);
+	LoadLayersPost(layers, sym, frame_rate, width, height);
+}
+
+void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::Sprite*>& map_assets,
+										 const std::vector<BodymovinParser::Layer>& layers, 
+										 int frame_rate, int width, int height, s2::AnimSymbol* sym)
+{
 	sym->SetFPS(static_cast<int>(FPS));
 
 	sm::vec2 left_top;
@@ -205,40 +213,6 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		LoadRotate(dst->frames, src.trans.rotate, frame_rate);
 		LoadScale(dst->frames, src.trans.scale, frame_rate);
 
-		// parent
-		if (src.parent_id != -1)
-		{
-			const BodymovinParser::Layer* parent = NULL;
-			for (int i = 0, n = layers.size(); i < n; ++i) {
-				if (layers[i].layer_id == src.parent_id) {
-					parent = &layers[i];
-					break;
-				}
-			}
-			if (parent) 
-			{
-				InsertKeyframe(dst->frames, parent->trans.anchor, frame_rate);
-//				InsertKeyframe(dst->frames, parent->trans.opacity, frame_rate);
-				InsertKeyframe(dst->frames, parent->trans.position, frame_rate);
-				InsertKeyframe(dst->frames, parent->trans.rotate, frame_rate);
-				InsertKeyframe(dst->frames, parent->trans.scale, frame_rate);
-
-				LoadAnchor(dst->frames, parent->trans.anchor, frame_rate, src_w, src_h);
-//				LoadOpacity(dst->frames, parent->trans.opacity, frame_rate);
-				LoadPosition(dst->frames, parent->trans.position, frame_rate, left_top);
-				LoadRotate(dst->frames, parent->trans.rotate, frame_rate);
-				LoadScale(dst->frames, parent->trans.scale, frame_rate);
-			}
-		}
-
-		LoadBlendMode(dst->frames, src.blend_mode);
-
-		if (opacity && src.layer_type == BodymovinParser::LAYER_PRE_COMP) {
-			LoadIntegrate(dst->frames);
-		}
-
-		LoadExpression(dst->frames, src.trans);
-
 		// fix null spr
 		s2::RenderColor col;
 		col.SetMul(s2::Color(0, 0, 0, 0));
@@ -248,6 +222,123 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& m
 		}
 
 		sym->AddLayer(dst);
+	}
+}
+
+void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Layer>& layers,
+										 s2::AnimSymbol* sym, int frame_rate, int width, int height)
+{
+	sm::vec2 left_top;
+	left_top.x = - width * 0.5f;
+	left_top.y = height * 0.5f;
+
+	const std::vector<s2::AnimSymbol::Layer*>& _layers = sym->GetLayers();
+
+	std::map<int, int> map_layerid2idx;
+	for (int i = 0, n = layers.size(); i < n; ++i) {
+		map_layerid2idx.insert(std::make_pair(layers[i].layer_id, i));
+	}
+
+	std::vector<bool> flags(_layers.size(), false);
+	while (true)
+	{
+		bool fail = false;
+		for (int i = 0, n = layers.size(); i < n; ++i)
+		{
+			const BodymovinParser::Layer& src = layers[i];
+			s2::AnimSymbol::Layer* dst = _layers[i];
+
+			int src_w = 0, src_h = 0;
+			if (src.layer_type == BodymovinParser::LAYER_PRE_COMP) {
+				src_w = src.comp_width;
+				src_h = src.comp_height;
+			} else if (src.layer_type == BodymovinParser::LAYER_SOLID) {
+				src_w = src.solid_width;
+				src_h = src.solid_height;
+			}
+
+			if (src.parent_id == -1)
+			{
+				flags[i] = true;
+			}
+			else
+			{
+				const BodymovinParser::Layer* parent = NULL;
+				int p_idx = -1;
+				std::map<int, int>::iterator itr = map_layerid2idx.find(src.parent_id);
+				if (itr != map_layerid2idx.end()) {
+					p_idx = itr->second;
+					parent = &layers[p_idx];
+				}
+				if (parent) 
+				{
+					assert(p_idx != -1);
+					if (flags[p_idx])
+					{
+						do 
+						{
+							InsertKeyframe(dst->frames, parent->trans.anchor, frame_rate);
+							//InsertKeyframe(dst->frames, parent->trans.opacity, frame_rate);
+							InsertKeyframe(dst->frames, parent->trans.position, frame_rate);
+							InsertKeyframe(dst->frames, parent->trans.rotate, frame_rate);
+							InsertKeyframe(dst->frames, parent->trans.scale, frame_rate);
+
+							LoadAnchor(dst->frames, parent->trans.anchor, frame_rate, src_w, src_h);
+							//LoadOpacity(dst->frames, parent->trans.opacity, frame_rate);
+							LoadPosition(dst->frames, parent->trans.position, frame_rate, left_top);
+							LoadRotate(dst->frames, parent->trans.rotate, frame_rate);
+							LoadScale(dst->frames, parent->trans.scale, frame_rate);
+
+							int pid = parent->parent_id;
+							parent = NULL;
+							if (pid != -1) {
+								std::map<int, int>::iterator itr = map_layerid2idx.find(pid);
+								if (itr != map_layerid2idx.end()) {
+									parent = &layers[itr->second];
+								}
+							}
+						} while (parent);
+					}
+					else
+					{
+						fail = true;
+						continue;
+					}
+				}
+
+				flags[i] = true;
+			}
+		}
+		if (!fail) {
+			break;
+		}
+	}
+
+	for (int i = 0, n = layers.size(); i < n; ++i)
+	{
+		const BodymovinParser::Layer& src = layers[i];
+		s2::AnimSymbol::Layer* dst = _layers[i];
+
+		LoadBlendMode(dst->frames, src.blend_mode);
+
+		bool opacity = false;
+		if (dst->frames.size() > 1)
+		{
+			for (int j = 0, m = dst->frames.size(); j < m; ++j) {
+				s2::AnimSymbol::Frame* frame = dst->frames[j];
+				for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
+					s2::Sprite* spr = frame->sprs[k];
+					if (spr->GetColor().GetMul().a != 255) {
+						opacity = true;
+					}
+				}
+			}
+		}
+		if (opacity && src.layer_type == BodymovinParser::LAYER_PRE_COMP) {
+			LoadIntegrate(dst->frames);
+		}
+
+		LoadExpression(dst->frames, src.trans);	
 	}
 }
 

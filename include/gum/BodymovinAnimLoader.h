@@ -37,6 +37,12 @@ private:
 	void LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
 		const std::vector<BodymovinParser::Layer>& layers, 
 		int frame_rate, int width, int height, s2::AnimSymbol* sym);
+	void LoadLayersPrev(const std::map<std::string, s2::Sprite*>& map_assets,
+		const std::vector<BodymovinParser::Layer>& layers, 
+		int frame_rate, int width, int height, s2::AnimSymbol* sym);
+	void LoadLayersPost(const std::vector<BodymovinParser::Layer>& layers,
+		s2::AnimSymbol* sym, int frame_rate, int width, int height);
+	
 
 	static int Frame2Time(int frame, int frame_rate);
 
