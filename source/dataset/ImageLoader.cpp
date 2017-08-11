@@ -118,9 +118,6 @@ void _parser_cb(const void* data, size_t size, void* ud)
 		break;
 	case timp::TEXTURE_ETC2:
 		{
-#if defined( __APPLE__ ) && !defined(__MACOSX)
-			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
-#elif defined _WIN32 || defined __ANDROID__
 			ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
 			if (rc->IsSupportETC2()) {
 				rc->UpdateTexture(img->GetTexID(), pixels, width, height);
@@ -129,11 +126,6 @@ void _parser_cb(const void* data, size_t size, void* ud)
 				rc->UpdateTexture(img->GetTexID(), uncompressed, width, height);
 				free(uncompressed);
 			}
-#else
-			uint8_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(pixels), width, height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
-			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), uncompressed, width, height);
-			free(uncompressed);
-#endif // __ANDROID__
 		}
 		break;
 	}
@@ -155,15 +147,12 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 	}
 
 	int real_fmt = format;
-#if defined( __APPLE__ ) && !defined(__MACOSX)
-#elif defined _WIN32 || defined __ANDROID__
-	ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
-	if (!rc->IsSupportETC2()) {
-		real_fmt = timp::TEXTURE_RGBA8;
+	if (real_fmt == timp::TEXTURE_ETC2) {
+		ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
+		if (!rc->IsSupportETC2()) {
+			real_fmt = timp::TEXTURE_RGBA8;
+		}
 	}
-#else
-	real_fmt = timp::TEXTURE_RGBA8;
-#endif // __ANDROID__
 
 	m_id = RenderContext::Instance()->GetImpl()->CreateTextureID(width, height, real_fmt);
 	m_format = format;
@@ -292,9 +281,6 @@ bool ImageLoader::DecodePVR4(const void* data)
 
 bool ImageLoader::DecodeETC2(const void* data)
 {
-#if defined( __APPLE__ ) && !defined(__MACOSX)
-	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, timp::TEXTURE_ETC2);
-#elif defined _WIN32 || defined __ANDROID__
 	ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
 	if (rc->IsSupportETC2()) {
 		m_id = rc->CreateTexture(data, m_width, m_height, timp::TEXTURE_ETC2);
@@ -303,11 +289,6 @@ bool ImageLoader::DecodeETC2(const void* data)
 		m_id = rc->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
 		free(uncompressed);
 	}
-#else
-	uint8_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(data), m_width, m_height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
-	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
-	free(uncompressed);
-#endif // __ANDROID__
 	return true;
 }
 
