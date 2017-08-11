@@ -101,6 +101,7 @@ void  gum_rt_bind(void* rt);
 void  gum_rt_unbind(void* rt);
 void  gum_rt_draw(void* rt, struct gum_region* src);
 int   gum_rt_get_texid(void* rt);
+void  gum_rt_set_screen(void* rt);
 
 /************************************************************************/
 /* dtex                                                                 */

@@ -51,6 +51,7 @@
 #include <sprite2/Color.h>
 #include <sprite2/ModelSymbol.h>
 #include <sprite2/StatImages.h>
+#include <sprite2/Blackboard.h>
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
@@ -578,6 +579,16 @@ extern "C"
 int gum_rt_get_texid(void* rt)
 {
 	return static_cast<RenderTarget*>(rt)->GetTexID();
+}
+
+extern "C"
+void gum_rt_set_screen(void* rt)
+{
+	int texid = -1;
+	if (rt) {
+		texid = static_cast<RenderTarget*>(rt)->GetTexID();
+	}
+	s2::Blackboard::Instance()->SetScreenCacheTexID(texid);
 }
 
 /************************************************************************/
