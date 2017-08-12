@@ -244,6 +244,12 @@ bool gum_is_support_etc2()
 	return RenderContext::Instance()->GetImpl()->IsSupportETC2();
 }
 
+extern "C"
+bool gum_avaliable_memory(int need_texture_area)
+{
+	return RenderContext::Instance()->GetImpl()->CheckAvailableMemory(need_texture_area);
+}
+
 /************************************************************************/
 /* simp id                                                              */
 /************************************************************************/

@@ -42,6 +42,8 @@ bool  gum_is_async_task_empty();
 
 bool  gum_is_support_etc2();
 
+bool  gum_avaliable_memory(int need_texture_area);
+
 /************************************************************************/
 /* simp id                                                              */
 /************************************************************************/
