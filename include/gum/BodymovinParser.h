@@ -25,6 +25,9 @@ public:
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
 
+	int GetStartFrame() const { return m_start_frame; }
+	int GetEndFrame() const { return m_end_frame; }
+
 public:
 	struct Layer;
 	struct Asset

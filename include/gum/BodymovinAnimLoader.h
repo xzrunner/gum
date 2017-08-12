@@ -27,28 +27,29 @@ public:
 	void LoadJson(const Json::Value& val, const std::string& dir);
 
 	void LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
-		const std::vector<BodymovinParser::Layer>& layers, 
-		int frame_rate, int width, int height);
+		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+		int width, int height, int start_frame, int end_frame);
 
 private:
 	void LoadAssets(std::map<std::string, s2::Sprite*>& map_assets,
-		const std::vector<BodymovinParser::Asset>& assets,
-		int frame_rate, int width, int height);
+		const std::vector<BodymovinParser::Asset>& assets, int frame_rate, 
+		int width, int height, int start_frame, int end_frame);
 	void LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
-		const std::vector<BodymovinParser::Layer>& layers, 
-		int frame_rate, int width, int height, s2::AnimSymbol* sym);
+		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+		int width, int height, int start_frame, int end_frame, s2::AnimSymbol* sym);
 	void LoadLayersPrev(const std::map<std::string, s2::Sprite*>& map_assets,
-		const std::vector<BodymovinParser::Layer>& layers, 
-		int frame_rate, int width, int height, s2::AnimSymbol* sym);
+		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+		int width, int height, int start_frame, int end_frame, s2::AnimSymbol* sym);
 	void LoadLayersPost(const std::vector<BodymovinParser::Layer>& layers,
-		s2::AnimSymbol* sym, int frame_rate, int width, int height);
+		s2::AnimSymbol* sym, int frame_rate, int width, int height, 
+		int start_frame, int end_frame);
 	
-
 	static int Frame2Time(int frame, int frame_rate);
 
 	static void InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, 
-		const BodymovinParser::FloatVal& val, int frame_rate);
-	static void InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, int time);
+		const BodymovinParser::FloatVal& val, int frame_rate, int end_frame);
+	static void InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, 
+		int time, int end_time);
 
 	static void LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, int w, int h);	
