@@ -26,6 +26,7 @@
 #ifndef S2_DISABLE_MODEL
 #include "gum/GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
+#include "gum/AudioContext.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -40,6 +41,8 @@
 #include <timp/PkgMgr.h>
 #include <timp/TIMP_Facade.h>
 #include <dtex2/DTEX_Facade.h>
+#include <uniaudio/Source.h>
+#include <uniaudio/AudioContext.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/S2_Facade.h>
@@ -899,6 +902,23 @@ extern "C"
 void gum_record_screen_clear()
 {
 	StatScreen::Instance()->Clear();
+}
+
+/************************************************************************/
+/* audio                                                                */
+/************************************************************************/
+
+extern "C"
+void* gum_audio_create_source(const char* filepath, bool stream)
+{
+	return AudioContext::Instance()->GetImpl()->CreateSource(filepath, stream);
+}
+
+extern "C"
+void gum_audio_play(void* source)
+{
+	ua::Source* s = static_cast<ua::Source*>(source);
+	s->Play();
 }
 
 }
