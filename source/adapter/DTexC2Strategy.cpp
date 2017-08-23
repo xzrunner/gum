@@ -3,6 +3,7 @@
 
 #include <simp/NodeID.h>
 #include <simp/NodeFactory.h>
+#include <multitask/Thread.h>
 
 namespace gum
 {
@@ -20,15 +21,24 @@ DTexC2Strategy::DTexC2Strategy()
 	m_tot_count			= 10240;
 
 	m_max_c2_edge = -1;
+
+	m_loading_tasks_mutex = new mt::Mutex();
 }
 
-bool DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
+DTexC2Strategy::~DTexC2Strategy()
+{
+	Clear();
+
+	delete m_loading_tasks_mutex;
+}
+
+void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
 {
 	if (id == 0xffffffff) {
-		return false;
+		return;
 	}
 	if (m_max_c2_edge > 0 && (region.Width() > m_max_c2_edge || region.Height() > m_max_c2_edge)) {
-		return false;
+		return;
 	}
 
 	Package* pkg = NULL;
@@ -40,32 +50,33 @@ bool DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h
 	} else {
 		const simp::Package* p = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
 		if (!p) {
-			return false;
+			return;
 		}
 		pkg = new Package(pkg_id, p->GetMaxNodeID() + 1);
 		m_pkgs.insert(std::make_pair(pkg_id, pkg));
 	}
 	pkg->AddCount(node_id, tex_id, tex_w, tex_h, region);
 
-	bool loaded = false;
 	if (pkg->GetSingleMaxCount() > m_single_max_count) {
-		LoadPackage(pkg);
-		loaded = true;
+		AddLoadPkgTask(pkg_id);
 	} else if (pkg->GetDiffSprCount() > m_diff_spr_count) {
-		LoadPackage(pkg);
-		loaded = true;
+		AddLoadPkgTask(pkg_id);
 	} else if (pkg->GetTotCount() > m_tot_count) {
-		LoadPackage(pkg);
-		loaded = true;
+		AddLoadPkgTask(pkg_id);
 	}
-	return loaded;
 }
 
 void DTexC2Strategy::Update()
 {
-	++m_no_update_count;
-	if (m_no_update_count <= m_max_no_update_count) {
-		m_discount = (float)(m_max_no_update_count - m_no_update_count) / m_max_no_update_count;
+	if (m_loading_tasks.empty()) {
+		++m_no_update_count;
+		if (m_no_update_count <= m_max_no_update_count) {
+			m_discount = (float)(m_max_no_update_count - m_no_update_count) / m_max_no_update_count;
+		}
+	} else {
+		FlushLoadingTask();
+		m_no_update_count = 0;
+		m_discount = 1;
 	}
 }
 
@@ -82,9 +93,27 @@ void DTexC2Strategy::LoadPackage(Package* pkg)
 {
 	pkg->Load();
 	pkg->Clear();
+}
 
-	m_no_update_count = 0;
-	m_discount = 1;
+void DTexC2Strategy::AddLoadPkgTask(int pkg_id)
+{
+	mt::Lock lock(m_loading_tasks_mutex);
+
+	m_loading_tasks.push_back(pkg_id);
+}
+
+void DTexC2Strategy::FlushLoadingTask()
+{
+	mt::Lock lock(m_loading_tasks_mutex);
+
+	for (int i = 0, n = m_loading_tasks.size(); i < n; ++i) {
+		std::map<int, Package*>::iterator itr = m_pkgs.find(m_loading_tasks[i]);
+		if (itr != m_pkgs.end()) {
+			LoadPackage(itr->second);
+		}
+	}
+
+	m_loading_tasks.clear();
 }
 
 /************************************************************************/

@@ -6,8 +6,11 @@
 
 #include <map>
 #include <set>
+#include <vector>
 
 #include <stdint.h>
+
+namespace mt { class Mutex; }
 
 namespace gum
 {
@@ -15,7 +18,7 @@ namespace gum
 class DTexC2Strategy
 {
 public:
-	bool OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region);
+	void OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region);
 
 	void Update();
 
@@ -67,6 +70,9 @@ private:
 private:
 	void LoadPackage(Package* pkg);
 
+	void AddLoadPkgTask(int pkg_id);
+	void FlushLoadingTask();
+
 private:
 	std::map<int, Package*> m_pkgs;
 
@@ -79,6 +85,9 @@ private:
 	int m_tot_count;
 
 	int m_max_c2_edge;
+
+	mt::Mutex* m_loading_tasks_mutex;
+	std::vector<int> m_loading_tasks;
 
 	SINGLETON_DECLARATION(DTexC2Strategy)
 
