@@ -12,6 +12,8 @@
 #include <timp/TextureLoader.h>
 #include <unirender/UR_RenderContext.h>
 
+#include <stdlib.h>
+
 namespace gum
 {
 
