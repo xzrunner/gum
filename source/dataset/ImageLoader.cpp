@@ -1,16 +1,15 @@
 #include "ImageLoader.h"
 #include "RenderContext.h"
-#include "GUM_AsyncTask.h"
 #include <gum/Config.h>
 #include "Image.h"
+#include "LoadImageTask.h"
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
 #include <gimg_pvr.h>
 #include <gimg_etc2.h>
-#include <bimp/FileLoader.h>
-#include <bimp/BIMP_ImportStream.h>
 #include <timp/TextureFormat.h>
+#include <multitask/ThreadPool.h>
 #include <timp/TextureLoader.h>
 #include <unirender/UR_RenderContext.h>
 
@@ -39,106 +38,6 @@ bool ImageLoader::Load()
 	}
 }
 
-class FileLoader : public bimp::FileLoader
-{
-public:
-	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
-		: bimp::FileLoader(filepath, use_cache)
-		, m_parser_cb(parser_cb)
-		, m_ud(ud)
-	{}
-	FileLoader(fs_file* file, uint32_t offset, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
-		: bimp::FileLoader(file, offset, use_cache)
-		, m_parser_cb(parser_cb)
-		, m_ud(ud)
-	{}
-
-protected:
-	virtual void OnLoad(bimp::ImportStream& is) 
-	{
-		m_parser_cb(is.Stream(), is.Size(), m_ud);
-	}
-
-private:
-	void (*m_parser_cb)(const void* data, size_t size, void* ud);
-	void* m_ud;
-
-}; // FileLoader
-
-static 
-void _load_cb(const void* res_path, void (*unpack)(const void* data, size_t size, void* ud), void* ud)
-{
-	ResPath path;
-	path.Deserialization(static_cast<const char*>(res_path));
-	if (path.IsSingleFile()) {
-		FileLoader loader(path.GetFilepath(), false, unpack, ud);
-		loader.Load();
-	} else {
-		fs_file* file = fs_open(path.GetFilepath().c_str(), "rb");
-		FileLoader loader(file, path.GetOffset(), false, unpack, ud);
-		loader.Load();
-		fs_close(file);
-	}
-}
-
-static 
-void _parser_cb(const void* data, size_t size, void* ud)
-{
-	timp::TextureLoader loader(static_cast<const char*>(data), size);
-	loader.Load();
-
-	Image* img = static_cast<Image*>(ud);
-	const void* pixels = loader.GetData();
-	int width = loader.GetWidth(),
-		height = loader.GetHeight();
-	int format = loader.GetFormat();
-	switch (format)
-	{
-	case timp::TEXTURE_RGBA4: case timp::TEXTURE_RGBA8:
-		RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
-		break;
-	case timp::TEXTURE_PVR2:
-#if defined( __APPLE__ ) && !defined(__MACOSX)
-		RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
-#endif
-		break;
-	case timp::TEXTURE_PVR4:
-		{
-#if defined( __APPLE__ ) && !defined(__MACOSX)
-			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), pixels, width, height);
-#else
-			uint8_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(pixels), width, height);
-			gimg_revert_y(uncompressed, width, height, GPF_RGBA);
-			RenderContext::Instance()->GetImpl()->UpdateTexture(img->GetTexID(), uncompressed, width, height);
-			free(uncompressed);
-#endif
-		}
-		break;
-	case timp::TEXTURE_ETC1:
-		break;
-	case timp::TEXTURE_ETC2:
-		{
-			ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
-			if (rc->IsSupportETC2()) {
-				rc->UpdateTexture(img->GetTexID(), pixels, width, height);
-			} else {
-				uint8_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(pixels), width, height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
-				rc->UpdateTexture(img->GetTexID(), uncompressed, width, height);
-				free(uncompressed);
-			}
-		}
-		break;
-	}
-	img->SetLoadFinished(true);
-}
-
-static
-void _release_cb(void* ud)
-{
-	Image* img = static_cast<Image*>(ud);
-	img->RemoveReference();
-}
-
 bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 {
 	if (m_res_path.IsSingleFile() && 
@@ -161,10 +60,7 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 
 	img->LoadFromLoader(*this);
 
-	img->SetLoadFinished(false);
-	img->AddReference();
-
-	AsyncTask::Instance()->Load(m_res_path, _load_cb, _parser_cb, _release_cb, img);
+	mt::ThreadPool::Instance()->AddTask(new LoadImageTask(img));
 
 	return true;
 }

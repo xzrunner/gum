@@ -25,7 +25,6 @@
 #include <dtex2/CacheSymbol.h>
 #include <dtex2/CS_Node.h>
 #include <dtex2/CacheGlyph.h>
-#include <dtex2/AsyncTask.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -38,7 +37,6 @@
 #include <sprite2/FlattenMgr.h>
 #include <sprite2/StatImages.h>
 #include <unirender/UR_RenderContext.h>
-#include <tasks_loader.h>
 
 #include <string>
 
@@ -593,7 +591,6 @@ void DTex::Clear()
 
 void DTex::Flush()
 {
-	dtex::AsyncTask::Instance()->Update();
 	m_cg->Flush();
 }
 

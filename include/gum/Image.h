@@ -39,6 +39,8 @@ public:
 	bool IsLoadFinished() const;
 	void SetLoadFinished(bool finished);
 
+	const ResPath& GetResPath() const { return m_res_path; }
+
 //private:
 	void LoadFromLoader(const ImageLoader& loader);
 

@@ -27,6 +27,7 @@
 #include "gum/GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
 #include "gum/AudioContext.h"
+#include "gum/LoadImageTask.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -41,6 +42,7 @@
 #include <timp/PkgMgr.h>
 #include <timp/TIMP_Facade.h>
 #include <dtex2/DTEX_Facade.h>
+#include <dtex2/LoadResTask.h>
 #include <uniaudio/Source.h>
 #include <uniaudio/AudioContext.h>
 #include <sprite2/SprTimer.h>
@@ -58,10 +60,9 @@
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
-#include <dtex2/AsyncTask.h>
-#include <gum/GUM_AsyncTask.h>
 #include <gtxt_label.h>
 #include <c_wrap_dtex.h>
+#include <multitask/ThreadPool.h>
 
 #include <queue>
 
@@ -77,6 +78,8 @@ void gum_init(void (*error_reload)())
 	DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
 	Sprite2::Init();
+
+	mt::ThreadPool::Instance();
 
 #ifndef S2_DISABLE_MODEL
 	Model3::Instance();
@@ -140,13 +143,13 @@ extern "C"
 void gum_update(float dt)
 {
 	s2::SprTimer::Instance()->Update(dt);
-	gum::AsyncTask::Instance()->Update();
 }
 
 extern "C"
 void gum_flush()
 {
 	DTex::Instance()->Flush();
+	mt::ThreadPool::Instance()->Flush();
 }
 
 extern "C"
@@ -237,8 +240,8 @@ void gum_clear()
 extern "C"
 bool gum_is_async_task_empty()
 {
-	return dtex::AsyncTask::Instance()->IsEmpty()
-		&& AsyncTask::Instance()->IsEmpty();
+	return dtex::LoadResTask::IsTaskEmpty()
+		&& LoadImageTask::IsTaskEmpty();
 }
 
 extern "C"
