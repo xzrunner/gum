@@ -13,20 +13,21 @@
 #include <unirender/UR_RenderContext.h>
 
 #include <stdlib.h>
+#include <assert.h>
 
 namespace gum
 {
 
-int LoadImageTask::m_count = 0;
+/************************************************************************/
+/* class LoadImageTask                                                  */
+/************************************************************************/
 
 LoadImageTask::LoadImageTask(Image* img)
-	: mt::Task(TASK_TYPE, true)
+	: mt::Task(TASK_TYPE)
 	, m_img(img)
 	, m_data(NULL)
 	, m_size(0)
 {
-	++m_count;
-
 	if (m_img) {
 		m_img->SetLoadFinished(false);
 		m_img->AddReference();
@@ -35,8 +36,6 @@ LoadImageTask::LoadImageTask(Image* img)
 
 LoadImageTask::~LoadImageTask()
 {
-	--m_count;
-
 	if (m_img) {
 		m_img->RemoveReference();
 	}
@@ -69,6 +68,7 @@ private:
 void LoadImageTask::Run()
 {
 	if (!m_img) {
+		LoadImageTaskMgr::Instance()->AddResult(this);
 		return;
 	}
 	const ResPath& path = m_img->GetResPath();
@@ -81,12 +81,13 @@ void LoadImageTask::Run()
 		loader.Load();
 		fs_close(file);
 	}
+	LoadImageTaskMgr::Instance()->AddResult(this);
 }
 
-bool LoadImageTask::Finish()
+void LoadImageTask::Flush()
 {
 	if (!m_data || m_size == 0) {
-		return true;
+		return;
 	}
 
 	timp::TextureLoader loader(static_cast<const char*>(m_data), m_size);
@@ -134,8 +135,6 @@ bool LoadImageTask::Finish()
 		break;
 	}
 	m_img->SetLoadFinished(true);
-
-	return true;
 }
 
 void LoadImageTask::OnLoad(bimp::ImportStream& is)
@@ -149,6 +148,67 @@ void LoadImageTask::OnLoad(bimp::ImportStream& is)
 		memcpy(m_data, is.Stream(), m_size);
 	} else {
 		m_size = 0;
+	}
+}
+
+void LoadImageTask::Init(Image* img)
+{
+	assert(!m_img && !m_data);
+	m_img = img;
+	if (m_img) {
+		m_img->SetLoadFinished(false);
+		m_img->AddReference();
+	}
+}
+
+void LoadImageTask::Release()
+{
+	if (m_img) {
+		m_img->RemoveReference();
+		m_img = NULL;
+	}
+
+	free(m_data); m_data = NULL;
+	m_size = 0;
+}
+
+/************************************************************************/
+/* class LoadImageTaskMgr                                               */
+/************************************************************************/
+
+SINGLETON_DEFINITION(LoadImageTaskMgr)
+
+LoadImageTaskMgr::LoadImageTaskMgr()
+	: m_count(0)
+{	
+}
+
+LoadImageTask* LoadImageTaskMgr::Fetch(Image* img)
+{
+	mt::Task* t = m_freelist.Front();
+	LoadImageTask* tt = static_cast<LoadImageTask*>(t);
+	if (!t) {
+		tt = new LoadImageTask(img);
+	} else {
+		m_freelist.Pop();
+		tt->Init(img);
+	}
+	return tt;
+}
+
+void LoadImageTaskMgr::AddResult(LoadImageTask* task)
+{
+	m_result.Push(task);
+}
+
+void LoadImageTaskMgr::Flush()
+{
+	while (mt::Task* t = m_result.TryPop())
+	{
+		LoadImageTask* tt = static_cast<LoadImageTask*>(t);
+		tt->Flush();
+		tt->Release();
+		m_freelist.Push(t);
 	}
 }
 

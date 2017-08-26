@@ -3,6 +3,7 @@
 #include "RenderContext.h"
 #include "ProxyImage.h"
 #include "DTexC2Strategy.h"
+#include "gum/ThreadPool.h"
 
 #include <logger.h>
 #include <bimp/BIMP_ImportStream.h>
@@ -335,6 +336,12 @@ cache_pkg_static_tex_ok()
 }
 
 static void
+submit_task(mt::Task* task)
+{
+	ThreadPool::Instance()->Submit(task);
+}
+
+static void
 stat_tex_add(int width, int height, int format)
 {
 	s2::StatImages::Instance()->Add(IMG_ID, width, height, format);
@@ -474,6 +481,7 @@ DTex::DTex()
 	res_cb.load_texture_cb         = load_texture_cb;
 	res_cb.load_texture_cb2        = load_texture_cb2;
 	res_cb.cache_pkg_static_tex_ok = cache_pkg_static_tex_ok;
+	res_cb.submit_task             = submit_task;
 	res_cb.stat_tex_add            = stat_tex_add;
 	res_cb.stat_tex_remove         = stat_tex_remove;
 	dtex::ResourceAPI::InitCallback(res_cb);

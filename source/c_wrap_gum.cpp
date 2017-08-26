@@ -62,7 +62,6 @@
 #include <dtex2/DTEX_PkgMgr.h>
 #include <gtxt_label.h>
 #include <c_wrap_dtex.h>
-#include <multitask/ThreadPool.h>
 
 #include <queue>
 
@@ -78,8 +77,6 @@ void gum_init(void (*error_reload)())
 	DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
 	Sprite2::Init();
-
-	mt::ThreadPool::Instance();
 
 #ifndef S2_DISABLE_MODEL
 	Model3::Instance();
@@ -148,8 +145,9 @@ void gum_update(float dt)
 extern "C"
 void gum_flush()
 {
+	dtex::Facade::Flush();
 	DTex::Instance()->Flush();
-	mt::ThreadPool::Instance()->Flush();
+	LoadImageTaskMgr::Instance()->Flush();
 }
 
 extern "C"
@@ -240,8 +238,8 @@ void gum_clear()
 extern "C"
 bool gum_is_async_task_empty()
 {
-	return dtex::LoadResTask::IsTaskEmpty()
-		&& LoadImageTask::IsTaskEmpty();
+	return dtex::LoadResTaskMgr::Instance()->IsEmpty()
+		&& LoadImageTaskMgr::Instance()->IsEmpty();
 }
 
 extern "C"

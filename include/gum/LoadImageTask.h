@@ -1,6 +1,7 @@
 #ifndef _GUM_LOAD_IMAGE_TASK_H_
 #define _GUM_LOAD_IMAGE_TASK_H_
 
+#include <CU_Singleton.h>
 #include <multitask/Task.h>
 
 namespace bimp { class ImportStream; }
@@ -16,11 +17,13 @@ public:
 	virtual ~LoadImageTask();
 
 	virtual void Run();
-	virtual bool Finish();
+
+	void Flush();
 
 	void OnLoad(bimp::ImportStream& is);
 
-	static bool IsTaskEmpty() { return m_count == 0; }
+	void Init(Image* img);
+	void Release();
 
 private:
 	class FileLoader;
@@ -34,9 +37,29 @@ private:
 	void*  m_data;
 	size_t m_size;
 
-	static int m_count;
-
 }; // LoadImageTask
+
+class LoadImageTaskMgr
+{
+public:
+	LoadImageTask* Fetch(Image* img);
+
+	void AddResult(LoadImageTask* task);
+
+	bool IsEmpty() { return m_count == 0; }
+	void AddCount() { ++m_count; }
+
+	void Flush();
+	
+private:
+	int m_count;
+
+	mt::TaskQueue m_freelist;
+	mt::SafeTaskQueue m_result;
+
+	SINGLETON_DECLARATION(LoadImageTaskMgr)
+
+}; // LoadImageTaskMgr
 
 }
 

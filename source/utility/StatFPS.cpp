@@ -39,8 +39,8 @@ void StatFPS::Update()
 		return;
 	}
 
-	if (!dtex::LoadResTask::IsTaskEmpty() || 
-		!LoadImageTask::IsTaskEmpty()) {
+	if (!dtex::LoadResTaskMgr::Instance()->IsEmpty() || 
+		!LoadImageTaskMgr::Instance()->IsEmpty()) {
 		const int annealing = 100;
 		m_annealing = annealing;
 	}

@@ -3,13 +3,13 @@
 #include <gum/Config.h>
 #include "Image.h"
 #include "LoadImageTask.h"
+#include "gum/ThreadPool.h"
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
 #include <gimg_pvr.h>
 #include <gimg_etc2.h>
 #include <timp/TextureFormat.h>
-#include <multitask/ThreadPool.h>
 #include <timp/TextureLoader.h>
 #include <unirender/UR_RenderContext.h>
 
@@ -60,7 +60,7 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 
 	img->LoadFromLoader(*this);
 
-	mt::ThreadPool::Instance()->AddTask(new LoadImageTask(img));
+	ThreadPool::Instance()->Submit(LoadImageTaskMgr::Instance()->Fetch(img));
 
 	return true;
 }
