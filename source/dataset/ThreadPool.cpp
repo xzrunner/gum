@@ -1,6 +1,7 @@
 #include "gum/ThreadPool.h"
 
 #include <multitask/ThreadPool.h>
+#include <multitask/TickThread.h>
 
 // get_num_cores()
 #ifdef _WIN32
@@ -25,17 +26,31 @@ ThreadPool::ThreadPool()
 
 	int num_threads = GetNumCores();
 	m_pool->Start(num_threads);
+
+	m_tick = new mt::TickThread(m_pool);
 }
 
 ThreadPool::~ThreadPool()
 {
 	m_pool->Stop();
 	delete m_pool;
+
+	delete m_tick;
 }
 
 void ThreadPool::Run(mt::Task* task)
 {
 	m_pool->Run(task);
+}
+
+void ThreadPool::RegisterUpdateCB(void (*update)(void* arg), void* arg)
+{
+	m_tick->RegisterUpdateCB(update, arg);
+}
+
+void ThreadPool::UnregisterUpdateCB(void (*update)(void* arg))
+{
+	m_tick->UnregisterUpdateCB(update);
 }
 
 int ThreadPool::GetNumCores()

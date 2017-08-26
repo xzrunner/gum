@@ -28,6 +28,7 @@
 #endif // S2_DISABLE_MODEL
 #include "gum/AudioContext.h"
 #include "gum/LoadImageTask.h"
+#include "gum/GUM_Audio.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -77,6 +78,8 @@ void gum_init(void (*error_reload)())
 	DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
 	Sprite2::Init();
+
+	Audio::Init();
 
 #ifndef S2_DISABLE_MODEL
 	Model3::Instance();

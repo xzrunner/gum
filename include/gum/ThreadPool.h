@@ -3,7 +3,7 @@
 
 #include <CU_Singleton.h>
 
-namespace mt { class Task; class ThreadPool; }
+namespace mt { class Task; class ThreadPool; class TickThread; }
 
 namespace gum
 {
@@ -13,11 +13,16 @@ class ThreadPool
 public:
 	void Run(mt::Task* task);
 
+	void RegisterUpdateCB(void (*update)(void* arg), void* arg);
+	void UnregisterUpdateCB(void (*update)(void* arg));
+
 private:
 	static int GetNumCores();
 
 private:
 	mt::ThreadPool* m_pool;
+
+	mt::TickThread* m_tick;
 
 	SINGLETON_DECLARATION(ThreadPool)
 
