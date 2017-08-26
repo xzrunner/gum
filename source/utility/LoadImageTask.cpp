@@ -185,6 +185,7 @@ LoadImageTaskMgr::LoadImageTaskMgr()
 
 LoadImageTask* LoadImageTaskMgr::Fetch(Image* img)
 {
+	++m_count;
 	mt::Task* t = m_freelist.Front();
 	LoadImageTask* tt = static_cast<LoadImageTask*>(t);
 	if (!t) {
@@ -209,6 +210,7 @@ void LoadImageTaskMgr::Flush()
 		tt->Flush();
 		tt->Release();
 		m_freelist.Push(t);
+		--m_count;
 	}
 }
 

@@ -47,7 +47,6 @@ public:
 	void AddResult(LoadImageTask* task);
 
 	bool IsEmpty() { return m_count == 0; }
-	void AddCount() { ++m_count; }
 
 	void Flush();
 	
