@@ -11,7 +11,10 @@ namespace gum
 class ThreadPool
 {
 public:
-	void Submit(mt::Task* task);
+	void Run(mt::Task* task);
+
+private:
+	static int GetNumCores();
 
 private:
 	mt::ThreadPool* m_pool;

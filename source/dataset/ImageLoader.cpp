@@ -60,7 +60,7 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 
 	img->LoadFromLoader(*this);
 
-	ThreadPool::Instance()->Submit(LoadImageTaskMgr::Instance()->Fetch(img));
+	ThreadPool::Instance()->Run(LoadImageTaskMgr::Instance()->Fetch(img));
 
 	return true;
 }

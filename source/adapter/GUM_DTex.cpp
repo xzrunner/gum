@@ -338,7 +338,7 @@ cache_pkg_static_tex_ok()
 static void
 submit_task(mt::Task* task)
 {
-	ThreadPool::Instance()->Submit(task);
+	ThreadPool::Instance()->Run(task);
 }
 
 static void
