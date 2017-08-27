@@ -26,7 +26,7 @@
 #ifndef S2_DISABLE_MODEL
 #include "gum/GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
-#include "gum/AudioContext.h"
+#include "gum/GUM_Audio.h"
 #include "gum/LoadImageTask.h"
 #include "gum/GUM_Audio.h"
 
@@ -79,7 +79,7 @@ void gum_init(void (*error_reload)())
 
 	Sprite2::Init();
 
-	Audio::Init();
+	Audio::Instance();
 
 #ifndef S2_DISABLE_MODEL
 	Model3::Instance();
@@ -915,7 +915,7 @@ void gum_record_screen_clear()
 extern "C"
 void* gum_audio_create_source(const char* filepath, bool stream)
 {
-	return AudioContext::Instance()->GetImpl()->CreateSource(filepath, stream);
+	return Audio::Instance()->GetContext()->CreateSource(filepath, stream);
 }
 
 extern "C"

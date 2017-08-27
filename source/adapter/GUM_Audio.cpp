@@ -2,9 +2,32 @@
 #include "ThreadPool.h"
 
 #include <uniaudio/Callback.h>
+#ifdef __ANDROID__
+#include <uniaudio/opensl/AudioContext.h>
+#else
+#include <uniaudio/openal/AudioContext.h>
+#endif // __ANDROID__
 
 namespace gum
 {
+
+SINGLETON_DEFINITION(Audio)
+
+Audio::Audio() 
+{
+	Init();
+
+#ifdef __ANDROID__
+	m_ctx = new ua::opensl::AudioContext();
+#else
+	m_ctx = new ua::openal::AudioContext();
+#endif // __ANDROID__
+}
+
+Audio::~Audio() 
+{
+	delete m_ctx;
+}
 
 static void 
 register_async_update(void (*update)(void* arg), void* arg)
