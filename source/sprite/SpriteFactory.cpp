@@ -28,6 +28,7 @@
 #include <simp/NodeMaskSpr.h>
 #include <simp/NodeTrailSpr.h>
 #include <simp/NodeAnim2Spr.h>
+#include <simp/AudioIDMgr.h>
 
 #include <sprite2/S2_Symbol.h>
 #include <sprite2/AnchorSprite.h>
@@ -46,6 +47,7 @@
 #include <sprite2/MaskSprite.h>
 #include <sprite2/TrailSprite.h>
 #include <sprite2/SkeletonSprite.h>
+#include <sprite2/AudioSprite.h>
 #include <sprite2/SymType.h>
 #include <sprite2/ResetActorFlagVisitor.h>
 #include <sprite2/CreateActorsVisitor.h>
@@ -119,6 +121,9 @@ s2::Sprite* SpriteFactory::Create(s2::Symbol* sym, uint32_t id, bool create_acto
 		break;
 	case s2::SYM_SKELETON:
 		spr = new s2::SkeletonSprite(sym, id);
+		break;
+	case s2::SYM_AUDIO:
+		spr = new s2::AudioSprite(sym, id);
 		break;
 	default:
 		LOGW("Create spr fail: unknown sym type %d", sym->Type());
@@ -252,9 +257,10 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	}
 
 	s2::Sprite* spr = NULL;
-	int type;
+	int type = simp::TYPE_INVALID;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
-	if (!data) {
+	if (!data && type == simp::TYPE_INVALID)
+	{
 		int pkg_id = simp::NodeID::GetPkgID(id);
 		int node_id = simp::NodeID::GetNodeID(id);
 		LOGW("Create spr fail: id %d, pkg %d, node %d\n", id, pkg_id, node_id);
@@ -476,6 +482,17 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_PARTICLE3D: case simp::TYPE_PARTICLE2D: case simp::TYPE_SHAPE: case simp::TYPE_MESH: case simp::TYPE_MASK:
 	case simp::TYPE_TRAIL:
 		spr = CreateFromSym(id, false);
+		break;
+	case simp::TYPE_AUDIO:
+		{
+			int audio_id = simp::NodeID::GetNodeID(id);
+			std::string filepath = simp::AudioIDMgr::Instance()->QueryAudioPath(audio_id);
+			if (!filepath.empty())
+			{
+				s2::AudioSprite* audio_spr = VI_DOWNCASTING<s2::AudioSprite*>(SpriteFactory::Instance()->Create(filepath));
+				spr = audio_spr;
+			}
+		}
 		break;
 	default:
 		LOGW("Create spr fail: unknown type %d", type);

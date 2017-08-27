@@ -53,6 +53,11 @@ int   gum_get_pkg_num();
 void  gum_get_all_pkg_names(const char* names[]);
 int   gum_query_pkg_id(const char* name);
 
+void  gum_load_audio_ids(const char* filepath);
+int   gum_get_audio_num();
+void  gum_get_all_audio_names(const char* names[]);
+void  gum_audio_set_path(const char* name, const char* filepath);
+
 /************************************************************************/
 /* pkg                                                                  */
 /************************************************************************/

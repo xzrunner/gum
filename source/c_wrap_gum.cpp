@@ -37,6 +37,7 @@
 #include <simp/SIMP_Package.h>
 #include <simp/NodeFactory.h>
 #include <simp/PkgIDMgr.h>
+#include <simp/AudioIDMgr.h>
 #include <simp/SIMP_Facade.h>
 #include <simp/RelocateTexcoords.h>
 #include <timp/TIMP_Package.h>
@@ -284,6 +285,32 @@ int gum_query_pkg_id(const char* name)
 {
 	std::string gbk_name = StringHelper::UTF8ToGBK(name);
 	return simp::PkgIDMgr::Instance()->QueryPkgID(gbk_name);
+}
+
+extern "C"
+void gum_load_audio_ids(const char* filepath)
+{
+	simp::AudioIDMgr::Instance()->LoadAudioIDs(filepath);
+}
+
+extern "C"
+int gum_get_audio_num()
+{
+	return simp::AudioIDMgr::Instance()->GetAudioSize();
+}
+
+extern "C"
+void gum_get_all_audio_names(const char* names[])
+{
+	simp::AudioIDMgr::Instance()->GetAllAudioNames(names);
+}
+
+extern "C"
+void gum_audio_set_path(const char* name, const char* filepath)
+{
+	if (name && filepath) {
+		simp::AudioIDMgr::Instance()->SetAudioPath(name, filepath);
+	}
 }
 
 /************************************************************************/
