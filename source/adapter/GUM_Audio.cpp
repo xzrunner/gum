@@ -1,5 +1,5 @@
 #include "GUM_Audio.h"
-#include "ThreadPool.h"
+#include "gum/ThreadPool.h"
 
 #include <uniaudio/Callback.h>
 #ifdef __ANDROID__
