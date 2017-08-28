@@ -952,4 +952,11 @@ void gum_audio_play(void* source)
 	s->Play();
 }
 
+extern "C"
+void gum_audio_stop(void* source)
+{
+	ua::Source* s = static_cast<ua::Source*>(source);
+	s->Stop();
+}
+
 }
