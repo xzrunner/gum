@@ -3,8 +3,10 @@
 #include "SymbolPool.h"
 #include "GUM_GTxt.h"
 #ifndef S2_DISABLE_MODEL
-#include "GUM_Model3.h"
+// todo
+//#include "GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
+#include "ThreadPool.h"
 
 namespace gum
 {
@@ -12,8 +14,14 @@ namespace gum
 void Facade::Init()
 {
 #ifndef S2_DISABLE_MODEL
-	Model3::Instance();
+	// todo
+//	Model3::Instance();
 #endif // S2_DISABLE_MODEL
+}
+
+void Facade::Close()
+{
+	ThreadPool::Instance()->Close();
 }
 
 void Facade::Clear()

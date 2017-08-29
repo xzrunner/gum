@@ -16,6 +16,8 @@ public:
 	void RegisterUpdateCB(void (*update)(void* arg), void* arg);
 	void UnregisterUpdateCB(void (*update)(void* arg));
 
+	void Close();
+
 private:
 	static int GetNumCores();
 

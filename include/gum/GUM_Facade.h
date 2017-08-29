@@ -8,6 +8,7 @@ class Facade
 {
 public:
 	static void Init();
+	static void Close();
 
 	static void Clear();
 

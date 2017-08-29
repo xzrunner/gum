@@ -4,7 +4,7 @@
 #include "GUM_Model3.h"
 #include "Image.h"
 
-#include <model3/ResourceAPI.h>
+//#include <model3/ResourceAPI.h>
 
 #include <string>
 

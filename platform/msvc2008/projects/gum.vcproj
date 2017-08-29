@@ -1008,6 +1008,14 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\source\GUM_Facade.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\gum\GUM_Facade.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

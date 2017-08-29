@@ -32,10 +32,7 @@ ThreadPool::ThreadPool()
 
 ThreadPool::~ThreadPool()
 {
-	m_pool->Stop();
-	delete m_pool;
-
-	delete m_tick;
+	Close();
 }
 
 void ThreadPool::Run(mt::Task* task)
@@ -51,6 +48,14 @@ void ThreadPool::RegisterUpdateCB(void (*update)(void* arg), void* arg)
 void ThreadPool::UnregisterUpdateCB(void (*update)(void* arg))
 {
 	m_tick->UnregisterUpdateCB(update);
+}
+
+void ThreadPool::Close()
+{
+	m_pool->Stop();
+	delete m_pool;
+
+	delete m_tick;
 }
 
 int ThreadPool::GetNumCores()
