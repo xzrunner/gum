@@ -18,10 +18,17 @@ RenderTarget::RenderTarget(int width, int height)
 
 void RenderTarget::Bind()
 {
+	s2::RenderScissor::Instance()->Disable();
+
 	int w = Width(),
 		h = Height();
-	s2::RenderScissor::Instance()->Disable();
-	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(w, h, w, h));
+	s2::RenderContext ctx(w, h, w, h);
+	// use last model view
+	const s2::RenderContext* last = s2::RenderCtxStack::Instance()->Top();
+	if (last) {
+		ctx.SetModelView(last->GetMVOffset(), last->GetMVScale());
+	}
+	s2::RenderCtxStack::Instance()->Push(ctx);
 
 	s2::RenderTarget::Bind();
 }
