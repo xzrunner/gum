@@ -938,6 +938,14 @@
 					RelativePath="..\..\..\include\gum\AudioLoader.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\source\sprite\AudioSymLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\gum\AudioSymLoader.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
