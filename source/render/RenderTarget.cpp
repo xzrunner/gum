@@ -16,6 +16,24 @@ RenderTarget::RenderTarget(int width, int height)
 {
 }
 
+void RenderTarget::Bind()
+{
+	int w = Width(),
+		h = Height();
+	s2::RenderScissor::Instance()->Disable();
+	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(w, h, w, h));
+
+	s2::RenderTarget::Bind();
+}
+
+void RenderTarget::Unbind()
+{
+	s2::RenderCtxStack::Instance()->Pop();
+	s2::RenderScissor::Instance()->Enable();
+
+	s2::RenderTarget::Unbind();
+}
+
 void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int dst_h) const
 {
 	sl::ShaderMgr::Instance()->FlushShader();
