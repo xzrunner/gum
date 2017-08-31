@@ -942,7 +942,13 @@ void gum_record_screen_clear()
 extern "C"
 void* gum_audio_create_source(const char* filepath, bool stream)
 {
-	return Audio::Instance()->GetContext()->CreateSource(filepath, stream);
+	void* ret = NULL;	
+	try {
+		ret = Audio::Instance()->GetContext()->CreateSource(filepath, stream);
+	} catch (const std::exception& e) {
+		fault("err: %s\n", e.what());
+	}
+	return ret;
 }
 
 extern "C"

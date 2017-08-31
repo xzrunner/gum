@@ -6,7 +6,7 @@
 // todo
 //#include "GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
-#include "ThreadPool.h"
+#include "gum/ThreadPool.h"
 
 namespace gum
 {
