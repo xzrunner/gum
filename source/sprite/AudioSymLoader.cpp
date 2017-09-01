@@ -3,6 +3,7 @@
 
 #include <sprite2/AudioSymbol.h>
 #include <uniaudio/AudioContext.h>
+#include <uniaudio/Source.h>
 
 namespace gum
 {
@@ -31,6 +32,7 @@ void AudioSymLoader::Load(const std::string& filepath)
 	ua::AudioContext* ctx = gum::Audio::Instance()->GetContext();
 	ua::Source* source = ctx->CreateSource(filepath, true);
 	m_sym->SetSource(source);
+	source->RemoveReference();
 }
 
 }
