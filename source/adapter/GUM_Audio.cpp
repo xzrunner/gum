@@ -14,6 +14,7 @@ namespace gum
 SINGLETON_DEFINITION(Audio)
 
 Audio::Audio() 
+	: m_enable(true)
 {
 	Init();
 

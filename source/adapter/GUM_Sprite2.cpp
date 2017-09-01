@@ -2,6 +2,7 @@
 #include "GUM_DTex.h"
 #include "RenderTargetMgr.h"
 #include "RenderTarget.h"
+#include "GUM_Audio.h"
 
 #include <sprite2/S2_RenderTargetMgr.h>
 #include <sprite2/S2_RenderTarget.h>
@@ -9,6 +10,7 @@
 #include <sprite2/S2_Symbol.h>
 #include <sprite2/RenderParams.h>
 #include <sprite2/DrawNode.h>
+#include <sprite2/AudioContext.h>
 #include <dtex2/DebugDraw.h>
 
 #include <stdint.h>
@@ -96,12 +98,24 @@ return_screen(s2::RenderTarget* rt)
 	RenderTargetMgr::Instance()->Return(static_cast<gum::RenderTarget*>(rt));
 }
 
+static bool
+is_audio_enable()
+{
+	return Audio::Instance()->IsEnable();
+}
+
 void Sprite2::Init()
 {
 	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
 	s2::DrawNode::InitUIDCB(get_sym_uid, get_spr_uid, get_actor_uid);
 
 	s2::RenderTargetMgr::Instance()->InitScreenCB(fetch_screen, return_screen);
+
+	{
+		s2::AudioContext::Callback cb;
+		cb.is_enable = is_audio_enable;
+		s2::AudioContext::InitCallback(cb);
+	}
 }
 
 }

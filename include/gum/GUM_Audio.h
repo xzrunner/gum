@@ -13,11 +13,16 @@ class Audio
 public:
 	ua::AudioContext* GetContext() { return m_ctx; }
 
+	bool IsEnable() const { return m_enable; }
+	void SetEnable(bool enable) { m_enable = enable; }
+
 private:
 	void Init();
 
 private:
 	ua::AudioContext* m_ctx;
+
+	bool m_enable;
 
 	SINGLETON_DECLARATION(Audio)
 

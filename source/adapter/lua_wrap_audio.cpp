@@ -8,12 +8,30 @@ namespace gum
 {
 
 static int
-lcreate(lua_State* L) {
+lenable(lua_State* L)
+{
+	bool enable = lua_toboolean(L, 1);
+	try {
+		Audio::Instance()->SetEnable(enable);
+	} catch (std::exception& e) {
+		luaL_error(L, e.what());
+	}
+	return 0;
+}
+
+static int
+lcreate(lua_State* L) 
+{
 	const char* filepath = luaL_checkstring(L, 1);
 	bool stream = lua_toboolean(L, 2);
 	void* source = NULL;
 	try {
-		source = Audio::Instance()->GetContext()->CreateSource(filepath, stream);
+		Audio* audio = Audio::Instance();
+		if (audio->IsEnable()) {
+			source = audio->GetContext()->CreateSource(filepath, stream);
+		} else {
+			return 0;
+		}
 	} catch (std::exception& e) {
 		luaL_error(L, e.what());
 		return 0;
@@ -28,25 +46,102 @@ lcreate(lua_State* L) {
 }
 
 static int
-lplay(lua_State* L) {
-	void* source = lua_touserdata(L, 1);
+lrelease(lua_State* L) 
+{
+	void* source = lua_touserdata(L, 1);	
 	try {
 		ua::Source* s = static_cast<ua::Source*>(source);
-		s->Play();
+		s->RemoveReference();
 	} catch (std::exception& e) {
-		luaL_error(L, "could not play source.");
+		luaL_error(L, e.what());
 	}
 	return 0;
 }
 
 static int
-lstop(lua_State* L) {
+lstop_all(lua_State* L) 
+{
+	try {
+		Audio* audio = Audio::Instance();
+		if (audio->IsEnable()) {
+			audio->GetContext()->Stop();
+		}
+	} catch (std::exception& e) {
+		luaL_error(L, e.what());
+	}
+	return 0;
+}
+
+static int
+lpause_all(lua_State* L) 
+{
+	try {
+		Audio* audio = Audio::Instance();
+		if (audio->IsEnable()) {
+			audio->GetContext()->Pause();
+		}
+	} catch (std::exception& e) {
+		luaL_error(L, e.what());
+	}
+	return 0;
+}
+
+static int
+lresume_all(lua_State* L) 
+{
+	try {
+		Audio* audio = Audio::Instance();
+		if (audio->IsEnable()) {
+			audio->GetContext()->Resume();
+		}
+	} catch (std::exception& e) {
+		luaL_error(L, e.what());
+	}
+	return 0;
+}
+
+static int
+lrewind_all(lua_State* L) 
+{
+	try {
+		Audio* audio = Audio::Instance();
+		if (audio->IsEnable()) {
+			audio->GetContext()->Rewind();
+		}
+	} catch (std::exception& e) {
+		luaL_error(L, e.what());
+	}
+	return 0;
+}
+
+static int
+lplay(lua_State* L) 
+{
 	void* source = lua_touserdata(L, 1);
 	try {
-		ua::Source* s = static_cast<ua::Source*>(source);
-		s->Stop();
+		Audio* audio = Audio::Instance();
+		if (audio->IsEnable()) {
+			ua::Source* s = static_cast<ua::Source*>(source);
+			s->Play();
+		}
 	} catch (std::exception& e) {
-		luaL_error(L, "could not stop source.");
+		luaL_error(L, e.what());
+	}
+	return 0;
+}
+
+static int
+lstop(lua_State* L) 
+{
+	void* source = lua_touserdata(L, 1);
+	try {
+		Audio* audio = Audio::Instance();
+		if (audio->IsEnable()) {
+			ua::Source* s = static_cast<ua::Source*>(source);
+			s->Stop();
+		}
+	} catch (std::exception& e) {
+		luaL_error(L, e.what());
 	}
 	return 0;
 }
@@ -55,7 +150,15 @@ extern "C" int luaopen_gum_audio(lua_State* L)
 {
 	luaL_Reg l[] = 
 	{
+		{ "enable", lenable },
+
 		{ "create", lcreate },
+		{ "release", lrelease },		
+
+		{ "stop_all", lstop_all },
+		{ "pause_all", lpause_all },
+		{ "resume_all", lresume_all },
+		{ "rewind_all", lrewind_all },
 
 		{ "play", lplay },
 		{ "stop", lstop },
