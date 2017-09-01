@@ -172,14 +172,6 @@ void  gum_record_screen_print(void* rt);
 void  gum_record_screen_flush();
 void  gum_record_screen_clear();
 
-/************************************************************************/
-/* audio                                                                */
-/************************************************************************/
-
-void* gum_audio_create_source(const char* filepath, bool stream);
-void  gum_audio_play(void* source);
-void  gum_audio_stop(void* source);
-
 #endif // _gum_wrap_c_h_
 
 #ifdef __cplusplus

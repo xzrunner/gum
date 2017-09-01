@@ -45,8 +45,6 @@
 #include <timp/TIMP_Facade.h>
 #include <dtex2/DTEX_Facade.h>
 #include <dtex2/LoadResTask.h>
-#include <uniaudio/Source.h>
-#include <uniaudio/AudioContext.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/S2_Facade.h>
@@ -933,36 +931,6 @@ extern "C"
 void gum_record_screen_clear()
 {
 	StatScreen::Instance()->Clear();
-}
-
-/************************************************************************/
-/* audio                                                                */
-/************************************************************************/
-
-extern "C"
-void* gum_audio_create_source(const char* filepath, bool stream)
-{
-	void* ret = NULL;	
-	try {
-		ret = Audio::Instance()->GetContext()->CreateSource(filepath, stream);
-	} catch (const std::exception& e) {
-		fault("err: %s\n", e.what());
-	}
-	return ret;
-}
-
-extern "C"
-void gum_audio_play(void* source)
-{
-	ua::Source* s = static_cast<ua::Source*>(source);
-	s->Play();
-}
-
-extern "C"
-void gum_audio_stop(void* source)
-{
-	ua::Source* s = static_cast<ua::Source*>(source);
-	s->Stop();
 }
 
 }
