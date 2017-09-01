@@ -14,20 +14,28 @@ namespace gum
 SINGLETON_DEFINITION(Audio)
 
 Audio::Audio() 
-	: m_enable(true)
+	: m_ctx(NULL)
+	, m_enable(true)
 {
-	Init();
-
-#ifdef __ANDROID__
-	m_ctx = new ua::opensl::AudioContext();
-#else
-	m_ctx = new ua::openal::AudioContext();
-#endif // __ANDROID__
+	InitCallback();
 }
 
 Audio::~Audio() 
 {
 	delete m_ctx;
+}
+
+void Audio::InitContext(void* device, void* context)
+{
+#ifdef __ANDROID__
+	m_ctx = new ua::opensl::AudioContext();
+#else
+	if (device && context) {
+		m_ctx = new ua::openal::AudioContext((ALCdevice*)device, (ALCcontext*)context);
+	} else {
+		m_ctx = new ua::openal::AudioContext();
+	}
+#endif // __ANDROID__
 }
 
 static void 
@@ -42,7 +50,7 @@ unregister_async_update(void (*update)(void* arg))
 	ThreadPool::Instance()->UnregisterUpdateCB(update);
 }
 
-void Audio::Init()
+void Audio::InitCallback()
 {
 	ua::Callback::API cb;
 	cb.register_async_update = register_async_update;

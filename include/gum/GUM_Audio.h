@@ -11,13 +11,15 @@ namespace gum
 class Audio
 {
 public:
+	void InitContext(void* device, void* context);
+
 	ua::AudioContext* GetContext() { return m_ctx; }
 
 	bool IsEnable() const { return m_enable; }
 	void SetEnable(bool enable) { m_enable = enable; }
 
 private:
-	void Init();
+	void InitCallback();
 
 private:
 	ua::AudioContext* m_ctx;
