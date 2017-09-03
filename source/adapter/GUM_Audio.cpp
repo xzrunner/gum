@@ -25,13 +25,17 @@ Audio::~Audio()
 	delete m_ctx;
 }
 
-void Audio::InitContext(void* device, void* context)
+void Audio::InitContext(void* arg1, void* arg2)
 {
 #ifdef __ANDROID__
-	m_ctx = new ua::opensl::AudioContext();
+	if (arg1 && arg2) {
+		m_ctx = new ua::opensl::AudioContext((SLObjectItf)arg1, (SLObjectItf)arg2);
+	} else {
+		m_ctx = new ua::opensl::AudioContext();
+	}
 #else
-	if (device && context) {
-		m_ctx = new ua::openal::AudioContext((ALCdevice*)device, (ALCcontext*)context);
+	if (arg1 && arg2) {
+		m_ctx = new ua::openal::AudioContext((ALCdevice*)arg1, (ALCcontext*)arg2);
 	} else {
 		m_ctx = new ua::openal::AudioContext();
 	}

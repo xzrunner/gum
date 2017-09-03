@@ -11,7 +11,7 @@ extern "C"
 #include <stdbool.h>
 #endif // __cplusplus
 
-void  gum_init(void (*error_reload)(), void* audio_device, void* audio_context);
+void  gum_init(void (*error_reload)(), void* arg1, void* arg2);
 
 void* gum_get_render_context();
 

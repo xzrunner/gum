@@ -72,13 +72,13 @@ namespace gum
 {
 
 extern "C"
-void gum_init(void (*error_reload)(), void* audio_device, void* audio_context)
+void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 {
 	DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
 	Sprite2::Init();
 
-	Audio::Instance()->InitContext(audio_device, audio_context);
+	Audio::Instance()->InitContext(arg1, arg2);
 
 #ifndef S2_DISABLE_MODEL
 	Model3::Instance();
