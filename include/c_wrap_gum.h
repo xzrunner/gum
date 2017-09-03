@@ -13,6 +13,9 @@ extern "C"
 
 void  gum_init(void (*error_reload)(), void* arg1, void* arg2);
 
+void  gum_on_pause();
+void  gum_on_resume();
+
 void* gum_get_render_context();
 
 void  gum_on_size(int w, int h);

@@ -31,6 +31,7 @@
 #include "gum/GUM_Audio.h"
 
 #include <unirender/UR_RenderContext.h>
+#include <uniaudio/AudioContext.h>
 #include <gimg_typedef.h>
 #include <gimg_export.h>
 #include <gimg_import.h>
@@ -87,6 +88,16 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 	} catch (std::exception& e) {
 		fault("gum_init fail: %s\n", e.what());		
 	}
+}
+
+extern "C"
+void gum_on_pause() {
+	Audio::Instance()->GetContext()->Pause();
+}
+
+extern "C"
+void gum_on_resume() {
+	Audio::Instance()->GetContext()->Resume();
 }
 
 extern "C"
