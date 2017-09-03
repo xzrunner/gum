@@ -22,8 +22,8 @@ public:
 
 	void OnLoad(bimp::ImportStream& is);
 
-	void Init(Image* img);
-	void Release();
+	void Initialize(Image* img);
+	void Terminate();
 
 private:
 	class FileLoader;
