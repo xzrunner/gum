@@ -1,7 +1,8 @@
 #include "StatFPS.h"
+#include "LoadImageTask.h"
 
-#include <dtex2/AsyncTask.h>
 #include <glp_loop.h>
+#include <dtex2/LoadResTask.h>
 
 namespace gum
 {
@@ -38,7 +39,8 @@ void StatFPS::Update()
 		return;
 	}
 
-	if (!dtex::AsyncTask::Instance()->IsEmpty()) {
+	if (!dtex::LoadResTaskMgr::Instance()->IsEmpty() || 
+		!LoadImageTaskMgr::Instance()->IsEmpty()) {
 		const int annealing = 100;
 		m_annealing = annealing;
 	}

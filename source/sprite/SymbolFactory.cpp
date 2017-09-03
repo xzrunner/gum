@@ -19,6 +19,7 @@
 #include "MaskSymLoader.h"
 #include "TrailSymLoader.h"
 #include "SkeletonSymLoader.h"
+#include "AudioSymLoader.h"
 
 #include <logger.h>
 #include <simp/NodeFactory.h>
@@ -41,6 +42,7 @@
 #include <sprite2/MaskSymbol.h>
 #include <sprite2/TrailSymbol.h>
 #include <sprite2/SkeletonSymbol.h>
+#include <sprite2/AudioSymbol.h>
 #include <sprite2/SymType.h>
 #include <sprite2/CacheMatVisitor.h>
 
@@ -194,6 +196,14 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, bool flatten, int
 			s2::SkeletonSymbol* sym = new s2::SkeletonSymbol;
 			SkeletonSymLoader loader(sym);
 			loader.LoadJson(filepath);
+			ret = sym;
+		}
+		break;
+	case s2::SYM_AUDIO:
+		{
+			s2::AudioSymbol* sym = new s2::AudioSymbol;
+			AudioSymLoader loader(sym);
+			loader.Load(filepath);
 			ret = sym;
 		}
 		break;

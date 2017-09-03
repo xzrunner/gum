@@ -11,7 +11,7 @@ extern "C"
 #include <stdbool.h>
 #endif // __cplusplus
 
-void  gum_init(void (*error_reload)());
+void  gum_init(void (*error_reload)(), void* arg1, void* arg2);
 
 void* gum_get_render_context();
 
@@ -52,6 +52,11 @@ void  gum_load_pkg_ids(const char* filepath);
 int   gum_get_pkg_num();
 void  gum_get_all_pkg_names(const char* names[]);
 int   gum_query_pkg_id(const char* name);
+
+void  gum_load_audio_ids(const char* filepath);
+int   gum_get_audio_num();
+void  gum_get_all_audio_names(const char* names[]);
+void  gum_audio_set_path(const char* name, const char* filepath);
 
 /************************************************************************/
 /* pkg                                                                  */
@@ -166,13 +171,6 @@ bool  gum_record_screen_is_enable();
 void  gum_record_screen_print(void* rt);
 void  gum_record_screen_flush();
 void  gum_record_screen_clear();
-
-/************************************************************************/
-/* audio                                                                */
-/************************************************************************/
-
-void* gum_audio_create_source(const char* filepath, bool stream);
-void  gum_audio_play(void* source);
 
 #endif // _gum_wrap_c_h_
 

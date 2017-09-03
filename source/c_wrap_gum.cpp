@@ -26,7 +26,9 @@
 #ifndef S2_DISABLE_MODEL
 #include "gum/GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
-#include "gum/AudioContext.h"
+#include "gum/GUM_Audio.h"
+#include "gum/LoadImageTask.h"
+#include "gum/GUM_Audio.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -35,14 +37,14 @@
 #include <simp/SIMP_Package.h>
 #include <simp/NodeFactory.h>
 #include <simp/PkgIDMgr.h>
+#include <simp/AudioIDMgr.h>
 #include <simp/SIMP_Facade.h>
 #include <simp/RelocateTexcoords.h>
 #include <timp/TIMP_Package.h>
 #include <timp/PkgMgr.h>
 #include <timp/TIMP_Facade.h>
 #include <dtex2/DTEX_Facade.h>
-#include <uniaudio/Source.h>
-#include <uniaudio/AudioContext.h>
+#include <dtex2/LoadResTask.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/S2_Facade.h>
@@ -58,8 +60,6 @@
 #include <shaderlab/SL_Facade.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
-#include <dtex2/AsyncTask.h>
-#include <gum/GUM_AsyncTask.h>
 #include <gtxt_label.h>
 #include <c_wrap_dtex.h>
 
@@ -72,11 +72,13 @@ namespace gum
 {
 
 extern "C"
-void gum_init(void (*error_reload)())
+void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 {
 	DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
 	Sprite2::Init();
+
+	Audio::Instance()->InitContext(arg1, arg2);
 
 #ifndef S2_DISABLE_MODEL
 	Model3::Instance();
@@ -147,7 +149,9 @@ void gum_update(float dt)
 extern "C"
 void gum_flush()
 {
+	dtex::Facade::Flush();
 	DTex::Instance()->Flush();
+	LoadImageTaskMgr::Instance()->Flush();
 }
 
 extern "C"
@@ -238,8 +242,8 @@ void gum_clear()
 extern "C"
 bool gum_is_async_task_empty()
 {
-	return dtex::AsyncTask::Instance()->IsEmpty()
-		&& AsyncTask::Instance()->IsEmpty();
+	return dtex::LoadResTaskMgr::Instance()->IsEmpty()
+		&& LoadImageTaskMgr::Instance()->IsEmpty();
 }
 
 extern "C"
@@ -281,6 +285,32 @@ int gum_query_pkg_id(const char* name)
 {
 	std::string gbk_name = StringHelper::UTF8ToGBK(name);
 	return simp::PkgIDMgr::Instance()->QueryPkgID(gbk_name);
+}
+
+extern "C"
+void gum_load_audio_ids(const char* filepath)
+{
+	simp::AudioIDMgr::Instance()->LoadAudioIDs(filepath);
+}
+
+extern "C"
+int gum_get_audio_num()
+{
+	return simp::AudioIDMgr::Instance()->GetAudioSize();
+}
+
+extern "C"
+void gum_get_all_audio_names(const char* names[])
+{
+	simp::AudioIDMgr::Instance()->GetAllAudioNames(names);
+}
+
+extern "C"
+void gum_audio_set_path(const char* name, const char* filepath)
+{
+	if (name && filepath) {
+		simp::AudioIDMgr::Instance()->SetAudioPath(name, filepath);
+	}
 }
 
 /************************************************************************/
@@ -903,23 +933,6 @@ extern "C"
 void gum_record_screen_clear()
 {
 	StatScreen::Instance()->Clear();
-}
-
-/************************************************************************/
-/* audio                                                                */
-/************************************************************************/
-
-extern "C"
-void* gum_audio_create_source(const char* filepath, bool stream)
-{
-	return AudioContext::Instance()->GetImpl()->CreateSource(filepath, stream);
-}
-
-extern "C"
-void gum_audio_play(void* source)
-{
-	ua::Source* s = static_cast<ua::Source*>(source);
-	s->Play();
 }
 
 }

@@ -29,10 +29,11 @@ LOCAL_C_INCLUDES  := \
 	${PS_SRC_PATH} \
 	${MTRAIL_SRC_PATH} \
 	${BOOST_PATH}/include \
-	${TASKS_SRC_PATH} \
+	${MULTITASK_SRC_PATH}/include \
 	${GLP_SRC_PATH} \
 	${DS_SRC_PATH} \
 	${OPENAL_SRC_PATH} \
+	${LUA_SRC_PATH} \
 
 
 LOCAL_CPPFLAGS  := -DNO_BOOST -g
@@ -47,6 +48,7 @@ LOCAL_STATIC_LIBRARIES := \
 	sprite2 \
 	shaderlab \
 	dtex2 \
+	multitask \
 
 include $(BUILD_STATIC_LIBRARY)	
 

@@ -16,6 +16,31 @@ RenderTarget::RenderTarget(int width, int height)
 {
 }
 
+void RenderTarget::Bind()
+{
+	s2::RenderScissor::Instance()->Disable();
+
+	int w = Width(),
+		h = Height();
+	s2::RenderContext ctx(w, h, w, h);
+	// use last model view
+	const s2::RenderContext* last = s2::RenderCtxStack::Instance()->Top();
+	if (last) {
+		ctx.SetModelView(last->GetMVOffset(), last->GetMVScale());
+	}
+	s2::RenderCtxStack::Instance()->Push(ctx);
+
+	s2::RenderTarget::Bind();
+}
+
+void RenderTarget::Unbind()
+{
+	s2::RenderCtxStack::Instance()->Pop();
+	s2::RenderScissor::Instance()->Enable();
+
+	s2::RenderTarget::Unbind();
+}
+
 void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int dst_h) const
 {
 	sl::ShaderMgr::Instance()->FlushShader();
