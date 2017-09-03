@@ -74,15 +74,19 @@ namespace gum
 extern "C"
 void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 {
-	DTex::Instance()->InitHook(NULL, NULL, error_reload);
+	try {
+		DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
-	Sprite2::Init();
+		Sprite2::Init();
 
-	Audio::Instance()->InitContext(arg1, arg2);
+		Audio::Instance()->InitContext(arg1, arg2);
 
 #ifndef S2_DISABLE_MODEL
-	Model3::Instance();
+		Model3::Instance();
 #endif // S2_DISABLE_MODEL
+	} catch (std::exception& e) {
+		fault("gum_init fail: %s\n", e.what());		
+	}
 }
 
 extern "C"
