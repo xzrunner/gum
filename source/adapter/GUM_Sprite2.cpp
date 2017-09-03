@@ -3,6 +3,7 @@
 #include "RenderTargetMgr.h"
 #include "RenderTarget.h"
 #include "GUM_Audio.h"
+#include "gum/ThreadPool.h"
 
 #include <sprite2/S2_RenderTargetMgr.h>
 #include <sprite2/S2_RenderTarget.h>
@@ -11,6 +12,7 @@
 #include <sprite2/RenderParams.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/AudioContext.h>
+#include <sprite2/Callback.h>
 #include <dtex2/DebugDraw.h>
 
 #include <stdint.h>
@@ -104,6 +106,12 @@ is_audio_enable()
 	return Audio::Instance()->IsEnable();
 }
 
+static void
+submit_task(mt::Task* task)
+{
+	ThreadPool::Instance()->Run(task);
+}
+
 void Sprite2::Init()
 {
 	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
@@ -115,6 +123,11 @@ void Sprite2::Init()
 		s2::AudioContext::Callback cb;
 		cb.is_enable = is_audio_enable;
 		s2::AudioContext::InitCallback(cb);
+	}
+	{
+		s2::Callback::Funs funs;
+		funs.submit_task = submit_task;
+		s2::Callback::RegisterCallback(funs);
 	}
 }
 
