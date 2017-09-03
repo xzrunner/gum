@@ -29,6 +29,7 @@
 #include "gum/GUM_Audio.h"
 #include "gum/LoadImageTask.h"
 #include "gum/GUM_Audio.h"
+#include "gum/Cooking.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -77,6 +78,8 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 	DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
 	Sprite2::Init();
+
+	Cooking::Init();
 
 	Audio::Instance()->InitContext(arg1, arg2);
 
@@ -142,7 +145,6 @@ extern "C"
 void gum_update(float dt)
 {
 	s2::SprTimer::Instance()->Update(dt);
-	gum::AsyncTask::Instance()->Update();
 	gum::DTexC2Strategy::Instance()->Update();
 }
 
