@@ -7,6 +7,7 @@
 //#include "GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
 #include "gum/ThreadPool.h"
+#include "gum/GUM_Audio.h"
 
 namespace gum
 {
@@ -17,6 +18,8 @@ void Facade::Init()
 	// todo
 //	Model3::Instance();
 #endif // S2_DISABLE_MODEL
+
+	Audio::Instance()->InitContext(NULL, NULL);
 }
 
 void Facade::Close()
