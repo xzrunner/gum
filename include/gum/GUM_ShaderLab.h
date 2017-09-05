@@ -9,10 +9,13 @@ namespace gum
 class ShaderLab
 {
 public:
-	void Init();
+//	void Init();
 
 	void Update(float dt);
 
+	static void Init();
+
+private:
 	SINGLETON_DECLARATION(ShaderLab)
 
 }; // ShaderLab

@@ -29,7 +29,8 @@
 #include "gum/GUM_Audio.h"
 #include "gum/LoadImageTask.h"
 #include "gum/GUM_Audio.h"
-#include "gum/Cooking.h"
+#include "gum/GUM_Cooking.h"
+#include "gum/GUM_ShaderLab.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <gimg_typedef.h>
@@ -78,6 +79,8 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 	DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
 	Sprite2::Init();
+
+	ShaderLab::Init();
 
 	Cooking::Init();
 
