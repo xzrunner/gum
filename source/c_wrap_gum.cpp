@@ -157,6 +157,7 @@ void gum_flush()
 	dtex::Facade::Flush();
 	DTex::Instance()->Flush();
 	LoadImageTaskMgr::Instance()->Flush();
+	sl::Facade::Flush();
 }
 
 extern "C"
