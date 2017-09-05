@@ -29,9 +29,6 @@ private:
 	class FileLoader;
 
 private:
-	static const unsigned int TASK_TYPE = 2;
-
-private:
 	Image* m_img;
 
 	void*  m_data;

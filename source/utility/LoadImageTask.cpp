@@ -23,8 +23,7 @@ namespace gum
 /************************************************************************/
 
 LoadImageTask::LoadImageTask(Image* img)
-	: mt::Task(TASK_TYPE)
-	, m_img(img)
+	: m_img(img)
 	, m_data(NULL)
 	, m_size(0)
 {
