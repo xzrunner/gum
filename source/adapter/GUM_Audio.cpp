@@ -27,6 +27,10 @@ Audio::~Audio()
 
 void Audio::Initialize(void* arg1, void* arg2)
 {
+	if (m_ctx) {
+		return;
+	}
+
 	try {
 #ifdef __ANDROID__
 		if (arg1 && arg2) {
