@@ -24,9 +24,8 @@ void Facade::Initialize()
 
 void Facade::Terminate()
 {
-	ThreadPool::Instance()->Close();
-
 	Audio::Instance()->Terminate();	
+	ThreadPool::Instance()->Close();
 }
 
 void Facade::Clear()
