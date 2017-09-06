@@ -80,7 +80,7 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 
 		Sprite2::Init();
 
-		Audio::Instance()->InitContext(arg1, arg2);
+		Audio::Instance()->Initialize(arg1, arg2);
 
 #ifndef S2_DISABLE_MODEL
 		Model3::Instance();
