@@ -12,19 +12,21 @@
 namespace gum
 {
 
-void Facade::Init()
+void Facade::Initialize()
 {
 #ifndef S2_DISABLE_MODEL
 	// todo
 //	Model3::Instance();
 #endif // S2_DISABLE_MODEL
 
-	Audio::Instance()->InitContext(NULL, NULL);
+	Audio::Instance()->Initialize(NULL, NULL);
 }
 
-void Facade::Close()
+void Facade::Terminate()
 {
 	ThreadPool::Instance()->Close();
+
+	Audio::Instance()->Terminate();	
 }
 
 void Facade::Clear()

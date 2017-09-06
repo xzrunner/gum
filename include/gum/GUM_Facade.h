@@ -7,8 +7,8 @@ namespace gum
 class Facade
 {
 public:
-	static void Init();
-	static void Close();
+	static void Initialize();
+	static void Terminate();
 
 	static void Clear();
 

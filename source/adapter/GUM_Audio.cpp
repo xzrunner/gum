@@ -25,7 +25,7 @@ Audio::~Audio()
 	delete m_ctx;
 }
 
-void Audio::InitContext(void* arg1, void* arg2)
+void Audio::Initialize(void* arg1, void* arg2)
 {
 	try {
 #ifdef __ANDROID__
@@ -47,6 +47,11 @@ void Audio::InitContext(void* arg1, void* arg2)
 		}
 		m_enable = false;
 	}
+}
+
+void Audio::Terminate()
+{
+	delete m_ctx;
 }
 
 static void 

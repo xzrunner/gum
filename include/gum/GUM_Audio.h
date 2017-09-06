@@ -11,7 +11,8 @@ namespace gum
 class Audio
 {
 public:
-	void InitContext(void* arg1, void* arg2);
+	void Initialize(void* arg1, void* arg2);
+	void Terminate();
 
 	ua::AudioContext* GetContext() { return m_ctx; }
 
