@@ -16,7 +16,7 @@ public:
 
 	ua::AudioContext* GetContext() { return m_ctx; }
 
-	bool IsEnable() const { return m_enable; }
+	bool IsEnable() const { return m_enable && m_ctx; }
 	void SetEnable(bool enable) { m_enable = enable; }
 
 private:

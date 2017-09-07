@@ -92,12 +92,18 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 
 extern "C"
 void gum_on_pause() {
-	Audio::Instance()->GetContext()->Pause();
+	Audio* audio = Audio::Instance();
+	if (audio->IsEnable()) {
+		audio->GetContext()->Pause();
+	}
 }
 
 extern "C"
 void gum_on_resume() {
-	Audio::Instance()->GetContext()->Resume();
+	Audio* audio = Audio::Instance();
+	if (audio->IsEnable()) {
+		audio->GetContext()->Resume();
+	}
 }
 
 extern "C"

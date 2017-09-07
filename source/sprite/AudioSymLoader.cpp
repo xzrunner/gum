@@ -29,8 +29,11 @@ void AudioSymLoader::Load(const std::string& filepath)
 		return;
 	}
 
-	ua::AudioContext* ctx = gum::Audio::Instance()->GetContext();
-	ua::Source* source = ctx->CreateSource(filepath, true);
+	Audio* audio = Audio::Instance();
+	if (!audio->IsEnable()) {
+		return;
+	}
+	ua::Source* source = audio->GetContext()->CreateSource(filepath, true);
 	m_sym->SetSource(source);
 	source->RemoveReference();
 }
