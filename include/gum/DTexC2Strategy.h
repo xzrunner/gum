@@ -3,7 +3,6 @@
 
 #include <SM_Rect.h>
 #include <CU_Singleton.h>
-#include <multitask/Thread.h>
 
 #include <map>
 #include <set>
@@ -87,7 +86,7 @@ private:
 
 	int m_max_c2_edge;
 
-	mt::Mutex m_loading_tasks_mutex;
+	mt::Mutex* m_loading_tasks_mutex;
 	std::vector<int> m_loading_tasks;
 
 	SINGLETON_DECLARATION(DTexC2Strategy)

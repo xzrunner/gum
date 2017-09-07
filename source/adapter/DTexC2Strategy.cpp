@@ -3,6 +3,7 @@
 
 #include <simp/NodeID.h>
 #include <simp/NodeFactory.h>
+#include <multitask/Thread.h>
 
 namespace gum
 {
@@ -20,11 +21,15 @@ DTexC2Strategy::DTexC2Strategy()
 	m_tot_count			= 10240;
 
 	m_max_c2_edge = -1;
+
+	m_loading_tasks_mutex = new mt::Mutex();
 }
 
 DTexC2Strategy::~DTexC2Strategy()
 {
 	Clear();
+
+	delete m_loading_tasks_mutex;
 }
 
 void DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region)
