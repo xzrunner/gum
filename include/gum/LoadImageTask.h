@@ -22,14 +22,11 @@ public:
 
 	void OnLoad(bimp::ImportStream& is);
 
-	void Init(Image* img);
-	void Release();
+	void Initialize(Image* img);
+	void Terminate();
 
 private:
 	class FileLoader;
-
-private:
-	static const unsigned int TASK_TYPE = 2;
 
 private:
 	Image* m_img;

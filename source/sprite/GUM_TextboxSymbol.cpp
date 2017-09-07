@@ -12,6 +12,7 @@ TextboxSymbol::TextboxSymbol(uint32_t id)
 
 void TextboxSymbol::DrawText(const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, const s2::Color& add, const std::string& text, int time, bool richtext) const
 {
+	// todo defer
 	GTxt::Instance()->Draw(style, mt, mul, add, text, time, richtext);
 }
 

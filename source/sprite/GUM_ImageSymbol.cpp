@@ -77,23 +77,14 @@ bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) co
 	}
 }
 
-bool ImageSymbol::OnQueryTexcoordsFail() const
+void ImageSymbol::OnQueryTexcoordsFail() const
 {
 	if (!DTex::Instance()->IsC2Enable()) {
-		return false;
+		return;
 	}
-
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	sl::ShaderType type = mgr->GetShaderType();
 
 	sm::ivec2 sz = m_img->GetSize();
-	bool loaded = DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
-
-	if (loaded) {
-		mgr->SetShader(type);
-	}
-
-	return loaded;
+	DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
 }
 
 void ImageSymbol::SetImage(Image* img)

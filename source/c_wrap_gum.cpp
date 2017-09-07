@@ -29,6 +29,8 @@
 #include "gum/GUM_Audio.h"
 #include "gum/LoadImageTask.h"
 #include "gum/GUM_Audio.h"
+#include "gum/GUM_Cooking.h"
+#include "gum/GUM_ShaderLab.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <uniaudio/AudioContext.h>
@@ -80,6 +82,10 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 
 		Sprite2::Init();
 
+		ShaderLab::Init();
+
+		Cooking::Init();
+
 		Audio::Instance()->Initialize(arg1, arg2);
 
 #ifndef S2_DISABLE_MODEL
@@ -92,18 +98,12 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 
 extern "C"
 void gum_on_pause() {
-	Audio* audio = Audio::Instance();
-	if (audio->IsEnable()) {
-		audio->GetContext()->Pause();
-	}
+	Audio::Instance()->GetContext()->Pause();
 }
 
 extern "C"
 void gum_on_resume() {
-	Audio* audio = Audio::Instance();
-	if (audio->IsEnable()) {
-		audio->GetContext()->Resume();
-	}
+	Audio::Instance()->GetContext()->Resume();
 }
 
 extern "C"
@@ -163,6 +163,7 @@ extern "C"
 void gum_update(float dt)
 {
 	s2::SprTimer::Instance()->Update(dt);
+	gum::DTexC2Strategy::Instance()->Update();
 }
 
 extern "C"
@@ -171,6 +172,7 @@ void gum_flush()
 	dtex::Facade::Flush();
 	DTex::Instance()->Flush();
 	LoadImageTaskMgr::Instance()->Flush();
+	sl::Facade::Flush();
 }
 
 extern "C"

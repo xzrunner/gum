@@ -23,8 +23,7 @@ namespace gum
 /************************************************************************/
 
 LoadImageTask::LoadImageTask(Image* img)
-	: mt::Task(TASK_TYPE)
-	, m_img(img)
+	: m_img(img)
 	, m_data(NULL)
 	, m_size(0)
 {
@@ -151,7 +150,7 @@ void LoadImageTask::OnLoad(bimp::ImportStream& is)
 	}
 }
 
-void LoadImageTask::Init(Image* img)
+void LoadImageTask::Initialize(Image* img)
 {
 	assert(!m_img && !m_data);
 	m_img = img;
@@ -161,7 +160,7 @@ void LoadImageTask::Init(Image* img)
 	}
 }
 
-void LoadImageTask::Release()
+void LoadImageTask::Terminate()
 {
 	if (m_img) {
 		m_img->RemoveReference();
@@ -192,7 +191,7 @@ LoadImageTask* LoadImageTaskMgr::Fetch(Image* img)
 		tt = new LoadImageTask(img);
 	} else {
 		m_freelist.Pop();
-		tt->Init(img);
+		tt->Initialize(img);
 	}
 	return tt;
 }
@@ -208,7 +207,7 @@ void LoadImageTaskMgr::Flush()
 	{
 		LoadImageTask* tt = static_cast<LoadImageTask*>(t);
 		tt->Flush();
-		tt->Release();
+		tt->Terminate();
 		m_freelist.Push(t);
 		--m_count;
 	}
