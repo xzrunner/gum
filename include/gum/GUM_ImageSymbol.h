@@ -32,7 +32,7 @@ public:
 	 *    s2::ImageSymbol
 	 */
 	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const;
-	virtual void OnQueryTexcoordsFail() const;
+	virtual bool OnQueryTexcoordsFail() const;
 
 	void SetImage(Image* img);
 	const Image* GetImage() const { return m_img; }

@@ -163,7 +163,7 @@ extern "C"
 void gum_update(float dt)
 {
 	s2::SprTimer::Instance()->Update(dt);
-	gum::DTexC2Strategy::Instance()->Update();
+	gum::AsyncTask::Instance()->Update();
 }
 
 extern "C"
