@@ -56,8 +56,18 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		h = Height();
 	}
 
+	const s2::RenderContext* last = s2::RenderCtxStack::Instance()->Top();
+	int vp_x, vp_y, vp_w, vp_h;
+	if (last) {
+		last->GetViewport(vp_x, vp_y, vp_w, vp_h);
+	}
+
 	s2::RenderScissor::Instance()->Disable();
 	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(w, h, w, h));
+	if (last) {
+		const s2::RenderContext* curr = s2::RenderCtxStack::Instance()->Top();
+		const_cast<s2::RenderContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);
+	}
 
 	float hw = w * 0.5f,
 		  hh = h * 0.5f;
