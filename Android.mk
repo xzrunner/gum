@@ -23,6 +23,7 @@ LOCAL_C_INCLUDES  := \
 	${UNIAUDIO_SRC_PATH}/include \
 	${SPRITE2_SRC_PATH}/include \
 	${JSON_SRC_PATH}/include \
+	${COOKING_SRC_PATH}/include \
 	${GTXT_SRC_PATH} \
 	${GIMG_SRC_PATH} \
 	${POLYMESH_SRC_PATH}/include \
@@ -49,6 +50,7 @@ LOCAL_STATIC_LIBRARIES := \
 	shaderlab \
 	dtex2 \
 	multitask \
+	cooking \
 
 include $(BUILD_STATIC_LIBRARY)	
 
