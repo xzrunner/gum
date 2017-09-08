@@ -12,7 +12,7 @@
 #include <sprite2/RenderParams.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/AudioContext.h>
-//#include <sprite2/Callback.h>
+#include <sprite2/Callback.h>
 #include <dtex2/DebugDraw.h>
 
 #include <stdint.h>
@@ -124,11 +124,11 @@ void Sprite2::Init()
 		cb.is_enable = is_audio_enable;
 		s2::AudioContext::InitCallback(cb);
 	}
-// 	{
-// 		s2::Callback::Funs funs;
-// 		funs.submit_task = submit_task;
-// 		s2::Callback::RegisterCallback(funs);
-// 	}
+	{
+		s2::Callback::Funs funs;
+		funs.submit_task = submit_task;
+		s2::Callback::RegisterCallback(funs);
+	}
 }
 
 }

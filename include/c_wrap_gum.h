@@ -30,6 +30,7 @@ int   gum_get_img_count();
 
 void  gum_update(float dt);
 void  gum_flush();
+void  gum_flush_deferred();
 
 void  gum_store_snapshot(const char* filepath);
 int   gum_compare_snapshot(const char* filepath);

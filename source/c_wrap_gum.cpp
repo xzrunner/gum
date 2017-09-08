@@ -61,10 +61,12 @@
 #include <sprite2/StatImages.h>
 #include <sprite2/Blackboard.h>
 #include <shaderlab/SL_Facade.h>
+#include <shaderlab/RenderTask.h>
 #include <SM_Matrix.h>
 #include <dtex2/DTEX_PkgMgr.h>
 #include <gtxt_label.h>
 #include <c_wrap_dtex.h>
+#include <c_wrap_cooking.h>
 
 #include <queue>
 
@@ -171,7 +173,13 @@ void gum_flush()
 	dtex::Facade::Flush();
 	DTex::Instance()->Flush();
 	LoadImageTaskMgr::Instance()->Flush();
-	sl::Facade::Flush();
+}
+
+extern "C"
+void  gum_flush_deferred()
+{
+	cooking_flush();
+	sl::RenderTask::FlushShared();
 }
 
 extern "C"
