@@ -19,9 +19,6 @@ public:
 	void Close();
 
 private:
-	static int GetNumCores();
-
-private:
 	mt::ThreadPool* m_pool;
 
 	mt::TickThread* m_tick;
