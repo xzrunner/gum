@@ -2,6 +2,7 @@
 #include "FilepathHelper.h"
 
 #include <fstream>
+#include <algorithm>
 
 #include <assert.h>
 #include <string.h>
