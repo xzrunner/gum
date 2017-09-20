@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include <functional>
 
 #include <stdint.h>
 
@@ -20,6 +21,8 @@ class Image;
 class SymbolPool
 {
 public:
+	void Traverse(std::function<bool(s2::Symbol*)> func);
+
 	void GC();
 	int Count() const { return m_path_cache.size() + m_id_cache.size(); }
 	
@@ -30,7 +33,7 @@ public:
 
 	void PrintSymRef(uint32_t sym_id) const;
 	void PrintImgRef(const Image* img) const;
-	
+
 private:
 	std::map<std::string, s2::Symbol*> m_path_cache;
 	std::map<uint32_t, s2::Symbol*>    m_id_cache;

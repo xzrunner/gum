@@ -168,10 +168,10 @@ static void
 draw_glyph(int unicode, float x, float y, float w, float h, 
 		   const gtxt_glyph_style* gs, const gtxt_draw_style* ds, void* ud) 
 {	
-	int tex_id;
+	int tex_id, block_id;
 	int ft_count = gtxt_ft_get_font_cout();
 	UID uid = ResourceUID::Glyph(unicode, GlyphStyle(gs));
-	const float* texcoords = DTex::Instance()->QuerySymbol(uid, &tex_id);
+	const float* texcoords = DTex::Instance()->QuerySymbol(uid, tex_id, block_id);
 
 	if( texcoords && (gs->font<ft_count) && !DTex::Instance()->ExistGlyph(uid) ) {
 		texcoords = NULL;

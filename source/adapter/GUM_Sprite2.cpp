@@ -65,9 +65,9 @@ dtex_sym_insert(UID uid, const sm::rect& bounding, int tex_id, int tex_w, int te
 }
 
 static const float* 
-dtex_sym_query(UID uid, int* tex_id)
+dtex_sym_query(UID uid, int& tex_id, int& block_id)
 {
-	return DTex::Instance()->QuerySymbol(uid, tex_id);
+	return DTex::Instance()->QuerySymbol(uid, tex_id, block_id);
 }
 
 static uint64_t 

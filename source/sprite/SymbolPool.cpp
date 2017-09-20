@@ -18,6 +18,16 @@ SymbolPool::SymbolPool()
 {
 }
 
+void SymbolPool::Traverse(std::function<bool(s2::Symbol*)> func)
+{
+	std::map<uint32_t, s2::Symbol*>::iterator itr = m_id_cache.begin();
+	for (; itr != m_id_cache.end(); ++itr) {
+		if (!func(itr->second)) {
+			break;
+		}
+	}
+}
+
 void SymbolPool::GC()
 {
 	while (true)

@@ -19,6 +19,7 @@ ImageSymbol::ImageSymbol()
 	, m_packed(false)
 {
 	InitTexcoords();
+	ClearCache();
 }
 
 ImageSymbol::ImageSymbol(uint32_t id)
@@ -27,6 +28,7 @@ ImageSymbol::ImageSymbol(uint32_t id)
 	, m_packed(false)
 {
 	InitTexcoords();
+	ClearCache();
 }
 
 ImageSymbol::~ImageSymbol()
@@ -53,27 +55,42 @@ bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) co
 		return true;
 	}
 
-	UID uid = ResourceUID::BinNode(GetID());
-	const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, &texid);
-	if (c2_texcoords) 
+	if (m_cached_texid < 0)
 	{
-		memcpy(texcoords, c2_texcoords, sizeof(float) * 8);
-		if (m_rotate) 
+		UID uid = ResourceUID::BinNode(GetID());
+		int block_id;
+		const float* c2_texcoords = DTex::Instance()->QuerySymbol(uid, texid, block_id);
+		if (c2_texcoords)
 		{
-			float x, y;
-			x = texcoords[6]; y = texcoords[7];
-			texcoords[6] = texcoords[4]; texcoords[7] = texcoords[5];
-			texcoords[4] = texcoords[2]; texcoords[5] = texcoords[3];
-			texcoords[2] = texcoords[0]; texcoords[3] = texcoords[1];
-			texcoords[0] = x;            texcoords[1] = y;
+			memcpy(texcoords, c2_texcoords, sizeof(float) * 8);
+			if (m_rotate)
+			{
+				float x, y;
+				x = texcoords[6]; y = texcoords[7];
+				texcoords[6] = texcoords[4]; texcoords[7] = texcoords[5];
+				texcoords[4] = texcoords[2]; texcoords[5] = texcoords[3];
+				texcoords[2] = texcoords[0]; texcoords[3] = texcoords[1];
+				texcoords[0] = x;            texcoords[1] = y;
+			}
+
+			memcpy(m_cached_texcoords, texcoords, sizeof(m_cached_texcoords));
+			m_cached_texid = texid;
+			m_cached_block_id = block_id;
+
+			return true;
 		}
-		return true;
-	} 
-	else 
+		else
+		{
+			texid = m_img->GetTexID();
+			memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
+			return false;
+		}
+	}
+	else
 	{
-		texid = m_img->GetTexID();
-		memcpy(texcoords, m_texcoords, sizeof(m_texcoords));
-		return false;
+		texid = m_cached_texid;
+		memcpy(texcoords, m_cached_texcoords, sizeof(m_cached_texcoords));
+		return true;
 	}
 }
 
@@ -173,6 +190,13 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max,
 	m_size.ymax = hh + offset.y;
 }
 
+void ImageSymbol::SetCacheDirty(int block_id)
+{
+	if (block_id == -1 || m_cached_block_id == block_id) {
+		ClearCache();
+	}
+}
+
 #ifdef GUM_DEBUG
 bool ImageSymbol::IsProxyImg() const
 {
@@ -186,6 +210,13 @@ void ImageSymbol::InitTexcoords()
 	m_texcoords[2] = 1; m_texcoords[3] = 0;
 	m_texcoords[4] = 1; m_texcoords[5] = 1;
 	m_texcoords[6] = 0; m_texcoords[7] = 1;
+}
+
+void ImageSymbol::ClearCache()
+{
+	memset(m_cached_texcoords, 0, sizeof(m_cached_texcoords));
+	m_cached_texid = -1;
+	m_cached_block_id = -1;
 }
 
 }

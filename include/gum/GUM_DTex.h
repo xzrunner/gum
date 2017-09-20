@@ -32,7 +32,7 @@ public:
 	void LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region,
 		int padding = 0, int extrude = 0, int src_extrude = 0);
 	void LoadSymFinish();
-	const float* QuerySymbol(UID sym_id, int* tex_id) const;
+	const float* QuerySymbol(UID sym_id, int& tex_id, int& block_id) const;
 	void ClearSymbolCache();
 
 	// CG

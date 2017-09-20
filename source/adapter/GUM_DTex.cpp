@@ -4,6 +4,8 @@
 #include "ProxyImage.h"
 #include "DTexC2Strategy.h"
 #include "gum/ThreadPool.h"
+#include "gum/SymbolPool.h"
+#include "gum/GUM_ImageSymbol.h"
 
 #include <logger.h>
 #include <bimp/BIMP_ImportStream.h>
@@ -37,6 +39,7 @@
 #include <sprite2/DrawNode.h>
 #include <sprite2/FlattenMgr.h>
 #include <sprite2/StatImages.h>
+#include <sprite2/S2_Symbol.h>
 #include <unirender/UR_RenderContext.h>
 
 #include <string>
@@ -417,9 +420,17 @@ remove_tex(int tex_id)
 }
 
 static void 
-on_clear_sym_block()
+on_clear_sym_block(int block_id)
 {
-	s2::FlattenMgr::Instance()->UpdateTexcoords();
+	SymbolPool::Instance()->Traverse(
+		[=](s2::Symbol* sym)->bool 
+		{
+			if (sym->Type() == s2::SYM_IMAGE) {
+				VI_DOWNCASTING<ImageSymbol*>(sym)->SetCacheDirty(block_id);
+			}			
+			return true;
+		}
+	);	
 }
 
 /************************************************************************/
@@ -550,15 +561,17 @@ void DTex::LoadSymFinish()
 	m_c2->LoadFinish();
 }
 
-const float* DTex::QuerySymbol(UID sym_id, int* tex_id) const
+const float* DTex::QuerySymbol(UID sym_id, int& tex_id, int& block_id) const
 {
 	if (!m_c2_enable) {
 		return NULL;
 	}
 
-	const dtex::CS_Node* node = m_c2->Query(sym_id);
+	int b_id;
+	const dtex::CS_Node* node = m_c2->Query(sym_id, b_id);
 	if (node) {
-		*tex_id = m_c2->GetTexID();
+		tex_id = m_c2->GetTexID();
+		block_id = b_id;
 		return node->GetTexcoords();
 	} else {
 		return NULL;

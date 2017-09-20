@@ -40,6 +40,8 @@ public:
 	void SetRegion(const sm::ivec2& min, const sm::ivec2& max, 
 		const sm::vec2& offset, int lod, float scale);
 
+	void SetCacheDirty(int block_id);
+
 private:
 #ifdef GUM_DEBUG
 	virtual bool IsProxyImg() const;
@@ -47,10 +49,16 @@ private:
 
 	void InitTexcoords();
 
+	void ClearCache();
+
 private:
 	Image* m_img;
 
 	float m_texcoords[8];
+
+	mutable float m_cached_texcoords[8];
+	mutable int   m_cached_texid;
+	mutable int   m_cached_block_id;
 
 	bool m_packed;
 
