@@ -35,7 +35,7 @@ LOCAL_C_INCLUDES  := \
 	${DS_SRC_PATH} \
 	${OPENAL_SRC_PATH} \
 	${LUA_SRC_PATH} \
-
+	${FLATTEN_SRC_PATH}/include \
 
 LOCAL_CPPFLAGS  := -DNO_BOOST -g -std=c++11
 
