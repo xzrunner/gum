@@ -775,7 +775,7 @@ void gum_gtxt_print(const char* str, float x, float y, int font_size, uint32_t f
 
 	S2_MAT mt;
 	mt.Translate(x, y);
-	GTxt::Instance()->Draw(s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), StringHelper::FromChar(str), 0, false);
+	GTxt::Instance()->Draw(nullptr, s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), StringHelper::FromChar(str), 0, false);
 }
 
 extern "C"

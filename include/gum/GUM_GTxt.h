@@ -15,6 +15,7 @@ struct gtxt_label_style;
 struct gtxt_glyph_layout;
 
 namespace s2 { class Color; class Symbol; }
+namespace cooking { class DisplayList; }
 
 namespace gum
 {
@@ -33,8 +34,8 @@ public:
 
 	void AddColor(const std::string& name, unsigned int color);
 
-	void Draw(const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, 
-		const s2::Color& add, const std::string& text, int time, bool richtext) const;
+	void Draw(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, 
+		const s2::Color& mul, const s2::Color& add, const std::string& text, int time, bool richtext) const;
 	void Draw(const S2_MAT& mt, const std::string& str, int width = 200) const;
 
 	sm::vec2 GetSize(const gtxt_label_style& style, const std::string& text) const;

@@ -19,6 +19,7 @@
 #include <sprite2/RenderParams.h>
 #include <sprite2/S2_Symbol.h>
 #include <sprite2/DrawNode.h>
+#include <cooking.h>
 
 #include <json/json.h>
 
@@ -45,10 +46,63 @@ struct render_params
 	const S2_MAT* mt;
 	const s2::Color* mul;
 	const s2::Color* add;
+	void* ud;
 };
 
 static void
-render_glyph(int id, const float* _texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp) 
+render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp)
+{
+	x += ds->offset_x;
+	y += ds->offset_y;
+	float hw = w * 0.5f * ds->scale, hh = h * 0.5f * ds->scale;
+
+	float vertices[8];
+	float vx, vy;
+	const float* mt = rp->mt->x;
+	float* ptr_dst = &vertices[0];
+
+	vx = ((x - hw) * mt[0] + (y - hh) * mt[2]) + mt[4];
+	vy = ((x - hw) * mt[1] + (y - hh) * mt[3]) + mt[5];
+	*ptr_dst++ = vx;
+	*ptr_dst++ = vy;
+
+	vx = ((x + hw) * mt[0] + (y - hh) * mt[2]) + mt[4];
+	vy = ((x + hw) * mt[1] + (y - hh) * mt[3]) + mt[5];
+	*ptr_dst++ = vx;
+	*ptr_dst++ = vy;
+
+	vx = ((x + hw) * mt[0] + (y + hh) * mt[2]) + mt[4];
+	vy = ((x + hw) * mt[1] + (y + hh) * mt[3]) + mt[5];
+	*ptr_dst++ = vx;
+	*ptr_dst++ = vy;
+
+	vx = ((x - hw) * mt[0] + (y + hh) * mt[2]) + mt[4];
+	vy = ((x - hw) * mt[1] + (y + hh) * mt[3]) + mt[5];
+	*ptr_dst++ = vx;
+	*ptr_dst++ = vy;
+
+	s2::RenderColor color;
+	if (rp->mul) {
+		s2::Color multi_col = *rp->mul;
+		multi_col.a = static_cast<int>(multi_col.a * ds->alpha);
+		color.SetMul(multi_col);
+	}
+	if (rp->add) {
+		color.SetAdd(*rp->add);
+	}
+
+	cooking::DisplayList* dlist = reinterpret_cast<cooking::DisplayList*>(rp->ud);
+	assert(dlist);
+	uint32_t col_mul = color.GetMulABGR(),
+		     col_add = color.GetAddABGR();
+	uint32_t col_rmap = color.GetRMapABGR(),
+		     col_gmap = color.GetGMapABGR(),
+			 col_bmap = color.GetBMapABGR();
+	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, vertices, texcoords, tex_id);
+}
+
+static void
+render_glyph_forward(int id, const float* _texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp)
 {
 	x += ds->offset_x;
 	y += ds->offset_y;
@@ -90,6 +144,16 @@ render_glyph(int id, const float* _texcoords, float x, float y, float w, float h
 	 	sl_shader->SetColor(color.GetMulABGR(), color.GetAddABGR());
 	 	sl_shader->SetColorMap(color.GetRMapABGR(), color.GetGMapABGR(), color.GetBMapABGR());
 	 	sl_shader->DrawQuad(&vertices[0].x, &texcoords[0].x, id);
+	}
+}
+
+static void
+render_glyph(int id, const float* texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp)
+{
+	if (rp->ud) {
+		render_glyph_deferred(id, texcoords, x, y, w, h, ds, rp);
+	} else {
+		render_glyph_forward(id, texcoords, x, y, w, h, ds, rp);
 	}
 }
 
@@ -171,20 +235,32 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 	int tex_id, block_id;
 	int ft_count = gtxt_ft_get_font_cout();
 	UID uid = ResourceUID::Glyph(unicode, GlyphStyle(gs));
-	const float* texcoords = DTex::Instance()->QuerySymbol(uid, tex_id, block_id);
 
-	if( texcoords && (gs->font<ft_count) && !DTex::Instance()->ExistGlyph(uid) ) {
+	const float* texcoords = NULL;
+	bool exist = false;
+	if (gs->font < ft_count && !DTex::Instance()->ExistGlyph(uid)) {
+		exist = false;
 		texcoords = NULL;
+	} else {
+		exist = true;
+		texcoords = DTex::Instance()->QuerySymbol(uid, tex_id, block_id);
 	}
 
-	if (texcoords) {
+	if (texcoords) 
+	{
 		render(tex_id, texcoords, x, y, w, h, ds, ud);
-	} else {
-		if (gs->font < ft_count) {
+	} 
+	else 
+	{
+		if (gs->font < ft_count) 
+		{
 			float texcoords[8];
-			if (DTex::Instance()->QueryGlyph(uid, texcoords, tex_id)) {
+			if (exist && DTex::Instance()->QueryGlyph(uid, texcoords, tex_id)) 
+			{
 				render(tex_id, texcoords, x, y, w, h, ds, ud);
-			} else {
+			} 
+			else 
+			{
 				struct gtxt_glyph_layout layout;
 				uint32_t* bmp = gtxt_glyph_get_bitmap(unicode, gs, &layout);
 				if (!bmp) {
@@ -194,7 +270,9 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 				h = layout.sizer.height;
 				DTex::Instance()->LoadGlyph(bmp, w, h, uid);
 			}
-		} else {
+		} 
+		else 
+		{
 			int uf_font = gs->font - ft_count;
 			GTxt::Instance()->DrawUFChar(unicode, uf_font, x, y, ud);
 		}
@@ -388,13 +466,14 @@ void GTxt::AddColor(const std::string& name, unsigned int color)
 	m_colors.insert(name);
 }
 
-void GTxt::Draw(const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, 
+void GTxt::Draw(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul,
 				const s2::Color& add, const std::string& text, int time, bool richtext) const
 {
 	render_params rp;
 	rp.mt = &mt;
 	rp.mul = &mul;
 	rp.add = &add;
+	rp.ud = dlist;
 
 	std::string utf8 = text;
 	if (richtext) {
