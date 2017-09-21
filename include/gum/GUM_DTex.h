@@ -5,6 +5,7 @@
 
 #include <SM_Rect.h>
 #include <CU_Singleton.h>
+#include <dtex2/CacheGlyph.h>
 
 #include <string>
 #include <map>
@@ -39,7 +40,7 @@ public:
 	void DrawGlyph(int tex_id, int tex_w, int tex_h, const dtex::Rect& r, uint64_t key);
 	void LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key);
 	bool QueryGlyph(uint64_t key, float* texcoords, int& tex_id) const;
-	bool ExistGlyph(uint64_t key) const;
+	bool ExistGlyph(uint64_t key) const { return m_cg->Exist(key); }
 
 	void Clear();
 

@@ -27,7 +27,6 @@
 #include <dtex2/CacheAPI.h>
 #include <dtex2/CacheSymbol.h>
 #include <dtex2/CS_Node.h>
-#include <dtex2/CacheGlyph.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -599,11 +598,6 @@ void DTex::LoadGlyph(uint32_t* bitmap, int width, int height, uint64_t key)
 bool DTex::QueryGlyph(uint64_t key, float* texcoords, int& tex_id) const
 {
 	return m_cg->QueryAndInsert(key, texcoords, tex_id);
-}
-
-bool DTex::ExistGlyph(uint64_t key) const 
-{
-	return m_cg->Exist(key);
 }
 
 void DTex::Clear()
