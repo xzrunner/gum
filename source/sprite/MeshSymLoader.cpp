@@ -156,7 +156,7 @@ s2::Mesh* MeshSymLoader::LoadSkin2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* no
 
 	std::vector<pm::Skin2Joint> joints;
 	int joints_n = 0;
-	for (int i = 0; i < node->vertices_n; ++i) {
+	for (uint32_t i = 0; i < node->vertices_n; ++i) {
 		joints_n += node->joints_n[i];
 	}
 	joints.reserve(joints_n);
@@ -174,7 +174,7 @@ s2::Mesh* MeshSymLoader::LoadSkin2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* no
 
 	std::vector<int> vertices;
 	vertices.reserve(node->vertices_n);
-	for (int i = 0; i < node->vertices_n; ++i) {
+	for (uint32_t i = 0; i < node->vertices_n; ++i) {
 		vertices.push_back(node->joints_n[i]);
 	}
 

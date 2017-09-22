@@ -32,7 +32,7 @@ void AnimSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	const Json::Value& anim_val = val["animation"];
 
 	m_spr->SetLoop(anim_val["loop"].asBool());
-	m_spr->SetInterval(anim_val["interval"].asDouble());
+	m_spr->SetInterval(static_cast<float>(anim_val["interval"].asDouble()));
 
 	m_spr->SetFPS(anim_val["fps"].asInt());
 

@@ -337,7 +337,7 @@ void SpineAnim2Loader::CreateJoints()
 		const JointData& src = m_joints_data[i];
 		rg_joint* dst = (rg_joint*)malloc(SIZEOF_RG_JOINT + sizeof(uint16_t) * src.children.size());
 		dst->parent         = RG_JOINT_UNKNOWN;
-		dst->children_count = src.children.size();
+		dst->children_count = static_cast<uint16_t>(src.children.size());
 		for (int j = 0; j < dst->children_count; ++j) {
 			dst->children[j] = src.children[j];
 		}
@@ -391,7 +391,7 @@ void SpineAnim2Loader::CreateSkeleton()
 	m_sk->joint_count = m_joint_count;
 	m_sk->root = -1;
 
-	m_sk->skin_count = m_skins.size();
+	m_sk->skin_count = static_cast<uint16_t>(m_skins.size());
 	for (int i = 0; i < m_sk->skin_count; ++i) {
 		m_sk->skins[i] = m_skins[i];
 	}
@@ -402,7 +402,7 @@ void SpineAnim2Loader::CreateSkeleton()
 		m_sk->slots[i] = m_slots[i];
 	}
 
-	m_sk->ik_count = m_iks.size();
+	m_sk->ik_count = static_cast<uint16_t>(m_iks.size());
 	m_sk->iks = (rg_ik*)((intptr_t)(m_sk) + SIZEOF_RG_SKELETON + skins_sz + slots_sz);
 	for (int i = 0; i < m_sk->ik_count; ++i) {
 		m_sk->iks[i] = m_iks[i];
@@ -476,7 +476,8 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 	{
 		joint->type |= DIM_FLAG_TRANS_X;
 		joint->type |= DIM_FLAG_TRANS_Y;
-		joint->dims_count[DIM_IDX_TRANS_X] = joint->dims_count[DIM_IDX_TRANS_Y] = bone->translates.size();
+		joint->dims_count[DIM_IDX_TRANS_X] = joint->dims_count[DIM_IDX_TRANS_Y] 
+			= static_cast<uint8_t>(bone->translates.size());
 
 		int max_frame = (int)(bone->translates.back().time * 30 + 0.5f);
 		if (max_frame > m_max_frame) {
@@ -502,7 +503,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 	if (!bone->rotates.empty())
 	{
 		joint->type |= DIM_FLAG_ROT;
-		joint->dims_count[DIM_IDX_ROT] = bone->rotates.size();
+		joint->dims_count[DIM_IDX_ROT] = static_cast<uint8_t>(bone->rotates.size());
 
 		int max_frame = (int)(bone->rotates.back().time * 30 + 0.5f);
 		if (max_frame > m_max_frame) {
@@ -521,7 +522,8 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 	{
 		joint->type |= DIM_FLAG_SCALE_X;
 		joint->type |= DIM_FLAG_SCALE_Y;
-		joint->dims_count[DIM_IDX_SCALE_X] = joint->dims_count[DIM_IDX_SCALE_Y] = bone->scales.size();
+		joint->dims_count[DIM_IDX_SCALE_X] = joint->dims_count[DIM_IDX_SCALE_Y] 
+			= static_cast<uint8_t>(bone->scales.size());
 
 		int max_frame = (int)(bone->scales.back().time * 30 + 0.5f);
 		if (max_frame > m_max_frame) {
@@ -577,7 +579,7 @@ void SpineAnim2Loader::LoadTimelineSkins(const SpineParser::Animation& anim)
 
 void SpineAnim2Loader::LoadTimelineSkins(const SpineParser::AnimSlot* slot, struct rg_tl_skin* skin)
 {
-	skin->skin_count = slot->skins.size();
+	skin->skin_count = static_cast<uint8_t>(slot->skins.size());
 	for (int i = 0, n = slot->skins.size(); i < n; ++i) {
 		skin->skins[i].time = (int)(slot->skins[i].first * 30 + 0.5f);
 		if (slot->skins[i].second.empty()) {
@@ -615,7 +617,7 @@ void SpineAnim2Loader::LoadTimelineDeforms(const SpineParser::AnimDeform* deform
 		rg_deform_sample sample;
 		sample.time   = (int)(src.time * 30 + 0.5f);
 		sample.offset = src.offset;
-		sample.count  = src.vertices.size();
+		sample.count  = static_cast<uint16_t>(src.vertices.size());
 		sample.data   = (float*)malloc(sizeof(float) * 2 * sample.count);
 		int ptr = 0;
 		for (int j = 0, m = sample.count; j < m; ++j) {

@@ -480,10 +480,10 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 					s2::RFHeatHaze* filter = static_cast<s2::RFHeatHaze*>(m_filter);
 					float distortion = 0.02f, rise = 0.2f;
 					if (fval.isMember("distortion")) {
-						distortion = fval["distortion"].asDouble();
+						distortion = static_cast<float>(fval["distortion"].asDouble());
 					}
 					if (fval.isMember("rise")) {
-						rise = fval["rise"].asDouble();
+						rise = static_cast<float>(fval["rise"].asDouble());
 					}
 					filter->SetFactor(distortion, rise);
 					if (fval.isMember("filepath")) 
@@ -516,7 +516,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 	}
 
 	if (val.isMember("downsample")) {
-		m_downsample = val["downsample"].asDouble();
+		m_downsample = static_cast<float>(val["downsample"].asDouble());
 	}
 }
 

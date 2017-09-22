@@ -61,7 +61,7 @@ void StatTag::PrintScreen() const
 	static char buf[512];
 
 	const int w = 960;
-	const int top = 280;
+	const float top = 280;
 
 	S2_MAT mt;
 	mt.Translate(0, top);

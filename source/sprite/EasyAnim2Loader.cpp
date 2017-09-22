@@ -150,7 +150,7 @@ void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 //		CopyJointPose(&dst->world_pose, src.world_pose);
 
 		dst->parent = src.parent;
-		dst->children_count = src.children.size();
+		dst->children_count = static_cast<uint16_t>(src.children.size());
 		for (int j = 0; j < dst->children_count; ++j) {
 			dst->children[j] = src.children[i];
 		}

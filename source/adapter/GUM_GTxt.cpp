@@ -268,7 +268,7 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 				}
 				w = layout.sizer.width;
 				h = layout.sizer.height;
-				DTex::Instance()->LoadGlyph(bmp, w, h, uid);
+				DTex::Instance()->LoadGlyph(bmp, static_cast<int>(w), static_cast<int>(h), uid);
 			}
 		} 
 		else 

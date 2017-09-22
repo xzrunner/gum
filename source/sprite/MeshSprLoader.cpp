@@ -75,7 +75,7 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 
 	std::vector<std::pair<int, sm::vec2> > trans;	
 	int ptr = 0;
-	for (int i = 0; i < node->n; ++i) 
+	for (uint32_t i = 0; i < node->n; ++i) 
 	{
 		int idx = node->trans[ptr++];
 		float x = simp::int2float(int16_t(node->trans[ptr++]), 16),

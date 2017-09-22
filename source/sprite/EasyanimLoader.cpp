@@ -135,8 +135,8 @@ void EasyAnimLoader::LoadLerps(const Json::Value& src, s2::AnimSymbol::Frame* ds
 		}
 		else if (type == "wiggle")
 		{
-			float freq = val["freq"].asDouble();
-			float amp = val["amp"].asDouble();
+			float freq = static_cast<float>(val["freq"].asDouble());
+			float amp = static_cast<float>(val["amp"].asDouble());
 			lerp = new s2::LerpWiggle(freq, amp);
 		}
 		else if (type == "ease")

@@ -107,12 +107,12 @@ void TrailSymLoader::LoadJson(const std::string& filepath)
 
 	mode = value["mode"].asInt();
 
-	count = value["count"].asDouble();
+	count = static_cast<int>(value["count"].asDouble());
 
-	life_begin = value["life_begin"].asDouble() * 0.001f;
-	life_offset = value["life_offset"].asDouble() * 0.001f;
+	life_begin = static_cast<float>(value["life_begin"].asDouble() * 0.001f);
+	life_offset = static_cast<float>(value["life_offset"].asDouble() * 0.001f);
 
-	fadeout_time = value["fadeout_time"].asDouble() * 0.001f;
+	fadeout_time = static_cast<float>(value["fadeout_time"].asDouble() * 0.001f);
 
 	std::string dir = FilepathHelper::Dir(filepath);
 	for (int i = 0, n = value["components"].size(); i < n; ++i)
@@ -179,8 +179,8 @@ void TrailSymLoader::LoadImageComp(const std::string& dir, const Json::Value& co
 	comp.filepath = comp_val["filepath"].asString();
 	comp.filepath = FilepathHelper::Absolute(dir, comp.filepath);
 
-	comp.scale_begin = comp_val["scale"]["start"].asDouble() * 0.01f;
-	comp.scale_end = comp_val["scale"]["end"].asDouble() * 0.01f;
+	comp.scale_begin = static_cast<float>(comp_val["scale"]["start"].asDouble() * 0.01f);
+	comp.scale_end = static_cast<float>(comp_val["scale"]["end"].asDouble() * 0.01f);
 
 	JsonSerializer::Load(comp_val["mul_col_begin"], comp.mul_col_begin);
 	JsonSerializer::Load(comp_val["mul_col_end"], comp.mul_col_end);
@@ -194,8 +194,8 @@ void TrailSymLoader::LoadShapeComp(const Json::Value& comp_val)
 {
 	CompShape comp;
 
-	comp.linewidth = comp_val["linewidth"].asDouble();
-	comp.acuity = comp_val["acuity"].asDouble() * 0.01f;
+	comp.linewidth = static_cast<float>(comp_val["linewidth"].asDouble());
+	comp.acuity = static_cast<float>(comp_val["acuity"].asDouble() * 0.01f);
 
 	JsonSerializer::Load(comp_val["color_begin"], comp.col_begin);
 	JsonSerializer::Load(comp_val["color_end"], comp.col_end);

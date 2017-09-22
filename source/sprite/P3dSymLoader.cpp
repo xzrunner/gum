@@ -321,11 +321,11 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	comp.name = comp_val["name"].asString();
 
 	if (comp_val.isMember("scale")) {
-		comp.scale_start = comp_val["scale"]["start"].asInt();
-		comp.scale_end = comp_val["scale"]["end"].asInt();
+		comp.scale_start = static_cast<float>(comp_val["scale"]["start"].asInt());
+		comp.scale_end = static_cast<float>(comp_val["scale"]["end"].asInt());
 	} else {
-		comp.scale_start = comp_val["start_scale"].asInt();
-		comp.scale_end = comp_val["end_scale"].asInt();
+		comp.scale_start = static_cast<float>(comp_val["start_scale"].asInt());
+		comp.scale_end = static_cast<float>(comp_val["end_scale"].asInt());
 	}
 
 	if (comp_val.isMember("rotate")) {
@@ -338,9 +338,9 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	}
 
 	if (comp_val.isMember("mul_col")) {
-		comp.mul_col_begin.r = comp_val["mul_col"]["r"].asDouble() * 255;
-		comp.mul_col_begin.g = comp_val["mul_col"]["g"].asDouble() * 255;
-		comp.mul_col_begin.b = comp_val["mul_col"]["b"].asDouble() * 255;
+		comp.mul_col_begin.r = static_cast<uint8_t>(comp_val["mul_col"]["r"].asDouble() * 255);
+		comp.mul_col_begin.g = static_cast<uint8_t>(comp_val["mul_col"]["g"].asDouble() * 255);
+		comp.mul_col_begin.b = static_cast<uint8_t>(comp_val["mul_col"]["b"].asDouble() * 255);
 		comp.mul_col_begin.a = 255;
 		comp.mul_col_end = comp.mul_col_begin;
 	} else {
@@ -357,9 +357,9 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	}
 
 	if (comp_val.isMember("add_col")) {
-		comp.add_col_begin.r = comp_val["add_col"]["r"].asDouble() * 255;
-		comp.add_col_begin.g = comp_val["add_col"]["g"].asDouble() * 255;
-		comp.add_col_begin.b = comp_val["add_col"]["b"].asDouble() * 255;
+		comp.add_col_begin.r = static_cast<uint8_t>(comp_val["add_col"]["r"].asDouble() * 255);
+		comp.add_col_begin.g = static_cast<uint8_t>(comp_val["add_col"]["g"].asDouble() * 255);
+		comp.add_col_begin.b = static_cast<uint8_t>(comp_val["add_col"]["b"].asDouble() * 255);
 		comp.add_col_end = comp.add_col_begin;
 	} else {
 		if (comp_val.isMember("add_col_begin")) {
@@ -377,18 +377,18 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	if (comp_val.isMember("alpha")) {
 		float start = comp_val["alpha"]["start"].asInt() * 0.01f;
 		float end = comp_val["alpha"]["end"].asInt() * 0.01f;
-		comp.mul_col_begin.a *= start;
-		comp.mul_col_end.a *= end;
+		comp.mul_col_begin.a = static_cast<uint8_t>(comp.mul_col_begin.a * start);
+		comp.mul_col_end.a   = static_cast<uint8_t>(comp.mul_col_end.a * end);
 		comp.alpha_start = 255 * start;
-		comp.alpha_end = 255 * end;
+		comp.alpha_end   = 255 * end;
 	}
 
 	if (comp_val.isMember("alpha2")) {
-		comp.alpha_start = comp_val["alpha2"]["start"].asInt();
-		comp.alpha_end = comp_val["alpha2"]["end"].asInt();
+		comp.alpha_start = static_cast<float>(comp_val["alpha2"]["start"].asInt());
+		comp.alpha_end   = static_cast<float>(comp_val["alpha2"]["end"].asInt());
 	}
 
-	comp.start_z = comp_val["start_z"].asInt();
+	comp.start_z = static_cast<float>(comp_val["start_z"].asInt());
 
 	components.push_back(comp);
 }

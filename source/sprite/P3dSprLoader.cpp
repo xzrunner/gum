@@ -59,7 +59,7 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	m_spr->SetAlone(alone);
 
 	if (p_val.isMember("start_radius")) {
-		float start_radius = p_val["start_radius"].asDouble();
+		float start_radius = static_cast<float>(p_val["start_radius"].asDouble());
 		m_spr->SetStartRadius(start_radius);
 	}
 }

@@ -13,11 +13,11 @@ namespace gum
 
 void SkeletonIO::Load(const Json::Value& val, s2::JointPose& pose)
 {
-	pose.trans.x	= val["trans_x"].asDouble();
-	pose.trans.y	= val["trans_y"].asDouble();
-	pose.rot		= val["rot"].asDouble();
-	pose.scale.x	= val["scale_x"].asDouble();
-	pose.scale.y	= val["scale_y"].asDouble();
+	pose.trans.x	= static_cast<float>(val["trans_x"].asDouble());
+	pose.trans.y	= static_cast<float>(val["trans_y"].asDouble());
+	pose.rot		= static_cast<float>(val["rot"].asDouble());
+	pose.scale.x	= static_cast<float>(val["scale_x"].asDouble());
+	pose.scale.y	= static_cast<float>(val["scale_y"].asDouble());
 }
 
 void SkeletonIO::Store(Json::Value& val, const s2::JointPose& pose)

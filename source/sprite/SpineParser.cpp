@@ -77,11 +77,11 @@ void SpineParser::ParseBones(const Json::Value& val)
 		Bone dst;
 		dst.name = src["name"].asString();
 		dst.parent = src["parent"].asString();
-		dst.pos.x = src["x"].asDouble();
-		dst.pos.y = src["y"].asDouble();
-		dst.angle = src["rotation"].asDouble() * SM_DEG_TO_RAD;
+		dst.pos.x = static_cast<float>(src["x"].asDouble());
+		dst.pos.y = static_cast<float>(src["y"].asDouble());
+		dst.angle = static_cast<float>(src["rotation"].asDouble() * SM_DEG_TO_RAD);
 		if (src.isMember("length")) {
-			dst.length = src["length"].asDouble();
+			dst.length = static_cast<float>(src["length"].asDouble());
 		}
 
 		bones.push_back(dst);
@@ -179,9 +179,9 @@ void SpineParser::ParseSkins(const Json::Value& val)
 
 void SpineParser::ParseImage(SkinItem& dst, const Json::Value& src)
 {
-	dst.pos.x = src["x"].asDouble();
-	dst.pos.y = src["y"].asDouble();
-	dst.angle = src["rotation"].asDouble() * SM_DEG_TO_RAD;
+	dst.pos.x = static_cast<float>(src["x"].asDouble());
+	dst.pos.y = static_cast<float>(src["y"].asDouble());
+	dst.angle = static_cast<float>(src["rotation"].asDouble() * SM_DEG_TO_RAD);
 }
 
 void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
@@ -192,8 +192,8 @@ void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
 	for (int i = 0; i < tn; ++i) 
 	{
 		sm::vec2 pos;
-		pos.x = src["uvs"][ptr++].asDouble();
-		pos.y = src["uvs"][ptr++].asDouble();
+		pos.x = static_cast<float>(src["uvs"][ptr++].asDouble());
+		pos.y = static_cast<float>(src["uvs"][ptr++].asDouble());
 		pos.y = 1 - pos.y;
 		dst.texcoords.push_back(pos);
 	}
@@ -206,8 +206,8 @@ void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
 		for (int i = 0; i < vn; ++i) 
 		{
 			sm::vec2 pos;
-			pos.x = src["vertices"][ptr++].asDouble();
-			pos.y = src["vertices"][ptr++].asDouble();
+			pos.x = static_cast<float>(src["vertices"][ptr++].asDouble());
+			pos.y = static_cast<float>(src["vertices"][ptr++].asDouble());
 			dst.vertices.push_back(pos);
 		}
 		assert(dst.vertices.size() == dst.texcoords.size());
@@ -223,9 +223,9 @@ void SpineParser::ParseMesh(SkinItem& dst, const Json::Value& src)
 			{
 				SkinItem::SkinnedVertex::Joint item;
 				item.bone = src["vertices"][i++].asInt();
-				item.vx = src["vertices"][i++].asDouble();
-				item.vy = src["vertices"][i++].asDouble();
-				item.weight = src["vertices"][i++].asDouble();
+				item.vx = static_cast<float>(src["vertices"][i++].asDouble());
+				item.vy = static_cast<float>(src["vertices"][i++].asDouble());
+				item.weight = static_cast<float>(src["vertices"][i++].asDouble());
 				sv.joints.push_back(item);
 			}
 			dst.skinned_vertices.push_back(sv);
@@ -296,8 +296,8 @@ void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
 		{
 			const Json::Value& src = val["rotate"][i];
 			Rotate dst;
-			dst.time = src["time"].asDouble();
-			dst.rot = src["angle"].asDouble() * SM_DEG_TO_RAD;
+			dst.time = static_cast<float>(src["time"].asDouble());
+			dst.rot = static_cast<float>(src["angle"].asDouble() * SM_DEG_TO_RAD);
 			bone.rotates.push_back(dst);
 		}
 	}
@@ -308,9 +308,9 @@ void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
 		{
 			const Json::Value& src = val["translate"][i];
 			Translate dst;
-			dst.time = src["time"].asDouble();
-			dst.trans.x = src["x"].asDouble();
-			dst.trans.y = src["y"].asDouble();
+			dst.time = static_cast<float>(src["time"].asDouble());
+			dst.trans.x = static_cast<float>(src["x"].asDouble());
+			dst.trans.y = static_cast<float>(src["y"].asDouble());
 			bone.translates.push_back(dst);
 		}
 	}
@@ -321,9 +321,9 @@ void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
 		{
 			const Json::Value& src = val["scale"][i];
 			Scale dst;
-			dst.time = src["time"].asDouble();
-			dst.scale.x = src["x"].asDouble();
-			dst.scale.y = src["y"].asDouble();
+			dst.time = static_cast<float>(src["time"].asDouble());
+			dst.scale.x = static_cast<float>(src["x"].asDouble());
+			dst.scale.y = static_cast<float>(src["y"].asDouble());
 			bone.scales.push_back(dst);
 		}
 	}
@@ -333,7 +333,7 @@ void SpineParser::ParseAnimSlot(const Json::Value& val, AnimSlot& slot)
 {
 	slot.skins.reserve(val.size());
 	for (int i = 0, n = val.size(); i < n; ++i) {
-		float time = val[i]["time"].asDouble();
+		float time = static_cast<float>(val[i]["time"].asDouble());
 		std::string skin = val[i]["name"].asString();
 		slot.skins.push_back(std::make_pair(time, skin));
 	}
@@ -366,7 +366,7 @@ void SpineParser::ParseAnimDeform(const Json::Value& val, AnimDeform& deform)
 		const Json::Value& src = val[i];
 		Deform dst;
 
-		dst.time = src["time"].asDouble();
+		dst.time = static_cast<float>(src["time"].asDouble());
 		if (src.isMember("offset")) {
 			dst.offset = src["offset"].asInt() / 2;
 		} else {
@@ -377,8 +377,8 @@ void SpineParser::ParseAnimDeform(const Json::Value& val, AnimDeform& deform)
 		int m = src["vertices"].size() / 2;
 		dst.vertices.reserve(m);
 		for (int j = 0; j < m; ++j) {
-			float x = src["vertices"][ptr++].asDouble(),
-				  y = src["vertices"][ptr++].asDouble();
+			float x = static_cast<float>(src["vertices"][ptr++].asDouble()),
+				  y = static_cast<float>(src["vertices"][ptr++].asDouble());
 			dst.vertices.push_back(sm::vec2(x, y));
 		}
 

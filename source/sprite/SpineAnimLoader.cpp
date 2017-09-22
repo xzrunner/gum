@@ -130,7 +130,7 @@ float SpineAnimLoader::GetNextTime()
 		if (!src_bone.rotates.empty()) 
 		{
 			int idx = m_pose_ptrs[ptr];
-			if (idx < src_bone.rotates.size() - 1) 
+			if (idx < static_cast<int>(src_bone.rotates.size()) - 1)
 			{
 				float time = src_bone.rotates[idx + 1].time;
 				if (time < next_time) {
@@ -143,7 +143,7 @@ float SpineAnimLoader::GetNextTime()
 		if (!src_bone.translates.empty()) 
 		{
 			int idx = m_pose_ptrs[ptr];
-			if (idx < src_bone.translates.size() - 1) 
+			if (idx < static_cast<int>(src_bone.translates.size()) - 1)
 			{
 				float time = src_bone.translates[idx + 1].time;
 				if (time < next_time) {
@@ -156,7 +156,7 @@ float SpineAnimLoader::GetNextTime()
 		if (!src_bone.scales.empty()) 
 		{
 			int idx = m_pose_ptrs[ptr];
-			if (idx < src_bone.scales.size() - 1) 
+			if (idx < static_cast<int>(src_bone.scales.size()) - 1)
 			{
 				float time = src_bone.scales[idx + 1].time;
 				if (time < next_time) {
@@ -242,7 +242,7 @@ void SpineAnimLoader::UpdateNextTime(float next_time)
 		if (!src_bone.rotates.empty()) 
 		{
 			int idx = m_pose_ptrs[ptr];
-			if (idx < src_bone.rotates.size() - 1) {
+			if (idx < static_cast<int>(src_bone.rotates.size()) - 1) {
 				if (src_bone.rotates[idx + 1].time <= next_time) {
 					++m_pose_ptrs[ptr];
 				}
@@ -253,7 +253,7 @@ void SpineAnimLoader::UpdateNextTime(float next_time)
 		if (!src_bone.translates.empty()) 
 		{
 			int idx = m_pose_ptrs[ptr];
-			if (idx < src_bone.translates.size() - 1) {
+			if (idx < static_cast<int>(src_bone.translates.size()) - 1) {
 				if (src_bone.translates[idx + 1].time <= next_time) {
 					++m_pose_ptrs[ptr];
 				}
@@ -264,7 +264,7 @@ void SpineAnimLoader::UpdateNextTime(float next_time)
 		if (!src_bone.scales.empty()) 
 		{
 			int idx = m_pose_ptrs[ptr];
-			if (idx < src_bone.scales.size() - 1) {
+			if (idx < static_cast<int>(src_bone.scales.size()) - 1) {
 				if (src_bone.scales[idx + 1].time <= next_time) {
 					++m_pose_ptrs[ptr];
 				}

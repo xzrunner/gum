@@ -54,10 +54,10 @@ dtex_sym_insert(UID uid, const sm::rect& bounding, int tex_id, int tex_w, int te
 	dtex->LoadSymStart();
 
 	sm::i16_rect r_dst;
-	r_dst.xmin = bounding.xmin + tex_w * 0.5f;
-	r_dst.ymin = bounding.ymin + tex_h * 0.5f;
-	r_dst.xmax = bounding.xmax + tex_w * 0.5f;
-	r_dst.ymax = bounding.ymax + tex_h * 0.5f;
+	r_dst.xmin = static_cast<uint16_t>(bounding.xmin + tex_w * 0.5f);
+	r_dst.ymin = static_cast<uint16_t>(bounding.ymin + tex_h * 0.5f);
+	r_dst.xmax = static_cast<uint16_t>(bounding.xmax + tex_w * 0.5f);
+	r_dst.ymax = static_cast<uint16_t>(bounding.ymax + tex_h * 0.5f);
 
 	dtex->LoadSymbol(uid, tex_id, tex_w, tex_h, r_dst, 1, 0, 0);
 

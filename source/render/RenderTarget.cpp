@@ -22,7 +22,7 @@ void RenderTarget::Bind()
 
 	int w = Width(),
 		h = Height();
-	s2::RenderContext ctx(w, h, w, h);
+	s2::RenderContext ctx(static_cast<float>(w), static_cast<float>(h), w, h);
 	// use last model view
 	const s2::RenderContext* last = s2::RenderCtxStack::Instance()->Top();
 	if (last) {
@@ -47,7 +47,7 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 
 	float vertices[8], texcoords[8];
 
-	float w, h;
+	int w, h;
 	if (dst_w != 0 && dst_h != 0) {
 		w = dst_w;
 		h = dst_h;
@@ -63,7 +63,7 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 	}
 
 	s2::RenderScissor::Instance()->Disable();
-	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(w, h, w, h));
+	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	if (last) {
 		const s2::RenderContext* curr = s2::RenderCtxStack::Instance()->Top();
 		const_cast<s2::RenderContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);

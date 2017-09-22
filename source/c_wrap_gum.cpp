@@ -194,8 +194,8 @@ void gum_store_snapshot(const char* filepath)
 	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
 	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
-	float w = ctx->GetScreenWidth();
-	float h = ctx->GetScreenHeight();
+	int w = ctx->GetScreenWidth();
+	int h = ctx->GetScreenHeight();
 
 	uint8_t* pixels = (uint8_t*)malloc(w * h * 3);
 	memset(pixels, 0, w * h * 3);
@@ -210,8 +210,8 @@ int gum_compare_snapshot(const char* filepath)
 	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
 	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
-	float w = ctx->GetScreenWidth();
-	float h = ctx->GetScreenHeight();
+	int w = ctx->GetScreenWidth();
+	int h = ctx->GetScreenHeight();
 
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
@@ -594,7 +594,7 @@ void gum_draw_text(const char* str, int x, int y, int w)
 	std::string gbk_str = StringHelper::UTF8ToGBK(str);
 
 	S2_MAT mat;
-	mat.Translate(x, y);
+	mat.Translate(static_cast<float>(x), static_cast<float>(y));
 	GTxt::Instance()->Draw(mat, gbk_str, w);
 }
 
@@ -894,7 +894,7 @@ void gum_stat_fps_end()
 extern "C"
 int gum_stat_get_fps()
 {
-	return StatFPS::Instance()->GetFPS();
+	return static_cast<int>(StatFPS::Instance()->GetFPS());
 }
 
 extern "C"

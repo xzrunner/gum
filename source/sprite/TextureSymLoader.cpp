@@ -61,7 +61,7 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 		return;
 	}
 
-	for (int i = 0; i < node->n; ++i) 
+	for (uint32_t i = 0; i < node->n; ++i) 
 	{
 		s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->polys[i], m_flatten);
 		if (sym)

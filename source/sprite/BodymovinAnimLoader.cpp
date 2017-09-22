@@ -427,8 +427,8 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames
 		break;
 	case s2::SYM_SHAPE:
 	case s2::SYM_ANIMATION:
-		ori_sz.x = w;
-		ori_sz.y = h;
+		ori_sz.x = static_cast<float>(w);
+		ori_sz.y = static_cast<float>(h);
 		break;
 	default:
 		assert(0);
@@ -483,7 +483,7 @@ bool BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frame
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
-			int opacity = data.data[0];
+			int opacity = static_cast<int>(data.data[0]);
 			s2::Sprite* spr = frame->sprs[0];
 			s2::RenderColor rc = spr->GetColor();
 			s2::Color col = spr->GetColor().GetMul();
@@ -572,7 +572,7 @@ void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::Frame*>& frames
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
-			int angle = data.data[0];
+			int angle = static_cast<int>(data.data[0]);
 			frame->sprs[0]->SetAngle(- angle * SM_DEG_TO_RAD);
 		}
 	}
@@ -805,7 +805,8 @@ void BodymovinAnimLoader::LoadExpression(std::vector<s2::AnimSymbol::Frame*>& fr
 			s2::AnimSymbol::Frame* frame = frames[i];
 			frame->tween = true;
 			for (int j = 0, m = frame->sprs.size(); j < m; ++j) {
-				s2::LerpWiggle* lerp = new s2::LerpWiggle(freq, amp);
+				s2::LerpWiggle* lerp = new s2::LerpWiggle(
+					static_cast<float>(freq), static_cast<float>(amp));
 				frame->lerps.push_back(std::make_pair(s2::AnimLerp::SPR_POS, lerp));
 			}
 		}

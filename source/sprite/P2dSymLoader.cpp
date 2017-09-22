@@ -285,11 +285,11 @@ void P2dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 {
 	Component comp;
 
-	comp.angle_start		= comp_val["angle"]["start"].asDouble();
-	comp.angle_end			= comp_val["angle"]["end"].asDouble();
+	comp.angle_start		= static_cast<float>(comp_val["angle"]["start"].asDouble());
+	comp.angle_end			= static_cast<float>(comp_val["angle"]["end"].asDouble());
 
-	comp.scale_start		= comp_val["scale"]["start"].asDouble();
-	comp.scale_end			= comp_val["scale"]["end"].asDouble();
+	comp.scale_start		= static_cast<float>(comp_val["scale"]["start"].asDouble());
+	comp.scale_end			= static_cast<float>(comp_val["scale"]["end"].asDouble());
 
 	JsonSerializer::Load(comp_val["mul_col_begin"], comp.mul_col_begin);
 	JsonSerializer::Load(comp_val["mul_col_end"], comp.mul_col_end);
@@ -297,8 +297,8 @@ void P2dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	JsonSerializer::Load(comp_val["add_col_end"], comp.add_col_end);
 
 	if (comp_val.isMember("alpha")) {
-		comp.alpha_start = comp_val["alpha"]["start"].asInt();
-		comp.alpha_end = comp_val["alpha"]["end"].asInt();
+		comp.alpha_start = static_cast<float>(comp_val["alpha"]["start"].asInt());
+		comp.alpha_end   = static_cast<float>(comp_val["alpha"]["end"].asInt());
 	}
 
 	comp.filepath = comp_val["filepath"].asString();

@@ -106,10 +106,10 @@ BodymovinParser::FloatVal::Float3::Float3(const Json::Value& val)
 		assert(val.size() <= 3);
 		int n = std::min(3, static_cast<int>(val.size()));
 		for (int i = 0; i < n; ++i) {
-			data[i] = val[i].asDouble();
+			data[i] = static_cast<float>(val[i].asDouble());
 		}		
 	} else {
-		data[0] = val.asDouble();
+		data[0] = static_cast<float>(val.asDouble());
 	}
 }
 
@@ -258,11 +258,11 @@ bool BodymovinParser::Layer::Load(const Json::Value& val)
 
 	float time_stretch = 1;
 	if (val.isMember("sr")) {
-		time_stretch = val["sr"].asDouble();
+		time_stretch = static_cast<float>(val["sr"].asDouble());
 	}
 
-	in_frame  = val["ip"].asDouble() / time_stretch;
-	out_frame = val["op"].asDouble() / time_stretch;
+	in_frame  = static_cast<float>(val["ip"].asDouble() / time_stretch);
+	out_frame = static_cast<float>(val["op"].asDouble() / time_stretch);
 
 	start_frame = val["st"].asInt();
 
