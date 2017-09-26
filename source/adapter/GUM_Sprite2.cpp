@@ -137,20 +137,20 @@ void Sprite2::Init()
 
 void Sprite2::Flush()
 {
-	int dc = sl::Statistics::Instance()->GetLastDrawCall();
-	if (dc < 4) {
-		return;
-	}
+	//int dc = sl::Statistics::Instance()->GetLastDrawCall();
+	//if (dc < 4) {
+	//	return;
+	//}
 
-	if (dc < m_curr_dc) {
-		m_curr_dc = dc;
-		m_dc_count = 0;
-	} else if (dc == m_curr_dc) {
-		++m_dc_count;
-		if (m_dc_count == MAX_DC_COUNT) {
-			s2::Blackboard::Instance()->SetDlistEnable(true);
-		}
-	}
+	//if (dc < m_curr_dc) {
+	//	m_curr_dc = dc;
+	//	m_dc_count = 0;
+	//} else if (dc == m_curr_dc) {
+	//	++m_dc_count;
+	//	if (m_dc_count == MAX_DC_COUNT) {
+	//		s2::Blackboard::Instance()->SetDlistEnable(true);
+	//	}
+	//}
 }
 
 }
