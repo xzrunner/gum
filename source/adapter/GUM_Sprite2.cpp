@@ -13,7 +13,9 @@
 #include <sprite2/DrawNode.h>
 #include <sprite2/AudioContext.h>
 #include <sprite2/Callback.h>
+#include <sprite2/Blackboard.h>
 #include <dtex2/DebugDraw.h>
+#include <shaderlab/Statistics.h>
 
 #include <stdint.h>
 
@@ -23,6 +25,8 @@ namespace gum
 SINGLETON_DEFINITION(Sprite2);
 
 Sprite2::Sprite2()
+	: m_curr_dc(std::numeric_limits<int>::max())
+	, m_dc_count(0)
 {
 }
 
@@ -128,6 +132,24 @@ void Sprite2::Init()
 		s2::Callback::Funs funs;
 		funs.submit_task = submit_task;
 		s2::Callback::RegisterCallback(funs);
+	}
+}
+
+void Sprite2::Flush()
+{
+	int dc = sl::Statistics::Instance()->GetLastDrawCall();
+	if (dc < 4) {
+		return;
+	}
+
+	if (dc < m_curr_dc) {
+		m_curr_dc = dc;
+		m_dc_count = 0;
+	} else if (dc == m_curr_dc) {
+		++m_dc_count;
+		if (m_dc_count == MAX_DC_COUNT) {
+			s2::Blackboard::Instance()->SetDlistEnable(true);
+		}
 	}
 }
 

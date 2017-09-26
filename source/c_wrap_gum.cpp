@@ -82,7 +82,7 @@ void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 	try {
 		DTex::Instance()->InitHook(NULL, NULL, error_reload);
 
-		Sprite2::Init();
+		Sprite2::Instance()->Init();
 
 		ShaderLab::Init();
 
@@ -179,6 +179,7 @@ void gum_flush()
 	dtex::Facade::Flush();
 	DTex::Instance()->Flush();
 	LoadImageTaskMgr::Instance()->Flush();
+	Sprite2::Instance()->Flush();
 }
 
 extern "C"

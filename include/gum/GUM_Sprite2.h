@@ -13,9 +13,14 @@ class Sprite2
 public:
 	void DebugDraw() const;
 
-	static void Init();
+	void Init();
+
+	void Flush();
 
 private:
+	static const int MAX_DC_COUNT = 30;
+	int m_curr_dc, m_dc_count;
+
 	SINGLETON_DECLARATION(Sprite2)
 
 }; // Sprite2
