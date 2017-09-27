@@ -21,14 +21,14 @@ public:
 	 *  @brief
 	 *    raw, json res
 	 */		
-	s2::Symbol* Create(const std::string& filepath, bool flatten, int type = s2::SYM_UNKNOWN) const;
+	s2::Symbol* Create(const std::string& filepath, int type = s2::SYM_UNKNOWN) const;
 
 	/**
 	 *  @brief
 	 *    pack, binary res
 	 */	
-	s2::Symbol* Create(uint32_t id, bool flatten) const;
-	s2::Symbol* Create(const std::string& pkg_name, const std::string& node_name, bool flatten) const;
+	s2::Symbol* Create(uint32_t id) const;
+	s2::Symbol* Create(const std::string& pkg_name, const std::string& node_name) const;
 
 	SINGLETON_DECLARATION(SymbolFactory);
 

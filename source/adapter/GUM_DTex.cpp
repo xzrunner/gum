@@ -36,7 +36,6 @@
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>
 #include <sprite2/DrawNode.h>
-#include <sprite2/FlattenMgr.h>
 #include <sprite2/StatImages.h>
 #include <sprite2/S2_Symbol.h>
 #include <unirender/UR_RenderContext.h>

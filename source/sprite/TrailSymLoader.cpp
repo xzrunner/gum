@@ -21,8 +21,7 @@
 namespace gum
 {
 
-TrailSymLoader::TrailSymLoader(bool flatten)
-	: m_flatten(flatten)
+TrailSymLoader::TrailSymLoader()
 {
 }
 
@@ -72,7 +71,7 @@ void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
 					LOGW("TrailSymLoader::Store err comp %s\n", src.filepath.c_str());
 				}
 			} else {
-				dst.mode.A.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
+				dst.mode.A.ud = SymbolPool::Instance()->Fetch(src.sym_id);
 				if (!dst.mode.A.ud) {
 					LOGW("TrailSymLoader::Store err comp %d\n", src.sym_id);
 				}

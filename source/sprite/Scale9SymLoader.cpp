@@ -18,9 +18,8 @@
 namespace gum
 {
 
-Scale9SymLoader::Scale9SymLoader(s2::Scale9Symbol* sym, bool flatten, const SpriteLoader* spr_loader)
+Scale9SymLoader::Scale9SymLoader(s2::Scale9Symbol* sym, const SpriteLoader* spr_loader)
 	: m_sym(sym)
-	, m_flatten(flatten)
 	, m_spr_loader(spr_loader)
 {
 	if (m_sym) {
@@ -216,7 +215,7 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 
 s2::Sprite* Scale9SymLoader::LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror)
 {
-	s2::Symbol* sym = SymbolPool::Instance()->Fetch(sym_id, m_flatten);
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(sym_id);
 	if (!sym) {
 		return NULL;
 	}

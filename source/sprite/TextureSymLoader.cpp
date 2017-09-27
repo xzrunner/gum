@@ -13,9 +13,8 @@
 namespace gum
 {
 
-TextureSymLoader::TextureSymLoader(s2::TextureSymbol* sym, bool flatten)
+TextureSymLoader::TextureSymLoader(s2::TextureSymbol* sym)
 	: m_sym(sym)
-	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -63,7 +62,7 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 
 	for (uint32_t i = 0; i < node->n; ++i) 
 	{
-		s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->polys[i], m_flatten);
+		s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->polys[i]);
 		if (sym)
 		{
 			s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<s2::ShapeSymbol*>(sym);

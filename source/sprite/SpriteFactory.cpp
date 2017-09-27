@@ -151,7 +151,7 @@ s2::Sprite* SpriteFactory::Create(const std::string& filepath) const
 	}
 }
 
-s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir, bool flatten) const
+s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir) const
 {
 	s2::Sprite* spr = NULL;
 
@@ -220,7 +220,7 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 		break;
 	case s2::SYM_MESH:
 		{
-			MeshSprLoader loader(VI_DOWNCASTING<s2::MeshSprite*>(spr), flatten);
+			MeshSprLoader loader(VI_DOWNCASTING<s2::MeshSprite*>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
@@ -250,10 +250,10 @@ s2::Sprite* SpriteFactory::Create(const Json::Value& val, const std::string& dir
 	return spr;
 }
 
-s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
+s2::Sprite* SpriteFactory::Create(uint32_t id)
 {
 	if (id == 0xffffffff) {
-		return new s2::AnchorSprite(SymbolFactory::Instance()->Create(id, flatten));
+		return new s2::AnchorSprite(SymbolFactory::Instance()->Create(id));
 	}
 
 	s2::Sprite* spr = NULL;
@@ -270,7 +270,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	{
 	case simp::TYPE_IMAGE:
 		{
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 			if (sym) 
 			{
 				spr = new s2::ImageSprite(sym, id);
@@ -281,7 +281,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_SCALE9_SPR:
 		{
 			const simp::NodeScale9Spr* node = (const simp::NodeScale9Spr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::Scale9Sprite* s9_spr = new s2::Scale9Sprite(sym, id);
@@ -298,7 +298,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_ICON_SPR:
 		{
 			const simp::NodeIconSpr* node = (const simp::NodeIconSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::IconSprite* icon_spr = new s2::IconSprite(sym, id);
@@ -315,7 +315,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_TEXTURE_SPR:
 		{
 			const simp::NodeTextureSpr* node = (const simp::NodeTextureSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::TextureSprite* tex_spr = new s2::TextureSprite(sym, id);
@@ -327,7 +327,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_LABEL:
 		{
 			const simp::NodeLabel* node = (const simp::NodeLabel*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 			if (sym)
 			{
 				s2::TextboxSprite* tb_spr = VI_DOWNCASTING<s2::TextboxSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -344,7 +344,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_COMPLEX_SPR:
 		{
 			const simp::NodeComplexSpr* node = (const simp::NodeComplexSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym) 
 			{
 				s2::ComplexSprite* comp_spr = VI_DOWNCASTING<s2::ComplexSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -360,7 +360,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_ANIM_SPR:
 		{
 			const simp::NodeAnimationSpr* node = (const simp::NodeAnimationSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::AnimSprite* anim_spr = VI_DOWNCASTING<s2::AnimSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -377,7 +377,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_ANIM2_SPR:
 		{
 			const simp::NodeAnim2Spr* node = (const simp::NodeAnim2Spr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::Anim2Sprite* anim2_spr = VI_DOWNCASTING<s2::Anim2Sprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -394,7 +394,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_P3D_SPR:
 		{
 			const simp::NodeParticle3dSpr* node = (const simp::NodeParticle3dSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::Particle3dSprite* p3d_spr = VI_DOWNCASTING<s2::Particle3dSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -411,7 +411,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_P2D_SPR:
 		{
 			const simp::NodeParticle2dSpr* node = (const simp::NodeParticle2dSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::Particle2dSprite* p2d_spr = VI_DOWNCASTING<s2::Particle2dSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -428,7 +428,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_SHAPE_SPR:
 		{
 			const simp::NodeShapeSpr* node = (const simp::NodeShapeSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::ShapeSprite* shape_spr = VI_DOWNCASTING<s2::ShapeSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -440,14 +440,14 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_MESH_SPR:
 		{
 			const simp::NodeMeshSpr* node = (const simp::NodeMeshSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->mesh_id, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->mesh_id);
 			if (sym)
 			{
 				s2::MeshSprite* mesh_spr = VI_DOWNCASTING<s2::MeshSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
 				sym->RemoveReference();
 				if (mesh_spr)
 				{
-					MeshSprLoader loader(mesh_spr, flatten);
+					MeshSprLoader loader(mesh_spr);
 					loader.LoadBin(node);
 					spr = mesh_spr;
 				}
@@ -457,7 +457,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_MASK_SPR:
 		{
 			const simp::NodeMaskSpr* node = (const simp::NodeMaskSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::MaskSprite* mask_spr = VI_DOWNCASTING<s2::MaskSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -469,7 +469,7 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	case simp::TYPE_TRAIL_SPR:
 		{
 			const simp::NodeTrailSpr* node = (const simp::NodeTrailSpr*)data;
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym, flatten);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
 				s2::TrailSprite* trail_spr = VI_DOWNCASTING<s2::TrailSprite*>(SpriteFactory::Instance()->Create(sym, id, true));
@@ -508,9 +508,9 @@ s2::Sprite* SpriteFactory::Create(uint32_t id, bool flatten)
 	return spr;
 }
 
-s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id, bool flatten, bool create_actors)
+s2::Sprite* SpriteFactory::CreateFromSym(uint32_t id, bool create_actors)
 {
-	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, flatten);
+	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 	if (!sym) {
 		LOGW("Create spr fail: err sym %u", id);
 		return NULL;

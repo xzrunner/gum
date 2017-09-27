@@ -22,9 +22,8 @@
 namespace gum
 {
 
-IconSymLoader::IconSymLoader(s2::IconSymbol* sym, bool flatten)
+IconSymLoader::IconSymLoader(s2::IconSymbol* sym)
 	: m_sym(sym)
-	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -101,7 +100,7 @@ void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 		break;
 	}
 
-	s2::Symbol* base = SymbolPool::Instance()->Fetch(node->base_id, m_flatten);
+	s2::Symbol* base = SymbolPool::Instance()->Fetch(node->base_id);
 	if (base) {
 		assert(base->Type() == s2::SYM_IMAGE);
 		icon->SetImage(VI_DOWNCASTING<s2::ImageSymbol*>(base));

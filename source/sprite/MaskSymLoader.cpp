@@ -13,9 +13,8 @@
 namespace gum
 {
 
-MaskSymLoader::MaskSymLoader(s2::MaskSymbol* sym, bool flatten)
+MaskSymLoader::MaskSymLoader(s2::MaskSymbol* sym)
 	: m_sym(sym)
-	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -74,13 +73,13 @@ void MaskSymLoader::LoadBin(const simp::NodeMask* node)
 
 	s2::MaskSymbol* psym = VI_DOWNCASTING<s2::MaskSymbol*>(m_sym);
 
-	s2::Sprite* base = SpriteFactory::Instance()->Create(node->base_id, m_flatten);
+	s2::Sprite* base = SpriteFactory::Instance()->Create(node->base_id);
 	if (base) {
 		psym->SetBase(base);
 		base->RemoveReference();
 	}
 
-	s2::Sprite* mask = SpriteFactory::Instance()->Create(node->mask_id, m_flatten);
+	s2::Sprite* mask = SpriteFactory::Instance()->Create(node->mask_id);
 	if (mask) {
 		psym->SetMask(mask);
 		mask->RemoveReference();

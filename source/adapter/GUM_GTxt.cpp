@@ -301,8 +301,7 @@ ext_sym_create(const char* str) {
 		if (tokens[0] == "pkg" && tokens[2] == "export") {
 			uint32_t id = simp::NodeFactory::Instance()->GetNodeID(tokens[1], tokens[3]);
 			if (id != 0xffffffff) {
-				// todo: flatten
-				sym = SymbolPool::Instance()->Fetch(id, false);
+				sym = SymbolPool::Instance()->Fetch(id);
 			}
 		}
 	}
@@ -439,16 +438,14 @@ void GTxt::LoadUserFontChar(const std::string& str, const std::string& pkg, cons
 		if (itr->second->GetID() == id) {
 			return;
 		} else {
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, false);
+			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 			if (sym) {
 				itr->second->RemoveReference();
-				// todo: flatten
 				itr->second = sym;
 			}
 		}
 	} else {
-		// todo: flatten
-		s2::Symbol* sym = SymbolPool::Instance()->Fetch(id, false);
+		s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
 		if (sym) {
 			m_user_font_chars.insert(std::make_pair(unicode, sym));
 		}

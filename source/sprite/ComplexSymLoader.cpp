@@ -13,9 +13,8 @@
 namespace gum
 {
 
-ComplexSymLoader::ComplexSymLoader(s2::ComplexSymbol* sym, bool flatten)
+ComplexSymLoader::ComplexSymLoader(s2::ComplexSymbol* sym)
 	: m_sym(sym)
-	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -62,10 +61,6 @@ void ComplexSymLoader::LoadJson(const std::string& filepath)
 	}
 
 //	LoadJsonAction(value, m_sym);
-
-	if (m_flatten) {
-		m_sym->BuildFlatten(NULL);
-	}
 }
 
 void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
@@ -83,7 +78,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 	m_sym->Clear();
 	for (int i = 0; i < node->sprs_n; ++i) 
 	{
-		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i], m_flatten);
+		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i]);
 		children.push_back(spr);
 		if (!spr) {
 			continue;
@@ -117,10 +112,6 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		}
 	}
 	m_sym->SetActions(dst);
-
-	if (m_flatten) {
-		m_sym->BuildFlatten(NULL);
-	}
 }
 
 //void ComplexSymLoader::LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym)

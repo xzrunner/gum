@@ -83,7 +83,7 @@ s2::Symbol* SymbolPool::Fetch(const std::string& filepath, int type)
 	return ret;
 }
 
-s2::Symbol* SymbolPool::Fetch(const uint32_t id, bool flatten)
+s2::Symbol* SymbolPool::Fetch(const uint32_t id)
 {
 	std::map<uint32_t, s2::Symbol*>::const_iterator itr = m_id_cache.find(id);
 	if (itr != m_id_cache.end()) {
@@ -91,7 +91,7 @@ s2::Symbol* SymbolPool::Fetch(const uint32_t id, bool flatten)
 		return itr->second;
 	}
 
-	s2::Symbol* ret = SymbolFactory::Instance()->Create(id, flatten);
+	s2::Symbol* ret = SymbolFactory::Instance()->Create(id);
 	if (ret) {
 		ret->AddReference();
 		m_id_cache.insert(std::make_pair(id, ret));

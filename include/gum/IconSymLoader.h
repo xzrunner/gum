@@ -16,7 +16,7 @@ namespace gum
 class IconSymLoader : private cu::Uncopyable
 {
 public:
-	IconSymLoader(s2::IconSymbol* sym, bool flatten);
+	IconSymLoader(s2::IconSymbol* sym);
 	~IconSymLoader();
 
 	void LoadJson(const std::string& filepath);	
@@ -24,8 +24,6 @@ public:
 
 private:
 	s2::IconSymbol* m_sym;
-
-	bool m_flatten;
 
 }; // IconSymLoader
 

@@ -20,7 +20,7 @@ class SpriteLoader;
 class Scale9SymLoader : private cu::Uncopyable
 {
 public:
-	Scale9SymLoader(s2::Scale9Symbol* sym, bool flatten, const SpriteLoader* spr_loader = NULL);
+	Scale9SymLoader(s2::Scale9Symbol* sym, const SpriteLoader* spr_loader = NULL);
 	~Scale9SymLoader();
 
 	void LoadJson(const std::string& filepath);
@@ -31,8 +31,6 @@ private:
 
 private:
 	s2::Scale9Symbol* m_sym;
-
-	bool m_flatten;
 
 	const SpriteLoader* m_spr_loader;
 

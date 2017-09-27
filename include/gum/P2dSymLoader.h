@@ -21,7 +21,7 @@ namespace gum
 class P2dSymLoader : private cu::Uncopyable
 {
 public:
-	P2dSymLoader(bool flatten);
+	P2dSymLoader();
 
 	void Store(s2::Particle2dSymbol* sym) const;
 	void Store(p2d_emitter_cfg* cfg) const;
@@ -119,9 +119,6 @@ public:
 	float direction, direction_var;
 
 	std::vector<Component> components;
-
-private:
-	bool m_flatten;
 
 }; // P2dSymLoader
 

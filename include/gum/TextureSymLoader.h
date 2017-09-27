@@ -16,7 +16,7 @@ namespace gum
 class TextureSymLoader : private cu::Uncopyable
 {
 public:
-	TextureSymLoader(s2::TextureSymbol* sym, bool flatten);
+	TextureSymLoader(s2::TextureSymbol* sym);
 	~TextureSymLoader();
 
 	void LoadJson(const std::string& filepath);	
@@ -24,8 +24,6 @@ public:
 
 private:
 	s2::TextureSymbol* m_sym;
-
-	bool m_flatten;
 
 }; // TextureSymLoader
 

@@ -25,9 +25,8 @@
 namespace gum
 {
 
-MeshSymLoader::MeshSymLoader(s2::MeshSymbol* sym, bool flatten)
+MeshSymLoader::MeshSymLoader(s2::MeshSymbol* sym)
 	: m_sym(sym)
-	, m_flatten(flatten)
 {
 	if (m_sym) {
 		m_sym->AddReference();
@@ -86,7 +85,7 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 		return;
 	}
 
-	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id, m_flatten);
+	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 	if (!base_sym) {
 		return;
 	}

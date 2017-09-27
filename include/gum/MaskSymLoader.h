@@ -14,7 +14,7 @@ namespace gum
 class MaskSymLoader : private cu::Uncopyable
 {
 public:
-	MaskSymLoader(s2::MaskSymbol* sym, bool flatten);
+	MaskSymLoader(s2::MaskSymbol* sym);
 	~MaskSymLoader();
 
 	void LoadJson(const std::string& filepath);
@@ -22,8 +22,6 @@ public:
 
 private:
 	s2::MaskSymbol* m_sym;
-
-	bool m_flatten;
 
 }; // MaskSymLoader
 

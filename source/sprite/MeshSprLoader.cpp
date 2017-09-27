@@ -15,9 +15,8 @@
 namespace gum
 {
 
-MeshSprLoader::MeshSprLoader(s2::MeshSprite* spr, bool flatten)
+MeshSprLoader::MeshSprLoader(s2::MeshSprite* spr)
 	: m_spr(spr)
-	, m_flatten(flatten)
 {
 	if (m_spr) {
 		m_spr->AddReference();
@@ -60,7 +59,7 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 		return;
 	}
 
-	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id, m_flatten);
+	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 	if (base_sym) {
 		m_spr->SetBaseSym(base_sym);
 		base_sym->RemoveReference();

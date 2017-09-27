@@ -20,7 +20,7 @@ namespace gum
 class TrailSymLoader : private cu::Uncopyable
 {
 public:
-	TrailSymLoader(bool flatten);
+	TrailSymLoader();
 
 	void Store(s2::TrailSymbol* sym) const;
 	void Store(t2d_emitter_cfg* cfg) const;
@@ -76,9 +76,6 @@ public:
 
 	std::vector<CompImage> comp_images;
 	std::vector<CompShape> comp_shapes;
-
-private:
-	bool m_flatten;
 
 }; // TrailSymLoader
 

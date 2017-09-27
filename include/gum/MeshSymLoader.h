@@ -16,7 +16,7 @@ namespace gum
 class MeshSymLoader : private cu::Uncopyable
 {
 public:
-	MeshSymLoader(s2::MeshSymbol* sym, bool flatten);
+	MeshSymLoader(s2::MeshSymbol* sym);
 	~MeshSymLoader();
 
 	void LoadJson(const std::string& filepath);	
@@ -31,8 +31,6 @@ private:
 
 private:
 	s2::MeshSymbol* m_sym;
-
-	bool m_flatten;
 
 }; // MeshSymLoader
 

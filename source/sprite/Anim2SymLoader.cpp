@@ -17,10 +17,8 @@ namespace gum
 {
 
 Anim2SymLoader::Anim2SymLoader(s2::Anim2Symbol* sym, 
-							   bool flatten,
 							   const SymbolLoader* sym_loader)
 	: m_sym(sym)
-	, m_flatten(flatten)
 	, m_sym_loader(sym_loader)
 {
 	if (m_sym) {
@@ -103,7 +101,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 		rg_skin* dst = &sk->skins[i];
 		dst->type = src.type;
 		LoadBinSRT(dst->local, src.local);
-		dst->ud = SymbolPool::Instance()->Fetch(src.node, m_flatten);
+		dst->ud = SymbolPool::Instance()->Fetch(src.node);
 		ptr += SIZEOF_RG_SKIN;
 	}
 	//// slots

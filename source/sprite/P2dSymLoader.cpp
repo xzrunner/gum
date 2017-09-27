@@ -20,8 +20,7 @@
 namespace gum
 {
 
-P2dSymLoader::P2dSymLoader(bool flatten)
-	: m_flatten(flatten)
+P2dSymLoader::P2dSymLoader()
 {
 }
 
@@ -112,7 +111,7 @@ void P2dSymLoader::Store(p2d_emitter_cfg* cfg) const
 				LOGW("P2dSymLoader::Store err comp %s\n", src.filepath.c_str());
 			}
 		} else {
-			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
+			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id);
 			if (!dst.ud) {
 				LOGW("P2dSymLoader::Store err comp %d\n", src.sym_id);
 			}

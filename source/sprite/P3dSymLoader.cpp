@@ -21,8 +21,7 @@
 namespace gum
 {
 
-P3dSymLoader::P3dSymLoader(bool flatten)
-	: m_flatten(flatten)
+P3dSymLoader::P3dSymLoader()
 {
 }
 
@@ -116,7 +115,7 @@ void P3dSymLoader::Store(p3d_emitter_cfg* cfg) const
 				LOGW("P3dSymLoader::Store err comp %s\n", src.filepath.c_str());
 			}
 		} else {
-			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id, m_flatten);
+			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id);
 			if (!dst.ud) {
 				LOGW("P3dSymLoader::Store err comp %d\n", src.sym_id);
 			}

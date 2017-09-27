@@ -20,7 +20,7 @@ class SpriteLoader;
 class EasyAnimLoader : private cu::Uncopyable
 {
 public:
-	EasyAnimLoader(s2::AnimSymbol* sym, bool flatten, const SpriteLoader* spr_loader = NULL);
+	EasyAnimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader = NULL);
 	~EasyAnimLoader();
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
@@ -38,8 +38,6 @@ private:
 	s2::AnimSymbol* m_sym;
 
 	const SpriteLoader* m_spr_loader;
-
-	bool m_flatten;
 
 }; // EasyAnimLoader
 

@@ -17,7 +17,7 @@ class SpriteLoader;
 class AnimSymLoader : private cu::Uncopyable
 {
 public:
-	AnimSymLoader(s2::AnimSymbol* sym, bool flatten, const SymbolLoader* sym_loader = NULL,
+	AnimSymLoader(s2::AnimSymbol* sym, const SymbolLoader* sym_loader = NULL,
 		const SpriteLoader* spr_loader = NULL);
 	~AnimSymLoader();
 
@@ -29,8 +29,6 @@ private:
 
 	const SymbolLoader* m_sym_loader;
 	const SpriteLoader* m_spr_loader;
-
-	bool m_flatten;
 
 }; // AnimSymLoader
 
