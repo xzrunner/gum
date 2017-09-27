@@ -46,20 +46,20 @@ private:
 	
 	static int Frame2Time(int frame, int frame_rate);
 
-	static void InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static void InsertKeyframe(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, int end_frame);
-	static void InsertKeyframe(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static void InsertKeyframe(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		int time, int end_time);
 
-	static void LoadAnchor(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static void LoadAnchor(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, int w, int h);	
-	static bool LoadOpacity(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static bool LoadOpacity(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
-	static void LoadPosition(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static void LoadPosition(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, const sm::vec2& left_top);	
-	static void LoadRotate(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static void LoadRotate(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
-	static void LoadScale(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static void LoadScale(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
 
 	static BodymovinParser::FloatVal::Float3 GetLerpVal(
@@ -67,11 +67,11 @@ private:
 
 	s2::Sprite* CreateSolidSpr(const std::string& color, int width, int height) const;
 
-	static void LoadBlendMode(std::vector<s2::AnimSymbol::Frame*>& frames, int bm);
+	static void LoadBlendMode(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, int bm);
 
-	static void LoadIntegrate(std::vector<s2::AnimSymbol::Frame*>& frames);
+	static void LoadIntegrate(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames);
 	
-	static void LoadExpression(std::vector<s2::AnimSymbol::Frame*>& frames, 
+	static void LoadExpression(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, 
 		const BodymovinParser::Transform& trans);
 
 private:

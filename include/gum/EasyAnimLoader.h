@@ -28,11 +28,11 @@ public:
 
 private:
 	void LoadLayers(const Json::Value& val, const std::string& dir);
- 	void LoadActors(const Json::Value& src, s2::AnimSymbol::Frame* dst, const std::string& dir);
- 	void LoadLerps(const Json::Value& src, s2::AnimSymbol::Frame* dst);
+ 	void LoadActors(const Json::Value& src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst, const std::string& dir);
+ 	void LoadLerps(const Json::Value& src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst);
 
-	void LoadActors(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst);
-	void LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst);
+	void LoadActors(const simp::NodeAnimation::Frame* src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst);
+	void LoadLerps(const simp::NodeAnimation::Frame* src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst);
 
 private:
 	s2::AnimSymbol* m_sym;

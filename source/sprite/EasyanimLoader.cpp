@@ -59,20 +59,20 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 	for (int layer = 0; layer < node->n; ++layer)
 	{
 		const simp::NodeAnimation::Layer* src_layer = &node->layers[layer];
-		s2::AnimSymbol::Layer* dst_layer = new s2::AnimSymbol::Layer;
+		auto dst_layer = std::make_unique<s2::AnimSymbol::Layer>();
 		int frame_n = src_layer->n;
 		dst_layer->frames.reserve(frame_n);
 		for (int frame = 0; frame < frame_n; ++frame)
 		{
 			const simp::NodeAnimation::Frame* src_frame = src_layer->frames[frame];
-			s2::AnimSymbol::Frame* dst_frame = new s2::AnimSymbol::Frame;
+			auto dst_frame = std::make_unique<s2::AnimSymbol::Frame>();
 			dst_frame->index = src_frame->index;
 			dst_frame->tween = simp::int2bool(src_frame->tween);
 			LoadActors(src_frame, dst_frame);
 			LoadLerps(src_frame, dst_frame);
-			dst_layer->frames.push_back(dst_frame);
+			dst_layer->frames.push_back(std::move(dst_frame));
 		}
-		m_sym->AddLayer(dst_layer);
+		m_sym->AddLayer(std::move(dst_layer));
 	}
 }
 
@@ -82,25 +82,25 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
 	for (int layer = 0; layer < layer_n; ++layer)
 	{
 		const Json::Value& layer_val = val[layer];
-		s2::AnimSymbol::Layer* dst_layer = new s2::AnimSymbol::Layer;
+		auto dst_layer = std::make_unique<s2::AnimSymbol::Layer>();
 		dst_layer->name = layer_val["name"].asString();
 		int frame_n = layer_val["frame"].size();
 		dst_layer->frames.reserve(frame_n);
 		for (int frame = 0; frame < frame_n; ++frame)
 		{
 			const Json::Value& frame_val = layer_val["frame"][frame];
-			s2::AnimSymbol::Frame* dst_frame = new s2::AnimSymbol::Frame;
+			auto dst_frame = std::make_unique<s2::AnimSymbol::Frame>();
 			dst_frame->index = frame_val["time"].asInt();
 			dst_frame->tween = frame_val["tween"].asBool();
 			LoadActors(frame_val, dst_frame, dir);
 			LoadLerps(frame_val, dst_frame);
-			dst_layer->frames.push_back(dst_frame);
+			dst_layer->frames.push_back(std::move(dst_frame));
 		}
-		m_sym->AddLayer(dst_layer);
+		m_sym->AddLayer(std::move(dst_layer));
 	}
 }
 
-void EasyAnimLoader::LoadActors(const Json::Value& src, s2::AnimSymbol::Frame* dst,
+void EasyAnimLoader::LoadActors(const Json::Value& src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst,
 								const std::string& dir)
 {
 	int actor_n = src["actor"].size();
@@ -113,44 +113,44 @@ void EasyAnimLoader::LoadActors(const Json::Value& src, s2::AnimSymbol::Frame* d
 	}
 }
 
-void EasyAnimLoader::LoadLerps(const Json::Value& src, s2::AnimSymbol::Frame* dst)
+void EasyAnimLoader::LoadLerps(const Json::Value& src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst)
 {
 	for (int i = 0, n = src["lerp"].size(); i < n; ++i)
 	{
-		s2::ILerp* lerp = NULL;
+		std::unique_ptr<s2::ILerp> lerp = nullptr;
 		const Json::Value& val = src["lerp"][i]["val"];
 		std::string type = val["type"].asString();
 		if (type == "circle")
 		{
 			float scale = val["scale"].asInt() * 0.01f;
-			lerp = new s2::LerpCircle(scale);
+			lerp = std::make_unique<s2::LerpCircle>(scale);
 		}
 		else if (type == "spiral") 
 		{
 			float begin = val["angle_begin"].asInt() * SM_DEG_TO_RAD,
 				  end   = val["angle_end"].asInt() * SM_DEG_TO_RAD;
 			float scale = val["scale"].asInt() * 0.01f;
-			lerp = new s2::LerpSpiral(begin, end, scale);
+			lerp = std::make_unique<s2::LerpSpiral>(begin, end, scale);
 		}
 		else if (type == "wiggle")
 		{
 			float freq = static_cast<float>(val["freq"].asDouble());
 			float amp = static_cast<float>(val["amp"].asDouble());
-			lerp = new s2::LerpWiggle(freq, amp);
+			lerp = std::make_unique<s2::LerpWiggle>(freq, amp);
 		}
 		else if (type == "ease")
 		{
 			int type = val["ease"].asInt();
-			lerp = new s2::LerpEase(type);
+			lerp = std::make_unique<s2::LerpEase>(type);
 		}
 		if (lerp) {
 			s2::AnimLerp::SprData key = s2::AnimLerp::SprData(src["lerp"][i]["key"].asInt());
-			dst->lerps.push_back(std::make_pair(key, lerp));
+			dst->lerps.push_back(std::make_pair(key, std::move(lerp)));
 		}
 	}
 }
 
-void EasyAnimLoader::LoadActors(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst)
+void EasyAnimLoader::LoadActors(const simp::NodeAnimation::Frame* src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst)
 {
 	dst->sprs.reserve(src->actors_n);
 	for (int i = 0; i < src->actors_n; ++i)
@@ -164,13 +164,13 @@ void EasyAnimLoader::LoadActors(const simp::NodeAnimation::Frame* src, s2::AnimS
 	}
 }
 
-void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame* dst)
+void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, const std::unique_ptr<s2::AnimSymbol::Frame>& dst)
 {
 	dst->lerps.reserve(src->lerps_n);
 	for (int i = 0; i < src->lerps_n; ++i)
 	{
 		const simp::NodeAnimation::Lerp* s = src->lerps[i];
-		s2::ILerp* lerp = NULL;
+		std::unique_ptr<s2::ILerp> lerp = nullptr;
 		switch (s->type)
 		{
 		case s2::LERP_CIRCLE:
@@ -178,7 +178,7 @@ void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSy
 				assert(s->data_n == 1);
 				float scale = 0;
 				memcpy(&scale, &s->data[0], sizeof(float));
-				lerp = new s2::LerpCircle(scale);
+				lerp = std::make_unique<s2::LerpCircle>(scale);
 				break;
 			}
 		case s2::LERP_SPIRAL:
@@ -189,7 +189,7 @@ void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSy
 				memcpy(&begin, &s->data[0], sizeof(float));
 				memcpy(&end, &s->data[1], sizeof(float));
 				memcpy(&scale, &s->data[2], sizeof(float));
-				lerp = new s2::LerpSpiral(begin, end, scale);
+				lerp = std::make_unique<s2::LerpSpiral>(begin, end, scale);
 				break;
 			}
 		case s2::LERP_WIGGLE:
@@ -198,19 +198,19 @@ void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSy
 				float freq = 0, amp = 0;
 				memcpy(&freq, &s->data[0], sizeof(float));
 				memcpy(&amp, &s->data[1], sizeof(float));
-				lerp = new s2::LerpWiggle(freq, amp);
+				lerp = std::make_unique<s2::LerpWiggle>(freq, amp);
 				break;
 			}
 		case s2::LERP_EASE:
 			{
 				assert(s->data_n == 1);
-				lerp = new s2::LerpEase(s->data[0]);
+				lerp = std::make_unique<s2::LerpEase>(s->data[0]);
 				break;
 			}
 		}
 		if (lerp) {
 			s2::AnimLerp::SprData key = static_cast<s2::AnimLerp::SprData>(s->spr_data);
-			dst->lerps.push_back(std::make_pair(key, lerp));
+			dst->lerps.push_back(std::make_pair(key, std::move(lerp)));
 		}
 	}
 }

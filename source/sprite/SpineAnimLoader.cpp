@@ -70,7 +70,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 
 	BuildBone2PoseTable();
 
-	s2::AnimSymbol::Layer* layer = new s2::AnimSymbol::Layer;
+	auto layer = std::make_unique<s2::AnimSymbol::Layer>();
 	
 	int bone_num = m_src_anim->bones.size();
 	m_pose_ptrs.resize(bone_num * 3, 0);
@@ -84,18 +84,18 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 			next_time = time;
 		}
 
-		s2::AnimSymbol::Frame* frame = new s2::AnimSymbol::Frame;
+		auto frame = std::make_unique<s2::AnimSymbol::Frame>();
 		frame->index = static_cast<int>(next_time * FPS) + 1;
 		frame->tween = true;
 		s2::Sprite* spr = m_spr_loader->Create(m_sk_sym);
 		spr->SetName("sk");
 		LoadJointPoses(next_time, VI_DOWNCASTING<s2::SkeletonSprite*>(spr)->GetPose());
 		frame->sprs.push_back(spr);
-		layer->frames.push_back(frame);
+		layer->frames.push_back(std::move(frame));
 		UpdateNextTime(next_time);
 	}
 
-	m_sym->AddLayer(layer);
+	m_sym->AddLayer(std::move(layer));
 }
 
 void SpineAnimLoader::BuildBone2PoseTable()
