@@ -37,7 +37,7 @@ LOCAL_C_INCLUDES  := \
 	${LUA_SRC_PATH} \
 	${FLATTEN_SRC_PATH}/include \
 
-LOCAL_CPPFLAGS  := -DNO_BOOST -g -std=c++11
+LOCAL_CPPFLAGS  := -DNO_BOOST -g -std=c++1y
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH)/source/ -name "*.cpp" -print)) \
