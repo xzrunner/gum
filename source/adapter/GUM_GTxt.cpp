@@ -43,10 +43,10 @@ int GTxt::m_cap_layout = 500;
 
 struct render_params
 {
-	const S2_MAT* mt;
-	const s2::Color* mul;
-	const s2::Color* add;
-	void* ud;
+	const S2_MAT* mt = nullptr;
+	const s2::Color* mul = nullptr;
+	const s2::Color* add = nullptr;
+	void* ud = nullptr;
 };
 
 static void
