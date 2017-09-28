@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>3.gum</ProjectName>
+    <ProjectGuid>{70C5478D-6D53-4F75-99D4-F06373175C83}</ProjectGuid>
+    <RootNamespace>gum</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.26730.12</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\gum\x86\Debug\</OutDir>
+    <IntDir>..\gum\x86\Debug\obj\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\gum\x86\Release\</OutDir>
+    <IntDir>..\gum\x86\Release\obj\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\gum;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\cooking\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;..\..\..\..\multitask\include;..\..\..\..\editor-external\cjson\include;..\..\..\..\editor-external\json\include;..\..\..\..\editor-external\lzma\include;..\..\..\..\editor-external\pthread\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\gl\include;..\..\..\..\editor-external\libjpeg\include;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\assimp\include;..\..\..\..\editor-external\boost\include;..\..\..\..\editor-external\openal32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\gum;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\cooking\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;..\..\..\..\multitask\include;..\..\..\..\editor-external\cjson\include;..\..\..\..\editor-external\json\include;..\..\..\..\editor-external\lzma\include;..\..\..\..\editor-external\pthread\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\gl\include;..\..\..\..\editor-external\libjpeg\include;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\assimp\include;..\..\..\..\editor-external\boost\include;..\..\..\..\editor-external\openal32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <DisableSpecificWarnings>94;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\adapter\DTexC2Strategy.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\GUM_Audio.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\GUM_DRect.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\GUM_DTex.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\GUM_GTxt.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\GUM_ShaderLab.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\GUM_Sprite2.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\GlyphStyle.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\GlyphStyleID.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\Image.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\ImageLoader.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\PkgFileParser.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\ProxyImage.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\ResourceUID.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\Texture.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\ThreadPool.cpp" />
+    <ClCompile Include="..\..\..\source\GUM_Facade.cpp" />
+    <ClCompile Include="..\..\..\source\render\BlendModes.cpp" />
+    <ClCompile Include="..\..\..\source\render\CameraModes.cpp" />
+    <ClCompile Include="..\..\..\source\render\FastBlendModes.cpp" />
+    <ClCompile Include="..\..\..\source\render\FilterModes.cpp" />
+    <ClCompile Include="..\..\..\source\render\RenderContext.cpp" />
+    <ClCompile Include="..\..\..\source\render\RenderTarget.cpp" />
+    <ClCompile Include="..\..\..\source\render\RenderTargetMgr.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\Anim2SprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\Anim2SymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\AnimSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\AnimSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ArrayLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\AudioLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\AudioSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\BodymovinAnimLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\BodymovinParser.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ComplexSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ComplexSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\EasyAnim2Loader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\EasyAnimLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\EasySkeletonLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ExtendSymFile.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\GUM_ImageSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\GUM_TextboxSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\GUM_TexturePolygon.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\IconSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\IconSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ImageSymbolOld.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ImageSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\JointLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\MaskSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\MeshIO.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\MeshSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\MeshSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\P2dSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\P2dSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\P3dSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\P3dSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\Scale9SprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\Scale9SymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ShapeLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ShapeSaver.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ShapeSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SkeletonIO.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SkeletonSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpineAnim2Loader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpineAnimLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpineParser.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpineSkeletonLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpriteFactory.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpriteIO.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpriteLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SpritePool.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SprTransLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SymbolFactory.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SymbolFile.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SymbolLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\SymbolPool.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TextboxLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TextboxSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TextureSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TrailSprLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TrailSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\utility\Config.cpp" />
+    <ClCompile Include="..\..\..\source\utility\Exception.cpp" />
+    <ClCompile Include="..\..\..\source\utility\FilepathHelper.cpp" />
+    <ClCompile Include="..\..\..\source\utility\JsonSerializer.cpp" />
+    <ClCompile Include="..\..\..\source\utility\LoadImageTask.cpp" />
+    <ClCompile Include="..\..\..\source\utility\StatFPS.cpp" />
+    <ClCompile Include="..\..\..\source\utility\Statistics.cpp" />
+    <ClCompile Include="..\..\..\source\utility\StatScreen.cpp" />
+    <ClCompile Include="..\..\..\source\utility\StatTag.cpp" />
+    <ClCompile Include="..\..\..\source\utility\StringHelper.cpp" />
+    <ClCompile Include="..\..\..\source\utility\trans_color.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\gum\Anim2SprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\Anim2SymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\AnimSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\AnimSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ArrayLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\AudioLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\AudioSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\BlendModes.h" />
+    <ClInclude Include="..\..\..\include\gum\BodymovinAnimLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\BodymovinParser.h" />
+    <ClInclude Include="..\..\..\include\gum\CameraModes.h" />
+    <ClInclude Include="..\..\..\include\gum\ComplexSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ComplexSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\Config.h" />
+    <ClInclude Include="..\..\..\include\gum\DTexC2Strategy.h" />
+    <ClInclude Include="..\..\..\include\gum\EasyAnim2Loader.h" />
+    <ClInclude Include="..\..\..\include\gum\EasyAnimLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\EasySkeletonLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\Exception.h" />
+    <ClInclude Include="..\..\..\include\gum\ExtendSymFile.h" />
+    <ClInclude Include="..\..\..\include\gum\FastBlendModes.h" />
+    <ClInclude Include="..\..\..\include\gum\FilepathHelper.h" />
+    <ClInclude Include="..\..\..\include\gum\FilterModes.h" />
+    <ClInclude Include="..\..\..\include\gum\GlyphStyle.h" />
+    <ClInclude Include="..\..\..\include\gum\GlyphStyleID.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_Audio.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_DRect.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_DTex.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_Facade.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_GTxt.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_ImageSymbol.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_ShaderLab.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_Sprite2.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_TextboxSymbol.h" />
+    <ClInclude Include="..\..\..\include\gum\GUM_TexturePolygon.h" />
+    <ClInclude Include="..\..\..\include\gum\IconSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\IconSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\IconType.h" />
+    <ClInclude Include="..\..\..\include\gum\Image.h" />
+    <ClInclude Include="..\..\..\include\gum\ImageLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ImageSymbolOld.h" />
+    <ClInclude Include="..\..\..\include\gum\ImageSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\JointLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\JsonSerializer.h" />
+    <ClInclude Include="..\..\..\include\gum\LoadImageTask.h" />
+    <ClInclude Include="..\..\..\include\gum\MaskSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\MeshIO.h" />
+    <ClInclude Include="..\..\..\include\gum\MeshSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\MeshSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\P2dSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\P2dSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\P3dSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\P3dSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\PkgFileParser.h" />
+    <ClInclude Include="..\..\..\include\gum\ProxyImage.h" />
+    <ClInclude Include="..\..\..\include\gum\RenderContext.h" />
+    <ClInclude Include="..\..\..\include\gum\RenderTarget.h" />
+    <ClInclude Include="..\..\..\include\gum\RenderTargetMgr.h" />
+    <ClInclude Include="..\..\..\include\gum\Resource.h" />
+    <ClInclude Include="..\..\..\include\gum\ResourceManager.h" />
+    <ClInclude Include="..\..\..\include\gum\ResourceUID.h" />
+    <ClInclude Include="..\..\..\include\gum\Scale9SprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\Scale9SymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ShapeLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ShapeSaver.h" />
+    <ClInclude Include="..\..\..\include\gum\ShapeSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ShapeType.h" />
+    <ClInclude Include="..\..\..\include\gum\SkeletonIO.h" />
+    <ClInclude Include="..\..\..\include\gum\SkeletonSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\SpineAnim2Loader.h" />
+    <ClInclude Include="..\..\..\include\gum\SpineAnimLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\SpineParser.h" />
+    <ClInclude Include="..\..\..\include\gum\SpineSkeletonLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\SpriteFactory.h" />
+    <ClInclude Include="..\..\..\include\gum\SpriteIO.h" />
+    <ClInclude Include="..\..\..\include\gum\SpriteLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\SpritePool.h" />
+    <ClInclude Include="..\..\..\include\gum\SprTransLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\StatFPS.h" />
+    <ClInclude Include="..\..\..\include\gum\Statistics.h" />
+    <ClInclude Include="..\..\..\include\gum\StatScreen.h" />
+    <ClInclude Include="..\..\..\include\gum\StatTag.h" />
+    <ClInclude Include="..\..\..\include\gum\StringHelper.h" />
+    <ClInclude Include="..\..\..\include\gum\SymbolFactory.h" />
+    <ClInclude Include="..\..\..\include\gum\SymbolFile.h" />
+    <ClInclude Include="..\..\..\include\gum\SymbolLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\SymbolPool.h" />
+    <ClInclude Include="..\..\..\include\gum\TextboxLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\TextboxSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\Texture.h" />
+    <ClInclude Include="..\..\..\include\gum\TextureSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ThreadPool.h" />
+    <ClInclude Include="..\..\..\include\gum\TrailSprLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\TrailSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\trans_color.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\gum\ResourceManager.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
