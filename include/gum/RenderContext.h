@@ -1,7 +1,7 @@
 #ifndef _GUM_RENDER_CONTEXT_H_
 #define _GUM_RENDER_CONTEXT_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <stdint.h>
 
@@ -27,7 +27,7 @@ private:
 
 	int m_width, m_height;
 
-	SINGLETON_DECLARATION(RenderContext)
+	CU_SINGLETON_DECLARATION(RenderContext)
 	
 }; // RenderContext
 

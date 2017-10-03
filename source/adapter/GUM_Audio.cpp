@@ -11,7 +11,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(Audio)
+CU_SINGLETON_DEFINITION(Audio)
 
 Audio::Audio() 
 	: m_ctx(NULL)

@@ -1,7 +1,8 @@
 #ifndef _GUM_SPRITE_POOL_H_
 #define _GUM_SPRITE_POOL_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
+#include <sprite2/s2_typedef.h>
 
 #include <map>
 
@@ -18,13 +19,13 @@ public:
 	void GC();
 	int Count() const { return m_sym_id_cache.size(); }
 
-	s2::Sprite* Fetch(const uint32_t sym_id);
-	void Return(s2::Sprite* spr);
+	s2::SprPtr Fetch(const uint32_t sym_id);
+	void Return(const s2::SprPtr& spr);
 
 private:
-	std::map<uint32_t, s2::Sprite*> m_sym_id_cache;
+	std::map<uint32_t, std::weak_ptr<s2::Sprite>> m_sym_id_cache;
 
-	SINGLETON_DECLARATION(SpritePool);
+	CU_SINGLETON_DECLARATION(SpritePool);
 
 }; // SpritePool
 

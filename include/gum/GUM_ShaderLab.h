@@ -1,7 +1,7 @@
 #ifndef _GUM_SHADERLAB_H_
 #define _GUM_SHADERLAB_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace gum
 {
@@ -16,7 +16,7 @@ public:
 	static void Init();
 
 private:
-	SINGLETON_DECLARATION(ShaderLab)
+	CU_SINGLETON_DECLARATION(ShaderLab)
 
 }; // ShaderLab
 

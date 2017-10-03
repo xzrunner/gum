@@ -32,9 +32,9 @@ UID ResourceUID::Sprite(int spr_id)
 	return Compose(spr_id, RES_SPRITE);
 }
 
-UID ResourceUID::Actor(const s2::Actor* actor)
+UID ResourceUID::Actor(const s2::ActorConstPtr& actor)
 {
-	uint64_t actor_id = reinterpret_cast<uint64_t>(actor);
+	uint64_t actor_id = reinterpret_cast<uint64_t>(actor.get());
 	return Compose(actor_id, RES_ACTOR);
 }
 

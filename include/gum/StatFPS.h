@@ -1,7 +1,7 @@
 #ifndef _GUM_STAT_FPS_H_
 #define _GUM_STAT_FPS_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace gum
 {
@@ -24,7 +24,7 @@ private:
 	float m_fps;
 	int   m_annealing;
 
-	SINGLETON_DECLARATION(StatFPS);
+	CU_SINGLETON_DECLARATION(StatFPS);
 
 }; // StatFPS
 

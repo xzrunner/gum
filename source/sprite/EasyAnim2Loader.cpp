@@ -15,8 +15,8 @@
 namespace gum
 {
 
-EasyAnim2Loader::EasyAnim2Loader(s2::Anim2Symbol* sym, 
-								 const SymbolLoader* sym_loader)
+EasyAnim2Loader::EasyAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym,
+								 const std::shared_ptr<const SymbolLoader>& sym_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
 	, m_num(0)
@@ -25,22 +25,13 @@ EasyAnim2Loader::EasyAnim2Loader(s2::Anim2Symbol* sym,
 	, m_sk(NULL)
 	, m_root(NULL)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-	if (m_sym_loader) {
-		m_sym_loader->AddReference();
-	} else {
-		m_sym_loader = new SymbolLoader;
+	if (!m_sym_loader) {
+		m_sym_loader = std::make_shared<SymbolLoader>();
 	}
 }
 
 EasyAnim2Loader::~EasyAnim2Loader()
 {
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
-	m_sym_loader->RemoveReference();
 	Clear();
 }
 
@@ -75,7 +66,6 @@ void EasyAnim2Loader::Clear()
 {
 	m_num = 0;
 
-	for_each(m_sprs.begin(), m_sprs.end(), cu::RemoveRefFunctor<s2::Sprite>());
 	m_sprs.clear();
 
 	m_root = NULL;
@@ -96,7 +86,7 @@ void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 
 	for (int i = 0; i < m_num; ++i) 
 	{
-		s2::Sprite* spr = m_sprs[i];
+		auto& spr = m_sprs[i];
 		const Json::Value& joints_val = val[i]["joint"];
 		bool find = false;
 		for (int j = 0, m = joints_val.size(); j < m; ++j) 

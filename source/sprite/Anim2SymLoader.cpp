@@ -16,21 +16,11 @@
 namespace gum
 {
 
-Anim2SymLoader::Anim2SymLoader(s2::Anim2Symbol* sym, 
-							   const SymbolLoader* sym_loader)
+Anim2SymLoader::Anim2SymLoader(const std::shared_ptr<s2::Anim2Symbol>& sym,
+							   const std::shared_ptr<const SymbolLoader>& sym_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-Anim2SymLoader::~Anim2SymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void Anim2SymLoader::LoadJson(const std::string& filepath)
@@ -101,7 +91,9 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 		rg_skin* dst = &sk->skins[i];
 		dst->type = src.type;
 		LoadBinSRT(dst->local, src.local);
-		dst->ud = SymbolPool::Instance()->Fetch(src.node);
+		auto sym = SymbolPool::Instance()->Fetch(src.node);
+		m_sym->AddCachedSym(sym);
+		dst->ud = static_cast<void*>(sym.get());
 		ptr += SIZEOF_RG_SKIN;
 	}
 	//// slots

@@ -1,6 +1,8 @@
 #ifndef _GUM_RESOURCE_UID_H_
 #define _GUM_RESOURCE_UID_H_
 
+#include <sprite2/s2_typedef.h>
+
 #include <string>
 
 #include <stdint.h>
@@ -34,7 +36,7 @@ public:
 	static UID Glyph(int unicode, const GlyphStyle& gs);
 	static UID BinNode(uint32_t node_id);
 	static UID Sprite(int spr_id);
-	static UID Actor(const s2::Actor* actor);
+	static UID Actor(const s2::ActorConstPtr& actor);
 
 private:
 	static const int DATA_SIZE = 56;

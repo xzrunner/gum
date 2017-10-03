@@ -6,19 +6,9 @@
 namespace gum
 {
 
-ComplexSprLoader::ComplexSprLoader(s2::ComplexSprite* spr)
+ComplexSprLoader::ComplexSprLoader(const std::shared_ptr<s2::ComplexSprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-ComplexSprLoader::~ComplexSprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void ComplexSprLoader::LoadJson(const Json::Value& val, const std::string& dir)

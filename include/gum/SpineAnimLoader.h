@@ -3,12 +3,13 @@
 
 #include "SpineParser.h"
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 #include <sprite2/JointPose.h>
 
 #include <json/json.h>
 
 #include <string>
+#include <memory>
 
 namespace s2 { class AnimSymbol; class SkeletonPose; class SkeletonSymbol; }
 
@@ -21,9 +22,9 @@ class SpriteLoader;
 class SpineAnimLoader : private cu::Uncopyable
 {
 public:
-	SpineAnimLoader(s2::AnimSymbol* sym, const SymbolLoader* sym_loader = NULL,
-		const SpriteLoader* spr_loader = NULL);
-	~SpineAnimLoader();
+	SpineAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL,
+		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
 	void LoadJson(const Json::Value& val, const std::string& dir,
 		const std::string& filepath);
@@ -36,14 +37,14 @@ private:
 	void UpdateNextTime(float next_time);
 
 private:
-	s2::AnimSymbol* m_sym;
+	std::shared_ptr<s2::AnimSymbol> m_sym;
 
-	const SymbolLoader* m_sym_loader;
-	const SpriteLoader* m_spr_loader;
+	std::shared_ptr<const SymbolLoader> m_sym_loader;
+	std::shared_ptr<const SpriteLoader> m_spr_loader;
 
 	const SpineParser::Animation* m_src_anim;
 
-	s2::SkeletonSymbol* m_sk_sym;
+	std::shared_ptr<s2::SkeletonSymbol> m_sk_sym;
 
 	// table for bone to pose index
 	std::vector<int> m_bone2pose;

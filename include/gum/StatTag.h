@@ -1,7 +1,7 @@
 #ifndef _GUM_STAT_TAG_H_
 #define _GUM_STAT_TAG_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <fstream>
 
@@ -30,7 +30,7 @@ private:
 
 	mutable std::ofstream m_fout;
 
-	SINGLETON_DECLARATION(StatTag);
+	CU_SINGLETON_DECLARATION(StatTag);
 
 }; // StatTag
 	

@@ -2,7 +2,7 @@
 #define _GUM_DTEX_C2_STRATEGY_H_
 
 #include <SM_Rect.h>
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <map>
 #include <set>
@@ -80,7 +80,7 @@ private:
 
 	int m_max_c2_edge;
 
-	SINGLETON_DECLARATION(DTexC2Strategy)
+	CU_SINGLETON_DECLARATION(DTexC2Strategy)
 
 }; // DTexC2Strategy
 

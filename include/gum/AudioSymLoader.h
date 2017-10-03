@@ -1,9 +1,10 @@
 #ifndef _GUM_AUDIO_SYM_LOADER_H_
 #define _GUM_AUDIO_SYM_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <string>
+#include <memory>
 
 namespace s2 { class AudioSymbol; }
 
@@ -13,13 +14,12 @@ namespace gum
 class AudioSymLoader : private cu::Uncopyable
 {
 public:
-	AudioSymLoader(s2::AudioSymbol* sym);
-	~AudioSymLoader();
+	AudioSymLoader(const std::shared_ptr<s2::AudioSymbol>& sym);
 
 	void Load(const std::string& filepath);
 
 private:
-	s2::AudioSymbol* m_sym;
+	std::shared_ptr<s2::AudioSymbol> m_sym;
 
 }; // AudioSymLoader
 

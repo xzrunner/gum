@@ -19,39 +19,20 @@ namespace gum
 static const float FPS = 30.0f;
 static const int DEFAULT_ANIM = 0;
 
-SpineAnimLoader::SpineAnimLoader(s2::AnimSymbol* sym, 
-								 const SymbolLoader* sym_loader,
-								 const SpriteLoader* spr_loader)
+SpineAnimLoader::SpineAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
+								 const std::shared_ptr<const SymbolLoader>& sym_loader,
+								 const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
 	, m_spr_loader(spr_loader)
 	, m_sk_sym(NULL)
 	, m_src_anim(NULL)
 {
-	if (m_sym) {
-		m_sym->AddReference();
+	if (!m_sym_loader) {
+		m_sym_loader = std::make_shared<SymbolLoader>();
 	}
-	if (m_sym_loader) {
-		m_sym_loader->AddReference();
-	} else {
-		m_sym_loader = new SymbolLoader;
-	}
-	if (m_spr_loader) {
-		m_spr_loader->AddReference();
-	} else {
-		m_spr_loader = new SpriteLoader;
-	}
-}
-
-SpineAnimLoader::~SpineAnimLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
-	m_sym_loader->RemoveReference();
-	m_spr_loader->RemoveReference();
-	if (m_sk_sym) {
-		m_sk_sym->RemoveReference();
+	if (!m_spr_loader) {
+		m_spr_loader = std::make_shared<SpriteLoader>();
 	}
 }
 
@@ -66,7 +47,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 	assert(!parser.anims.empty());
 	m_src_anim = &parser.anims[DEFAULT_ANIM];
 
-	m_sk_sym = VI_DOWNCASTING<s2::SkeletonSymbol*>(m_sym_loader->Create(filepath, s2::SYM_SKELETON));
+	m_sk_sym = S2_VI_PTR_DOWN_CAST<s2::SkeletonSymbol>(m_sym_loader->Create(filepath, s2::SYM_SKELETON));
 
 	BuildBone2PoseTable();
 
@@ -87,9 +68,9 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 		auto frame = std::make_unique<s2::AnimSymbol::Frame>();
 		frame->index = static_cast<int>(next_time * FPS) + 1;
 		frame->tween = true;
-		s2::Sprite* spr = m_spr_loader->Create(m_sk_sym);
+		auto spr = m_spr_loader->Create(m_sk_sym);
 		spr->SetName("sk");
-		LoadJointPoses(next_time, VI_DOWNCASTING<s2::SkeletonSprite*>(spr)->GetPose());
+		LoadJointPoses(next_time, S2_VI_PTR_DOWN_CAST<s2::SkeletonSprite>(spr)->GetPose());
 		frame->sprs.push_back(spr);
 		layer->frames.push_back(std::move(frame));
 		UpdateNextTime(next_time);
@@ -101,8 +82,8 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 void SpineAnimLoader::BuildBone2PoseTable()
 {
 	m_bone2pose.reserve(m_src_anim->bones.size());
-	const s2::Skeleton* sk = m_sk_sym->GetSkeleton();
-	const std::vector<s2::Joint*>& all_joints = sk->GetAllJoints();
+	auto& sk = m_sk_sym->GetSkeleton();
+	auto& all_joints = sk->GetAllJoints();
 	for (int i = 0, n = m_src_anim->bones.size(); i < n; ++i) 
 	{
 		const std::string& name = m_src_anim->bones[i].name;
@@ -171,7 +152,7 @@ float SpineAnimLoader::GetNextTime()
 
 void SpineAnimLoader::LoadJointPoses(float next_time, s2::SkeletonPose& sk_pose)
 {
-	const std::vector<s2::Joint*>& joints = m_sk_sym->GetSkeleton()->GetAllJoints();
+	auto& joints = m_sk_sym->GetSkeleton()->GetAllJoints();
 
 	int ptr = 0;
 	int bone_num = m_src_anim->bones.size();

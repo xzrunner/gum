@@ -1,9 +1,10 @@
 #ifndef _GUM_SYMBOL_POOL_H_
 #define _GUM_SYMBOL_POOL_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <sprite2/SymType.h>
+#include <sprite2/s2_typedef.h>
 
 #include <string>
 #include <map>
@@ -21,24 +22,21 @@ class Image;
 class SymbolPool
 {
 public:
-	void Traverse(std::function<bool(s2::Symbol*)> func);
+	void Traverse(std::function<bool(const s2::SymPtr&)> func);
 
 	void GC();
 	int Count() const { return m_path_cache.size() + m_id_cache.size(); }
 	
-	s2::Symbol* Fetch(const std::string& filepath, int type = s2::SYM_UNKNOWN);
-	s2::Symbol* Fetch(const uint32_t id);
+	s2::SymPtr Fetch(const std::string& filepath, int type = s2::SYM_UNKNOWN);
+	s2::SymPtr Fetch(const uint32_t id);
 
 	void Clear();
 
-	void PrintSymRef(uint32_t sym_id) const;
-	void PrintImgRef(const Image* img) const;
-
 private:
-	std::map<std::string, s2::Symbol*> m_path_cache;
-	std::map<uint32_t, s2::Symbol*>    m_id_cache;
+	std::map<std::string, std::weak_ptr<s2::Symbol>> m_path_cache;
+	std::map<uint32_t, std::weak_ptr<s2::Symbol>>    m_id_cache;
 
-	SINGLETON_DECLARATION(SymbolPool);
+	CU_SINGLETON_DECLARATION(SymbolPool);
 
 }; // SymbolPool
 

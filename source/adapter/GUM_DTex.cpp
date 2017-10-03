@@ -1,5 +1,6 @@
 #include "GUM_DTex.h"
 #include "ImageLoader.h"
+#include "ImagePool.h"
 #include "RenderContext.h"
 #include "ProxyImage.h"
 #include "DTexC2Strategy.h"
@@ -49,7 +50,7 @@ namespace dtex { class Package; }
 namespace gum
 {
 
-SINGLETON_DEFINITION(DTex);
+CU_SINGLETON_DEFINITION(DTex);
 
 static const int IMG_ID = -3;
 
@@ -359,6 +360,8 @@ stat_tex_remove(int width, int height, int format)
 /* Cache                                                                */
 /************************************************************************/
 
+static std::map<ResPath, std::shared_ptr<Image>> DTEX_CACHED_IMAGES;
+
 static void
 relocate_pkg(int src_pkg, int src_tex, int src_lod, int dst_tex_id, int dst_fmt, int dst_w, int dst_h, int dst_xmin, int dst_ymin, int dst_xmax, int dst_ymax)
 {
@@ -376,17 +379,15 @@ relocate_pkg(int src_pkg, int src_tex, int src_lod, int dst_tex_id, int dst_fmt,
 	simp::RelocateTexcoords::Instance()->Add(item);
 
 	ResPath res_path(ProxyImage::GetFilepath(dst_tex_id));
-	Image* img = ImageMgr::Instance()->Query(res_path);
+	auto img = ImagePool::Instance()->Query(res_path);
 	if (img) {
-		ProxyImage* p_img = static_cast<ProxyImage*>(img);
+		auto p_img = std::static_pointer_cast<ProxyImage>(img);
 		p_img->Init(dst_tex_id, dst_w, dst_h, dst_fmt);
 	} else {
-		img = new ProxyImage(dst_tex_id, dst_w, dst_h, dst_fmt);
-		std::string filepath = ProxyImage::GetFilepath(dst_tex_id);
-		bool succ = ImageMgr::Instance()->Add(res_path, img);
-		assert(succ);
-		// no GC in ImageMgr 
-//		img->RemoveReference();
+		auto img = std::make_shared<ProxyImage>(dst_tex_id, dst_w, dst_h, dst_fmt);
+		DTEX_CACHED_IMAGES.insert(std::make_pair(res_path, img));
+		bool insert = ImagePool::Instance()->Add(res_path, img);
+		assert(insert);
 	}
 }
 
@@ -411,21 +412,18 @@ static void
 remove_tex(int tex_id)
 {
 	ResPath res_path(ProxyImage::GetFilepath(tex_id));
-	Image* img = ImageMgr::Instance()->Query(res_path);
-	if(img) {
-		img->RemoveReference();	// other ref will be removed at gum_gc()
-		ImageMgr::Instance()->Delete(res_path);
-	}
+	DTEX_CACHED_IMAGES.erase(res_path);
+	ImagePool::Instance()->Delete(res_path);
 }
 
 static void 
 on_clear_sym_block(int block_id)
 {
 	SymbolPool::Instance()->Traverse(
-		[=](s2::Symbol* sym)->bool 
+		[=](const s2::SymPtr& sym)->bool 
 		{
 			if (sym->Type() == s2::SYM_IMAGE) {
-				VI_DOWNCASTING<ImageSymbol*>(sym)->SetCacheDirty(block_id);
+				S2_VI_PTR_DOWN_CAST<ImageSymbol>(sym)->SetCacheDirty(block_id);
 			}			
 			return true;
 		}

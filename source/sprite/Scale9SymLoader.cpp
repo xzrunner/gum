@@ -18,26 +18,14 @@
 namespace gum
 {
 
-Scale9SymLoader::Scale9SymLoader(s2::Scale9Symbol* sym, const SpriteLoader* spr_loader)
+Scale9SymLoader::Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym, 
+	                             const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 {
-	if (m_sym) {
-		m_sym->AddReference();
+	if (!m_spr_loader) {
+		m_spr_loader = std::make_shared<SpriteLoader>();
 	}
-	if (m_spr_loader) {
-		m_spr_loader->AddReference();
-	} else {
-		m_spr_loader = new SpriteLoader;
-	}
-}
-
-Scale9SymLoader::~Scale9SymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
-	m_spr_loader->RemoveReference();
 }
 
 void Scale9SymLoader::LoadJson(const std::string& filepath)
@@ -58,7 +46,7 @@ void Scale9SymLoader::LoadJson(const std::string& filepath)
 
 	const Json::Value& spr_val = val["sprite"];
 
-	s2::Sprite* grids[9];
+	s2::SprPtr grids[9];
 	memset(grids, 0, sizeof(grids));
 
 	int idx = 0;
@@ -111,17 +99,11 @@ void Scale9SymLoader::LoadJson(const std::string& filepath)
 	int w = val["width"].asInt(),
 		h = val["height"].asInt();
 	m_sym->GetScale9().Build(type, w, h, grids, 0, 0, 0, 0);
-
-	for (int i = 0; i < 9; ++i) {
-		if (grids[i]) {
-			grids[i]->RemoveReference();
-		}
-	}
 }
 
 void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 {
-	s2::Sprite* grids[9];
+	s2::SprPtr grids[9];
 	memset(grids, 0, sizeof(grids));
 
 	const simp::NodeScale9::Grid* grid = NULL;
@@ -205,25 +187,18 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 	const int DEFAULT_SIZE = 256;
 	m_sym->GetScale9().Build(type, DEFAULT_SIZE, DEFAULT_SIZE, grids, 
 		node->left, node->right, node->top, node->down);
-
-	for (int i = 0; i < 9; ++i) {
-		if (grids[i]) {
-			grids[i]->RemoveReference();
-		}
-	}
 }
 
-s2::Sprite* Scale9SymLoader::LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror)
+s2::SprPtr Scale9SymLoader::LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror)
 {
-	s2::Symbol* sym = SymbolPool::Instance()->Fetch(sym_id);
+	auto sym = SymbolPool::Instance()->Fetch(sym_id);
 	if (!sym) {
 		return NULL;
 	}
-	s2::Sprite* spr = SpriteFactory::Instance()->Create(sym);
+	auto spr = SpriteFactory::Instance()->Create(sym);
 	if (!spr) {
 		return NULL;
 	}
-	sym->RemoveReference();
 	float angle = dir * SM_PI / 2;
 	spr->SetAngle(angle);
 	bool xmirror = mirror & 0x1,

@@ -1,7 +1,8 @@
 #ifndef _GUM_SPRITE_FACTORY_H_
 #define _GUM_SPRITE_FACTORY_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
+#include <sprite2/s2_typedef.h>
 
 #include <json/json.h>
 
@@ -9,34 +10,32 @@
 
 #include <stdint.h>
 
-namespace s2 { class Sprite; class Symbol; }
-
 namespace gum
 {
 
 class SpriteFactory
 {
 public:
-	s2::Sprite* Create(s2::Symbol* sym, uint32_t id = -1, bool create_actors = true) const;
+	s2::SprPtr Create(const s2::SymPtr& sym, uint32_t id = -1, bool create_actors = true) const;
 
 	/**
 	 *  @brief
 	 *    raw, json res
 	 */	
-	s2::Sprite* Create(const std::string& filepath) const;
-	s2::Sprite* Create(const Json::Value& val, const std::string& dir) const;
+	s2::SprPtr Create(const std::string& filepath) const;
+	s2::SprPtr Create(const Json::Value& val, const std::string& dir) const;
 
 	/**
 	 *  @brief
 	 *    pack, binary res
 	 */	
-	s2::Sprite* Create(uint32_t id);
-	s2::Sprite* CreateFromSym(uint32_t id, bool create_actors = true);
+	s2::SprPtr Create(uint32_t id);
+	s2::SprPtr CreateFromSym(uint32_t id, bool create_actors = true);
 
 private:
-	static void CreateSprActors(const s2::Sprite* spr);
+	static void CreateSprActors(const s2::SprPtr& spr);
 
-	SINGLETON_DECLARATION(SpriteFactory);
+	CU_SINGLETON_DECLARATION(SpriteFactory);
 
 }; // SpriteFactory
 

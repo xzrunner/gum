@@ -1,7 +1,7 @@
 #ifndef _GUM_CONFIG_H_
 #define _GUM_CONFIG_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace gum
 {
@@ -15,7 +15,7 @@ public:
 private:
 	bool m_pre_mul_alpha;
 
-	SINGLETON_DECLARATION(Config);
+	CU_SINGLETON_DECLARATION(Config);
 
 }; // Config
 

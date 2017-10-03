@@ -7,7 +7,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(StatFPS);
+CU_SINGLETON_DEFINITION(StatFPS);
 
 StatFPS::StatFPS()
 {

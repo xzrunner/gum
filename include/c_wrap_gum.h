@@ -84,15 +84,15 @@ char** gum_pkg_get_export_names(const char* name, int* count);
 
 void* gum_create_sym_model(const void* model);
 
-void* gum_fetch_sym(uint32_t id);
+//void* gum_fetch_sym(uint32_t id);
 
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
 
-void* gum_create_spr(const char* pkg, const char* spr);
-void* gum_create_spr_by_id(int id);
-void* gum_create_spr_from_file(const char* filepath);
+void* gum_create_actor(const char* pkg, const char* spr);
+void* gum_create_actor_by_id(int id);
+void* gum_create_actor_from_file(const char* filepath);
 
 void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new);
 void  gum_return_actor_cached(void* actor);

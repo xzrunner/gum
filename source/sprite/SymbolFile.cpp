@@ -8,7 +8,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(SymbolFile);
+CU_SINGLETON_DEFINITION(SymbolFile);
 
 const std::string SymbolFile::UNKNOWN_TAG = "unknown";
 

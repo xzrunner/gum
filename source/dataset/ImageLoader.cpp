@@ -38,7 +38,7 @@ bool ImageLoader::Load()
 	}
 }
 
-bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
+bool ImageLoader::AsyncLoad(int format, int width, int height, const std::shared_ptr<Image>& img)
 {
 	if (m_res_path.IsSingleFile() && 
 		m_res_path.GetFilepath().find(".ept") == std::string::npos) {

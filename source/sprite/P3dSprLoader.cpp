@@ -7,19 +7,9 @@
 namespace gum
 {
 
-P3dSprLoader::P3dSprLoader(s2::Particle3dSprite* spr)
+P3dSprLoader::P3dSprLoader(const std::shared_ptr<s2::Particle3dSprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-P3dSprLoader::~P3dSprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)

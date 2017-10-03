@@ -3,7 +3,7 @@
 
 #include "GlyphStyle.h"
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <vector>
 
@@ -29,7 +29,7 @@ private:
 
  	std::pair<GlyphStyle, int> m_last;
 	
-	SINGLETON_DECLARATION(GlyphStyleID)
+	CU_SINGLETON_DECLARATION(GlyphStyleID)
 
 }; // GlyphStyleID
 

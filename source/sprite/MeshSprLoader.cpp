@@ -15,19 +15,9 @@
 namespace gum
 {
 
-MeshSprLoader::MeshSprLoader(s2::MeshSprite* spr)
+MeshSprLoader::MeshSprLoader(const std::shared_ptr<s2::MeshSprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-MeshSprLoader::~MeshSprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
@@ -39,16 +29,15 @@ void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	const Json::Value& mesh_val = val["mesh"];
 
 	pm::MeshTransform& trans = m_spr->GetMeshTrans();
-	const s2::Mesh* mesh = VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol())->GetMesh();
+	auto& mesh = S2_VI_PTR_DOWN_CAST<s2::MeshSymbol>(m_spr->GetSymbol())->GetMesh();
 	MeshIO::Load(mesh_val, trans, *mesh);
-	const_cast<s2::Mesh*>(mesh)->LoadFromTransform(trans);
+	mesh->LoadFromTransform(trans);
 
 	if (mesh_val.isMember("base_symbol")) {
 		std::string base_path = FilepathHelper::Absolute(dir, mesh_val["base_symbol"].asString());
-		s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(base_path);
+		auto base_sym = SymbolPool::Instance()->Fetch(base_path);
 		if (base_sym) {
 			m_spr->SetBaseSym(base_sym);
-			base_sym->RemoveReference();
 		}
 	}
 }
@@ -59,15 +48,14 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 		return;
 	}
 
-	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
+	auto base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 	if (base_sym) {
 		m_spr->SetBaseSym(base_sym);
-		base_sym->RemoveReference();
 	}
 
 	assert(m_spr->GetSymbol()->Type() == s2::SYM_MESH);
-	s2::MeshSymbol* mesh_sym = VI_DOWNCASTING<s2::MeshSymbol*>(m_spr->GetSymbol());
-	s2::Mesh* mesh = mesh_sym->GetMesh();
+	auto mesh_sym = S2_VI_PTR_DOWN_CAST<s2::MeshSymbol>(m_spr->GetSymbol());
+	auto& mesh = mesh_sym->GetMesh();
 	if (!mesh) {
 		return;
 	}

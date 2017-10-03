@@ -16,7 +16,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(ShaderLab)
+CU_SINGLETON_DEFINITION(ShaderLab)
 
 ShaderLab::ShaderLab() 
 {

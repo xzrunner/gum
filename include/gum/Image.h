@@ -1,11 +1,11 @@
 #ifndef _GUM_IMAGE_H_
 #define _GUM_IMAGE_H_
 
-#include "Resource.h"
-#include "ResourceManager.h"
 #include "ResPath.h"
 
 #include <SM_Vector.h>
+
+#include <memory>
 
 #include <stdint.h>
 
@@ -16,15 +16,13 @@ namespace gum
 
 class Image;
 class ImageLoader;
-typedef ResourceManager<Image> ImageMgr;
 
-class Image : public Resource
+class Image : public std::enable_shared_from_this<Image>
 {
 public:
 	Image();
+	Image(int pkg_id, const ResPath& res_path, bool async);
 	virtual ~Image();
-
-	virtual bool LoadFromFile(int pkg_id, const ResPath& res_path, bool async);
 
 	void AsyncLoad(int pkg_id, int format, int width, int height);
 
@@ -34,7 +32,7 @@ public:
 
 	uint32_t GetTexID() const { return m_id; }
 
-	s2::Texture* GetS2Tex() const { return m_s2_tex; }
+	const std::shared_ptr<s2::Texture>& GetS2Tex() const { return m_s2_tex; }
 	
 	bool IsLoadFinished() const;
 	void SetLoadFinished(bool finished);
@@ -43,6 +41,8 @@ public:
 
 //private:
 	void LoadFromLoader(const ImageLoader& loader);
+
+	static int GetAllImgCount();
 
 protected:
 	int m_pkg_id;
@@ -54,7 +54,7 @@ protected:
 
 	uint32_t m_id;
 
-	s2::Texture* m_s2_tex;
+	std::shared_ptr<s2::Texture> m_s2_tex;
 
 }; // Image
 

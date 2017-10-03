@@ -16,26 +16,14 @@
 namespace gum
 {
 
-EasyAnimLoader::EasyAnimLoader(s2::AnimSymbol* sym, const SpriteLoader* spr_loader)
+EasyAnimLoader::EasyAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+	                           const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 {
-	if (m_sym) {
-		m_sym->AddReference();
+	if (!m_spr_loader) {
+		m_spr_loader = std::make_shared<SpriteLoader>();
 	}
-	if (m_spr_loader) {
-		m_spr_loader->AddReference();
-	} else {
-		m_spr_loader = new SpriteLoader;
-	}
-}
-
-EasyAnimLoader::~EasyAnimLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
-	m_spr_loader->RemoveReference();
 }
 
 void EasyAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
@@ -108,7 +96,7 @@ void EasyAnimLoader::LoadActors(const Json::Value& src, const std::unique_ptr<s2
 	for (int actor = 0; actor < actor_n; ++actor)
 	{
 		const Json::Value& actor_val = src["actor"][actor];
-		s2::Sprite* spr = m_spr_loader->Create(actor_val, dir);
+		auto spr = m_spr_loader->Create(actor_val, dir);
 		dst->sprs.push_back(spr);
 	}
 }
@@ -156,7 +144,7 @@ void EasyAnimLoader::LoadActors(const simp::NodeAnimation::Frame* src, const std
 	for (int i = 0; i < src->actors_n; ++i)
 	{
 		const simp::NodeAnimation::Actor* src_actor = src->actors[i];
-		s2::Sprite* spr = SpriteFactory::Instance()->Create(src_actor->sym_id);
+		auto spr = SpriteFactory::Instance()->Create(src_actor->sym_id);
 		if (spr) {
 			SprTransLoader::Load(spr, src_actor->trans);
 			dst->sprs.push_back(spr);

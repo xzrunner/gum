@@ -1,9 +1,11 @@
 #ifndef _GUM_COMPLEX_SPR_LOADER_H_
 #define _GUM_COMPLEX_SPR_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <json/json.h>
+
+#include <memory>
 
 namespace s2 { class ComplexSprite; }
 namespace simp { class NodeComplexSpr; }
@@ -14,14 +16,13 @@ namespace gum
 class ComplexSprLoader : private cu::Uncopyable
 {
 public:
-	ComplexSprLoader(s2::ComplexSprite* spr);
-	~ComplexSprLoader();
+	ComplexSprLoader(const std::shared_ptr<s2::ComplexSprite>& spr);
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
 	void LoadBin(const simp::NodeComplexSpr* node);
 
 private:
-	s2::ComplexSprite* m_spr;
+	std::shared_ptr<s2::ComplexSprite> m_spr;
 
 }; // ComplexSprLoader
 

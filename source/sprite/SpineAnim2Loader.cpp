@@ -22,8 +22,8 @@ namespace gum
 
 static const int ANIM_IDX = 0;
 
-SpineAnim2Loader::SpineAnim2Loader(s2::Anim2Symbol* sym, 
-								   const SymbolLoader* sym_loader)
+SpineAnim2Loader::SpineAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym,
+								   const std::shared_ptr<const SymbolLoader>& sym_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
 	, m_num(0)
@@ -35,22 +35,13 @@ SpineAnim2Loader::SpineAnim2Loader(s2::Anim2Symbol* sym,
 	, m_tl_skins(NULL)
 	, m_max_frame(0)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-	if (m_sym_loader) {
-		m_sym_loader->AddReference();
-	} else {
-		m_sym_loader = new SymbolLoader;
+	if (!m_sym_loader) {
+		m_sym_loader = std::make_shared<SymbolLoader>();
 	}
 }
 
 SpineAnim2Loader::~SpineAnim2Loader()
 {
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
-	m_sym_loader->RemoveReference();
 	Clear();
 }
 
@@ -95,8 +86,6 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& 
 
 	rg_animation* anim = (rg_animation*)malloc(SIZEOF_RG_ANIM);
 	anim->sk = m_sk;
-
-	s2::Symbol* sym = static_cast<s2::Symbol*>(anim->sk->skins[10].ud);
 
 	anim->timeline.joints  = m_tl_joints;
 	anim->timeline.skins   = m_tl_skins;
@@ -230,21 +219,24 @@ void SpineAnim2Loader::CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem
 	dst.local.rot      = src.angle;
 	dst.local.scale[0] = 1;
 	dst.local.scale[1] = 1;
+
 	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
-	dst.ud = m_sym_loader->Create(filepath);
+	auto sym = m_sym_loader->Create(filepath);
+	m_sym->AddCachedSym(sym);
+	dst.ud = static_cast<void*>(sym.get());
 	dst.type = SKIN_IMG;
 }
 
 void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const
 {
 	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
-	s2::Symbol* base_sym = m_sym_loader->Create(filepath);
+	auto base_sym = m_sym_loader->Create(filepath);
 
 	// fix texcoords for image trimed
 	std::vector<sm::vec2> texcoords = src.texcoords;
 	if (base_sym->Type() == s2::SYM_IMAGE) 
 	{
-		s2::ImageSymbol* img_sym = VI_DOWNCASTING<s2::ImageSymbol*>(base_sym);
+		auto img_sym = S2_VI_PTR_DOWN_CAST<s2::ImageSymbol>(base_sym);
 		const sm::i16_rect& d = img_sym->GetRegion();
 		sm::vec2 s = img_sym->GetNoTrimedSize();
 		for (int i = 0, n = texcoords.size(); i < n; ++i) {
@@ -255,10 +247,10 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 
 	rg_pose_srt_identity(&dst.local);
 
-	pm::Mesh* pm_mesh = NULL;
+	std::unique_ptr<pm::Mesh> pm_mesh;
 	if (!src.vertices.empty()) 
 	{
-		pm_mesh = new pm::TrianglesMesh(src.vertices, texcoords, src.triangles);
+		pm_mesh = std::make_unique<pm::TrianglesMesh>(src.vertices, texcoords, src.triangles);
 		dst.type = SKIN_MESH;
 	} 
 	else 
@@ -292,16 +284,17 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 			}
 		}
 
-		pm_mesh = new pm::Skin2Mesh(joints, vertices, texcoords, src.triangles);
+		pm_mesh = std::make_unique<pm::Skin2Mesh>(joints, vertices, texcoords, src.triangles);
 		dst.type = SKIN_JOINT_MESH;
 	}
+	
+	auto sym = m_sym_loader->Create(s2::SYM_MESH);
+	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
+	s2_mesh->SetMesh(std::move(pm_mesh));
+	S2_VI_PTR_DOWN_CAST<s2::MeshSymbol>(sym)->SetMesh(std::move(s2_mesh));
 
-	s2::MeshSymbol* sym = VI_DOWNCASTING<s2::MeshSymbol*>(m_sym_loader->Create(s2::SYM_MESH));
-	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
-	s2_mesh->SetMesh(pm_mesh);
-	sym->SetMesh(s2_mesh);
-
-	dst.ud = static_cast<s2::Symbol*>(sym);
+	m_sym->AddCachedSym(sym);
+	dst.ud = static_cast<void*>(sym.get());
 }
 
 void SpineAnim2Loader::CreateSlots(const SpineParser& parser)

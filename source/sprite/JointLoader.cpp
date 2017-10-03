@@ -5,9 +5,9 @@
 namespace gum
 {
 
-s2::Joint* JointLoader::Create(s2::Sprite* spr, const s2::JointPose& joint_pose) const
+std::shared_ptr<s2::Joint> JointLoader::Create(const s2::SprPtr& spr, const s2::JointPose& joint_pose) const
 {
-	return new s2::Joint(spr, joint_pose);
+	return std::make_shared<s2::Joint>(spr, joint_pose);
 }
 
 }

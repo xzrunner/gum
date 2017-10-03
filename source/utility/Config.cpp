@@ -3,7 +3,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(Config);
+CU_SINGLETON_DEFINITION(Config);
 
 Config::Config()
 {

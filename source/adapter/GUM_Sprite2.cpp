@@ -22,7 +22,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(Sprite2);
+CU_SINGLETON_DEFINITION(Sprite2);
 
 Sprite2::Sprite2()
 	: m_curr_dc(std::numeric_limits<int>::max())
@@ -43,7 +43,7 @@ void Sprite2::DebugDraw() const
 }
 
 static void prepare_render_params(const s2::RenderParams& parent, 
-								  const s2::Sprite* spr, 
+								  const s2::SprConstPtr& spr, 
 								  s2::RenderParams& child)
 {
 	if (parent.IsDisableDTexC2() || spr->IsDTexDisable()) {
@@ -75,19 +75,19 @@ dtex_sym_query(UID uid, int& tex_id, int& block_id)
 }
 
 static uint64_t 
-get_sym_uid(const s2::Symbol* sym)
+get_sym_uid(const s2::SymConstPtr& sym)
 {
 	return ResourceUID::BinNode(sym->GetID());
 }
 
 static uint64_t 
-get_spr_uid(const s2::Sprite* spr)
+get_spr_uid(const s2::SprConstPtr& spr)
 {
 	return ResourceUID::Sprite(spr->GetID());
 }
 
 static uint64_t 
-get_actor_uid(const s2::Actor* actor)
+get_actor_uid(const s2::ActorConstPtr& actor)
 {
 	return ResourceUID::Actor(actor);
 }

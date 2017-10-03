@@ -7,7 +7,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(DTexC2Strategy);
+CU_SINGLETON_DEFINITION(DTexC2Strategy);
 
 DTexC2Strategy::DTexC2Strategy()
 {

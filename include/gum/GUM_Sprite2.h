@@ -1,7 +1,7 @@
 #ifndef _GUM_SPRITE2_H_
 #define _GUM_SPRITE2_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace s2 { class Sprite; }
 
@@ -21,7 +21,7 @@ private:
 	static const int MAX_DC_COUNT = 30;
 	int m_curr_dc, m_dc_count;
 
-	SINGLETON_DECLARATION(Sprite2)
+	CU_SINGLETON_DECLARATION(Sprite2)
 
 }; // Sprite2
 

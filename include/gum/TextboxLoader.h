@@ -1,7 +1,7 @@
 #ifndef _GUM_TEXTBOX_LOADER_H_
 #define _GUM_TEXTBOX_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <json/json.h>
 

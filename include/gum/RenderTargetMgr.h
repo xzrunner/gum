@@ -1,7 +1,7 @@
 #ifndef _GUM_RENDER_TARGET_MGR_H_
 #define _GUM_RENDER_TARGET_MGR_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 #include <SM_Vector.h>
 
 #include <vector>
@@ -35,7 +35,7 @@ private:
 	
 	std::vector<Item> m_items;
 
-	SINGLETON_DECLARATION(RenderTargetMgr);
+	CU_SINGLETON_DECLARATION(RenderTargetMgr);
 
 }; // RenderTargetMgr
 

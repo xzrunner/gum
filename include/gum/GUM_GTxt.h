@@ -2,7 +2,8 @@
 #define _GUM_GTXT_H_
 
 #include <sprite2/pre_defined.h>
-#include <CU_Singleton.h>
+#include <sprite2/s2_typedef.h>
+#include <cu/cu_macro.h>
 #include <SM_Matrix.h>
 #include S2_MAT_HEADER
 
@@ -56,9 +57,9 @@ private:
 
 	std::set<std::string> m_colors;
 
-	std::map<int, s2::Symbol*> m_user_font_chars;
+	std::map<int, s2::SymPtr> m_user_font_chars;
 		
-	SINGLETON_DECLARATION(GTxt)
+	CU_SINGLETON_DECLARATION(GTxt)
 
 }; // GTxt
 	

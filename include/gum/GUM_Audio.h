@@ -1,7 +1,7 @@
 #ifndef _GUM_AUDIO_H_
 #define _GUM_AUDIO_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace ua { class AudioContext; }
 
@@ -27,7 +27,7 @@ private:
 
 	bool m_enable;
 
-	SINGLETON_DECLARATION(Audio)
+	CU_SINGLETON_DECLARATION(Audio)
 
 }; // Audio
 

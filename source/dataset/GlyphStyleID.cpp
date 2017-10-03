@@ -3,7 +3,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(GlyphStyleID);
+CU_SINGLETON_DEFINITION(GlyphStyleID);
 
 GlyphStyleID::GlyphStyleID()
 	: m_next_id(0)

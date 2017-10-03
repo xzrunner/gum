@@ -3,6 +3,8 @@
 
 #include "ResPath.h"
 
+#include <memory>
+
 namespace timp { class TextureLoader; }
 
 namespace gum
@@ -16,7 +18,7 @@ public:
 	ImageLoader(const ResPath& res_path);
 
 	bool Load();
-	bool AsyncLoad(int format, int width, int height, Image* img);
+	bool AsyncLoad(int format, int width, int height, const std::shared_ptr<Image>& img);
 
 	int GetID() const { return m_id; }
 	int GetFormat() const { return m_format; }

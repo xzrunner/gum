@@ -1,16 +1,17 @@
 #ifndef _GUM_P3D_SYM_LOADER_H_
 #define _GUM_P3D_SYM_LOADER_H_
 
-#include <CU_Uncopyable.h>
-
+#include <cu/uncopyable.h>
 #include <sprite2/Color.h>
+#include <sprite2/s2_typedef.h>
 
 #include <json/json.h>
 
 #include <string>
 #include <vector>
+#include <memory>
 
-namespace s2 { class Particle3dSymbol; class Symbol; }
+namespace s2 { class Particle3dSymbol; class Symbol; class P3dEmitterCfg; }
 namespace simp { class NodeParticle3d; }
 
 struct p3d_emitter_cfg;
@@ -23,8 +24,8 @@ class P3dSymLoader : private cu::Uncopyable
 public:
 	P3dSymLoader();
 
-	void Store(s2::Particle3dSymbol* sym) const;
-	void Store(p3d_emitter_cfg* cfg) const;
+	void Store(const std::shared_ptr<s2::Particle3dSymbol>& sym) const;
+	void Store(const std::shared_ptr<s2::P3dEmitterCfg>& p3d_cfg) const;
 
 	void LoadJson(const std::string& filepath);	
 	void LoadBin(const simp::NodeParticle3d* node);
@@ -33,7 +34,7 @@ private:
 	void LoadComponent(const std::string& dir, const Json::Value& comp_val);
 
 protected:
-	virtual s2::Symbol* LoadSymbol(const std::string& filepath) const;
+	virtual s2::SymPtr LoadSymbol(const std::string& filepath) const;
 
 public:
 	struct Component

@@ -1,7 +1,7 @@
 #ifndef _GUM_EXTEND_SYM_FILE_H_
 #define _GUM_EXTEND_SYM_FILE_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <json/json.h>
 

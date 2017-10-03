@@ -4,6 +4,7 @@
 #include "gum/GUM_GTxt.h"
 #include "gum/SymbolPool.h"
 #include "gum/Image.h"
+#include "gum/ImagePool.h"
 
 #include <logger.h>
 #include <glp_loop.h>
@@ -19,6 +20,7 @@
 #include <sprite2/StatImages.h>
 #include <sprite2/S2_Sprite.h>
 #include <sprite2/S2_Actor.h>
+#include <sprite2/S2_Symbol.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Statistics.h>
 #include <shaderlab/StatDrawCall.h>
@@ -30,7 +32,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(Statistics);
+CU_SINGLETON_DEFINITION(Statistics);
 
 static const float FPS_SMOOTHING = 0.99f;
 
@@ -214,10 +216,10 @@ void Statistics::PrintScreen() const
 
 	mt.Translate(0, -50);
 	sprintf(buf, "COUNT: sym %d, spr %d, actor %d, img %d", 
-		SymbolPool::Instance()->Count(), 
+		s2::Symbol::GetAllSymCount(),
 		s2::Sprite::GetAllSprCount(), 
 		s2::Actor::GetAllActorCount(), 
-		ImageMgr::Instance()->Count());
+		Image::GetAllImgCount());
 	GTxt::Instance()->Draw(mt, buf, w);	
 
 	mt.Translate(0, -30);

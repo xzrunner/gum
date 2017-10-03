@@ -1,7 +1,7 @@
 #ifndef _GUM_SYMBOL_FILE_H_
 #define _GUM_SYMBOL_FILE_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 #include <map>
@@ -26,7 +26,7 @@ private:
 	std::map<int, std::string> m_type2tag;
 	std::map<std::string, int> m_tag2type;
 
-	SINGLETON_DECLARATION(SymbolFile);
+	CU_SINGLETON_DECLARATION(SymbolFile);
 
 }; // SymbolFile
 

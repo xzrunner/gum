@@ -8,19 +8,9 @@
 namespace gum
 {
 
-AnimSprLoader::AnimSprLoader(s2::AnimSprite* spr)
+AnimSprLoader::AnimSprLoader(const std::shared_ptr<s2::AnimSprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-AnimSprLoader::~AnimSprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void AnimSprLoader::LoadJson(const Json::Value& val, const std::string& dir)

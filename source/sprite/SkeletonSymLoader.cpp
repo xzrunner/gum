@@ -11,23 +11,13 @@
 namespace gum
 {
 
-SkeletonSymLoader::SkeletonSymLoader(s2::SkeletonSymbol* sym, 
-									 const SpriteLoader* spr_loader,
-									 const JointLoader* joint_loader)
+SkeletonSymLoader::SkeletonSymLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym,
+									 const std::shared_ptr<const SpriteLoader>& spr_loader,
+									 const std::shared_ptr<const JointLoader>& joint_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 	, m_joint_loader(joint_loader)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-SkeletonSymLoader::~SkeletonSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void SkeletonSymLoader::LoadJson(const std::string& filepath)

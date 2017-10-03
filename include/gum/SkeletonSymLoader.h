@@ -1,13 +1,14 @@
 #ifndef _GUM_SKELETON_SYM_LOADER_H_
 #define _GUM_SKELETON_SYM_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <SM_Vector.h>
 
 #include <json/json.h>
 
 #include <string>
+#include <memory>
 
 namespace s2 { class SkeletonSymbol; class Joint; class Sprite; class JointPose; }
 
@@ -20,17 +21,17 @@ class JointLoader;
 class SkeletonSymLoader : private cu::Uncopyable
 {
 public:
-	SkeletonSymLoader(s2::SkeletonSymbol* sym, const SpriteLoader* spr_loader = NULL,
-		const JointLoader* joint_loader = NULL);
-	~SkeletonSymLoader();
+	SkeletonSymLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym, 
+		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL,
+		const std::shared_ptr<const JointLoader>& joint_loader = NULL);
 
 	void LoadJson(const std::string& filepath);
 
 private:
-	s2::SkeletonSymbol* m_sym;
+	std::shared_ptr<s2::SkeletonSymbol> m_sym;
 
-	const SpriteLoader* m_spr_loader;
-	const JointLoader*  m_joint_loader;
+	std::shared_ptr<const SpriteLoader> m_spr_loader;
+	std::shared_ptr<const JointLoader>  m_joint_loader;
 
 }; // SkeletonSymLoader
 

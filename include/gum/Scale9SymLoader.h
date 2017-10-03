@@ -1,11 +1,12 @@
 #ifndef _GUM_SCALE9_SYM_LOADER_H_
 #define _GUM_SCALE9_SYM_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <json/json.h>
 
 #include <string>
+#include <memory>
 
 #include <stdint.h>
 
@@ -20,19 +21,19 @@ class SpriteLoader;
 class Scale9SymLoader : private cu::Uncopyable
 {
 public:
-	Scale9SymLoader(s2::Scale9Symbol* sym, const SpriteLoader* spr_loader = NULL);
-	~Scale9SymLoader();
+	Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym, 
+		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
 	void LoadJson(const std::string& filepath);
 	void LoadBin(const simp::NodeScale9* node);
 
 private:
-	s2::Sprite* LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror);
+	std::shared_ptr<s2::Sprite> LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror);
 
 private:
-	s2::Scale9Symbol* m_sym;
+	std::shared_ptr<s2::Scale9Symbol> m_sym;
 
-	const SpriteLoader* m_spr_loader;
+	std::shared_ptr<const SpriteLoader> m_spr_loader;
 
 }; // Scale9SymLoader
 

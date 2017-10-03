@@ -3,10 +3,12 @@
 
 #include "SpineParser.h"
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 #include <rigging.h>
 
 #include <json/value.h>
+
+#include <memory>
 
 namespace s2 { class Anim2Symbol; class Symbol; }
 
@@ -25,7 +27,8 @@ class SpineParser;
 class SpineAnim2Loader : private cu::Uncopyable
 {
 public:
-	SpineAnim2Loader(s2::Anim2Symbol* sym, const SymbolLoader* sym_loader = NULL);
+	SpineAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
+		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL);
 	~SpineAnim2Loader();
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
@@ -86,9 +89,9 @@ private:
 	};
 
 private:
-	s2::Anim2Symbol* m_sym;
+	std::shared_ptr<s2::Anim2Symbol> m_sym;
 
-	const SymbolLoader* m_sym_loader;
+	std::shared_ptr<const SymbolLoader> m_sym_loader;
 
 	int m_num;
 

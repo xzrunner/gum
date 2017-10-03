@@ -1,7 +1,8 @@
 #ifndef _GUM_ACTOR_POOL_H_
 #define _GUM_ACTOR_POOL_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
+#include <sprite2/s2_typedef.h>
 
 #include <map>
 
@@ -18,13 +19,13 @@ public:
 	void GC();
 	int Count() const { return m_sym_id_cache.size(); }
 
-	s2::Actor* Fetch(const uint32_t sym_id, bool& is_new);
-	void Return(s2::Actor* actor);
+	s2::ActorPtr Fetch(const uint32_t sym_id, bool& is_new);
+	void Return(const s2::ActorPtr& actor);
 
 private:
-	std::map<uint32_t, s2::Actor*> m_sym_id_cache;
+	std::map<uint32_t, std::weak_ptr<s2::Actor>> m_sym_id_cache;
 
-	SINGLETON_DECLARATION(ActorPool);
+	CU_SINGLETON_DECLARATION(ActorPool);
 
 }; // ActorPool
 

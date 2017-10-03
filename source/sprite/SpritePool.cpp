@@ -7,55 +7,39 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(SpritePool);
+CU_SINGLETON_DEFINITION(SpritePool);
 
 SpritePool::SpritePool()
 {
 }
 
 void SpritePool::GC()
-{	
-	while (true)
-	{
-		bool dirty = false;
-
-		std::map<uint32_t, s2::Sprite*>::iterator itr = m_sym_id_cache.begin();
-		while (itr != m_sym_id_cache.end())
-		{
-			if (itr->second->GetRefCount() == 1) {
-				itr->second->RemoveReference();
-				m_sym_id_cache.erase(itr++);
-				dirty = true;
-			} else {
-				++itr;
-			}
-		}
-
-		if (!dirty) {
-			break;
+{
+	auto itr = m_sym_id_cache.begin();
+	for (; itr != m_sym_id_cache.end(); ) {
+		if (itr->second.expired()) {
+			itr = m_sym_id_cache.erase(itr);
+		} else {
+			++itr;
 		}
 	}
 }
 
-s2::Sprite* SpritePool::Fetch(const uint32_t sym_id)
+s2::SprPtr SpritePool::Fetch(const uint32_t sym_id)
 {
-	std::map<uint32_t, s2::Sprite*>::iterator itr = m_sym_id_cache.find(sym_id);
+	auto itr = m_sym_id_cache.find(sym_id);
 	if (itr != m_sym_id_cache.end()) {
-		s2::Sprite* ret = itr->second;
-		ret->AddReference();
-		return ret;
+		return itr->second.lock();
 	} else {
 		return SpriteFactory::Instance()->CreateFromSym(sym_id, true);
 	}
 }
 
-void SpritePool::Return(s2::Sprite* spr)
+void SpritePool::Return(const s2::SprPtr& spr)
 {
 	int sym_id = spr->GetSymbol()->GetID();
-	std::map<uint32_t, s2::Sprite*>::iterator itr 
-		= m_sym_id_cache.find(sym_id);
+	auto itr = m_sym_id_cache.find(sym_id);
 	if (itr == m_sym_id_cache.end()) {
-		spr->AddReference();
 		m_sym_id_cache.insert(std::make_pair(sym_id, spr));
 	}
 }

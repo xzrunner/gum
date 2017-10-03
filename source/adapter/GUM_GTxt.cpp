@@ -32,7 +32,7 @@ extern "C" {
 namespace gum
 {
 
-SINGLETON_DEFINITION(GTxt)
+CU_SINGLETON_DEFINITION(GTxt)
 
 int GTxt::m_cap_bitmap = 50;
 int GTxt::m_cap_layout = 500;
@@ -292,7 +292,7 @@ ext_sym_create(const char* str) {
 	}
 	std::vector<std::string> tokens;
 	StringHelper::Split(src, " =", tokens);
-	s2::Symbol* sym = NULL;
+	s2::SymPtr sym = NULL;
 	if (tokens.size() == 2) {
 		if (tokens[0] == "path") {
 			sym = SymbolPool::Instance()->Fetch(tokens[1]);
@@ -305,14 +305,13 @@ ext_sym_create(const char* str) {
 			}
 		}
 	}
-	return sym;
+	return new s2::SymPtr(sym);
 }
 
 static void
 ext_sym_release(void* ext_sym) {
 	if (ext_sym) {
-		s2::Symbol* sym = static_cast<s2::Symbol*>(ext_sym);
-		sym->RemoveReference();
+		delete static_cast<s2::SymPtr*>(ext_sym);
 	}
 }
 
@@ -323,7 +322,7 @@ ext_sym_get_size(void* ext_sym, int* width, int* height) {
 		return;
 	}
 
-	s2::Symbol* sym = static_cast<s2::Symbol*>(ext_sym);
+	s2::SymPtr sym(*static_cast<s2::SymPtr*>(ext_sym));
 	sm::vec2 sz = sym->GetBounding().Size();
 	*width  = static_cast<int>(sz.x);
 	*height = static_cast<int>(sz.y);
@@ -346,7 +345,9 @@ ext_sym_render(void* ext_sym, float x, float y, void* ud) {
 	if (_rp->add) {
 		rp.color.SetAdd(*_rp->add);
 	}
-	s2::DrawNode::Draw(static_cast<s2::Symbol*>(ext_sym), rp, sm::vec2(x, y));
+
+	s2::SymPtr sym(*static_cast<s2::SymPtr*>(ext_sym));
+	s2::DrawNode::Draw(sym, rp, sm::vec2(x, y));
 }
 
 /************************************************************************/
@@ -418,9 +419,9 @@ void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 		std::string utf8 = StringHelper::GBKToUTF8(str);		
 		int len = gtxt_unicode_len(utf8[0]);
 		int unicode = gtxt_get_unicode(utf8.c_str(), len);
-		std::map<int, s2::Symbol*>::iterator itr = m_user_font_chars.find(unicode);
+		auto itr = m_user_font_chars.find(unicode);
 		if (itr != m_user_font_chars.end()) {
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
+			auto sym = SymbolPool::Instance()->Fetch(filepath);
 			if (sym) {
 				m_user_font_chars.insert(std::make_pair(unicode, sym));
 			}
@@ -433,19 +434,15 @@ void GTxt::LoadUserFontChar(const std::string& str, const std::string& pkg, cons
 	int len = gtxt_unicode_len(str[0]);
 	int unicode = gtxt_get_unicode(str.c_str(), len);
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(pkg, node);
-	std::map<int, s2::Symbol*>::iterator itr = m_user_font_chars.find(unicode);
+	auto itr = m_user_font_chars.find(unicode);
 	if (itr != m_user_font_chars.end()) {
 		if (itr->second->GetID() == id) {
 			return;
 		} else {
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
-			if (sym) {
-				itr->second->RemoveReference();
-				itr->second = sym;
-			}
+			itr->second = SymbolPool::Instance()->Fetch(id);
 		}
 	} else {
-		s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
+		auto sym = SymbolPool::Instance()->Fetch(id);
 		if (sym) {
 			m_user_font_chars.insert(std::make_pair(unicode, sym));
 		}
@@ -547,18 +544,12 @@ sm::vec2 GTxt::GetSize(const gtxt_label_style& style, const std::string& text) c
 
 void GTxt::Clear()
 {
-	std::map<int, s2::Symbol*>::iterator itr 
-		= m_user_font_chars.begin();
-	for ( ; itr != m_user_font_chars.end(); ++itr) {
-		itr->second->RemoveReference();
-	}
 	m_user_font_chars.clear();
 }
 
 void GTxt::GetUFLayout(int unicode, int font, struct gtxt_glyph_layout* layout) const
 {
-	std::map<int, s2::Symbol*>::const_iterator itr = 
-		m_user_font_chars.find(unicode);
+	auto itr = m_user_font_chars.find(unicode);
 	if (itr == m_user_font_chars.end()) {
 		return;
 	}
@@ -574,8 +565,7 @@ void GTxt::GetUFLayout(int unicode, int font, struct gtxt_glyph_layout* layout) 
 
 void GTxt::DrawUFChar(int unicode, int font, float x, float y, void* ud) const
 {
-	std::map<int, s2::Symbol*>::const_iterator itr = 
-		m_user_font_chars.find(unicode);
+	auto itr = m_user_font_chars.find(unicode);
 	if (itr == m_user_font_chars.end()) {
 		return;
 	}

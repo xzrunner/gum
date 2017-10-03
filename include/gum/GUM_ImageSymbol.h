@@ -19,7 +19,6 @@ class ImageSymbol : public s2::ImageSymbol
 public:
 	ImageSymbol();
 	ImageSymbol(uint32_t id);
-	virtual ~ImageSymbol();
 
 	/**
 	 *  @interface
@@ -34,8 +33,8 @@ public:
 	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const;
 	virtual bool OnQueryTexcoordsFail() const;
 
-	void SetImage(Image* img);
-	const Image* GetImage() const { return m_img; }
+	void SetImage(const std::shared_ptr<Image>& img);
+	const std::shared_ptr<Image>& GetImage() const { return m_img; }
 
 	void SetRegion(const sm::ivec2& min, const sm::ivec2& max, 
 		const sm::vec2& offset, int lod, float scale);
@@ -52,7 +51,7 @@ private:
 	void ClearCache();
 
 private:
-	Image* m_img;
+	std::shared_ptr<Image> m_img;
 
 	float m_texcoords[8];
 

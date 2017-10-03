@@ -1,7 +1,7 @@
 #ifndef _GUM_THREAD_POOL_H_
 #define _GUM_THREAD_POOL_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace mt { class Task; class ThreadPool; class TickThread; }
 
@@ -23,7 +23,7 @@ private:
 
 	mt::TickThread* m_tick;
 
-	SINGLETON_DECLARATION(ThreadPool)
+	CU_SINGLETON_DECLARATION(ThreadPool)
 
 }; // ThreadPool
 

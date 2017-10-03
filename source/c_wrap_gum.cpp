@@ -5,6 +5,7 @@
 #include "SpriteFactory.h"
 #include "SymbolPool.h"
 #include "Image.h"
+#include "ImagePool.h"
 #include "GUM_GTxt.h"
 #include "GUM_DTex.h"
 #include "GUM_Sprite2.h"
@@ -60,6 +61,9 @@
 #include <sprite2/ModelSymbol.h>
 #include <sprite2/StatImages.h>
 #include <sprite2/Blackboard.h>
+#include <sprite2/ActorFactory.h>
+#include <sprite2/ActorProxy.h>
+#include <sprite2/S2_Symbol.h>
 #include <shaderlab/SL_Facade.h>
 #include <shaderlab/RenderTask.h>
 #include <SM_Matrix.h>
@@ -140,14 +144,14 @@ void gum_gc()
 	ActorPool::Instance()->GC();
 	SpritePool::Instance()->GC();
 	SymbolPool::Instance()->GC();
-	ImageMgr::Instance()->GC();
+	ImagePool::Instance()->GC();
 
 	DTexC2Strategy::Instance()->Clear();
 }
 
 extern "C"
 int gum_get_sym_count() {
-	return SymbolPool::Instance()->Count();
+	return s2::Symbol::GetAllSymCount();
 }
 
 extern "C"
@@ -164,7 +168,7 @@ int gum_get_actor_count()
 
 extern "C"
 int gum_get_img_count() {
-	return ImageMgr::Instance()->Count();
+	return Image::GetAllImgCount();
 }
 
 extern "C"
@@ -186,7 +190,7 @@ extern "C"
 void  gum_flush_deferred()
 {
 	cooking_flush();
-	sl::RenderTask::FlushShared();
+//	sl::RenderTask::FlushShared();
 }
 
 extern "C"
@@ -236,17 +240,21 @@ int gum_compare_snapshot(const char* filepath)
 	return cmp;
 }
 
+static std::vector<std::shared_ptr<Image>> IMAGE_CACHE;
+
 extern "C"
 void* gum_create_img(const char* filepath)
 {
 	ResPath res_path(filepath);
-	return ImageMgr::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, res_path);
+	auto img = ImagePool::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, res_path);
+	IMAGE_CACHE.push_back(img);
+	return static_cast<void*>(img.get());
 }
 
 extern "C"
 int gum_get_img_texid(void* img)
 {
-	Image* gum_img = static_cast<Image*>(img);
+	Image* gum_img(static_cast<Image*>(img));
 	return gum_img->GetTexID();
 }
 
@@ -530,19 +538,19 @@ void* gum_create_sym_model(const void* model)
 #endif // S2_DISABLE_MODEL
 }
 
-extern "C"
-void* gum_fetch_sym(uint32_t id)
-{
-	s2::Symbol* sym = SymbolPool::Instance()->Fetch(id);
-	return sym;
-}
+//extern "C"
+//void* gum_fetch_sym(uint32_t id)
+//{
+//	auto sym = SymbolPool::Instance()->Fetch(id);
+//	return static_cast<void*>(sym.get();
+//}
 
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
 
 extern "C"
-void* gum_create_spr(const char* pkg, const char* spr)
+void* gum_create_actor(const char* pkg, const char* spr)
 {
 	std::string gbk_pkg = StringHelper::UTF8ToGBK(pkg);
 	std::string gbk_spr = StringHelper::UTF8ToGBK(spr);
@@ -550,21 +558,25 @@ void* gum_create_spr(const char* pkg, const char* spr)
 	if (id == 0xffffffff) {
 		return NULL;
 	} else {
-		return gum_create_spr_by_id(id);
+		return gum_create_actor_by_id(id);
 	}
 }
 
 extern "C"
-void* gum_create_spr_by_id(int id)
+void* gum_create_actor_by_id(int id)
 {
-	return SpriteFactory::Instance()->CreateFromSym(id, true);
+	auto spr = SpriteFactory::Instance()->CreateFromSym(id, true);
+	auto actor = s2::ActorFactory::Create(nullptr, spr);
+	return s2::ActorProxyPool::Instance()->Create(actor);
 }
 
 extern "C"
-void* gum_create_spr_from_file(const char* filepath)
+void* gum_create_actor_from_file(const char* filepath)
 {
 	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
-	return SpriteFactory::Instance()->Create(gbk_filepath);
+	auto spr = SpriteFactory::Instance()->Create(gbk_filepath);
+	auto actor = s2::ActorFactory::Create(nullptr, spr);
+	return s2::ActorProxyPool::Instance()->Create(actor);
 }
 
 extern "C"
@@ -576,16 +588,15 @@ void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new)
 	if (id == 0xffffffff) {
 		return NULL;
 	} else {
-		return gum::ActorPool::Instance()->Fetch(id, *is_new);
+		auto actor = gum::ActorPool::Instance()->Fetch(id, *is_new);
+		return s2::ActorProxyPool::Instance()->Create(actor);
 	}
 }
 
 extern "C"
 void gum_return_actor_cached(void* actor)
 {
-	s2::Actor* s2_actor = static_cast<s2::Actor*>(actor);
-	ActorPool::Instance()->Return(s2_actor);
-	s2_actor->GetSpr()->RemoveReference();
+	delete static_cast<s2::ActorPtr*>(actor);
 }
 
 extern "C"

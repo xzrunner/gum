@@ -25,19 +25,9 @@
 namespace gum
 {
 
-MeshSymLoader::MeshSymLoader(s2::MeshSymbol* sym)
+MeshSymLoader::MeshSymLoader(const std::shared_ptr<s2::MeshSymbol>& sym)
 	: m_sym(sym)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-MeshSymLoader::~MeshSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void MeshSymLoader::LoadJson(const std::string& filepath)
@@ -60,13 +50,13 @@ void MeshSymLoader::LoadJson(const std::string& filepath)
 
 	std::string dir = FilepathHelper::Dir(filepath);
 	std::string base_path = FilepathHelper::Absolute(dir, value["base_symbol"].asString());
-	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(base_path);
+	auto base_sym = SymbolPool::Instance()->Fetch(base_path);
 	if (!base_sym) {
 		return;
 	}
 
 	std::string type = value["type"].asString();
-	s2::Mesh* mesh = NULL;
+	std::unique_ptr<s2::Mesh> mesh;
 	if (type == "strip") {
 
 	} else if (type == "network" || type == "points") {
@@ -75,7 +65,6 @@ void MeshSymLoader::LoadJson(const std::string& filepath)
 
 	if (mesh) {
 		m_sym->SetMesh(mesh);
-		mesh->RemoveReference();
 	}
 }
 
@@ -85,12 +74,12 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 		return;
 	}
 
-	s2::Symbol* base_sym = SymbolPool::Instance()->Fetch(node->base_id);
+	auto base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 	if (!base_sym) {
 		return;
 	}
 
-	s2::Mesh* mesh = NULL;
+	std::unique_ptr<s2::Mesh> mesh = NULL;
 	switch (node->shape->type)
 	{
 	case simp::MESH_POINTS:
@@ -106,16 +95,11 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 		break;
 	}
 	m_sym->SetMesh(mesh);
-
-	base_sym->RemoveReference();
-	if (mesh) {
-		mesh->RemoveReference();
-	}
 }
 
-s2::Mesh* MeshSymLoader::LoadPointsMesh(s2::Symbol* base_sym, simp::PointsMesh* node)
+std::unique_ptr<s2::Mesh> MeshSymLoader::LoadPointsMesh(const s2::SymConstPtr& base_sym, simp::PointsMesh* node)
 {
-	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
+	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 	
 	std::vector<sm::vec2> outline;
 	ArrayLoader::Load(outline, node->outline, node->outline_n, 16);
@@ -124,15 +108,15 @@ s2::Mesh* MeshSymLoader::LoadPointsMesh(s2::Symbol* base_sym, simp::PointsMesh* 
 	ArrayLoader::Load(points, node->points, node->points_n, 16);
 
 	sm::rect r = base_sym->GetBounding();
-	pm::Mesh* pm_mesh = new pm::PointsMesh(outline, points, r.Width(), r.Height());
-	s2_mesh->SetMesh(pm_mesh);
+	auto pm_mesh = std::make_unique<pm::PointsMesh>(outline, points, r.Width(), r.Height());
+	s2_mesh->SetMesh(std::move(pm_mesh));
 	
 	return s2_mesh;
 }
 
-s2::Mesh* MeshSymLoader::LoadTrianglesMesh(s2::Symbol* base_sym, simp::TrianglesMesh* node)
+std::unique_ptr<s2::Mesh> MeshSymLoader::LoadTrianglesMesh(const s2::SymConstPtr& base_sym, simp::TrianglesMesh* node)
 {
-	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
+	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 
 	std::vector<sm::vec2> vertices;
 	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
@@ -143,15 +127,15 @@ s2::Mesh* MeshSymLoader::LoadTrianglesMesh(s2::Symbol* base_sym, simp::Triangles
 	std::vector<int> triangles;
 	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
 
-	pm::Mesh* pm_mesh = new pm::TrianglesMesh(vertices, texcoords, triangles);
-	s2_mesh->SetMesh(pm_mesh);
+	auto pm_mesh = std::make_unique<pm::TrianglesMesh>(vertices, texcoords, triangles);
+	s2_mesh->SetMesh(std::move(pm_mesh));
 
 	return s2_mesh;
 }
 
-s2::Mesh* MeshSymLoader::LoadSkin2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* node)
+std::unique_ptr<s2::Mesh> MeshSymLoader::LoadSkin2Mesh(const s2::SymConstPtr& base_sym, simp::Skin2Mesh* node)
 {
-	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
+	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 
 	std::vector<pm::Skin2Joint> joints;
 	int joints_n = 0;
@@ -183,15 +167,15 @@ s2::Mesh* MeshSymLoader::LoadSkin2Mesh(s2::Symbol* base_sym, simp::Skin2Mesh* no
 	std::vector<int> triangles;
 	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
 
-	pm::Mesh* pm_mesh = new pm::Skin2Mesh(joints, vertices, texcoords, triangles);
-	s2_mesh->SetMesh(pm_mesh);
+	auto pm_mesh = std::make_unique<pm::Skin2Mesh>(joints, vertices, texcoords, triangles);
+	s2_mesh->SetMesh(std::move(pm_mesh));
 
 	return s2_mesh;
 }
 
-s2::Mesh* MeshSymLoader::CreatePointsMesh(const Json::Value& val, const s2::Symbol* base_sym)
+std::unique_ptr<s2::Mesh> MeshSymLoader::CreatePointsMesh(const Json::Value& val, const s2::SymConstPtr& base_sym)
 {
-	s2::Mesh* s2_mesh = new s2::Mesh(base_sym);
+	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 
 	std::vector<sm::vec2> outline;
 	JsonSerializer::Load(val["shape"]["outline"], outline);
@@ -200,13 +184,13 @@ s2::Mesh* MeshSymLoader::CreatePointsMesh(const Json::Value& val, const s2::Symb
 	JsonSerializer::Load(val["shape"]["inner"], points);
 
 	sm::rect r = base_sym->GetBounding();
-	pm::Mesh* pm_mesh = new pm::PointsMesh(outline, points, r.Width(), r.Height());
+	auto pm_mesh = std::make_unique<pm::PointsMesh>(outline, points, r.Width(), r.Height());
 
 	pm::MeshTransform trans;
 	MeshIO::Load(val, trans, *s2_mesh);
 	pm_mesh->LoadFromTransform(trans);
 
-	s2_mesh->SetMesh(pm_mesh);
+	s2_mesh->SetMesh(std::move(pm_mesh));
 
 	return s2_mesh;
 }

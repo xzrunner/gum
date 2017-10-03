@@ -7,19 +7,9 @@
 namespace gum
 {
 
-IconSprLoader::IconSprLoader(s2::IconSprite* spr)
+IconSprLoader::IconSprLoader(const std::shared_ptr<s2::IconSprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-IconSprLoader::~IconSprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void IconSprLoader::LoadJson(const Json::Value& val, const std::string& dir)

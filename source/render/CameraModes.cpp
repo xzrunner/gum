@@ -5,7 +5,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(CameraModes);
+CU_SINGLETON_DEFINITION(CameraModes);
 
 CameraModes::CameraModes()
 {

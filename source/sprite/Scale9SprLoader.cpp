@@ -6,19 +6,9 @@
 namespace gum
 {
 
-Scale9SprLoader::Scale9SprLoader(s2::Scale9Sprite* spr)
+Scale9SprLoader::Scale9SprLoader(const std::shared_ptr<s2::Scale9Sprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-Scale9SprLoader::~Scale9SprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void Scale9SprLoader::LoadJson(const Json::Value& val, const std::string& dir)

@@ -22,22 +22,18 @@ namespace gum
 /* class LoadImageTask                                                  */
 /************************************************************************/
 
-LoadImageTask::LoadImageTask(Image* img)
+LoadImageTask::LoadImageTask(const std::shared_ptr<Image>& img)
 	: m_img(img)
 	, m_data(NULL)
 	, m_size(0)
 {
 	if (m_img) {
 		m_img->SetLoadFinished(false);
-		m_img->AddReference();
 	}	
 }
 
 LoadImageTask::~LoadImageTask()
 {
-	if (m_img) {
-		m_img->RemoveReference();
-	}
 	free(m_data);
 }
 
@@ -154,20 +150,18 @@ void LoadImageTask::OnLoad(bimp::ImportStream& is)
 	}
 }
 
-void LoadImageTask::Initialize(Image* img)
+void LoadImageTask::Initialize(const std::shared_ptr<Image>& img)
 {
 	assert(!m_img && !m_data);
 	m_img = img;
 	if (m_img) {
 		m_img->SetLoadFinished(false);
-		m_img->AddReference();
 	}
 }
 
 void LoadImageTask::Terminate()
 {
 	if (m_img) {
-		m_img->RemoveReference();
 		m_img = NULL;
 	}
 
@@ -179,14 +173,14 @@ void LoadImageTask::Terminate()
 /* class LoadImageTaskMgr                                               */
 /************************************************************************/
 
-SINGLETON_DEFINITION(LoadImageTaskMgr)
+CU_SINGLETON_DEFINITION(LoadImageTaskMgr)
 
 LoadImageTaskMgr::LoadImageTaskMgr()
 	: m_count(0)
 {	
 }
 
-LoadImageTask* LoadImageTaskMgr::Fetch(Image* img)
+LoadImageTask* LoadImageTaskMgr::Fetch(const std::shared_ptr<Image>& img)
 {
 	++m_count;
 	mt::Task* t = m_freelist.Front();

@@ -26,35 +26,19 @@ namespace gum
 
 static const float FPS = 30.0f;
 
-BodymovinAnimLoader::BodymovinAnimLoader(s2::AnimSymbol* sym, 
-										 const SymbolLoader* sym_loader, 
-										 const SpriteLoader* spr_loader)
+BodymovinAnimLoader::BodymovinAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
+										 const std::shared_ptr<const SymbolLoader>& sym_loader,
+										 const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
 	, m_spr_loader(spr_loader)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-	if (m_sym_loader) {
-		m_sym_loader->AddReference();
-	} else {
-		m_sym_loader = new SymbolLoader;
+	if (!m_sym_loader) {
+		m_sym_loader = std::make_shared<SymbolLoader>();
 	}
 	if (m_spr_loader) {
-		m_spr_loader->AddReference();
-	} else {
-		m_spr_loader = new SpriteLoader;
+		m_spr_loader = std::make_shared<SpriteLoader>();
 	}
-}
-
-BodymovinAnimLoader::~BodymovinAnimLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
-	m_sym_loader->RemoveReference();
-	m_spr_loader->RemoveReference();
 }
 
 void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
@@ -62,34 +46,34 @@ void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& di
 	BodymovinParser parser;
 	parser.Parse(val, dir);
 
-	std::map<std::string, s2::Sprite*> map_assets;
+	std::map<std::string, s2::SprPtr> map_assets;
 	LoadAssets(map_assets, parser.GetAssets(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight(), parser.GetStartFrame(), parser.GetEndFrame());
 	LoadLayers(map_assets, parser.GetLayers(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight(), parser.GetStartFrame(), parser.GetEndFrame(), m_sym);
 }
 
-void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
+void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
 									 const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
 									 int width, int height, int start_frame, int end_frame)
 {
 	LoadLayers(map_assets, layers, frame_rate, width, height, start_frame, end_frame, m_sym);
 }
 
-void BodymovinAnimLoader::LoadAssets(std::map<std::string, s2::Sprite*>& map_assets,
+void BodymovinAnimLoader::LoadAssets(std::map<std::string, s2::SprPtr>& map_assets,
 									 const std::vector<BodymovinParser::Asset>& assets, int frame_rate, 
 									 int width, int height, int start_frame, int end_frame)
 {
 	for (int i = 0, n = assets.size(); i < n; ++i)
 	{
 		const BodymovinParser::Asset& a = assets[i];
-		s2::Sprite* spr = NULL;
+		s2::SprPtr spr = NULL;
 		if (a.layers.empty()) 
 		{
 			spr = m_spr_loader->Create(a.filepath);
 		} 
 		else 
 		{
-			s2::Symbol* sym = m_sym_loader->Create(s2::SYM_ANIMATION);
-			s2::AnimSymbol* anim_sym = VI_DOWNCASTING<s2::AnimSymbol*>(sym);
+			auto sym = m_sym_loader->Create(s2::SYM_ANIMATION);
+			auto anim_sym = S2_VI_PTR_DOWN_CAST<s2::AnimSymbol>(sym);
 			LoadLayers(map_assets, a.layers, frame_rate, width, height, start_frame, end_frame, anim_sym);
 			spr = m_spr_loader->Create(sym);
 		}
@@ -97,17 +81,19 @@ void BodymovinAnimLoader::LoadAssets(std::map<std::string, s2::Sprite*>& map_ass
 	}
 }
 
-void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
+void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
 									 const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
-									 int width, int height, int start_frame, int end_frame, s2::AnimSymbol* sym)
+									 int width, int height, int start_frame, int end_frame, 
+	                                 const std::shared_ptr<s2::AnimSymbol>& sym)
 {
 	LoadLayersPrev(map_assets, layers, frame_rate, width, height, start_frame, end_frame, sym);
 	LoadLayersPost(layers, sym, frame_rate, width, height, start_frame, end_frame);
 }
 
-void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::Sprite*>& map_assets,
+void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::SprPtr>& map_assets,
 										 const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
-										 int width, int height, int start_frame, int end_frame, s2::AnimSymbol* sym)
+										 int width, int height, int start_frame, int end_frame, 
+	                                     const std::shared_ptr<s2::AnimSymbol>& sym)
 {
 	sym->SetFPS(static_cast<int>(FPS));
 
@@ -128,25 +114,24 @@ void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::Sprite*
 			src_h = src.solid_height;
 		}
 
-		s2::Sprite *s_spr = NULL, *e_spr = NULL;
+		s2::SprPtr s_spr = NULL, e_spr = NULL;
 		if (src.layer_type == BodymovinParser::LAYER_PRE_COMP ||
 			src.layer_type == BodymovinParser::LAYER_IMAGE)
 		{
-			std::map<std::string, s2::Sprite*>::const_iterator itr 
-				= map_assets.find(src.ref_id);
+			auto itr = map_assets.find(src.ref_id);
 			assert(itr != map_assets.end());
-			s_spr = VI_CLONE(s2::Sprite, itr->second);
-			e_spr = VI_CLONE(s2::Sprite, itr->second);
+			s_spr = itr->second->Clone();
+			e_spr = itr->second->Clone();
 		}
 		else if (src.layer_type == BodymovinParser::LAYER_SOLID)
 		{
 			s_spr = CreateSolidSpr(src.solid_color, src.solid_width, src.solid_height);
-			e_spr = VI_CLONE(s2::Sprite, s_spr);
+			e_spr = s_spr->Clone();
 		}
 		else if (src.layer_type == BodymovinParser::LAYER_NULL)
 		{
 			s_spr = CreateSolidSpr("#000000", 1, 1);
-			e_spr = VI_CLONE(s2::Sprite, s_spr);
+			e_spr = s_spr->Clone();
 		}
 
 		assert(s_spr && e_spr);
@@ -178,7 +163,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::Sprite*
 		e_frame->index = end_time;
 
 		// insert frame
-		s2::Sprite *start_null = NULL, *pre_in_null = NULL;
+		s2::SprPtr start_null = NULL, pre_in_null = NULL;
 		if (src.start_frame < src.in_frame) 
 		{
 			// start frame
@@ -188,7 +173,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::Sprite*
 			s_frame->index = s_time;
 			s_frame->tween = true;
 
-			start_null = VI_CLONE(s2::Sprite, s_spr);
+			start_null = s_spr->Clone();
 			s_frame->sprs.push_back(start_null);
 			
 			// pre in frame
@@ -198,7 +183,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::Sprite*
 			p_frame->index = p_time;
 			p_frame->tween = true;
 
-			pre_in_null = VI_CLONE(s2::Sprite, s_spr);
+			pre_in_null = s_spr->Clone();
 			p_frame->sprs.push_back(pre_in_null);
 		}
 		InsertKeyframe(dst->frames, src.trans.anchor, frame_rate, end_frame);
@@ -227,8 +212,8 @@ void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::Sprite*
 }
 
 void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Layer>& layers,
-										 s2::AnimSymbol* sym, int frame_rate, int width, int height, 
-										 int start_frame, int end_frame)
+										 const std::shared_ptr<s2::AnimSymbol>& sym, int frame_rate, 
+	                                     int width, int height, int start_frame, int end_frame)
 {
 	sm::vec2 left_top;
 	left_top.x = - width * 0.5f;
@@ -329,7 +314,7 @@ void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Laye
 			for (int j = 0, m = dst->frames.size(); j < m; ++j) {
 				const std::unique_ptr<s2::AnimSymbol::Frame>& frame = dst->frames[j];
 				for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
-					s2::Sprite* spr = frame->sprs[k];
+					auto& spr = frame->sprs[k];
 					if (spr->GetColor().GetMul().a != 255) {
 						opacity = true;
 					}
@@ -399,7 +384,7 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<std::unique_ptr<s2::AnimSym
 			new_frame->index = time;
 			new_frame->sprs.reserve((*clone_frame)->sprs.size());
 			for (int j = 0, bm = (*clone_frame)->sprs.size(); j < bm; ++j) {
-				s2::Sprite* clone = VI_CLONE(s2::Sprite, (*clone_frame)->sprs[j]);
+				auto clone = (*clone_frame)->sprs[j]->Clone();
 				new_frame->sprs.push_back(clone);
 			}
 			frames.insert(frames.begin() + i + 1, std::move(new_frame));
@@ -419,11 +404,11 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<std::unique_ptr<s2::AnimSymbol:
 	assert(frames.size() >= 2 && !frames[0]->sprs.empty() && !val.frames.empty());
 
 	sm::vec2 ori_sz;
-	const s2::Symbol* sym = frames[0]->sprs[0]->GetSymbol();
+	auto& sym = frames[0]->sprs[0]->GetSymbol();
 	switch (sym->Type())
 	{
 	case s2::SYM_IMAGE:
-		ori_sz = VI_DOWNCASTING<const s2::ImageSymbol*>(sym)->GetNoTrimedSize();
+		ori_sz = S2_VI_PTR_DOWN_CAST<const s2::ImageSymbol>(sym)->GetNoTrimedSize();
 		break;
 	case s2::SYM_SHAPE:
 	case s2::SYM_ANIMATION:
@@ -442,7 +427,7 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<std::unique_ptr<s2::AnimSymbol:
 		sm::vec2 e_val(val.frames.back().s_val.data[0], val.frames.back().s_val.data[1]);		
 		for (int i = 0, n = frames.size(); i < n; ++i)
 		{
-			const std::unique_ptr<s2::AnimSymbol::Frame>& frame = frames[i];
+			auto& frame = frames[i];
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
@@ -457,9 +442,9 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<std::unique_ptr<s2::AnimSymbol:
 		offset.y =   ori_sz.y * 0.5f - val.frames[0].s_val.data[1];
 		for (int i = 0, n = frames.size(); i < n; ++i) 
 		{
-			const std::unique_ptr<s2::AnimSymbol::Frame>& frame = frames[i];
+			auto& frame = frames[i];
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
+			auto& spr = frame->sprs[0];
 			spr->SetOffset(offset);
 		}
 	}
@@ -484,7 +469,7 @@ bool BodymovinAnimLoader::LoadOpacity(std::vector<std::unique_ptr<s2::AnimSymbol
 			assert(frame->sprs.size() == 1);
 			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
 			int opacity = static_cast<int>(data.data[0]);
-			s2::Sprite* spr = frame->sprs[0];
+			auto& spr = frame->sprs[0];
 			s2::RenderColor rc = spr->GetColor();
 			s2::Color col = spr->GetColor().GetMul();
 			col.a = (uint8_t)(255 * opacity / 100.0f);
@@ -501,7 +486,7 @@ bool BodymovinAnimLoader::LoadOpacity(std::vector<std::unique_ptr<s2::AnimSymbol
 		{
 			const std::unique_ptr<s2::AnimSymbol::Frame>& frame = frames[i];
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
+			auto& spr = frame->sprs[0];
 
 			s2::RenderColor rc = spr->GetColor();
 			s2::Color col = spr->GetColor().GetMul();
@@ -533,7 +518,7 @@ void BodymovinAnimLoader::LoadPosition(std::vector<std::unique_ptr<s2::AnimSymbo
 			frame->tween = true;
 			assert(frame->sprs.size() == 1);
 			BodymovinParser::FloatVal::Float3 data = GetLerpVal(val.frames, frame->index, frame_rate);
-			s2::Sprite* spr = frame->sprs[0];
+			auto& spr = frame->sprs[0];
 			sm::vec2 anchor_pos(data.data[0], data.data[1]);
 			anchor_pos.x = left_top.x + anchor_pos.x;
 			anchor_pos.y = left_top.y - anchor_pos.y;
@@ -549,7 +534,7 @@ void BodymovinAnimLoader::LoadPosition(std::vector<std::unique_ptr<s2::AnimSymbo
 		{
 			const std::unique_ptr<s2::AnimSymbol::Frame>& frame = frames[i];
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
+			auto& spr = frame->sprs[0];
 			spr->Translate(anchor_pos - (spr->GetPosition() + spr->GetOffset()));
 		}
 	}
@@ -583,7 +568,7 @@ void BodymovinAnimLoader::LoadRotate(std::vector<std::unique_ptr<s2::AnimSymbol:
 		{
 			const std::unique_ptr<s2::AnimSymbol::Frame>& frame = frames[i];
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
+			auto& spr = frame->sprs[0];
 			spr->SetAngle(- angle * SM_DEG_TO_RAD);
 		}
 	}
@@ -618,7 +603,7 @@ void BodymovinAnimLoader::LoadScale(std::vector<std::unique_ptr<s2::AnimSymbol::
 		{
 			const std::unique_ptr<s2::AnimSymbol::Frame>& frame = frames[i];
 			assert(frame->sprs.size() == 1);
-			s2::Sprite* spr = frame->sprs[0];
+			auto& spr = frame->sprs[0];
 			spr->SetScale(scale);
 		}
 	}
@@ -664,18 +649,18 @@ BodymovinAnimLoader::GetLerpVal(const std::vector<BodymovinParser::FloatVal::Key
 	return frames.front().s_val;
 }
 
-s2::Sprite* BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int width, int height) const
+s2::SprPtr BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int width, int height) const
 {
-	s2::Symbol* sym = m_sym_loader->Create(s2::SYM_SHAPE);
+	auto sym = m_sym_loader->Create(s2::SYM_SHAPE);
 	assert(sym);
-	s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<s2::ShapeSymbol*>(sym);
+	auto shape_sym = S2_VI_PTR_DOWN_CAST<s2::ShapeSymbol>(sym);
 
 	// set color
 	int r, g, b;
 	StringHelper::FromString(color.substr(1, 2), r);
 	StringHelper::FromString(color.substr(3, 2), g);
 	StringHelper::FromString(color.substr(5, 2), b);
-	s2::ColorPolygon* poly = new s2::ColorPolygon(s2::Color(r, g, b));
+	auto poly = std::make_unique<s2::ColorPolygon>(s2::Color(r, g, b));
 
 	// region
 	float hw = width * 0.5f,
@@ -688,14 +673,12 @@ s2::Sprite* BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int wi
 	poly->SetOutline(outline);
 	poly->Build();
 
-	s2::PolygonShape* poly_shape = new s2::PolygonShape();
+	auto poly_shape = std::make_unique<s2::PolygonShape>();
 	poly_shape->SetVertices(outline);
-	poly_shape->SetPolygon(poly);
-	poly->RemoveReference();
-	shape_sym->SetShape(poly_shape);
-	poly_shape->RemoveReference();
+	poly_shape->SetPolygon(std::move(poly));
+	shape_sym->SetShape(std::move(poly_shape));
 
-	s2::Sprite* spr = m_spr_loader->Create(sym);
+	auto spr = m_spr_loader->Create(sym);
 	spr->UpdateBounding();
 	return spr;
 }
@@ -767,7 +750,7 @@ void BodymovinAnimLoader::LoadBlendMode(std::vector<std::unique_ptr<s2::AnimSymb
 		const std::unique_ptr<s2::AnimSymbol::Frame>& f = frames[i];
 		for (int j = 0, m = f->sprs.size(); j < m; ++j) 
 		{
-			s2::Sprite* spr = f->sprs[j];
+			auto& spr = f->sprs[j];
 			s2::RenderShader rs = spr->GetShader();
 			rs.SetBlend(bm);
 			spr->SetShader(rs);
@@ -780,7 +763,7 @@ void BodymovinAnimLoader::LoadIntegrate(std::vector<std::unique_ptr<s2::AnimSymb
 	for (int i = 0, n = frames.size(); i < n; ++i) {
 		const std::unique_ptr<s2::AnimSymbol::Frame>& f = frames[i];
 		for (int j = 0, m = f->sprs.size(); j < m; ++j) {
-			s2::Sprite* spr = f->sprs[j];
+			auto& spr = f->sprs[j];
 			spr->SetIntegrate(true);
 		}
 	}

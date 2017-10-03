@@ -28,7 +28,10 @@ lcreate(lua_State* L)
 	try {
 		Audio* audio = Audio::Instance();
 		if (audio->IsEnable()) {
-			source = audio->GetContext()->CreateSource(filepath, stream);
+			auto s = audio->GetContext()->CreateSource(filepath, stream);
+			if (s) {
+				source = new std::shared_ptr<ua::Source>(s);
+			}
 		} else {
 			return 0;
 		}
@@ -50,8 +53,7 @@ lrelease(lua_State* L)
 {
 	void* source = lua_touserdata(L, 1);	
 	try {
-		ua::Source* s = static_cast<ua::Source*>(source);
-		s->RemoveReference();
+		delete static_cast<std::shared_ptr<ua::Source>*>(source);
 	} catch (std::exception& e) {
 		luaL_error(L, e.what());
 	}

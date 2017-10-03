@@ -6,6 +6,7 @@
 #include "FilterModes.h"
 #include "FilepathHelper.h"
 #include "Image.h"
+#include "ImagePool.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/HeatHazeProg.h>
@@ -53,7 +54,7 @@ SpriteIO::~SpriteIO()
 	}
 }
 
-void SpriteIO::Load(const Json::Value& val, s2::Sprite* spr, const std::string& dir)
+void SpriteIO::Load(const Json::Value& val, const s2::SprPtr& spr, const std::string& dir)
 {
 	Load(val, dir);
 
@@ -63,7 +64,7 @@ void SpriteIO::Load(const Json::Value& val, s2::Sprite* spr, const std::string& 
 	LoadEdit(spr);
 }
 
-void SpriteIO::Store(Json::Value& val, const s2::Sprite* spr, const std::string& dir)
+void SpriteIO::Store(Json::Value& val, const s2::SprConstPtr& spr, const std::string& dir)
 {
 	StoreGeometry(spr);
 	StoreRender(spr);
@@ -93,7 +94,7 @@ void SpriteIO::Store(Json::Value& val, const std::string& dir)
 /* geometry                                                             */
 /************************************************************************/
 
-void SpriteIO::LoadGeometry(s2::Sprite* spr)
+void SpriteIO::LoadGeometry(const s2::SprPtr& spr)
 {
 	spr->SetShear(m_shear);
 	spr->SetScale(m_scale);
@@ -102,7 +103,7 @@ void SpriteIO::LoadGeometry(s2::Sprite* spr)
 	spr->SetAngle(m_angle);
 }
 
-void SpriteIO::StoreGeometry(const s2::Sprite* spr)
+void SpriteIO::StoreGeometry(const s2::SprConstPtr& spr)
 {
 	m_position	= spr->GetPosition();
 	m_angle		= spr->GetAngle();
@@ -191,14 +192,14 @@ void SpriteIO::StoreGeometry(Json::Value& val)
 /* render                                                               */
 /************************************************************************/
 
-void SpriteIO::LoadRender(s2::Sprite* spr)
+void SpriteIO::LoadRender(const s2::SprPtr& spr)
 {
 	LoadColor(spr);
 	LoadShader(spr);
 	LoadCamera(spr);	
 }
 
-void SpriteIO::StoreRender(const s2::Sprite* spr)
+void SpriteIO::StoreRender(const s2::SprConstPtr& spr)
 {
 	StoreColor(spr->GetColor());
 	StoreShader(spr->GetShader());
@@ -223,14 +224,14 @@ void SpriteIO::StoreRender(Json::Value& val, const std::string& dir)
 /* info                                                                 */
 /************************************************************************/
 
-void SpriteIO::LoadInfo(s2::Sprite* spr)
+void SpriteIO::LoadInfo(const s2::SprPtr& spr)
 {
 	spr->SetName(m_name);
 	spr->SetNeedActor(m_need_actor);
 	spr->SetIntegrate(m_integrate);
 }
 
-void SpriteIO::StoreInfo(const s2::Sprite* spr)
+void SpriteIO::StoreInfo(const s2::SprConstPtr& spr)
 {
 	s2::SprNameMap::Instance()->IDToStr(spr->GetName(), m_name);
 	m_need_actor = spr->IsNeedActor();
@@ -273,13 +274,13 @@ void SpriteIO::StoreInfo(Json::Value& val)
 /* edit                                                                 */
 /************************************************************************/
 
-void SpriteIO::LoadEdit(s2::Sprite* spr)
+void SpriteIO::LoadEdit(const s2::SprPtr& spr)
 {
 	spr->SetVisible(m_visible);
 	spr->SetEditable(m_editable);
 }
 
-void SpriteIO::StoreEdit(const s2::Sprite* spr)
+void SpriteIO::StoreEdit(const s2::SprConstPtr& spr)
 {
 	m_visible = spr->IsVisible();
 	m_editable = spr->IsEditable();
@@ -313,7 +314,7 @@ void SpriteIO::StoreEdit(Json::Value& val)
 /* private                                                              */
 /************************************************************************/
 
-void SpriteIO::LoadColor(s2::Sprite* spr)
+void SpriteIO::LoadColor(const s2::SprPtr& spr)
 {
 	spr->SetColor(m_col);
 }
@@ -392,7 +393,7 @@ void SpriteIO::StoreColor(Json::Value& val)
 	}
 }
 
-void SpriteIO::LoadShader(s2::Sprite* spr)
+void SpriteIO::LoadShader(const s2::SprPtr& spr)
 {
 	s2::RenderShader rs = spr->GetShader();
 	rs.SetBlend(m_blend);
@@ -499,7 +500,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 							prog = static_cast<sl::HeatHazeProg*>(shader->GetProgram(sl::FM_HEAT_HAZE));
 						}
 						if (prog) {
-							Image* img = ImageMgr::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, ResPath(filepath));
+							auto img = ImagePool::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, ResPath(filepath));
 							prog->SetDistortionMapTex(img->GetTexID());
 						}
 					}
@@ -583,7 +584,7 @@ void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
 	}
 }
 
-void SpriteIO::LoadCamera(s2::Sprite* spr)
+void SpriteIO::LoadCamera(const s2::SprPtr& spr)
 {
 	s2::RenderCamera rc = spr->GetCamera();
 	rc.SetMode(m_camera);

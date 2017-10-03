@@ -1,9 +1,10 @@
 #ifndef _GUM_IMAGE_SYM_LOADER_H_
 #define _GUM_IMAGE_SYM_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <string>
+#include <memory>
 
 namespace gum
 {
@@ -14,13 +15,12 @@ class ResPath;
 class ImageSymLoader : private cu::Uncopyable
 {
 public:
-	ImageSymLoader(ImageSymbol* sym);
-	~ImageSymLoader();
+	ImageSymLoader(const std::shared_ptr<ImageSymbol>& sym);
 
 	void Load(const ResPath& res_path, float scale, bool async);
 
 private:
-	ImageSymbol* m_sym;
+	std::shared_ptr<ImageSymbol> m_sym;
 
 }; // ImageSymLoader
 

@@ -11,10 +11,10 @@ namespace gum
 
 TexturePolygon::TexturePolygon(const std::string& filepath)
 {
-	s2::Symbol* sym = SymbolPool::Instance()->Fetch(filepath);
+	auto sym = SymbolPool::Instance()->Fetch(filepath);
 	if (sym) {
 		assert(sym->Type() == s2::SYM_IMAGE);
-		m_img = VI_DOWNCASTING<s2::ImageSymbol*>(sym);
+		m_img = S2_VI_PTR_DOWN_CAST<s2::ImageSymbol>(sym);
 	}
 }
 

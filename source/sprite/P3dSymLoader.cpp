@@ -25,23 +25,25 @@ P3dSymLoader::P3dSymLoader()
 {
 }
 
-void P3dSymLoader::Store(s2::Particle3dSymbol* sym) const
+void P3dSymLoader::Store(const std::shared_ptr<s2::Particle3dSymbol>& sym) const
 {
 	int sz = SIZEOF_P3D_EMITTER_CFG + SIZEOF_P3D_SYMBOL * components.size();
 	p3d_emitter_cfg* cfg_impl = (p3d_emitter_cfg*) operator new(sz);
 	memset(cfg_impl, 0, sz);
-	Store(cfg_impl);
 
-	s2::P3dEmitterCfg* cfg = new s2::P3dEmitterCfg(cfg_impl);
+	auto cfg = std::make_shared<s2::P3dEmitterCfg>(cfg_impl);
+	Store(cfg);
+
 	sym->SetEmitterCfg(cfg);
-	cfg->RemoveReference();
 
 	sym->SetLoop(loop);
 	sym->SetLocal(local);
 }
 
-void P3dSymLoader::Store(p3d_emitter_cfg* cfg) const
+void P3dSymLoader::Store(const std::shared_ptr<s2::P3dEmitterCfg>& p3d_cfg) const
 {
+	p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(p3d_cfg->GetImpl());
+
 	cfg->blend = blend;
 
 	cfg->static_mode = static_mode;
@@ -109,16 +111,17 @@ void P3dSymLoader::Store(p3d_emitter_cfg* cfg) const
 		memcpy(&dst.add_col_begin.r, &src.add_col_begin.r, sizeof(dst.add_col_begin));
 		memcpy(&dst.add_col_end.r, &src.add_col_end.r, sizeof(dst.add_col_end));
 
+		std::shared_ptr<s2::Symbol> sym = nullptr;
 		if (!src.filepath.empty()) {
-			dst.ud = LoadSymbol(src.filepath);
-			if (!dst.ud) {
-				LOGW("P3dSymLoader::Store err comp %s\n", src.filepath.c_str());
-			}
+			sym = LoadSymbol(src.filepath);
 		} else {
-			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id);
-			if (!dst.ud) {
-				LOGW("P3dSymLoader::Store err comp %d\n", src.sym_id);
-			}
+			sym = SymbolPool::Instance()->Fetch(src.sym_id);
+		}
+		if (sym) {
+			p3d_cfg->InsertCachedSym(sym);
+			dst.ud = static_cast<void*>(sym.get());
+		} else {
+			LOGW("P3dSymLoader::Store err comp\n");
 		}
 	}
 }
@@ -392,7 +395,7 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	components.push_back(comp);
 }
 
-s2::Symbol* P3dSymLoader::LoadSymbol(const std::string& filepath) const
+s2::SymPtr P3dSymLoader::LoadSymbol(const std::string& filepath) const
 {
 	return SymbolPool::Instance()->Fetch(filepath);
 }

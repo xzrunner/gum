@@ -1,9 +1,11 @@
 #ifndef _GUM_P3D_SPR_LOADER_H_
 #define _GUM_P3D_SPR_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <json/json.h>
+
+#include <memory>
 
 namespace s2 { class Particle3dSprite; }
 namespace simp { class NodeParticle3dSpr; }
@@ -14,14 +16,13 @@ namespace gum
 class P3dSprLoader : private cu::Uncopyable
 {
 public:
-	P3dSprLoader(s2::Particle3dSprite* spr);
-	~P3dSprLoader();
+	P3dSprLoader(const std::shared_ptr<s2::Particle3dSprite>& spr);
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
 	void LoadBin(const simp::NodeParticle3dSpr* node);
 
 private:
-	s2::Particle3dSprite* m_spr;
+	std::shared_ptr<s2::Particle3dSprite> m_spr;
 
 }; // P3dSprLoader
 

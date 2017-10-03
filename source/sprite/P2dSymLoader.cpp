@@ -24,7 +24,7 @@ P2dSymLoader::P2dSymLoader()
 {
 }
 
-void P2dSymLoader::Store(s2::Particle2dSymbol* sym) const
+void P2dSymLoader::Store(const const std::shared_ptr<s2::Particle2dSymbol>& sym) const
 {
 	int sz = SIZEOF_P2D_EMITTER_CFG + SIZEOF_P2D_SYMBOL * components.size();
 	p2d_emitter_cfg* cfg = (p2d_emitter_cfg*) operator new(sz);
@@ -106,12 +106,12 @@ void P2dSymLoader::Store(p2d_emitter_cfg* cfg) const
 		memcpy(&dst.add_col_end.r, &src.add_col_end.r, sizeof(src.add_col_end));
 
 		if (!src.filepath.empty()) {
-			dst.ud = LoadSymbol(src.filepath);
+			dst.ud = static_cast<void*>(LoadSymbol(src.filepath).get());
 			if (!dst.ud) {
 				LOGW("P2dSymLoader::Store err comp %s\n", src.filepath.c_str());
 			}
 		} else {
-			dst.ud = SymbolPool::Instance()->Fetch(src.sym_id);
+			dst.ud = static_cast<void*>(SymbolPool::Instance()->Fetch(src.sym_id).get());
 			if (!dst.ud) {
 				LOGW("P2dSymLoader::Store err comp %d\n", src.sym_id);
 			}
@@ -306,7 +306,7 @@ void P2dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	components.push_back(comp);
 }
 
-s2::Symbol* P2dSymLoader::LoadSymbol(const std::string& filepath) const
+s2::SymPtr P2dSymLoader::LoadSymbol(const std::string& filepath) const
 {
 	return SymbolPool::Instance()->Fetch(filepath);
 }

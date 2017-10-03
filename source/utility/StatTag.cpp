@@ -12,7 +12,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(StatTag);
+CU_SINGLETON_DEFINITION(StatTag);
 
 StatTag::StatTag()
 	: m_enable(false)

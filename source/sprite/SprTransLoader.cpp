@@ -12,7 +12,7 @@
 namespace gum
 {
 
-void SprTransLoader::Load(s2::Sprite* spr, const simp::NodeTrans* trans)
+void SprTransLoader::Load(const s2::SprPtr& spr, const simp::NodeTrans* trans)
 {
 	if (!spr) {
 		return;

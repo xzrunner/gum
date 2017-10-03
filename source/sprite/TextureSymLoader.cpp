@@ -13,19 +13,9 @@
 namespace gum
 {
 
-TextureSymLoader::TextureSymLoader(s2::TextureSymbol* sym)
+TextureSymLoader::TextureSymLoader(const std::shared_ptr<s2::TextureSymbol>& sym)
 	: m_sym(sym)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-TextureSymLoader::~TextureSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void TextureSymLoader::LoadJson(const std::string& filepath)
@@ -49,8 +39,9 @@ void TextureSymLoader::LoadJson(const std::string& filepath)
 	std::string dir = FilepathHelper::Dir(filepath);
 
 	for (int i = 0, n = value["shapes"].size(); i < n; ++i) {
-		s2::Shape* shape = ShapeLoader::LoadShape(value["shapes"][i], dir);
-		m_sym->AddPolygon(VI_DOWNCASTING<s2::PolygonShape*>(shape));
+		auto shape = ShapeLoader::LoadShape(value["shapes"][i], dir);
+		std::unique_ptr<s2::PolygonShape> poly_shape(S2_VI_DOWN_CAST<s2::PolygonShape*>(shape.get()));
+		m_sym->AddPolygon(std::move(poly_shape));
 	}
 }
 
@@ -62,13 +53,12 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 
 	for (uint32_t i = 0; i < node->n; ++i) 
 	{
-		s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->polys[i]);
+		auto sym = SymbolPool::Instance()->Fetch(node->polys[i]);
 		if (sym)
 		{
-			s2::ShapeSymbol* shape_sym = VI_DOWNCASTING<s2::ShapeSymbol*>(sym);
-			const s2::PolygonShape* poly = VI_DOWNCASTING<const s2::PolygonShape*>(shape_sym->GetShape());
-			m_sym->AddPolygon(const_cast<s2::PolygonShape*>(poly));
-			sym->RemoveReference();			
+			auto shape_sym = S2_VI_PTR_DOWN_CAST<s2::ShapeSymbol>(sym);
+			std::unique_ptr<s2::PolygonShape> poly_shape(S2_VI_DOWN_CAST<s2::PolygonShape*>(shape_sym->GetShape().get()));
+			m_sym->AddPolygon(poly_shape);
 		}
 	}
 }

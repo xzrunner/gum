@@ -4,7 +4,7 @@
 #include "ResourceUID.h"
 
 #include <SM_Rect.h>
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 #include <dtex2/CacheGlyph.h>
 
 #include <string>
@@ -54,7 +54,7 @@ private:
 
 	dtex::CacheGlyph* m_cg;
 
-	SINGLETON_DECLARATION(DTex)
+	CU_SINGLETON_DECLARATION(DTex)
 
 }; // DTex
 

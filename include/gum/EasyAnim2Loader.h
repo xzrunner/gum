@@ -1,8 +1,9 @@
 #ifndef _GUM_EASY_ANIM2_LOADER_H_
 #define _GUM_EASY_ANIM2_LOADER_H_
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 #include <sprite2/JointPose.h>
+#include <sprite2/s2_typedef.h>
 
 #include <json/json.h>
 
@@ -21,7 +22,8 @@ class JointLoader;
 class EasyAnim2Loader : private cu::Uncopyable
 {
 public:
-	EasyAnim2Loader(s2::Anim2Symbol* sym, const SymbolLoader* sym_loader = NULL);
+	EasyAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
+		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL);
 	~EasyAnim2Loader();
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
@@ -42,7 +44,7 @@ private:
 		s2::JointPose world_pose;
 		s2::JointPose skin_pose;
 
-		s2::Sprite* skin;
+		s2::SprPtr skin;
 
 		int parent;
 		std::vector<int> children;
@@ -53,12 +55,12 @@ private:
 	};
 
 private:
-	s2::Anim2Symbol* m_sym;
+	std::shared_ptr<s2::Anim2Symbol> m_sym;
 
-	const SymbolLoader* m_sym_loader;
+	std::shared_ptr<const SymbolLoader> m_sym_loader;
 
 	int m_num;
-	std::vector<s2::Sprite*> m_sprs;
+	std::vector<s2::SprPtr> m_sprs;
 
 	int          m_joint_count;
 	rg_joint**   m_joints;

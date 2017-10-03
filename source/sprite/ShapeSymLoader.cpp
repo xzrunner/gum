@@ -22,19 +22,9 @@
 namespace gum
 {
 
-ShapeSymLoader::ShapeSymLoader(s2::ShapeSymbol* sym)
+ShapeSymLoader::ShapeSymLoader(const std::shared_ptr<s2::ShapeSymbol>& sym)
 	: m_sym(sym)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-ShapeSymLoader::~ShapeSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void ShapeSymLoader::LoadJson(const std::string& filepath)
@@ -72,35 +62,30 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 	{
 	case gum::SHAPE_POLYGON_COLOR:
 		{
-			s2::PolygonShape* polygon = new s2::PolygonShape(vertices);
-			s2::Polygon* poly = new s2::ColorPolygon(col);
+			auto poly_shape = std::make_unique<s2::PolygonShape>(vertices);
+			auto poly = std::make_unique<s2::ColorPolygon>(col);
 			poly->SetOutline(vertices);
 			poly->Build();
-			polygon->SetPolygon(poly);
-			poly->RemoveReference();
-			m_sym->SetShape(polygon);
-			polygon->RemoveReference();
+			poly_shape->SetPolygon(std::move(poly));
+			m_sym->SetShape(std::move(poly_shape));
 		}
 		break;
 	case gum::SHAPE_POLYGON_TEXTURE:
 		{
-			s2::PolygonShape* polygon = new s2::PolygonShape(vertices);
+			auto poly_shape = std::make_unique<s2::PolygonShape>(vertices);
 
-			s2::Symbol* sym = SymbolPool::Instance()->Fetch(node->color);
+			auto sym = SymbolPool::Instance()->Fetch(node->color);
 			if (!sym) {
 				return;
 			}
 			assert(sym->Type() == s2::SYM_IMAGE);
-			gum::ImageSymbol* tex_sym = VI_DOWNCASTING<gum::ImageSymbol*>(sym);
-			s2::Polygon* poly = new s2::TexturePolygon(tex_sym);
-			tex_sym->RemoveReference();
+			auto tex_sym = S2_VI_PTR_DOWN_CAST<gum::ImageSymbol>(sym);
+			auto poly = std::make_unique<s2::TexturePolygon>(tex_sym);
 
 			poly->SetOutline(vertices);
 			poly->Build();
-			polygon->SetPolygon(poly);
-			poly->RemoveReference();
-			m_sym->SetShape(polygon);
-			polygon->RemoveReference();
+			poly_shape->SetPolygon(std::move(poly));
+			m_sym->SetShape(std::move(poly_shape));
 		}
 		break;
 	}

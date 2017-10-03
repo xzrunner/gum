@@ -3,7 +3,7 @@
 
 #ifndef S2_DISABLE_MODEL
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace gum
 {
@@ -14,7 +14,7 @@ public:
 
 	
 private:
-	SINGLETON_DECLARATION(Model3)
+	CU_SINGLETON_DECLARATION(Model3)
 
 }; // Model3
 

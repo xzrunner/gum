@@ -5,7 +5,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(FastBlendModes);
+CU_SINGLETON_DEFINITION(FastBlendModes);
 
 FastBlendModes::FastBlendModes()
 {

@@ -16,23 +16,13 @@
 namespace gum
 {
 
-AnimSymLoader::AnimSymLoader(s2::AnimSymbol* sym, 
-							 const SymbolLoader* sym_loader,
-							 const SpriteLoader* spr_loader)
+AnimSymLoader::AnimSymLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
+							 const std::shared_ptr<const SymbolLoader>& sym_loader,
+							 const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
 	, m_sym_loader(sym_loader)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-AnimSymLoader::~AnimSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void AnimSymLoader::LoadJson(const std::string& filepath)

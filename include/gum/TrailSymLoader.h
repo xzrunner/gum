@@ -1,13 +1,14 @@
 #ifndef _GUM_TRAIL_SYM_LOADER_H_
 #define _GUM_TRAIL_SYM_LOADER_H_
 
-#include <CU_Uncopyable.h>
-
+#include <cu/uncopyable.h>
 #include <sprite2/Color.h>
+#include <sprite2/s2_typedef.h>
 
 #include <json/json.h>
 
 #include <string>
+#include <memory>
 
 struct t2d_emitter_cfg;
 
@@ -22,7 +23,7 @@ class TrailSymLoader : private cu::Uncopyable
 public:
 	TrailSymLoader();
 
-	void Store(s2::TrailSymbol* sym) const;
+	void Store(const std::shared_ptr<s2::TrailSymbol>& sym) const;
 	void Store(t2d_emitter_cfg* cfg) const;
 
 	void LoadJson(const std::string& filepath);
@@ -33,7 +34,7 @@ private:
 	void LoadShapeComp(const Json::Value& comp_val);
 
 protected:
-	virtual s2::Symbol* LoadSymbol(const std::string& filepath) const;
+	virtual s2::SymPtr LoadSymbol(const std::string& filepath) const;
 
 public:
 	struct CompImage

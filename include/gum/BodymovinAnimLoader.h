@@ -3,7 +3,7 @@
 
 #include "BodymovinParser.h"
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 #include <sprite2/AnimSymbol.h>
 
 #include <string>
@@ -20,28 +20,30 @@ class SpriteLoader;
 class BodymovinAnimLoader : private cu::Uncopyable
 {
 public:
-	BodymovinAnimLoader(s2::AnimSymbol* sym, const SymbolLoader* sym_loader = NULL,
-		const SpriteLoader* spr_loader = NULL);
-	~BodymovinAnimLoader();
+	BodymovinAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL,
+		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
 	void LoadJson(const Json::Value& val, const std::string& dir);
 
-	void LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
+	void LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
 		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
 		int width, int height, int start_frame, int end_frame);
 
 private:
-	void LoadAssets(std::map<std::string, s2::Sprite*>& map_assets,
+	void LoadAssets(std::map<std::string, s2::SprPtr>& map_assets,
 		const std::vector<BodymovinParser::Asset>& assets, int frame_rate, 
 		int width, int height, int start_frame, int end_frame);
-	void LoadLayers(const std::map<std::string, s2::Sprite*>& map_assets,
+	void LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
 		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
-		int width, int height, int start_frame, int end_frame, s2::AnimSymbol* sym);
-	void LoadLayersPrev(const std::map<std::string, s2::Sprite*>& map_assets,
+		int width, int height, int start_frame, int end_frame, 
+		const std::shared_ptr<s2::AnimSymbol>& sym);
+	void LoadLayersPrev(const std::map<std::string, s2::SprPtr>& map_assets,
 		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
-		int width, int height, int start_frame, int end_frame, s2::AnimSymbol* sym);
+		int width, int height, int start_frame, int end_frame, 
+		const std::shared_ptr<s2::AnimSymbol>& sym);
 	void LoadLayersPost(const std::vector<BodymovinParser::Layer>& layers,
-		s2::AnimSymbol* sym, int frame_rate, int width, int height, 
+		const std::shared_ptr<s2::AnimSymbol>& sym, int frame_rate, int width, int height,
 		int start_frame, int end_frame);
 	
 	static int Frame2Time(int frame, int frame_rate);
@@ -65,7 +67,7 @@ private:
 	static BodymovinParser::FloatVal::Float3 GetLerpVal(
 		const std::vector<BodymovinParser::FloatVal::KeyFrame>& frames, int frame, int frame_rate);
 
-	s2::Sprite* CreateSolidSpr(const std::string& color, int width, int height) const;
+	s2::SprPtr CreateSolidSpr(const std::string& color, int width, int height) const;
 
 	static void LoadBlendMode(std::vector<std::unique_ptr<s2::AnimSymbol::Frame>>& frames, int bm);
 
@@ -75,10 +77,10 @@ private:
 		const BodymovinParser::Transform& trans);
 
 private:
-	s2::AnimSymbol* m_sym;
+	std::shared_ptr<s2::AnimSymbol> m_sym;
 
-	const SymbolLoader* m_sym_loader;
-	const SpriteLoader* m_spr_loader;
+	std::shared_ptr<const SymbolLoader> m_sym_loader;
+	std::shared_ptr<const SpriteLoader> m_spr_loader;
 
 }; // BodymovinAnimLoader
 

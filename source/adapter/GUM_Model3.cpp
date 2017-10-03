@@ -11,12 +11,13 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(Model3);
+CU_SINGLETON_DEFINITION(Model3);
 
 static void* 
 create_img(const std::string& filepath)
 {
-	return ImageMgr::Instance()->Create(filepath);
+//	return ImageMgr::Instance()->Create(filepath);
+	return nullptr;
 }
 
 static void 

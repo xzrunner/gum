@@ -1,7 +1,7 @@
 #ifndef _GUM_LUA_WRAP_AUDIO_H_
 #define _GUM_LUA_WRAP_AUDIO_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 extern "C" {
 	#include <lua.h>

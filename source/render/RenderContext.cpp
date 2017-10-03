@@ -11,7 +11,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(RenderContext)
+CU_SINGLETON_DEFINITION(RenderContext)
 
 static void flush_shader()
 {

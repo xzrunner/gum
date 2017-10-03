@@ -14,7 +14,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(StatScreen);
+CU_SINGLETON_DEFINITION(StatScreen);
 
 StatScreen::StatScreen()
 	: m_enable(false)

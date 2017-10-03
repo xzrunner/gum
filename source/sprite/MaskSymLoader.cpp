@@ -13,19 +13,9 @@
 namespace gum
 {
 
-MaskSymLoader::MaskSymLoader(s2::MaskSymbol* sym)
+MaskSymLoader::MaskSymLoader(const std::shared_ptr<s2::MaskSymbol>& sym)
 	: m_sym(sym)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-MaskSymLoader::~MaskSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void MaskSymLoader::LoadJson(const std::string& filepath)
@@ -48,20 +38,18 @@ void MaskSymLoader::LoadJson(const std::string& filepath)
 
 	std::string dir = FilepathHelper::Dir(filepath);
 
-	s2::MaskSymbol* psym = VI_DOWNCASTING<s2::MaskSymbol*>(m_sym);
+	auto psym = S2_VI_PTR_DOWN_CAST<s2::MaskSymbol>(m_sym);
 
 	std::string base_path = FilepathHelper::Absolute(dir, value["base"]["filepath"].asString());
-	s2::Sprite* base = SpriteFactory::Instance()->Create(base_path);
+	auto base = SpriteFactory::Instance()->Create(base_path);
 	if (base) {
 		psym->SetBase(base);
-		base->RemoveReference();
 	}
 
 	std::string mask_path = FilepathHelper::Absolute(dir, value["mask"]["filepath"].asString());
-	s2::Sprite* mask = SpriteFactory::Instance()->Create(mask_path);
+	auto mask = SpriteFactory::Instance()->Create(mask_path);
 	if (mask) {
 		psym->SetMask(mask);
-		mask->RemoveReference();
 	}
 }
 
@@ -71,18 +59,16 @@ void MaskSymLoader::LoadBin(const simp::NodeMask* node)
 		return;
 	}
 
-	s2::MaskSymbol* psym = VI_DOWNCASTING<s2::MaskSymbol*>(m_sym);
+	auto psym = S2_VI_PTR_DOWN_CAST<s2::MaskSymbol>(m_sym);
 
-	s2::Sprite* base = SpriteFactory::Instance()->Create(node->base_id);
+	auto base = SpriteFactory::Instance()->Create(node->base_id);
 	if (base) {
 		psym->SetBase(base);
-		base->RemoveReference();
 	}
 
-	s2::Sprite* mask = SpriteFactory::Instance()->Create(node->mask_id);
+	auto mask = SpriteFactory::Instance()->Create(node->mask_id);
 	if (mask) {
 		psym->SetMask(mask);
-		mask->RemoveReference();
 	}
 }
 

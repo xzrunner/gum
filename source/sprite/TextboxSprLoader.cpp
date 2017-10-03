@@ -8,19 +8,9 @@
 namespace gum
 {
 
-TextboxSprLoader::TextboxSprLoader(s2::TextboxSprite* spr)
+TextboxSprLoader::TextboxSprLoader(const std::shared_ptr<s2::TextboxSprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-TextboxSprLoader::~TextboxSprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void TextboxSprLoader::LoadJson(const Json::Value& val)

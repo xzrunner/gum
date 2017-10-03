@@ -6,7 +6,7 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(ThreadPool)
+CU_SINGLETON_DEFINITION(ThreadPool)
 
 ThreadPool::ThreadPool()
 {

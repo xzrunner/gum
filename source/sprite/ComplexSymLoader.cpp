@@ -13,19 +13,9 @@
 namespace gum
 {
 
-ComplexSymLoader::ComplexSymLoader(s2::ComplexSymbol* sym)
+ComplexSymLoader::ComplexSymLoader(const std::shared_ptr<s2::ComplexSymbol>& sym)
 	: m_sym(sym)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-ComplexSymLoader::~ComplexSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void ComplexSymLoader::LoadJson(const std::string& filepath)
@@ -53,10 +43,9 @@ void ComplexSymLoader::LoadJson(const std::string& filepath)
 
 	m_sym->Clear();
 	for (int i = 0, n = value["sprite"].size(); i < n; ++i) {
-		s2::Sprite* spr = SpriteFactory::Instance()->Create(value["sprite"][i], dir);
+		auto spr = SpriteFactory::Instance()->Create(value["sprite"][i], dir);
 		if (spr) {
 			m_sym->Add(spr);
-			spr->RemoveReference();
 		}
 	}
 
@@ -72,13 +61,13 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 	scissor.ymax = node->scissor[3];
 	m_sym->SetScissor(scissor);
 
-	std::vector<s2::Sprite*> children;
+	std::vector<s2::SprPtr> children;
 	children.reserve(node->sprs_n);
 
 	m_sym->Clear();
 	for (int i = 0; i < node->sprs_n; ++i) 
 	{
-		s2::Sprite* spr = SpriteFactory::Instance()->Create(node->sprs[i]);
+		auto spr = SpriteFactory::Instance()->Create(node->sprs[i]);
 		children.push_back(spr);
 		if (!spr) {
 			continue;
@@ -86,7 +75,6 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 
 		SprTransLoader::Load(spr, node->trans[i]);
 		m_sym->Add(spr);
-		spr->RemoveReference();
 	}
 
 	std::vector<s2::ComplexSymbol::Action> dst;
@@ -100,7 +88,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		bool succ = true;
 		for (int j = 0; j < src_action.n; ++j) 
 		{
-			s2::Sprite* child = children[src_action.idx[j]];
+			auto& child = children[src_action.idx[j]];
 			if (!child) {
 				succ = false;
 				break;

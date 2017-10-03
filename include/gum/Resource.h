@@ -1,8 +1,6 @@
 #ifndef _GUM_RESOURCE_H_
 #define _GUM_RESOURCE_H_
 
-#include <CU_RefCountObj.h>
-
 #include <string>
 
 namespace gum
@@ -10,7 +8,7 @@ namespace gum
 
 class ResPath;
 
-class Resource : public cu::RefCountObj
+class Resource
 {
 public:
 	virtual ~Resource() {}

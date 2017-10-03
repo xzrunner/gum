@@ -31,13 +31,6 @@ ImageSymbol::ImageSymbol(uint32_t id)
 	ClearCache();
 }
 
-ImageSymbol::~ImageSymbol()
-{
-	if (m_img) {
-		m_img->RemoveReference();
-	}
-}
-
 sm::vec2 ImageSymbol::GetNoTrimedSize() const
 {
 	if (m_packed) {
@@ -113,9 +106,9 @@ bool ImageSymbol::OnQueryTexcoordsFail() const
 	return loaded;
 }
 
-void ImageSymbol::SetImage(Image* img)
+void ImageSymbol::SetImage(const std::shared_ptr<Image>& img)
 {
-	cu::RefCountObjAssign(m_img, img);
+	m_img = img;
 
 	sm::i16_rect q;
 	q.xmin = q.ymin = 0;
@@ -200,7 +193,7 @@ void ImageSymbol::SetCacheDirty(int block_id)
 #ifdef GUM_DEBUG
 bool ImageSymbol::IsProxyImg() const
 {
-	return dynamic_cast<ProxyImage*>(m_img) != NULL;
+	return std::dynamic_pointer_cast<ProxyImage>(m_img) != nullptr;
 }
 #endif // GUM_DEBUG
 

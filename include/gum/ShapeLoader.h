@@ -5,6 +5,8 @@
 
 #include <json/json.h>
 
+#include <memory>
+
 namespace s2 { class Shape; class PolygonShape; class Polygon; }
 
 namespace gum
@@ -13,12 +15,12 @@ namespace gum
 class ShapeLoader
 {
 public:
-	static s2::Shape* LoadShape(const Json::Value& val, const std::string& dir);
+	static std::unique_ptr<s2::Shape> LoadShape(const Json::Value& val, const std::string& dir);
 
 private:
-	static s2::PolygonShape* LoadPolygon(const Json::Value& val, const std::string& dir);
+	static std::unique_ptr<s2::PolygonShape> LoadPolygon(const Json::Value& val, const std::string& dir);
 
-	static s2::Polygon* LoadPolyMaterial(const Json::Value& val, const std::string& dir,
+	static std::unique_ptr<s2::Polygon> LoadPolyMaterial(const Json::Value& val, const std::string& dir,
 		const std::vector<sm::vec2>& vertice);
 
 }; // ShapeLoader

@@ -1,7 +1,7 @@
 #ifndef _GUM_LOAD_IMAGE_TASK_H_
 #define _GUM_LOAD_IMAGE_TASK_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 #include <multitask/Task.h>
 
 namespace bimp { class ImportStream; }
@@ -13,7 +13,7 @@ class Image;
 class LoadImageTask : public mt::Task
 {
 public:
-	LoadImageTask(Image* img);
+	LoadImageTask(const std::shared_ptr<Image>& img);
 	virtual ~LoadImageTask();
 
 	virtual void Run();
@@ -22,14 +22,14 @@ public:
 
 	void OnLoad(bimp::ImportStream& is);
 
-	void Initialize(Image* img);
+	void Initialize(const std::shared_ptr<Image>& img);
 	void Terminate();
 
 private:
 	class FileLoader;
 
 private:
-	Image* m_img;
+	std::shared_ptr<Image> m_img;
 
 	void*  m_data;
 	size_t m_size;
@@ -39,7 +39,7 @@ private:
 class LoadImageTaskMgr
 {
 public:
-	LoadImageTask* Fetch(Image* img);
+	LoadImageTask* Fetch(const std::shared_ptr<Image>& img);
 
 	void AddResult(LoadImageTask* task);
 
@@ -53,7 +53,7 @@ private:
 	mt::TaskQueue m_freelist;
 	mt::SafeTaskQueue m_result;
 
-	SINGLETON_DECLARATION(LoadImageTaskMgr)
+	CU_SINGLETON_DECLARATION(LoadImageTaskMgr)
 
 }; // LoadImageTaskMgr
 

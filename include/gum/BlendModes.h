@@ -1,7 +1,7 @@
 #ifndef _GUM_BLEND_MODES_H_
 #define _GUM_BLEND_MODES_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <sprite2/BlendMode.h>
 
@@ -30,7 +30,7 @@ private:
 private:
 	std::vector<Item> m_modes;
 
-	SINGLETON_DECLARATION(BlendModes);
+	CU_SINGLETON_DECLARATION(BlendModes);
 
 }; // BlendModes
 

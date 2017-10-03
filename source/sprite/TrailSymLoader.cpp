@@ -25,7 +25,7 @@ TrailSymLoader::TrailSymLoader()
 {
 }
 
-void TrailSymLoader::Store(s2::TrailSymbol* sym) const
+void TrailSymLoader::Store(const std::shared_ptr<s2::TrailSymbol>& sym) const
 {
 	int comp_sz = mode == T2D_MODE_IMAGE ? comp_images.size() : comp_shapes.size();
 	int sz = SIZEOF_T2D_EMITTER_CFG + SIZEOF_T2D_SYMBOL * comp_sz;
@@ -33,9 +33,8 @@ void TrailSymLoader::Store(s2::TrailSymbol* sym) const
 	memset(cfg_impl, 0, sz);
 	Store(cfg_impl);
 
-	s2::TrailEmitterCfg* cfg = new s2::TrailEmitterCfg(cfg_impl);
+	auto cfg = std::make_shared<s2::TrailEmitterCfg>(cfg_impl);
 	sym->SetEmitterCfg(cfg);
-	cfg->RemoveReference();
 }
 
 void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
@@ -66,12 +65,12 @@ void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
 			dst.mode.A.scale_end = src.scale_end;
 
 			if (!src.filepath.empty()) {
-				dst.mode.A.ud = LoadSymbol(src.filepath);
+				dst.mode.A.ud = static_cast<void*>(LoadSymbol(src.filepath).get());
 				if (!dst.mode.A.ud) {
 					LOGW("TrailSymLoader::Store err comp %s\n", src.filepath.c_str());
 				}
 			} else {
-				dst.mode.A.ud = SymbolPool::Instance()->Fetch(src.sym_id);
+				dst.mode.A.ud = static_cast<void*>(SymbolPool::Instance()->Fetch(src.sym_id).get());
 				if (!dst.mode.A.ud) {
 					LOGW("TrailSymLoader::Store err comp %d\n", src.sym_id);
 				}
@@ -202,7 +201,7 @@ void TrailSymLoader::LoadShapeComp(const Json::Value& comp_val)
 	comp_shapes.push_back(comp);
 }
 
-s2::Symbol* TrailSymLoader::LoadSymbol(const std::string& filepath) const
+s2::SymPtr TrailSymLoader::LoadSymbol(const std::string& filepath) const
 {
 	return SymbolPool::Instance()->Fetch(filepath);
 }

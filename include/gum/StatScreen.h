@@ -1,7 +1,7 @@
 #ifndef _GUM_STAT_SCREEN_H_
 #define _GUM_STAT_SCREEN_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <fstream>
 
@@ -40,7 +40,7 @@ private:
 
 	mutable std::ofstream m_fout;
 
-	SINGLETON_DECLARATION(StatScreen);
+	CU_SINGLETON_DECLARATION(StatScreen);
 
 }; // StatScreen
 

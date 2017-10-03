@@ -1,22 +1,19 @@
 #ifndef _GUM_SYMBOL_LOADER_H_
 #define _GUM_SYMBOL_LOADER_H_
 
-#include <CU_RefCountObj.h>
-
 #include <sprite2/SymType.h>
+#include <sprite2/s2_typedef.h>
 
 #include <string>
-
-namespace s2 { class Symbol; }
 
 namespace gum
 {
 
-class SymbolLoader : public cu::RefCountObj
+class SymbolLoader
 {
 public:
-	virtual s2::Symbol* Create(const std::string& filepath, int type = s2::SYM_UNKNOWN) const;
-	virtual s2::Symbol* Create(int type) const;
+	virtual s2::SymPtr Create(const std::string& filepath, int type = s2::SYM_UNKNOWN) const;
+	virtual s2::SymPtr Create(int type) const;
 
 }; // SymbolLoader
 

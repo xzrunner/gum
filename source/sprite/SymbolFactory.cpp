@@ -1,5 +1,6 @@
 #include "SymbolFactory.h"
 #include "SymbolFile.h"
+#include "ImagePool.h"
 
 #include "GUM_ImageSymbol.h"
 #include "ImageSymLoader.h"
@@ -53,16 +54,16 @@
 namespace gum
 {
 
-SINGLETON_DEFINITION(SymbolFactory);
+CU_SINGLETON_DEFINITION(SymbolFactory);
 
 SymbolFactory::SymbolFactory()
 	: m_anchor_sym(NULL)
 {
 }
 
-s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
+s2::SymPtr SymbolFactory::Create(const std::string& filepath, int type) const
 {
-	s2::Symbol* ret = NULL;
+	s2::SymPtr ret = NULL;
 
 	if (type == s2::SYM_UNKNOWN) {
 		type = SymbolFile::Instance()->Type(filepath);
@@ -71,7 +72,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 	{
 	case s2::SYM_IMAGE:
 		{
-			ImageSymbol* sym = new ImageSymbol;
+			auto& sym = std::make_shared<ImageSymbol>();
 			ImageSymLoader loader(sym);
 			loader.Load(ResPath(filepath), 1, false);
 			ret = sym;
@@ -79,7 +80,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_SCALE9:
 		{
-			s2::Scale9Symbol* sym = new s2::Scale9Symbol();
+			auto& sym = std::make_shared<s2::Scale9Symbol>();
 			Scale9SymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -87,7 +88,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_ICON:
 		{
-			s2::IconSymbol* sym = new s2::IconSymbol();
+			auto& sym = std::make_shared<s2::IconSymbol>();
 			IconSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -95,7 +96,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_TEXTURE:
 		{
-			s2::TextureSymbol* sym = new s2::TextureSymbol;
+			auto& sym = std::make_shared<s2::TextureSymbol>();
 			TextureSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -103,7 +104,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_TEXTBOX:
 		{
-			TextboxSymbol* sym = new TextboxSymbol();
+			auto& sym = std::make_shared<TextboxSymbol>();
 			TextboxLoader loader(sym->GetTextbox());
 			Json::Value val;
 			Json::Reader reader;
@@ -118,7 +119,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_COMPLEX:
 		{
-			s2::ComplexSymbol* sym = new s2::ComplexSymbol();
+			auto& sym = std::make_shared<s2::ComplexSymbol>();
 			ComplexSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -126,7 +127,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_ANIMATION:
 		{
-			s2::AnimSymbol* sym = new s2::AnimSymbol();
+			auto& sym = std::make_shared<s2::AnimSymbol>();
 			AnimSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -134,7 +135,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_ANIM2:
 		{
-			s2::Anim2Symbol* sym = new s2::Anim2Symbol;
+			auto& sym = std::make_shared<s2::Anim2Symbol>();
 			Anim2SymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -142,7 +143,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_PARTICLE3D:
 		{
-			s2::Particle3dSymbol* sym = new s2::Particle3dSymbol;
+			auto& sym = std::make_shared<s2::Particle3dSymbol>();
 			P3dSymLoader loader;
 			loader.LoadJson(filepath);
 			loader.Store(sym);
@@ -151,7 +152,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_PARTICLE2D:
 		{
-			s2::Particle2dSymbol* sym = new s2::Particle2dSymbol;
+			auto& sym = std::make_shared<s2::Particle2dSymbol>();
 			P2dSymLoader loader;
 			loader.LoadJson(filepath);
 			loader.Store(sym);
@@ -160,7 +161,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_SHAPE:
 		{
-			s2::ShapeSymbol* sym = new s2::ShapeSymbol;
+			auto& sym = std::make_shared<s2::ShapeSymbol>();
 			ShapeSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -168,7 +169,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_MESH:
 		{
-			s2::MeshSymbol* sym = new s2::MeshSymbol;
+			auto& sym = std::make_shared<s2::MeshSymbol>();
 			MeshSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -176,7 +177,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_MASK:
 		{
-			s2::MaskSymbol* sym = new s2::MaskSymbol;
+			auto& sym = std::make_shared<s2::MaskSymbol>();
 			MaskSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -184,7 +185,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_TRAIL:
 		{
-			s2::TrailSymbol* sym = new s2::TrailSymbol;
+			auto& sym = std::make_shared<s2::TrailSymbol>();
 			TrailSymLoader loader;
 			loader.LoadJson(filepath);
 			loader.Store(sym);
@@ -193,7 +194,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_SKELETON:
 		{
-			s2::SkeletonSymbol* sym = new s2::SkeletonSymbol;
+			auto& sym = std::make_shared<s2::SkeletonSymbol>();
 			SkeletonSymLoader loader(sym);
 			loader.LoadJson(filepath);
 			ret = sym;
@@ -201,7 +202,7 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 		break;
 	case s2::SYM_AUDIO:
 		{
-			s2::AudioSymbol* sym = new s2::AudioSymbol;
+			auto& sym = std::make_shared<s2::AudioSymbol>();
 			AudioSymLoader loader(sym);
 			loader.Load(filepath);
 			ret = sym;
@@ -218,16 +219,16 @@ s2::Symbol* SymbolFactory::Create(const std::string& filepath, int type) const
 	return ret;
 }
 
-s2::Symbol* SymbolFactory::Create(uint32_t id) const
+s2::SymPtr SymbolFactory::Create(uint32_t id) const
 {
 	if (id == 0xffffffff) {
 		if (!m_anchor_sym) {
-			m_anchor_sym = new s2::AnchorSymbol();
+			m_anchor_sym = std::make_shared<s2::AnchorSymbol>();
 		}
 		return m_anchor_sym;
 	}
 
-	s2::Symbol* ret = NULL;
+	s2::SymPtr ret = NULL;
 
 	int type;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
@@ -241,7 +242,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		{
 			const simp::NodePicture* pic = (const simp::NodePicture*)data;
 			sm::vec2 offset(pic->offx * 0.5f, pic->offy * 0.5f);
-			ImageSymbol* sym = NULL;
+			std::shared_ptr<ImageSymbol> sym = NULL;
 			if (pic->texid < simp::NodePicture::MAX_IN_PKG)
 			{
 				int pkg_id = simp::NodeID::GetPkgID(id);
@@ -249,14 +250,14 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 
 				const bimp::FilePath& fp = t_pkg->GetTexPath(pic->texid, 0);
 
-				sym = new ImageSymbol(id);
+				sym = std::make_shared<ImageSymbol>(id);
 				ImageSymLoader loader(sym);
 
 				bool async = true;
 				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
 				loader.Load(ResPath(fp.GetFilepath(), fp.GetOffset()), s_pkg->GetScale(), async);
 				const timp::Package::TextureDesc& tex = t_pkg->GetTexDesc(pic->texid);
-				Image* img = const_cast<Image*>(sym->GetImage());
+				auto& img = sym->GetImage();
 				if (img && async) {
 					img->AsyncLoad(pkg_id, tex.type, tex.w, tex.h);
 				}
@@ -271,13 +272,13 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 			else
 			{
 				std::string filepath = ProxyImage::GetFilepath(pic->texid - simp::NodePicture::MAX_IN_PKG);
-				Image* img = ImageMgr::Instance()->Query(ResPath(filepath));
+				auto img = ImagePool::Instance()->Query(ResPath(filepath));
 				assert(img);
 
 				int pkg_id = simp::NodeID::GetPkgID(id);
 				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
 
-				sym = new ImageSymbol(id);
+				sym = std::make_shared<ImageSymbol>(id);
 				sym->SetImage(img);
 				sym->SetRegion(
 					sm::ivec2(pic->region[0], pic->region[1]), 
@@ -291,7 +292,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_SCALE9:
 		{
-			s2::Scale9Symbol* sym = new s2::Scale9Symbol(id);
+			auto& sym = std::make_shared<s2::Scale9Symbol>(id);
 			Scale9SymLoader loader(sym);
 			loader.LoadBin((const simp::NodeScale9*)data);
 			ret = sym;
@@ -299,7 +300,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_ICON:
 		{
-			s2::IconSymbol* sym = new s2::IconSymbol(id);
+			auto& sym = std::make_shared<s2::IconSymbol>(id);
 			IconSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeIcon*)data);
 			ret = sym;
@@ -307,7 +308,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_TEXTURE:
 		{
-			s2::TextureSymbol* sym = new s2::TextureSymbol(id);
+			auto& sym = std::make_shared<s2::TextureSymbol>(id);
 			TextureSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeTexture*)data);
 			ret = sym;
@@ -315,7 +316,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_LABEL:
 		{
-			TextboxSymbol* sym = new TextboxSymbol(id);
+			auto& sym = std::make_shared<TextboxSymbol>(id);
 			TextboxLoader loader(sym->GetTextbox());
 			loader.LoadBin((const simp::NodeLabel*)data);
 			ret = sym;
@@ -323,7 +324,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_COMPLEX:
 		{
-			s2::ComplexSymbol* sym = new s2::ComplexSymbol(id);
+			auto& sym = std::make_shared<s2::ComplexSymbol>(id);
 			ComplexSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeComplex*)data);
 			ret = sym;
@@ -331,7 +332,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_ANIMATION:
 		{
-			s2::AnimSymbol* sym = new s2::AnimSymbol(id);
+			auto& sym = std::make_shared<s2::AnimSymbol>(id);
 			AnimSymLoader loader(sym, NULL, NULL);
 			loader.LoadBin((const simp::NodeAnimation*)data);
 			ret = sym;
@@ -339,7 +340,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_ANIM2:
 		{
-			s2::Anim2Symbol* sym = new s2::Anim2Symbol(id);
+			auto& sym = std::make_shared<s2::Anim2Symbol>(id);
 			Anim2SymLoader loader(sym);
 			loader.LoadBin((const simp::NodeAnim2*)data);
 			ret = sym;
@@ -347,7 +348,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_PARTICLE3D:
 		{
-			s2::Particle3dSymbol* sym = new s2::Particle3dSymbol(id);
+			auto& sym = std::make_shared<s2::Particle3dSymbol>(id);
 			P3dSymLoader loader;
 			loader.LoadBin((const simp::NodeParticle3d*)data);
 			loader.Store(sym);
@@ -356,7 +357,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_PARTICLE2D:
 		{
-			s2::Particle2dSymbol* sym = new s2::Particle2dSymbol(id);
+			auto& sym = std::make_shared<s2::Particle2dSymbol>(id);
 			P2dSymLoader loader;
 			loader.LoadBin((const simp::NodeParticle2d*)data);
 			loader.Store(sym);
@@ -365,7 +366,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_SHAPE:
 		{
-			s2::ShapeSymbol* sym = new s2::ShapeSymbol(id);
+			auto& sym = std::make_shared<s2::ShapeSymbol>(id);
 			ShapeSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeShape*)data);
 			ret = sym;
@@ -373,7 +374,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_MESH:
 		{
-			s2::MeshSymbol* sym = new s2::MeshSymbol(id);
+			auto& sym = std::make_shared<s2::MeshSymbol>(id);
 			MeshSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeMesh*)data);
 			ret = sym;
@@ -381,7 +382,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_MASK:
 		{
-			s2::MaskSymbol* sym = new s2::MaskSymbol(id);
+			auto& sym = std::make_shared<s2::MaskSymbol>(id);
 			MaskSymLoader loader(sym);
 			loader.LoadBin((const simp::NodeMask*)data);
 			ret = sym;
@@ -389,7 +390,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 		break;
 	case simp::TYPE_TRAIL:
 		{
-			s2::TrailSymbol* sym = new s2::TrailSymbol(id);
+			auto& sym = std::make_shared<s2::TrailSymbol>(id);
 			TrailSymLoader loader;
 			loader.LoadBin((const simp::NodeTrail*)data);
 			loader.Store(sym);
@@ -413,7 +414,7 @@ s2::Symbol* SymbolFactory::Create(uint32_t id) const
 	return ret;
 }
 
-s2::Symbol* SymbolFactory::Create(const std::string& pkg_name, const std::string& node_name) const
+s2::SymPtr SymbolFactory::Create(const std::string& pkg_name, const std::string& node_name) const
 {
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(pkg_name, node_name);
 	if (id != 0xffffffff) {

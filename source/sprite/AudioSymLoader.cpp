@@ -8,19 +8,9 @@
 namespace gum
 {
 
-AudioSymLoader::AudioSymLoader(s2::AudioSymbol* sym)
+AudioSymLoader::AudioSymLoader(const std::shared_ptr<s2::AudioSymbol>& sym)
 	: m_sym(sym)
 {
-	if (m_sym) {
-		m_sym->AddReference();
-	}
-}
-
-AudioSymLoader::~AudioSymLoader()
-{
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void AudioSymLoader::Load(const std::string& filepath)
@@ -33,9 +23,8 @@ void AudioSymLoader::Load(const std::string& filepath)
 	if (!audio->IsEnable()) {
 		return;
 	}
-	ua::Source* source = audio->GetContext()->CreateSource(filepath, true);
+	auto source = audio->GetContext()->CreateSource(filepath, true);
 	m_sym->SetSource(source);
-	source->RemoveReference();
 }
 
 }
