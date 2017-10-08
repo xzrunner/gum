@@ -2,8 +2,7 @@
 #include "gum/StringHelper.h"
 
 #ifndef NO_BOOST
-	#include <boost/filesystem/operations.hpp>
-	#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 #endif // NO_BOOST
 
 #include <assert.h>
