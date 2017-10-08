@@ -179,6 +179,8 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string&
 		skin_count += parser.skins[i].items.size();
 	}
 
+	m_sym->ClearCachedSym();
+
 	m_skins.reserve(skin_count);
 	int ptr = 0;
 	for (int i = 0, n = parser.skins.size(); i < n; ++i) 

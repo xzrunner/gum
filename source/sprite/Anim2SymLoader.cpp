@@ -85,6 +85,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 	sk->slot_count = node->slot_count;
 	sk->skin_count = node->skin_count;
 	//// skins
+	m_sym->ClearCachedSym();
 	for (int i = 0; i < sk->skin_count; ++i) 
 	{
 		const simp::NodeAnim2::Skin& src = node->skins[i];
