@@ -36,7 +36,7 @@ public:
 	static UID Glyph(int unicode, const GlyphStyle& gs);
 	static UID BinNode(uint32_t node_id);
 	static UID Sprite(int spr_id);
-	static UID Actor(const s2::ActorConstPtr& actor);
+	static UID Actor(const s2::Actor* actor);
 
 private:
 	static const int DATA_SIZE = 56;

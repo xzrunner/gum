@@ -24,7 +24,7 @@ P2dSymLoader::P2dSymLoader()
 {
 }
 
-void P2dSymLoader::Store(const const std::shared_ptr<s2::Particle2dSymbol>& sym) const
+void P2dSymLoader::Store(const std::shared_ptr<s2::Particle2dSymbol>& sym) const
 {
 	int sz = SIZEOF_P2D_EMITTER_CFG + SIZEOF_P2D_SYMBOL * components.size();
 	p2d_emitter_cfg* cfg = (p2d_emitter_cfg*) operator new(sz);

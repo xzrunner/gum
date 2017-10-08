@@ -1,7 +1,7 @@
 #include "TextureSymLoader.h"
 #include "FilepathHelper.h"
 #include "ShapeLoader.h"
-#include "SymbolPool.h"
+#include "SymbolFactory.h"
 
 #include <sprite2/TextureSymbol.h>
 #include <sprite2/PolygonShape.h>
@@ -40,8 +40,8 @@ void TextureSymLoader::LoadJson(const std::string& filepath)
 
 	for (int i = 0, n = value["shapes"].size(); i < n; ++i) {
 		auto shape = ShapeLoader::LoadShape(value["shapes"][i], dir);
-		std::unique_ptr<s2::PolygonShape> poly_shape(S2_VI_DOWN_CAST<s2::PolygonShape*>(shape.get()));
-		m_sym->AddPolygon(std::move(poly_shape));
+		auto poly_shape = static_cast<s2::PolygonShape*>(std::move(shape).release());
+		m_sym->AddPolygon(std::unique_ptr<s2::PolygonShape>(poly_shape));
 	}
 }
 
@@ -53,12 +53,12 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 
 	for (uint32_t i = 0; i < node->n; ++i) 
 	{
-		auto sym = SymbolPool::Instance()->Fetch(node->polys[i]);
+		auto sym = SymbolFactory::Instance()->Create(node->polys[i]);
 		if (sym)
 		{
 			auto shape_sym = S2_VI_PTR_DOWN_CAST<s2::ShapeSymbol>(sym);
-			std::unique_ptr<s2::PolygonShape> poly_shape(S2_VI_DOWN_CAST<s2::PolygonShape*>(shape_sym->GetShape().get()));
-			m_sym->AddPolygon(poly_shape);
+			auto poly_shape = static_cast<s2::PolygonShape*>(std::move(shape_sym->GetShape()).release());
+			m_sym->AddPolygon(std::unique_ptr<s2::PolygonShape>(poly_shape));
 		}
 	}
 }

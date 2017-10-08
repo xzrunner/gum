@@ -347,7 +347,7 @@ ext_sym_render(void* ext_sym, float x, float y, void* ud) {
 	}
 
 	s2::SymPtr sym(*static_cast<s2::SymPtr*>(ext_sym));
-	s2::DrawNode::Draw(sym, rp, sm::vec2(x, y));
+	s2::DrawNode::Draw(*sym, rp, sm::vec2(x, y));
 }
 
 /************************************************************************/
@@ -581,7 +581,7 @@ void GTxt::DrawUFChar(int unicode, int font, float x, float y, void* ud) const
 	if (_rp->add) {
 		rp.color.SetAdd(*_rp->add);
 	}
-	s2::DrawNode::Draw(itr->second, rp, sm::vec2(x, y));
+	s2::DrawNode::Draw(*itr->second, rp, sm::vec2(x, y));
 }
 
 void GTxt::SetCap(int cap_bitmap, int cap_layout)
