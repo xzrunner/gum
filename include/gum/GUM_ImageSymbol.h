@@ -42,10 +42,6 @@ public:
 	void SetCacheDirty(int block_id);
 
 private:
-#ifdef GUM_DEBUG
-	virtual bool IsProxyImg() const;
-#endif // GUM_DEBUG
-
 	void InitTexcoords();
 
 	void ClearCache();

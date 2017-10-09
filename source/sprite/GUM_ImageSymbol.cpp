@@ -190,13 +190,6 @@ void ImageSymbol::SetCacheDirty(int block_id)
 	}
 }
 
-#ifdef GUM_DEBUG
-bool ImageSymbol::IsProxyImg() const
-{
-	return std::dynamic_pointer_cast<ProxyImage>(m_img) != nullptr;
-}
-#endif // GUM_DEBUG
-
 void ImageSymbol::InitTexcoords()
 {
 	m_texcoords[0] = 0; m_texcoords[1] = 0;
