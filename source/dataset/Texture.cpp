@@ -31,7 +31,7 @@ void Texture::Load(const std::string& filepath)
 		return;
 	}
 
-	if (fmt == GPF_RGBA && Config::Instance()->GetPreMulAlpha()) {
+	if (fmt == GPF_RGBA8 && Config::Instance()->GetPreMulAlpha()) {
 		gimg_pre_mul_alpha(pixels, w, h);
 	}
 
@@ -44,7 +44,7 @@ void Texture::Load(const std::string& filepath)
 	case GPF_RGB:
 		tf = ur::TEXTURE_RGB;
 		break;
-	case GPF_RGBA:
+	case GPF_RGBA8:
 		tf = ur::TEXTURE_RGBA8;
 		break;
 	}
