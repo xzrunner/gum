@@ -49,7 +49,7 @@ bool ImageLoader::AsyncLoad(int format, int width, int height, Image* img)
 	if (real_fmt == timp::TEXTURE_ETC2) {
 		ur::RenderContext* rc = RenderContext::Instance()->GetImpl();
 		if (!rc->IsSupportETC2()) {
-			real_fmt = timp::TEXTURE_RGBA8;
+			real_fmt = timp::TEXTURE_RGBA4;
 		}
 	}
 
@@ -73,7 +73,7 @@ bool ImageLoader::LoadRaw()
 		return false;
 	}
 
-	if (fmt == GPF_RGBA && Config::Instance()->GetPreMulAlpha()) {
+	if (fmt == GPF_RGBA8 && Config::Instance()->GetPreMulAlpha()) {
 		gimg_pre_mul_alpha(pixels, w, h);
 	}
 
@@ -89,7 +89,7 @@ bool ImageLoader::LoadRaw()
 	case GPF_RGB:
 		tf = timp::TEXTURE_RGB;
 		break;
-	case GPF_RGBA:
+	case GPF_RGBA8:
 		tf = timp::TEXTURE_RGBA8;
 		break;
 	}
@@ -167,8 +167,8 @@ bool ImageLoader::DecodePVR4(const void* data)
 //	internal_format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
 	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, ur::TEXTURE_PVR4);
 #else
-	uint8_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(data), m_width, m_height);
-	gimg_revert_y(uncompressed, m_width, m_height, GPF_RGBA);
+	uint16_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(data), m_width, m_height);
+	gimg_revert_y((uint8_t*)uncompressed, m_width, m_height, GPF_RGBA4);
 	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
 	free(uncompressed);
 #endif
@@ -181,8 +181,8 @@ bool ImageLoader::DecodeETC2(const void* data)
 	if (rc->IsSupportETC2()) {
 		m_id = rc->CreateTexture(data, m_width, m_height, timp::TEXTURE_ETC2);
 	} else {
-		uint8_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(data), m_width, m_height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
-		m_id = rc->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
+		uint16_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(data), m_width, m_height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
+		m_id = rc->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA4);
 		free(uncompressed);
 	}
 	return true;
