@@ -20,7 +20,6 @@ class SpriteIO
 {
 public:
 	SpriteIO(bool compress, bool render_open);
-	~SpriteIO();
 
 	void Load(const Json::Value& val, const s2::SprPtr& spr, const std::string& dir);
 	void Store(Json::Value& val, const s2::SprConstPtr& spr, const std::string& dir);
@@ -81,7 +80,7 @@ public:
 	s2::RenderColor		m_col;
 	s2::BlendMode		m_blend;
 	s2::FastBlendMode	m_fast_blend;
-	s2::RenderFilter*	m_filter;
+	std::shared_ptr<s2::RenderFilter> m_filter;
 	float               m_downsample;
 	s2::CameraMode		m_camera;
 	

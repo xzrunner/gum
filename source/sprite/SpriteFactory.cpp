@@ -78,52 +78,52 @@ s2::SprPtr SpriteFactory::Create(const s2::SymPtr& sym, uint32_t id, bool create
 	switch (sym->Type())
 	{
 	case s2::SYM_IMAGE:
-		spr = std::make_shared<s2::ImageSprite>(sym, id);
+		spr = mm::allocate_shared<s2::ImageSprite>(sym, id);
 		break;
 	case s2::SYM_SCALE9:
-		spr = std::make_shared<s2::Scale9Sprite>(sym, id);
+		spr = mm::allocate_shared<s2::Scale9Sprite>(sym, id);
 		break;
 	case s2::SYM_ICON:
-		spr = std::make_shared<s2::IconSprite>(sym, id);
+		spr =mm::allocate_shared<s2::IconSprite>(sym, id);
 		break;
 	case s2::SYM_TEXTURE:
-		spr = std::make_shared<s2::TextureSprite>(sym, id);
+		spr =mm::allocate_shared<s2::TextureSprite>(sym, id);
 		break;
 	case s2::SYM_TEXTBOX:
-		spr = std::make_shared<s2::TextboxSprite>(sym, id);
+		spr =mm::allocate_shared<s2::TextboxSprite>(sym, id);
 		break;
 	case s2::SYM_COMPLEX:
-		spr = std::make_shared<s2::ComplexSprite>(sym, id);
+		spr =mm::allocate_shared<s2::ComplexSprite>(sym, id);
 		break;
 	case s2::SYM_ANIMATION:
-		spr = std::make_shared<s2::AnimSprite>(sym, id);
+		spr =mm::allocate_shared<s2::AnimSprite>(sym, id);
 		break;
 	case s2::SYM_ANIM2:
-		spr = std::make_shared<s2::Anim2Sprite>(sym, id);
+		spr =mm::allocate_shared<s2::Anim2Sprite>(sym, id);
 		break;
 	case s2::SYM_PARTICLE3D:
-		spr = std::make_shared<s2::Particle3dSprite>(sym, id);
+		spr =mm::allocate_shared<s2::Particle3dSprite>(sym, id);
 		break;
 	case s2::SYM_PARTICLE2D:
-		spr = std::make_shared<s2::Particle2dSprite>(sym, id);
+		spr =mm::allocate_shared<s2::Particle2dSprite>(sym, id);
 		break;
 	case s2::SYM_SHAPE:
-		spr = std::make_shared<s2::ShapeSprite>(sym, id);
+		spr =mm::allocate_shared<s2::ShapeSprite>(sym, id);
 		break;
 	case s2::SYM_MESH:
-		spr = std::make_shared<s2::MeshSprite>(sym, id);
+		spr =mm::allocate_shared<s2::MeshSprite>(sym, id);
 		break;
 	case s2::SYM_MASK:
-		spr = std::make_shared<s2::MaskSprite>(sym, id);
+		spr =mm::allocate_shared<s2::MaskSprite>(sym, id);
 		break;
 	case s2::SYM_TRAIL:
-		spr = std::make_shared<s2::TrailSprite>(sym, id);
+		spr =mm::allocate_shared<s2::TrailSprite>(sym, id);
 		break;
 	case s2::SYM_SKELETON:
-		spr = std::make_shared<s2::SkeletonSprite>(sym, id);
+		spr =mm::allocate_shared<s2::SkeletonSprite>(sym, id);
 		break;
 	case s2::SYM_AUDIO:
-		spr = std::make_shared<s2::AudioSprite>(sym, id);
+		spr =mm::allocate_shared<s2::AudioSprite>(sym, id);
 		break;
 	default:
 		LOGW("Create spr fail: unknown sym type %d", sym->Type());
@@ -272,7 +272,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 		{
 			auto sym = SymbolPool::Instance()->Fetch(id);
 			if (sym) {
-				spr = std::make_shared<s2::ImageSprite>(sym, id);
+				spr =mm::allocate_shared<s2::ImageSprite>(sym, id);
 			}
 		}
 		break;
@@ -282,7 +282,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 			auto sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
-				auto s9_spr = std::make_shared<s2::Scale9Sprite>(sym, id);
+				auto s9_spr =mm::allocate_shared<s2::Scale9Sprite>(sym, id);
 				if (s9_spr)
 				{
 					Scale9SprLoader loader(s9_spr);
@@ -298,7 +298,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 			auto sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
-				auto icon_spr = std::make_shared<s2::IconSprite>(sym, id);
+				auto icon_spr =mm::allocate_shared<s2::IconSprite>(sym, id);
 				if (icon_spr)
 				{
 					IconSprLoader loader(icon_spr);
@@ -314,7 +314,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 			auto sym = SymbolPool::Instance()->Fetch(node->sym);
 			if (sym)
 			{
-				auto tex_spr = std::make_shared<s2::TextureSprite>(sym, id);
+				auto tex_spr =mm::allocate_shared<s2::TextureSprite>(sym, id);
 				spr = tex_spr;
 			}
 		}

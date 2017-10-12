@@ -77,7 +77,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		m_sym->Add(spr);
 	}
 
-	std::vector<s2::ComplexSymbol::Action> dst;
+	mm::AllocVector<s2::ComplexSymbol::Action> dst;
 	dst.reserve(node->actions_n);
 	for (int i = 0; i < node->actions_n; ++i) 
 	{

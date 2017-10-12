@@ -6,18 +6,19 @@
 #include <string>
 #include <memory>
 
+namespace bimp { class FilePath; }
+
 namespace gum
 {
 
 class ImageSymbol;
-class ResPath;
 
 class ImageSymLoader : private cu::Uncopyable
 {
 public:
 	ImageSymLoader(const std::shared_ptr<ImageSymbol>& sym);
 
-	void Load(const ResPath& res_path, float scale, bool async);
+	void Load(const bimp::FilePath& res_path, float scale, bool async);
 
 private:
 	std::shared_ptr<ImageSymbol> m_sym;

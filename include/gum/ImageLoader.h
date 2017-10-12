@@ -1,7 +1,7 @@
 #ifndef _GUM_IMAGE_LOADER_H_
 #define _GUM_IMAGE_LOADER_H_
 
-#include "ResPath.h"
+#include <bimp/FilePath.h>
 
 #include <memory>
 
@@ -15,7 +15,7 @@ class Image;
 class ImageLoader
 {
 public:
-	ImageLoader(const ResPath& res_path);
+	ImageLoader(const bimp::FilePath& res_path);
 
 	bool Load();
 	bool AsyncLoad(int format, int width, int height, const std::shared_ptr<Image>& img);
@@ -38,7 +38,7 @@ private:
 	static void LoadTextureCB(int format, int w, int h, const void* data, void* ud);
 
 private:
-	ResPath m_res_path;
+	bimp::FilePath m_res_path;
 
 	int m_id;
 	int m_format;

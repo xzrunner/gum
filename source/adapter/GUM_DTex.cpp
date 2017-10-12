@@ -236,7 +236,7 @@ get_tex_filepath(int pkg_id, int tex_idx, int lod_layer, char* buf)
 class FileLoader : public bimp::FileLoader
 {
 public:
-	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+	FileLoader(const bimp::ResString& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 		: bimp::FileLoader(filepath, use_cache)
 		, m_parser_cb(parser_cb)
 		, m_ud(ud)
@@ -282,7 +282,7 @@ load_texture(int pkg_id, int tex_idx, int lod)
 	assert(t_pkg);
 	const bimp::FilePath& filepath = t_pkg->GetTexPath(tex_idx, lod);
 	
-	ImageLoader loader(ResPath(filepath.GetFilepath(), filepath.GetOffset()));
+	ImageLoader loader(bimp::FilePath(filepath.GetFilepath(), filepath.GetOffset()));
 	bool ret = loader.Load();
 	if (!ret) {
 		return;
@@ -360,7 +360,7 @@ stat_tex_remove(int width, int height, int format)
 /* Cache                                                                */
 /************************************************************************/
 
-static std::map<ResPath, std::shared_ptr<Image>> DTEX_CACHED_IMAGES;
+static std::map<bimp::FilePath, std::shared_ptr<Image>> DTEX_CACHED_IMAGES;
 
 static void
 relocate_pkg(int src_pkg, int src_tex, int src_lod, int dst_tex_id, int dst_fmt, int dst_w, int dst_h, int dst_xmin, int dst_ymin, int dst_xmax, int dst_ymax)
@@ -378,7 +378,7 @@ relocate_pkg(int src_pkg, int src_tex, int src_lod, int dst_tex_id, int dst_fmt,
 	item.dst_ymax = dst_ymax;
 	simp::RelocateTexcoords::Instance()->Add(item);
 
-	ResPath res_path(ProxyImage::GetFilepath(dst_tex_id));
+	bimp::FilePath res_path(ProxyImage::GetFilepath(dst_tex_id));
 	auto img = ImagePool::Instance()->Query(res_path);
 	if (img) {
 		auto p_img = std::static_pointer_cast<ProxyImage>(img);
@@ -411,7 +411,7 @@ relocate_pkg_finish()
 static void
 remove_tex(int tex_id)
 {
-	ResPath res_path(ProxyImage::GetFilepath(tex_id));
+	bimp::FilePath res_path(ProxyImage::GetFilepath(tex_id));
 	DTEX_CACHED_IMAGES.erase(res_path);
 	ImagePool::Instance()->Delete(res_path);
 }
@@ -520,8 +520,7 @@ void DTex::CreatePkg(int pkg_id)
 
 	dtex::Package* dst = new dtex::Package(pkg_id);
 
-	const std::vector<timp::Package::TextureDesc>& textures 
-		= src->GetAllTextures();
+	auto& textures = src->GetAllTextures();
 	for (int i = 0, n = textures.size(); i < n; ++i) 
 	{
 		const timp::Package::TextureDesc& desc = textures[i];

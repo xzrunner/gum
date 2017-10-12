@@ -10,7 +10,7 @@ ImagePool::ImagePool()
 {
 }
 
-std::shared_ptr<Image> ImagePool::Create(int pkg_id, const ResPath& res_path, bool async)
+std::shared_ptr<Image> ImagePool::Create(int pkg_id, const bimp::FilePath& res_path, bool async)
 {
 	auto itr = m_map_images.find(res_path);
 	if (itr != m_map_images.end())
@@ -28,7 +28,7 @@ std::shared_ptr<Image> ImagePool::Create(int pkg_id, const ResPath& res_path, bo
 	return img;
 }
 
-std::shared_ptr<Image> ImagePool::Query(const ResPath& res_path)
+std::shared_ptr<Image> ImagePool::Query(const bimp::FilePath& res_path)
 {
 	auto itr = m_map_images.find(res_path);
 	if (itr != m_map_images.end()) {
@@ -40,13 +40,13 @@ std::shared_ptr<Image> ImagePool::Query(const ResPath& res_path)
 	return nullptr;
 }
 
-bool ImagePool::Add(const ResPath& res_path, const std::shared_ptr<Image>& img)
+bool ImagePool::Add(const bimp::FilePath& res_path, const std::shared_ptr<Image>& img)
 {
 	auto ret = m_map_images.insert(std::make_pair(res_path, img));
 	return ret.second;
 }
 
-bool ImagePool::Delete(const ResPath& res_path)
+bool ImagePool::Delete(const bimp::FilePath& res_path)
 {
 	auto itr = m_map_images.find(res_path);
 	if (itr == m_map_images.end()) {

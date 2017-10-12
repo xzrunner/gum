@@ -24,7 +24,7 @@ Image::Image()
 	++ALL_IMG_COUNT;
 }
 
-Image::Image(int pkg_id, const ResPath& res_path, bool async)
+Image::Image(int pkg_id, const bimp::FilePath& res_path, bool async)
 	: m_pkg_id(pkg_id)
 	, m_res_path(res_path)
 	, m_width(0)

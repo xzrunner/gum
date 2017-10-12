@@ -65,7 +65,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 			next_time = time;
 		}
 
-		auto frame = std::make_unique<s2::AnimSymbol::Frame>();
+		auto frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
 		frame->index = static_cast<int>(next_time * FPS) + 1;
 		frame->tween = true;
 		auto spr = m_spr_loader->Create(m_sk_sym);

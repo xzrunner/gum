@@ -18,7 +18,7 @@
 namespace gum
 {
 
-ImageLoader::ImageLoader(const ResPath& res_path)
+ImageLoader::ImageLoader(const bimp::FilePath& res_path)
 	: m_res_path(res_path)
 	, m_id(0)
 	, m_format(0)
@@ -29,7 +29,7 @@ ImageLoader::ImageLoader(const ResPath& res_path)
 
 bool ImageLoader::Load()
 {
-	const std::string& filepath = m_res_path.GetFilepath();
+	auto& filepath = m_res_path.GetFilepath();
 	if (filepath.find(".ept") != std::string::npos ||
 		filepath.find(".pkg") != std::string::npos) {
 		return LoadBin();

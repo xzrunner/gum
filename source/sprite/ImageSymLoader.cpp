@@ -13,7 +13,7 @@ ImageSymLoader::ImageSymLoader(const std::shared_ptr<ImageSymbol>& sym)
 {
 }
 
-void ImageSymLoader::Load(const ResPath& res_path, float scale, bool async)
+void ImageSymLoader::Load(const bimp::FilePath& res_path, float scale, bool async)
 {
 	int pkg_id = simp::NodeID::GetPkgID(m_sym->GetID());
 	auto img = ImagePool::Instance()->Create(pkg_id, res_path, async);

@@ -1,7 +1,7 @@
 #ifndef _GUM_IMAGE_H_
 #define _GUM_IMAGE_H_
 
-#include "ResPath.h"
+#include <bimp/FilePath.h>
 
 #include <SM_Vector.h>
 
@@ -21,7 +21,7 @@ class Image : public std::enable_shared_from_this<Image>
 {
 public:
 	Image();
-	Image(int pkg_id, const ResPath& res_path, bool async);
+	Image(int pkg_id, const bimp::FilePath& res_path, bool async);
 	virtual ~Image();
 
 	void AsyncLoad(int pkg_id, int format, int width, int height);
@@ -37,7 +37,7 @@ public:
 	bool IsLoadFinished() const;
 	void SetLoadFinished(bool finished);
 
-	const ResPath& GetResPath() const { return m_res_path; }
+	const bimp::FilePath& GetResPath() const { return m_res_path; }
 
 //private:
 	void LoadFromLoader(const ImageLoader& loader);
@@ -47,7 +47,7 @@ public:
 protected:
 	int m_pkg_id;
 
-	ResPath m_res_path;
+	bimp::FilePath m_res_path;
 
 	int m_width, m_height;
 	int m_format;

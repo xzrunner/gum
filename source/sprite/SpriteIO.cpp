@@ -47,13 +47,6 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_editable		= true;
 }
 
-SpriteIO::~SpriteIO() 
-{ 
-	if (m_filter) {
-		delete m_filter; 
-	}
-}
-
 void SpriteIO::Load(const Json::Value& val, const s2::SprPtr& spr, const std::string& dir)
 {
 	Load(val, dir);
@@ -398,7 +391,7 @@ void SpriteIO::LoadShader(const s2::SprPtr& spr)
 	s2::RenderShader rs = spr->GetShader();
 	rs.SetBlend(m_blend);
 	rs.SetFastBlend(m_fast_blend);
-	rs.SetFilter(m_filter);
+	rs.SetFilter(m_filter.get());
 	rs.SetDownsample(m_downsample);
 	spr->SetShader(rs);
 }
@@ -420,8 +413,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 	m_blend = s2::BM_NULL;
 	m_fast_blend = s2::FBM_NULL;
 	if (m_filter) {
-		delete m_filter;
-		m_filter = NULL;
+		m_filter.reset();
 	}
 	m_downsample = 1;
 
@@ -458,27 +450,27 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 			case s2::FM_EDGE_DETECTION:
 				{
 					float blend = (float)(fval["blend"].asDouble());
-					s2::RFEdgeDetection* filter = static_cast<s2::RFEdgeDetection*>(m_filter);
+					auto& filter = std::static_pointer_cast<s2::RFEdgeDetection>(m_filter);
 					filter->SetBlend(blend);
 				}
 				break;
 			case s2::FM_GAUSSIAN_BLUR:
 				{
 					int iterations = fval["iterations"].asInt();
-					s2::RFGaussianBlur* filter = static_cast<s2::RFGaussianBlur*>(m_filter);
+					auto& filter = std::static_pointer_cast<s2::RFGaussianBlur>(m_filter);
 					filter->SetIterations(iterations);
 				}
 				break;
 			case s2::FM_OUTER_GLOW:
 				{
 					int iterations = fval["iterations"].asInt();
-					s2::RFOuterGlow* filter = static_cast<s2::RFOuterGlow*>(m_filter);
+					auto& filter = std::static_pointer_cast<s2::RFOuterGlow>(m_filter);
 					filter->SetIterations(iterations);
 				}
 				break;
 			case s2::FM_HEAT_HAZE:
 				{
-					s2::RFHeatHaze* filter = static_cast<s2::RFHeatHaze*>(m_filter);
+					auto& filter = std::static_pointer_cast<s2::RFHeatHaze>(m_filter);
 					float distortion = 0.02f, rise = 0.2f;
 					if (fval.isMember("distortion")) {
 						distortion = static_cast<float>(fval["distortion"].asDouble());
@@ -500,7 +492,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 							prog = static_cast<sl::HeatHazeProg*>(shader->GetProgram(sl::FM_HEAT_HAZE));
 						}
 						if (prog) {
-							auto img = ImagePool::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, ResPath(filepath));
+							auto img = ImagePool::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, bimp::FilePath(filepath));
 							prog->SetDistortionMapTex(img->GetTexID());
 						}
 					}
@@ -547,25 +539,25 @@ void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
 		{
 		case s2::FM_EDGE_DETECTION:
 			{
-				s2::RFEdgeDetection* filter = static_cast<s2::RFEdgeDetection*>(m_filter);
+				auto& filter = std::static_pointer_cast<s2::RFEdgeDetection>(m_filter);
 				fval["blend"] = filter->GetBlend();
 			}
 			break;
 		case s2::FM_GAUSSIAN_BLUR:
 			{
-				s2::RFGaussianBlur* filter = static_cast<s2::RFGaussianBlur*>(m_filter);
+				auto& filter = std::static_pointer_cast<s2::RFGaussianBlur>(m_filter);
 				fval["iterations"] = filter->GetIterations();
 			}
 			break;
 		case s2::FM_OUTER_GLOW:
 			{
-				s2::RFOuterGlow* filter = static_cast<s2::RFOuterGlow*>(m_filter);
+				auto& filter = std::static_pointer_cast<s2::RFOuterGlow>(m_filter);
 				fval["iterations"] = filter->GetIterations();
 			}
 			break;
 		case s2::FM_HEAT_HAZE:
 			{
-				s2::RFHeatHaze* filter = static_cast<s2::RFHeatHaze*>(m_filter);
+				auto& filter = std::static_pointer_cast<s2::RFHeatHaze>(m_filter);
 				fval["filepath"] = gum::FilepathHelper::Relative(dir, filter->GetFilepath());
 				float distortion, rise;
 				filter->GetFactor(distortion, rise);

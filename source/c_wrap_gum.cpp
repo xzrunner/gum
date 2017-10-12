@@ -23,7 +23,6 @@
 #include "gum/StatTag.h"
 #include "gum/StatScreen.h"
 #include "gum/PkgFileParser.h"
-#include "gum/ResPath.h"
 #ifndef S2_DISABLE_MODEL
 #include "gum/GUM_Model3.h"
 #endif // S2_DISABLE_MODEL
@@ -245,7 +244,7 @@ static std::vector<std::shared_ptr<Image>> IMAGE_CACHE;
 extern "C"
 void* gum_create_img(const char* filepath)
 {
-	ResPath res_path(filepath);
+	bimp::FilePath res_path(filepath);
 	auto img = ImagePool::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, res_path);
 	IMAGE_CACHE.push_back(img);
 	return static_cast<void*>(img.get());
