@@ -80,7 +80,7 @@ public:
 	s2::RenderColor		m_col;
 	s2::BlendMode		m_blend;
 	s2::FastBlendMode	m_fast_blend;
-	std::shared_ptr<s2::RenderFilter> m_filter;
+	std::unique_ptr<s2::RenderFilter> m_filter;
 	float               m_downsample;
 	s2::CameraMode		m_camera;
 	

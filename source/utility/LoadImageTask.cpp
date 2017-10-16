@@ -40,7 +40,7 @@ LoadImageTask::~LoadImageTask()
 class LoadImageTask::FileLoader : public bimp::FileLoader
 {
 public:
-	FileLoader(const bimp::ResString& filepath, bool use_cache, LoadImageTask* task)
+	FileLoader(const std::string& filepath, bool use_cache, LoadImageTask* task)
 		: bimp::FileLoader(filepath, use_cache)
 		, m_task(task)
 	{}
@@ -68,7 +68,7 @@ void LoadImageTask::Run()
 	}
 	const bimp::FilePath& path = m_img->GetResPath();
 	if (path.IsSingleFile()) {
-		LoadImageTask::FileLoader loader(path.GetFilepath(), false, this);
+		LoadImageTask::FileLoader loader(path.GetFilepath().c_str(), false, this);
 		loader.Load();
 	} else {
 		fs_file* file = fs_open(path.GetFilepath().c_str(), "rb");

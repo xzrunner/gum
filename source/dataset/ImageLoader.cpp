@@ -105,7 +105,7 @@ bool ImageLoader::LoadBin()
 {
 	if (m_res_path.IsSingleFile()) 
 	{
-		timp::TextureLoader loader(m_res_path.GetFilepath());
+		timp::TextureLoader loader(m_res_path.GetFilepath().c_str());
 		loader.Load();
 		return LoadBin(loader);
 	} 

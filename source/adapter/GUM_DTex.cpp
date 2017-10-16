@@ -236,7 +236,7 @@ get_tex_filepath(int pkg_id, int tex_idx, int lod_layer, char* buf)
 class FileLoader : public bimp::FileLoader
 {
 public:
-	FileLoader(const bimp::ResString& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 		: bimp::FileLoader(filepath, use_cache)
 		, m_parser_cb(parser_cb)
 		, m_ud(ud)
@@ -265,7 +265,7 @@ load_file(const void* res_path, bool use_cache, void (*parser_cb)(const void* da
 	bimp::FilePath file_path;
 	file_path.Deserialization(static_cast<const char*>(res_path));
 	if (file_path.IsSingleFile()) {
-		FileLoader loader(file_path.GetFilepath(), use_cache, parser_cb, ud);
+		FileLoader loader(file_path.GetFilepath().c_str(), use_cache, parser_cb, ud);
 		loader.Load();
 	} else {
 		fs_file* file = fs_open(file_path.GetFilepath().c_str(), "rb");
@@ -307,7 +307,7 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 	const bimp::FilePath& filepath = t_pkg->GetTexPath(tex_idx, 0);
 	if (filepath.IsSingleFile())
 	{
-		timp::TextureLoader loader(filepath.GetFilepath());
+		timp::TextureLoader loader(filepath.GetFilepath().c_str());
 		loader.Load();
 		s2::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
 		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
