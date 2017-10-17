@@ -167,10 +167,12 @@ bool ImageLoader::DecodePVR4(const void* data)
 //	internal_format = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
 	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(data, m_width, m_height, ur::TEXTURE_PVR4);
 #else
-	uint16_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(data), m_width, m_height);
-	gimg_revert_y((uint8_t*)uncompressed, m_width, m_height, GPF_RGBA4);
-	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA8);
-	free(uncompressed);
+	uint8_t* rgba8 = gimg_pvr_decode_rgba8(static_cast<const uint8_t*>(data), m_width, m_height);
+	uint8_t* rgba4 = gimg_rgba8_to_rgba4_dither(rgba8, m_width, m_height);
+	gimg_revert_y((uint8_t*)rgba4, m_width, m_height, GPF_RGBA4);
+	m_id = RenderContext::Instance()->GetImpl()->CreateTexture(rgba4, m_width, m_height, timp::TEXTURE_RGBA8);
+	free(rgba4);
+	free(rgba8);
 #endif
 	return true;
 }
@@ -181,9 +183,11 @@ bool ImageLoader::DecodeETC2(const void* data)
 	if (rc->IsSupportETC2()) {
 		m_id = rc->CreateTexture(data, m_width, m_height, timp::TEXTURE_ETC2);
 	} else {
-		uint16_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(data), m_width, m_height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
-		m_id = rc->CreateTexture(uncompressed, m_width, m_height, timp::TEXTURE_RGBA4);
-		free(uncompressed);
+		uint8_t* rgba8 = gimg_etc2_decode_rgba8(static_cast<const uint8_t*>(data), m_width, m_height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
+		uint8_t* rgba4 = gimg_rgba8_to_rgba4_dither(rgba8, m_width, m_height);
+		m_id = rc->CreateTexture(rgba4, m_width, m_height, timp::TEXTURE_RGBA4);
+		free(rgba4);
+		free(rgba8);
 	}
 	return true;
 }

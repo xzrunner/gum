@@ -111,10 +111,12 @@ void LoadImageTask::Flush()
 #if defined( __APPLE__ ) && !defined(__MACOSX)
 			RenderContext::Instance()->GetImpl()->UpdateTexture(m_img->GetTexID(), pixels, width, height);
 #else
-			uint16_t* uncompressed = gimg_pvr_decode(static_cast<const uint8_t*>(pixels), width, height);
-			gimg_revert_y((uint8_t*)uncompressed, width, height, GPF_RGBA4);
-			RenderContext::Instance()->GetImpl()->UpdateTexture(m_img->GetTexID(), uncompressed, width, height);
-			free(uncompressed);
+			uint8_t* rgba8 = gimg_pvr_decode_rgba8(static_cast<const uint8_t*>(pixels), width, height);
+			uint8_t* rgba4 = gimg_rgba8_to_rgba4_dither(rgba8, width, height);
+			gimg_revert_y((uint8_t*)rgba4, width, height, GPF_RGBA4);
+			RenderContext::Instance()->GetImpl()->UpdateTexture(m_img->GetTexID(), rgba4, width, height);
+			free(rgba4);
+			free(rgba8);
 #endif
 		}
 		break;
@@ -126,9 +128,11 @@ void LoadImageTask::Flush()
 			if (rc->IsSupportETC2()) {
 				rc->UpdateTexture(m_img->GetTexID(), pixels, width, height);
 			} else {
-				uint16_t* uncompressed = gimg_etc2_decode(static_cast<const uint8_t*>(pixels), width, height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
-				rc->UpdateTexture(m_img->GetTexID(), uncompressed, width, height);
-				free(uncompressed);
+				uint8_t* rgba8 = gimg_etc2_decode_rgba8(static_cast<const uint8_t*>(pixels), width, height, ETC2PACKAGE_RGBA_NO_MIPMAPS);
+				uint8_t* rgba4 = gimg_rgba8_to_rgba4_dither(rgba8, width, height);
+				rc->UpdateTexture(m_img->GetTexID(), rgba4, width, height);
+				free(rgba4);
+				free(rgba8);
 			}
 		}
 		break;
