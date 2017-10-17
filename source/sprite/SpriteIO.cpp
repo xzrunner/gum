@@ -25,7 +25,8 @@ namespace gum
 {
 
 SpriteIO::SpriteIO(bool m_compress, bool render_open)
-	: m_compress(m_compress)
+	: m_filter(nullptr, s2::RenderFilter::Deleter)
+	, m_compress(m_compress)
 	, m_render_open(render_open)
 {
 	m_position		= sm::vec2(0, 0);
@@ -36,7 +37,6 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 
 	m_blend			= s2::BM_NULL;
 	m_fast_blend	= s2::FBM_NULL;
-	m_filter		= nullptr;
 	m_camera		= s2::CM_ORTHO;
 	m_downsample    = 1;
 
@@ -437,14 +437,14 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 		{
 			std::string disc = val["filter"].asString();
 			s2::FilterMode mode = FilterModes::Instance()->Name2Mode(disc);
-			m_filter.reset(s2::FilterFactory::Instance()->Create(mode));
+			m_filter = s2::FilterFactory::Instance()->Create(mode);
 		} 
 		else 
 		{
 			const Json::Value& fval = val["filter"];
 			std::string disc = fval["mode"].asString();
 			s2::FilterMode mode = FilterModes::Instance()->Name2Mode(disc);
-			m_filter.reset(s2::FilterFactory::Instance()->Create(mode));
+			m_filter = s2::FilterFactory::Instance()->Create(mode);
 			switch (mode)
 			{
 			case s2::FM_EDGE_DETECTION:
@@ -505,7 +505,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 	}
 	else
 	{
-		m_filter.reset(s2::FilterFactory::Instance()->Create(s2::FM_NULL));
+		m_filter = s2::FilterFactory::Instance()->Create(s2::FM_NULL);
 	}
 
 	if (val.isMember("downsample")) {
