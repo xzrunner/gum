@@ -81,7 +81,11 @@ public:
 	s2::RenderColor		m_col;
 	s2::BlendMode		m_blend;
 	s2::FastBlendMode	m_fast_blend;
+#ifdef S2_FILTER_FULL
 	s2::RenderFilterPtr m_filter;
+#else
+	s2::FilterMode      m_filter;
+#endif // S2_FILTER_FULL
 	float               m_downsample;
 	s2::CameraMode		m_camera;
 	

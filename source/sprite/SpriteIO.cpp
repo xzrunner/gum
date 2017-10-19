@@ -25,7 +25,11 @@ namespace gum
 {
 
 SpriteIO::SpriteIO(bool m_compress, bool render_open)
+#ifdef S2_FILTER_FULL
 	: m_filter(nullptr, s2::RenderFilter::Deleter)
+#else
+	: m_filter(s2::FM_NULL)
+#endif // S2_FILTER_FULL
 	, m_compress(m_compress)
 	, m_render_open(render_open)
 {
@@ -391,7 +395,11 @@ void SpriteIO::LoadShader(const s2::SprPtr& spr)
 	s2::RenderShader rs = spr->GetShader();
 	rs.SetBlend(m_blend);
 	rs.SetFastBlend(m_fast_blend);
+#ifdef S2_FILTER_FULL
 	rs.SetFilter(m_filter.get());
+#else
+	rs.SetFilter(m_filter);
+#endif // S2_FILTER_FULL
 	rs.SetDownsample(m_downsample);
 	spr->SetShader(rs);
 }
@@ -400,11 +408,15 @@ void SpriteIO::StoreShader(const s2::RenderShader& shader)
 {
 	m_blend      = shader.GetBlend();
 	m_fast_blend = shader.GetFastBlend();
+#ifdef S2_FILTER_FULL
 	if (shader.GetFilter()) {
 		m_filter.reset(shader.GetFilter()->Clone());
 	} else {
 		m_filter.reset();
 	}
+#else
+	m_filter = shader.GetFilter();
+#endif // S2_FILTER_FULL
 	m_downsample = shader.GetDownsample();
 }
 
@@ -412,9 +424,13 @@ void SpriteIO::LoadShader(const Json::Value& val, const CU_STR& dir)
 {
 	m_blend = s2::BM_NULL;
 	m_fast_blend = s2::FBM_NULL;
+#ifdef S2_FILTER_FULL
 	if (m_filter) {
 		m_filter.reset();
 	}
+#else
+	m_filter = s2::FM_NULL;
+#endif // S2_FILTER_FULL
 	m_downsample = 1;
 
 	if (!m_render_open) {
@@ -431,6 +447,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const CU_STR& dir)
 		m_fast_blend = FastBlendModes::Instance()->Name2Mode(disc);
 	}
 
+#ifdef S2_FILTER_FULL
 	if (val.isMember("filter")) 
 	{
 		if (val["filter"].isString()) 
@@ -507,6 +524,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const CU_STR& dir)
 	{
 		m_filter = s2::FilterFactory::Instance()->Create(s2::FM_NULL);
 	}
+#endif // S2_FILTER_FULL
 
 	if (val.isMember("downsample")) {
 		m_downsample = static_cast<float>(val["downsample"].asDouble());
@@ -528,6 +546,7 @@ void SpriteIO::StoreShader(Json::Value& val, const CU_STR& dir)
 	}
 
 	s2::FilterMode mode = s2::FM_NULL;
+#ifdef S2_FILTER_FULL
 	if (m_filter) {
 		mode = m_filter->GetMode();
 	}
@@ -570,6 +589,7 @@ void SpriteIO::StoreShader(Json::Value& val, const CU_STR& dir)
 		}
 		val["filter"] = fval;
 	}
+#endif // S2_FILTER_FULL
 
 	if (m_downsample != 1) {
 		val["downsample"] = m_downsample;
