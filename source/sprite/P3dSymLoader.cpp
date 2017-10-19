@@ -126,7 +126,7 @@ void P3dSymLoader::Store(const std::shared_ptr<s2::P3dEmitterCfg>& p3d_cfg) cons
 	}
 }
 
-void P3dSymLoader::LoadJson(const std::string& filepath)
+void P3dSymLoader::LoadJson(const CU_STR& filepath)
 {
 	Json::Value val;
 	Json::Reader reader;
@@ -136,7 +136,7 @@ void P3dSymLoader::LoadJson(const std::string& filepath)
 	reader.parse(fin, val);
 	fin.close();
 
-	name = val["name"].asString();
+	name = val["name"].asString().c_str();
 
 	loop = val["loop"].asBool();
 	local = val["local"].asBool();
@@ -230,7 +230,7 @@ void P3dSymLoader::LoadJson(const std::string& filepath)
 
 	blend = val["blend"].asInt();
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 	for (int i = 0, n = val["components"].size(); i < n; ++i) {
 		LoadComponent(dir, val["components"][i]);
 	}
@@ -307,7 +307,7 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 	}
 }
 
-void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp_val)
+void P3dSymLoader::LoadComponent(const CU_STR& dir, const Json::Value& comp_val)
 {
 	Component comp;
 
@@ -317,10 +317,10 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 		comp.count = comp_val["count"].asInt();
 	}
 
-	comp.filepath = comp_val["filepath"].asString();
+	comp.filepath = comp_val["filepath"].asString().c_str();
 	comp.filepath = FilepathHelper::Absolute(dir, comp.filepath);
 
-	comp.name = comp_val["name"].asString();
+	comp.name = comp_val["name"].asString().c_str();
 
 	if (comp_val.isMember("scale")) {
 		comp.scale_start = static_cast<float>(comp_val["scale"]["start"].asInt());
@@ -395,7 +395,7 @@ void P3dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 	components.push_back(comp);
 }
 
-s2::SymPtr P3dSymLoader::LoadSymbol(const std::string& filepath) const
+s2::SymPtr P3dSymLoader::LoadSymbol(const CU_STR& filepath) const
 {
 	return SymbolPool::Instance()->Fetch(filepath);
 }

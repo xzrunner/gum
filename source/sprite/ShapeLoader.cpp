@@ -9,9 +9,9 @@
 namespace gum
 {
 
-std::unique_ptr<s2::Shape> ShapeLoader::LoadShape(const Json::Value& val, const std::string& dir)
+std::unique_ptr<s2::Shape> ShapeLoader::LoadShape(const Json::Value& val, const CU_STR& dir)
 {
-	std::string type = val["type"].asString();
+	CU_STR type = val["type"].asString().c_str();
 
 	if (type == "polygon") {
 		return LoadPolygon(val, dir);
@@ -20,11 +20,11 @@ std::unique_ptr<s2::Shape> ShapeLoader::LoadShape(const Json::Value& val, const 
 	return NULL;
 }
 
-std::unique_ptr<s2::PolygonShape> ShapeLoader::LoadPolygon(const Json::Value& val, const std::string& dir)
+std::unique_ptr<s2::PolygonShape> ShapeLoader::LoadPolygon(const Json::Value& val, const CU_STR& dir)
 {
 	auto poly = std::make_unique<s2::PolygonShape>();
 
-	std::vector<sm::vec2> vertices;
+	CU_VEC<sm::vec2> vertices;
 	JsonSerializer::Load(val["vertices"], vertices);
 	poly->SetVertices(vertices);
 
@@ -34,12 +34,12 @@ std::unique_ptr<s2::PolygonShape> ShapeLoader::LoadPolygon(const Json::Value& va
 	return poly;
 }
 
-std::unique_ptr<s2::Polygon> ShapeLoader::LoadPolyMaterial(const Json::Value& val, const std::string& dir,
-	                                                       const std::vector<sm::vec2>& vertice)
+std::unique_ptr<s2::Polygon> ShapeLoader::LoadPolyMaterial(const Json::Value& val, const CU_STR& dir,
+	                                                       const CU_VEC<sm::vec2>& vertice)
 {
 	std::unique_ptr<s2::Polygon> poly;
 
-	std::string type = val["type"].asString();
+	CU_STR type = val["type"].asString().c_str();
 	if (type == "color")
 	{
 		s2::Color col;
@@ -48,7 +48,7 @@ std::unique_ptr<s2::Polygon> ShapeLoader::LoadPolyMaterial(const Json::Value& va
 	}
 	else if (type == "texture") 
 	{
-		std::string path = val["texture path"].asString();
+		CU_STR path = val["texture path"].asString().c_str();
 		path = FilepathHelper::Absolute(dir, path);
 		poly = std::make_unique<TexturePolygon>(path);
 	}

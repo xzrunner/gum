@@ -3,10 +3,10 @@
 
 #include <cu/uncopyable.h>
 #include <SM_Vector.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class Anim2Symbol; }
@@ -27,7 +27,7 @@ public:
 	Anim2SymLoader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
 		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL);
 
-	void LoadJson(const std::string& filepath);
+	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeAnim2* node);
 
 private:

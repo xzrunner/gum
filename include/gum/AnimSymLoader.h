@@ -2,8 +2,8 @@
 #define _GUM_ANIM_SYM_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class AnimSymbol; }
@@ -22,7 +22,7 @@ public:
 		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL,
 		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
-	void LoadJson(const std::string& filepath);
+	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeAnimation* node);
 
 private:

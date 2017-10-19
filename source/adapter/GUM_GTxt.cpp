@@ -285,12 +285,12 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 
 static void*
 ext_sym_create(const char* str) {
-	std::string src = StringHelper::UTF8ToGBK(str);
-	std::string::size_type pos = src.find("export");
-	if (pos != std::string::npos) {
+	CU_STR src = StringHelper::UTF8ToGBK(str);
+	CU_STR::size_type pos = src.find("export");
+	if (pos != CU_STR::npos) {
 		src.insert(pos, " ");
 	}
-	std::vector<std::string> tokens;
+	CU_VEC<CU_STR> tokens;
 	StringHelper::Split(src, " =", tokens);
 	s2::SymPtr sym = NULL;
 	if (tokens.size() == 2) {
@@ -378,20 +378,20 @@ GTxt::~GTxt()
 {
 }
 
-void GTxt::Init(const std::vector<std::pair<std::string, std::string> >& fonts, 
-				const std::vector<std::pair<std::string, std::string> >& user_fonts)
+void GTxt::Init(const CU_VEC<std::pair<CU_STR, CU_STR> >& fonts, 
+				const CU_VEC<std::pair<CU_STR, CU_STR> >& user_fonts)
 {
 	for (int i = 0, n = fonts.size(); i < n; ++i) {
-		LoadFont(fonts[i].first.c_str(), fonts[i].second.c_str());
+		LoadFont(fonts[i].first, fonts[i].second);
 	}
 	for (int i = 0, n = user_fonts.size(); i < n; ++i) {
 		LoadUserFont(user_fonts[i].first, user_fonts[i].second);
 	}
 }
 
-void GTxt::LoadFont(const std::string& name, const std::string& filepath)
+void GTxt::LoadFont(const CU_STR& name, const CU_STR& filepath)
 {
-	std::set<std::string>::iterator itr = m_fonts.find(name);
+	CU_SET<CU_STR>::iterator itr = m_fonts.find(name);
 	if (itr != m_fonts.end()) {
 		return;
 	}
@@ -400,7 +400,7 @@ void GTxt::LoadFont(const std::string& name, const std::string& filepath)
 	m_fonts.insert(name);
 }
 
-void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
+void GTxt::LoadUserFont(const CU_STR& name, const CU_STR& filepath)
 {
 	Json::Value value;
 	Json::Reader reader;
@@ -415,8 +415,8 @@ void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 	for (int i = 0, n = value["chars"].size(); i < n; ++i)
 	{
 		const Json::Value& c_val = value["chars"][i];
-		std::string str = c_val["str"].asString();
-		std::string utf8 = StringHelper::GBKToUTF8(str);		
+		CU_STR str = c_val["str"].asString().c_str();
+		CU_STR utf8 = StringHelper::GBKToUTF8(str);		
 		int len = gtxt_unicode_len(utf8[0]);
 		int unicode = gtxt_get_unicode(utf8.c_str(), len);
 		auto itr = m_user_font_chars.find(unicode);
@@ -429,7 +429,7 @@ void GTxt::LoadUserFont(const std::string& name, const std::string& filepath)
 	}
 }
 
-void GTxt::LoadUserFontChar(const std::string& str, const std::string& pkg, const std::string& node)
+void GTxt::LoadUserFontChar(const CU_STR& str, const CU_STR& pkg, const CU_STR& node)
 {
 	int len = gtxt_unicode_len(str[0]);
 	int unicode = gtxt_get_unicode(str.c_str(), len);
@@ -449,9 +449,9 @@ void GTxt::LoadUserFontChar(const std::string& str, const std::string& pkg, cons
 	}
 }
 
-void GTxt::AddColor(const std::string& name, unsigned int color)
+void GTxt::AddColor(const CU_STR& name, unsigned int color)
 {
-	std::set<std::string>::iterator itr = m_colors.find(name);
+	CU_SET<CU_STR>::iterator itr = m_colors.find(name);
 	if (itr != m_colors.end()) {
 		return;
 	}
@@ -461,7 +461,7 @@ void GTxt::AddColor(const std::string& name, unsigned int color)
 }
 
 void GTxt::Draw(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul,
-				const s2::Color& add, const std::string& text, int time, bool richtext) const
+				const s2::Color& add, const char* text, int time, bool richtext) const
 {
 	render_params rp;
 	rp.mt = &mt;
@@ -469,15 +469,14 @@ void GTxt::Draw(cooking::DisplayList* dlist, const gtxt_label_style& style, cons
 	rp.add = &add;
 	rp.ud = dlist;
 
-	std::string utf8 = text;
 	if (richtext) {
-		gtxt_label_draw_richtext(utf8.c_str(), &style, time, (void*)&rp);
+		gtxt_label_draw_richtext(text, &style, time, (void*)&rp);
 	} else {
-		gtxt_label_draw(utf8.c_str(), &style, (void*)&rp);
+		gtxt_label_draw(text, &style, (void*)&rp);
 	}
 }
 
-void GTxt::Draw(const S2_MAT& mt, const std::string& str, int width) const
+void GTxt::Draw(const S2_MAT& mt, const CU_STR& str, int width) const
 {
 	if (str.empty()) {
 		return;
@@ -511,7 +510,7 @@ void GTxt::Draw(const S2_MAT& mt, const std::string& str, int width) const
 	gtxt_label_draw(str.c_str(), &style, (void*)&rp);
 }
 
-sm::vec2 GTxt::GetSize(const gtxt_label_style& style, const std::string& text) const
+sm::vec2 GTxt::GetSize(const gtxt_label_style& style, const CU_STR& text) const
 {
 	float w, h;
 	gtxt_get_label_size(text.c_str(), &style, &w, &h);
@@ -538,7 +537,7 @@ sm::vec2 GTxt::GetSize(const gtxt_label_style& style, const std::string& text) c
 //	style.gs.edge_size = spr->GetEdgeSize();
 //	style.gs.edge_color.integer = color2int(spr->GetEdgeColor(), PT_RGBA);
 //
-//	std::string utf8 = StringHelper::ToUtf8(spr->GetText());
+//	CU_STR utf8 = StringHelper::ToUtf8(spr->GetText());
 //	gtxt_label_reload_richtext(utf8.c_str(), &style);
 //}
 

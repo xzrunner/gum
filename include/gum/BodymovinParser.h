@@ -2,11 +2,9 @@
 #define _GUM_BODYMOVIN_PARSER_H_
 
 #include <SM_Vector.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
-
-#include <string>
-#include <map>
 
 #include <string.h>
 
@@ -18,7 +16,7 @@ class BodymovinParser
 public:
 	BodymovinParser();
 
-	void Parse(const Json::Value& val, const std::string& dir);
+	void Parse(const Json::Value& val, const CU_STR& dir);
 
 	int GetFrameRate() const { return m_frame_rate; }
 
@@ -32,14 +30,14 @@ public:
 	struct Layer;
 	struct Asset
 	{
-		std::string id;
+		CU_STR id;
 
 		// single
-		std::string filepath;
+		CU_STR filepath;
 		int w, h;
 
 		// compose
-		std::vector<Layer> layers;
+		CU_VEC<Layer> layers;
 	};
 
 	enum LayerType 
@@ -75,9 +73,9 @@ public:
 			KeyFrame() { memset(this, 0, sizeof(*this)); }
 		};
 
-		std::vector<KeyFrame> frames;
+		CU_VEC<KeyFrame> frames;
 
-		std::string expression;
+		CU_STR expression;
 
 		void Load(const Json::Value& val);		
 	};
@@ -98,15 +96,15 @@ public:
 
 	struct Layer
 	{
-		std::string name;
-		std::string ref_id;
+		CU_STR name;
+		CU_STR ref_id;
 
 		int layer_id;
 		int layer_type;
 
 		int parent_id;
 
-		std::string cl;	// class
+		CU_STR cl;	// class
 
 		float in_frame, out_frame;
 
@@ -120,7 +118,7 @@ public:
 
 		// solid type
 		int solid_width, solid_height;
-		std::string solid_color;
+		CU_STR solid_color;
 
 		Transform trans;
 
@@ -130,19 +128,19 @@ public:
 	};
 
 public:
-	const std::vector<Asset>& GetAssets() const { return m_assets; }
-	const std::vector<Layer>& GetLayers() const { return m_layers; }
+	const CU_VEC<Asset>& GetAssets() const { return m_assets; }
+	const CU_VEC<Layer>& GetLayers() const { return m_layers; }
 
 private:
 	void Clear();
 
 	void ParseHeader(const Json::Value& val);
-	void ParseAssets(const Json::Value& val, const std::string& dir);
-	static void ParseLayers(const Json::Value& val, std::vector<Layer>& layers);
+	void ParseAssets(const Json::Value& val, const CU_STR& dir);
+	static void ParseLayers(const Json::Value& val, CU_VEC<Layer>& layers);
 
 private:
-	std::string m_version;
-	std::string m_name;
+	CU_STR m_version;
+	CU_STR m_name;
 
 	int m_frame_rate;
 
@@ -150,8 +148,8 @@ private:
 
 	int m_start_frame, m_end_frame;
 
-	std::vector<Asset> m_assets;
-	std::vector<Layer> m_layers;
+	CU_VEC<Asset> m_assets;
+	CU_VEC<Layer> m_layers;
 
 }; // BodymovinParser
 

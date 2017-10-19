@@ -65,7 +65,7 @@ void SpineParser::Clear()
 
 void SpineParser::ParseHeader(const Json::Value& val)
 {
-	img_dir = "." + val["images"].asString();
+	img_dir = "." + CU_STR(val["images"].asString().c_str());
 }
 
 void SpineParser::ParseBones(const Json::Value& val)
@@ -75,8 +75,8 @@ void SpineParser::ParseBones(const Json::Value& val)
 	{
 		const Json::Value& src = val[i];
 		Bone dst;
-		dst.name = src["name"].asString();
-		dst.parent = src["parent"].asString();
+		dst.name = src["name"].asString().c_str();
+		dst.parent = src["parent"].asString().c_str();
 		dst.pos.x = static_cast<float>(src["x"].asDouble());
 		dst.pos.y = static_cast<float>(src["y"].asDouble());
 		dst.angle = static_cast<float>(src["rotation"].asDouble() * SM_DEG_TO_RAD);
@@ -94,9 +94,9 @@ void SpineParser::ParseSlots(const Json::Value& val)
 	{
 		const Json::Value& src = val[i];
 		Slot dst;
-		dst.name = src["name"].asString();
-		dst.bone = src["bone"].asString();
-		dst.attachment = src["attachment"].asString();
+		dst.name = src["name"].asString().c_str();
+		dst.bone = src["bone"].asString().c_str();
+		dst.attachment = src["attachment"].asString().c_str();
 		slots.push_back(dst);
 	}
 }
@@ -107,12 +107,12 @@ void SpineParser::ParseIK(const Json::Value& val)
 	{
 		const Json::Value& src = val[i];
 		IK dst;
-		dst.name = src["name"].asString();
+		dst.name = src["name"].asString().c_str();
 		dst.bones.reserve(src["bones"].size());
 		for (int j = 0, m = src["bones"].size(); j < m; ++j) {
-			dst.bones.push_back(src["bones"][j].asString());
+			dst.bones.push_back(src["bones"][j].asString().c_str());
 		}
-		dst.target = src["target"].asString();
+		dst.target = src["target"].asString().c_str();
 		if (src.isMember("bendPositive")) {
 			dst.bend_positive = src["bendPositive"].asBool();
 		} else {
@@ -139,14 +139,14 @@ void SpineParser::ParseSkins(const Json::Value& val)
 			SkinItem item;
 			item.name = key;
 			if (src_item.isMember("name")) {
-				item.path = src_item["name"].asString();
+				item.path = src_item["name"].asString().c_str();
 			} else {
 				item.path = key;
 			}
 
 			item.type = SKIN_IMAGE;
 			if (src_item.isMember("type")) {
-				std::string stype = src_item["type"].asString();
+				CU_STR stype = src_item["type"].asString().c_str();
 				if (stype == "boundingbox") {
 					item.type = SKIN_BOUNDINGBOX;
 				} else if (stype == "mesh") {
@@ -334,12 +334,12 @@ void SpineParser::ParseAnimSlot(const Json::Value& val, AnimSlot& slot)
 	slot.skins.reserve(val.size());
 	for (int i = 0, n = val.size(); i < n; ++i) {
 		float time = static_cast<float>(val[i]["time"].asDouble());
-		std::string skin = val[i]["name"].asString();
+		CU_STR skin = val[i]["name"].asString().c_str();
 		slot.skins.push_back(std::make_pair(time, skin));
 	}
 }
 
-void SpineParser::ParseAnimDeforms(const Json::Value& val, std::vector<AnimDeform>& deforms)
+void SpineParser::ParseAnimDeforms(const Json::Value& val, CU_VEC<AnimDeform>& deforms)
 {
 	Json::Value::Members key_slots = val.getMemberNames();
 	for (int i = 0, n = key_slots.size(); i < n; ++i)

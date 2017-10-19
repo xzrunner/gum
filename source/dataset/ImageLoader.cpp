@@ -30,8 +30,8 @@ ImageLoader::ImageLoader(const bimp::FilePath& res_path)
 bool ImageLoader::Load()
 {
 	auto& filepath = m_res_path.GetFilepath();
-	if (filepath.find(".ept") != std::string::npos ||
-		filepath.find(".pkg") != std::string::npos) {
+	if (filepath.find(".ept") != CU_STR::npos ||
+		filepath.find(".pkg") != CU_STR::npos) {
 		return LoadBin();
 	} else {
 		return LoadRaw();
@@ -41,7 +41,7 @@ bool ImageLoader::Load()
 bool ImageLoader::AsyncLoad(int format, int width, int height, const std::shared_ptr<Image>& img)
 {
 	if (m_res_path.IsSingleFile() && 
-		m_res_path.GetFilepath().find(".ept") == std::string::npos) {
+		m_res_path.GetFilepath().find(".ept") == CU_STR::npos) {
 		return false;
 	}
 

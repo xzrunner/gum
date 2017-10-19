@@ -27,7 +27,7 @@ ShapeSymLoader::ShapeSymLoader(const std::shared_ptr<s2::ShapeSymbol>& sym)
 {
 }
 
-void ShapeSymLoader::LoadJson(const std::string& filepath)
+void ShapeSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
@@ -41,7 +41,7 @@ void ShapeSymLoader::LoadJson(const std::string& filepath)
 	reader.parse(fin, value);
 	fin.close();
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	// todo
 }
@@ -55,7 +55,7 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 	s2::Color col;
 	col.FromRGBA(node->color);
 
-	std::vector<sm::vec2> vertices;
+	CU_VEC<sm::vec2> vertices;
 	ArrayLoader::Load(vertices, node->vertices, node->vertices_n);
 
 	switch (node->type)

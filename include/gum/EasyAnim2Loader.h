@@ -4,6 +4,7 @@
 #include <cu/uncopyable.h>
 #include <sprite2/JointPose.h>
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
@@ -26,12 +27,12 @@ public:
 		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL);
 	~EasyAnim2Loader();
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 
 private:
 	void Clear();
 
-	void LoadSprites(const Json::Value& val, const std::string& dir);
+	void LoadSprites(const Json::Value& val, const CU_STR& dir);
 	void LoadJoints(const Json::Value& val);
 	void InitRoot();
 	void InitPose();
@@ -47,7 +48,7 @@ private:
 		s2::SprPtr skin;
 
 		int parent;
-		std::vector<int> children;
+		CU_VEC<int> children;
 
 		int idx;
 
@@ -60,7 +61,7 @@ private:
 	std::shared_ptr<const SymbolLoader> m_sym_loader;
 
 	int m_num;
-	std::vector<s2::SprPtr> m_sprs;
+	CU_VEC<s2::SprPtr> m_sprs;
 
 	int          m_joint_count;
 	rg_joint**   m_joints;

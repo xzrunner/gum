@@ -3,6 +3,7 @@
 
 #include <cu/uncopyable.h>
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/value.h>
 
@@ -24,14 +25,14 @@ public:
 		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL,
 		const std::shared_ptr<const JointLoader>& joint_loader = NULL);
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 
-	void LoadParser(const SpineParser& parser, const std::string& dir);
+	void LoadParser(const SpineParser& parser, const CU_STR& dir);
 
 private:
 	void Clear();
 
-	void LoadSprites(const SpineParser& parser, const std::string& img_dir);
+	void LoadSprites(const SpineParser& parser, const CU_STR& img_dir);
 	void LoadJoints(const SpineParser& parser);
 	void InitRoot();
 	void InitPose(const SpineParser& parser);
@@ -44,8 +45,8 @@ private:
 	std::shared_ptr<const JointLoader> m_joint_loader;
 
 	int m_num;
-	std::vector<s2::SprPtr> m_sprs;
-	std::map<std::string, std::shared_ptr<s2::Joint>> m_joints;
+	CU_VEC<s2::SprPtr> m_sprs;
+	CU_MAP<CU_STR, std::shared_ptr<s2::Joint>> m_joints;
 	std::shared_ptr<s2::Joint> m_root;
 
 }; // SpineSkeletonLoader

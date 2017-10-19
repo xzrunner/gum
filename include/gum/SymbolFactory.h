@@ -2,11 +2,9 @@
 #define _GUM_SYMBOL_FACTORY_H_
 
 #include <cu/cu_macro.h>
-
 #include <sprite2/SymType.h>
 #include <sprite2/s2_typedef.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -22,14 +20,14 @@ public:
 	 *  @brief
 	 *    raw, json res
 	 */		
-	s2::SymPtr Create(const std::string& filepath, int type = s2::SYM_UNKNOWN) const;
+	s2::SymPtr Create(const CU_STR& filepath, int type = s2::SYM_UNKNOWN) const;
 
 	/**
 	 *  @brief
 	 *    pack, binary res
 	 */	
 	s2::SymPtr Create(uint32_t id) const;
-	s2::SymPtr Create(const std::string& pkg_name, const std::string& node_name) const;
+	s2::SymPtr Create(const CU_STR& pkg_name, const CU_STR& node_name) const;
 
 private:
 	mutable s2::SymPtr m_anchor_sym;

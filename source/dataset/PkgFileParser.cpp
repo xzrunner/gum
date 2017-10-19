@@ -29,7 +29,7 @@ uint32_t PkgFileParser::GetEptIdxOffset(fs_file* file)
 	return offset;
 }
 
-void PkgFileParser::SetEPPath(fs_file* file, const std::string& filepath, int pkg_id)
+void PkgFileParser::SetEPPath(fs_file* file, const CU_STR& filepath, int pkg_id)
 {
 	const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
 	if (!s_pkg) {

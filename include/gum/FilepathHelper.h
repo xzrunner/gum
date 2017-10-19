@@ -1,7 +1,7 @@
 #ifndef _GUM_FILEPATH_HELPER_H_
 #define _GUM_FILEPATH_HELPER_H_
 
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace gum
 {
@@ -9,17 +9,17 @@ namespace gum
 class FilepathHelper
 {
 public:
-	static std::string Relative(const std::string& base, const std::string& path);
-	static std::string Absolute(const std::string& base, const std::string& path);
+	static CU_STR Relative(const CU_STR& base, const CU_STR& path);
+	static CU_STR Absolute(const CU_STR& base, const CU_STR& path);
 
-	static std::string Dir(const std::string& path);
-	static std::string Filename(const std::string& path);
+	static CU_STR Dir(const CU_STR& path);
+	static CU_STR Filename(const CU_STR& path);
 
-	static std::string Format(const std::string& path);
+	static CU_STR Format(const CU_STR& path);
 
 	//////////////////////////////////////////////////////////////////////////
 
-	static bool Exists(const std::string& path);
+	static bool Exists(const CU_STR& path);
 
 }; // FilepathHelper
 

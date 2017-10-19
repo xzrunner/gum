@@ -2,13 +2,12 @@
 #define _GUM_P3D_SYM_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 #include <sprite2/Color.h>
 #include <sprite2/s2_typedef.h>
 
 #include <json/json.h>
 
-#include <string>
-#include <vector>
 #include <memory>
 
 namespace s2 { class Particle3dSymbol; class Symbol; class P3dEmitterCfg; }
@@ -27,14 +26,14 @@ public:
 	void Store(const std::shared_ptr<s2::Particle3dSymbol>& sym) const;
 	void Store(const std::shared_ptr<s2::P3dEmitterCfg>& p3d_cfg) const;
 
-	void LoadJson(const std::string& filepath);	
+	void LoadJson(const CU_STR& filepath);	
 	void LoadBin(const simp::NodeParticle3d* node);
 
 private:
-	void LoadComponent(const std::string& dir, const Json::Value& comp_val);
+	void LoadComponent(const CU_STR& dir, const Json::Value& comp_val);
 
 protected:
-	virtual s2::SymPtr LoadSymbol(const std::string& filepath) const;
+	virtual s2::SymPtr LoadSymbol(const CU_STR& filepath) const;
 
 public:
 	struct Component
@@ -42,9 +41,9 @@ public:
 		int count;
 
 		uint32_t sym_id;
-		std::string filepath;
+		CU_STR filepath;
 
-		std::string name;
+		CU_STR name;
 
 		float scale_start, scale_end;
 
@@ -73,7 +72,7 @@ public:
 	}; // Component
 
 public:
-	std::string name;
+	CU_STR name;
 
 	bool loop, local;
 
@@ -111,7 +110,7 @@ public:
 
 	int blend;
 
-	std::vector<Component> components;
+	CU_VEC<Component> components;
 
 }; // P3dSymLoader
 

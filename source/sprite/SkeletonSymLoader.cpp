@@ -20,13 +20,13 @@ SkeletonSymLoader::SkeletonSymLoader(const std::shared_ptr<s2::SkeletonSymbol>& 
 {
 }
 
-void SkeletonSymLoader::LoadJson(const std::string& filepath)
+void SkeletonSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
 	}
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	Json::Value val;
 	Json::Reader reader;

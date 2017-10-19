@@ -2,8 +2,7 @@
 #define _GUM_AUDIO_LOADER_H_
 
 #include <cu/uncopyable.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace ua { class AudioData; }
 
@@ -15,7 +14,7 @@ class AudioLoader : private cu::Uncopyable
 public:
 	AudioLoader(ua::AudioData* data);
 
-	void LoadRaw(const std::string& filepath);
+	void LoadRaw(const CU_STR& filepath);
 
 private:
 	ua::AudioData* m_data;

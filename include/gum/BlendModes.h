@@ -2,11 +2,8 @@
 #define _GUM_BLEND_MODES_H_
 
 #include <cu/cu_macro.h>
-
+#include <cu/cu_stl.h>
 #include <sprite2/BlendMode.h>
-
-#include <vector>
-#include <string>
 
 namespace gum
 {
@@ -14,21 +11,21 @@ namespace gum
 class BlendModes
 {
 public:
-	s2::BlendMode Name2Mode(const std::string& name) const;
-	std::string ModeToName(s2::BlendMode mode) const;
+	s2::BlendMode Name2Mode(const CU_STR& name) const;
+	CU_STR ModeToName(s2::BlendMode mode) const;
 
 private:
 	 struct Item
 	 {
-		Item(s2::BlendMode mode, const std::string& name)
+		Item(s2::BlendMode mode, const CU_STR& name)
 			: mode(mode), name(name) {}
 
 	 	s2::BlendMode mode;
-	 	std::string name;
+	 	CU_STR name;
 	 };
 
 private:
-	std::vector<Item> m_modes;
+	CU_VEC<Item> m_modes;
 
 	CU_SINGLETON_DECLARATION(BlendModes);
 

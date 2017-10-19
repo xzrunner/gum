@@ -195,7 +195,7 @@ void  gum_flush_deferred()
 extern "C"
 void gum_store_snapshot(const char* filepath)
 {
-	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
+	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
 	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
 	int w = ctx->GetScreenWidth();
@@ -211,7 +211,7 @@ void gum_store_snapshot(const char* filepath)
 extern "C"
 int gum_compare_snapshot(const char* filepath)
 {
-	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
+	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
 	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
 	int w = ctx->GetScreenWidth();
@@ -325,7 +325,7 @@ void gum_get_all_pkg_names(const char* names[])
 extern "C"
 int gum_query_pkg_id(const char* name)
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
 	return simp::PkgIDMgr::Instance()->QueryPkgID(gbk_name);
 }
 
@@ -362,25 +362,24 @@ void gum_audio_set_path(const char* name, const char* filepath)
 extern "C"
 bool gum_pkg_exists(const char* name)
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
 	return simp::NodeFactory::Instance()->QueryPkg(gbk_name) != NULL;
 }
 
 extern "C"
 bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* tex_path)
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
-	std::string gbk_spr_path = StringHelper::UTF8ToGBK(spr_path);
-	std::string gbk_tex_path = StringHelper::UTF8ToGBK(tex_path);
+	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
+	CU_STR gbk_spr_path = StringHelper::UTF8ToGBK(spr_path);
+	CU_STR gbk_tex_path = StringHelper::UTF8ToGBK(tex_path);
 
-	simp::Package* s_pkg = new simp::Package(gbk_spr_path, id);
+	simp::PackagePtr s_pkg(mm::allocate_unique<simp::Package>(gbk_spr_path, id));
 	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, gbk_name, id);
 	if (!success) {
-		delete s_pkg;
 		return success;
 	}
 
-	timp::Package* t_pkg = new timp::Package(gbk_tex_path);
+	timp::PackagePtr t_pkg(mm::allocate_unique<timp::Package>(gbk_tex_path));
 	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
 	assert(success);
 
@@ -392,24 +391,23 @@ bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* 
 extern "C"
 bool gum_create_pkg2(const char* name, int id, const char* pkg_path)
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
-	std::string gbk_pkg_path = StringHelper::UTF8ToGBK(pkg_path);
+	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
+	CU_STR gbk_pkg_path = StringHelper::UTF8ToGBK(pkg_path);
 
 	struct fs_file* file = fs_open(gbk_pkg_path.c_str(), "rb");
 	if (file == NULL) {
 		fault("Can't open pkg file: %s\n", gbk_pkg_path.c_str());
 	}
 
-	int epe_off = PkgFileParser::GetEpeIdxOffset(file);	
-	simp::Package* s_pkg = new simp::Package(file, epe_off, id);	
+	int epe_off = PkgFileParser::GetEpeIdxOffset(file);		
+	simp::PackagePtr s_pkg(mm::allocate_unique<simp::Package>(file, epe_off, id));
  	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, gbk_name, id);
  	if (!success) {
- 		delete s_pkg;
  		return success;
  	}
 
 	int ept_off = PkgFileParser::GetEptIdxOffset(file);	
-	timp::Package* t_pkg = new timp::Package(file, ept_off);
+	timp::PackagePtr t_pkg(mm::allocate_unique<timp::Package>(file, ept_off));
 	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
 	assert(success);
 
@@ -447,7 +445,7 @@ void gum_pkg_release_after_last_tag()
 extern "C"
 int gum_pkg_get_page_count(const char* name)
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
 	const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(gbk_name);
 	if (!pkg) {
 		return -1;
@@ -459,8 +457,8 @@ int gum_pkg_get_page_count(const char* name)
 extern "C"
 void gum_pkg_set_page_filepath(const char* name, int page, const char* filepath)
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
-	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
+	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
+	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 	const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(gbk_name);
 	if (!pkg) {
 		return;
@@ -485,7 +483,7 @@ void gum_pkg_get_texture_count(int pkg_id, int* tex_count, int* lod_count)
 extern "C"
 void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* filepath)
 {
-	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
+	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
 	const timp::Package* pkg = timp::PkgMgr::Instance()->Query(pkg_id);
 	if (!pkg) {
@@ -498,20 +496,20 @@ void gum_pkg_set_texture_filepath(int pkg_id, int tex, int lod, const char* file
 extern "C"
 char** gum_pkg_get_export_names(const char* name, int* count)
 {
-	std::string gbk_name = StringHelper::UTF8ToGBK(name);
+	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
 	const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(gbk_name);
 	if (!pkg) {
 		*count = 0;
 		return NULL;
 	}
 
-	std::vector<std::string> names;
+	CU_VEC<CU_STR> names;
 	pkg->GetExportNames(names);
 	int sz = names.size();
 	char** ret = (char**)malloc(sizeof(char*) * sz);
 	for (int i = 0; i < sz; ++i) 
 	{
-		const std::string& src = names[i];
+		const CU_STR& src = names[i];
 		char* dst = (char*)malloc(src.size() + 1);
 		strcpy(dst, src.c_str());
 		ret[i] = dst;
@@ -551,8 +549,8 @@ void* gum_create_sym_model(const void* model)
 extern "C"
 void* gum_create_actor(const char* pkg, const char* spr)
 {
-	std::string gbk_pkg = StringHelper::UTF8ToGBK(pkg);
-	std::string gbk_spr = StringHelper::UTF8ToGBK(spr);
+	CU_STR gbk_pkg = StringHelper::UTF8ToGBK(pkg);
+	CU_STR gbk_spr = StringHelper::UTF8ToGBK(spr);
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
 	if (id == 0xffffffff) {
 		return NULL;
@@ -572,7 +570,7 @@ void* gum_create_actor_by_id(int id)
 extern "C"
 void* gum_create_actor_from_file(const char* filepath)
 {
-	std::string gbk_filepath = StringHelper::UTF8ToGBK(filepath);
+	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 	auto spr = SpriteFactory::Instance()->Create(gbk_filepath);
 	auto actor = s2::ActorFactory::Create(nullptr, spr);
 	return s2::ActorProxyPool::Instance()->Create(actor);
@@ -581,8 +579,8 @@ void* gum_create_actor_from_file(const char* filepath)
 extern "C"
 void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new)
 {
-	std::string gbk_pkg = StringHelper::UTF8ToGBK(pkg);
-	std::string gbk_spr = StringHelper::UTF8ToGBK(spr);
+	CU_STR gbk_pkg = StringHelper::UTF8ToGBK(pkg);
+	CU_STR gbk_spr = StringHelper::UTF8ToGBK(spr);
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
 	if (id == 0xffffffff) {
 		return NULL;
@@ -601,7 +599,7 @@ void gum_return_actor_cached(void* actor)
 extern "C"
 void gum_draw_text(const char* str, int x, int y, int w) 
 {
-	std::string gbk_str = StringHelper::UTF8ToGBK(str);
+	CU_STR gbk_str = StringHelper::UTF8ToGBK(str);
 
 	S2_MAT mat;
 	mat.Translate(static_cast<float>(x), static_cast<float>(y));
@@ -698,7 +696,7 @@ bool gum_dtex_cache_pkg_static_load(void* cache, int pkg_id, int lod, bool ref)
 		return dtex_cache_pkg_static_load(cache, pkg_id, lod) == 0;
 	}
 
-	std::set<int> pkgs;
+	CU_SET<int> pkgs;
 	std::queue<int> buf;
 	buf.push(pkg_id);
 	while (!buf.empty())
@@ -709,13 +707,13 @@ bool gum_dtex_cache_pkg_static_load(void* cache, int pkg_id, int lod, bool ref)
 		if (!pkg) {
 			continue;
 		}
-		const std::vector<int>& ref_pkgs = pkg->GetRefPkgs();
+		auto& ref_pkgs = pkg->GetRefPkgs();
 		for (int i = 0, n = ref_pkgs.size(); i < n; ++i) {
 			buf.push(ref_pkgs[i]);
 		}
 	}
 
-	std::set<int>::iterator itr = pkgs.begin();
+	CU_SET<int>::iterator itr = pkgs.begin();
 	for ( ; itr != pkgs.end(); ++itr) {
 		if (dtex_cache_pkg_static_load(cache, *itr, lod) != 0) {
 			return false;
@@ -785,7 +783,8 @@ void gum_gtxt_print(const char* str, float x, float y, int font_size, uint32_t f
 
 	S2_MAT mt;
 	mt.Translate(x, y);
-	GTxt::Instance()->Draw(nullptr, s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), StringHelper::FromChar(str), 0, false);
+	CU_STR std_str = StringHelper::FromChar(str);
+	GTxt::Instance()->Draw(nullptr, s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), std_str.c_str(), 0, false);
 }
 
 extern "C"

@@ -7,10 +7,6 @@
 #include <cu/cu_macro.h>
 #include <dtex2/CacheGlyph.h>
 
-#include <string>
-#include <map>
-#include <set>
-
 #include <stdint.h>
 
 namespace dtex { class CacheSymbol; class CacheGlyph; class Texture; struct Rect; }

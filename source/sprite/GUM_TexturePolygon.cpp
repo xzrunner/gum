@@ -9,7 +9,7 @@
 namespace gum
 {
 
-TexturePolygon::TexturePolygon(const std::string& filepath)
+TexturePolygon::TexturePolygon(const CU_STR& filepath)
 {
 	auto sym = SymbolPool::Instance()->Fetch(filepath);
 	if (sym) {

@@ -35,7 +35,7 @@ void SkeletonIO::Store(Json::Value& val, const s2::JointPose& pose)
 
 void SkeletonIO::Load(const Json::Value& val, s2::SkeletonPose& pose)
 {
-	std::vector<s2::JointPose> joints;
+	CU_VEC<s2::JointPose> joints;
 	joints.reserve(val["joint"].size());
 	for (int i = 0, n = val["joint"].size(); i < n; ++i) {
 		s2::JointPose joint;
@@ -47,7 +47,7 @@ void SkeletonIO::Load(const Json::Value& val, s2::SkeletonPose& pose)
 
 void SkeletonIO::Store(Json::Value& val, const s2::SkeletonPose& pose)
 {
-	const std::vector<s2::JointPose>& joints = pose.GetJointPose();
+	const CU_VEC<s2::JointPose>& joints = pose.GetJointPose();
 	for (int i = 0, n = joints.size(); i < n; ++i) {
 		Store(val["joint"][i], joints[i]);
 	}

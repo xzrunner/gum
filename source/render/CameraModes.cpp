@@ -1,7 +1,5 @@
 #include "CameraModes.h"
 
-#include <string>
-
 namespace gum
 {
 
@@ -14,7 +12,7 @@ CameraModes::CameraModes()
 	m_modes.push_back(Item(s2::CM_PERSPECTIVE_AUTO_HEIGHT, "perspective auto height"));
 }
 
-s2::CameraMode CameraModes::Name2Mode(const std::string& name) const
+s2::CameraMode CameraModes::Name2Mode(const CU_STR& name) const
 {
 	if (name.empty()) {
 		return s2::CM_ORTHO;
@@ -29,7 +27,7 @@ s2::CameraMode CameraModes::Name2Mode(const std::string& name) const
 	return s2::CM_ORTHO;
 }
 
-std::string CameraModes::Mode2Name(s2::CameraMode mode) const
+CU_STR CameraModes::Mode2Name(s2::CameraMode mode) const
 {
 	for (int i = 0, n = m_modes.size(); i < n; ++i) {
 		const Item& item = m_modes[i];

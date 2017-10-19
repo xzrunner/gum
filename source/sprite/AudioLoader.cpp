@@ -8,7 +8,7 @@ AudioLoader::AudioLoader(ua::AudioData* data)
 {
 }
 
-void AudioLoader::LoadRaw(const std::string& filepath)
+void AudioLoader::LoadRaw(const CU_STR& filepath)
 {
 	
 }

@@ -19,7 +19,7 @@ BodymovinParser::BodymovinParser()
 {
 }
 
-void BodymovinParser::Parse(const Json::Value& val, const std::string& dir)
+void BodymovinParser::Parse(const Json::Value& val, const CU_STR& dir)
 {
 	Clear();
 
@@ -36,8 +36,8 @@ void BodymovinParser::Clear()
 
 void BodymovinParser::ParseHeader(const Json::Value& val)
 {
-	m_version = val["v"].asString();
-	m_name    = val["nm"].asString();
+	m_version = val["v"].asString().c_str();
+	m_name    = val["nm"].asString().c_str();
 
 	m_frame_rate = val["fr"].asInt();
 
@@ -48,7 +48,7 @@ void BodymovinParser::ParseHeader(const Json::Value& val)
 	m_end_frame   = val["op"].asInt();
 }
 
-void BodymovinParser::ParseAssets(const Json::Value& val, const std::string& dir)
+void BodymovinParser::ParseAssets(const Json::Value& val, const CU_STR& dir)
 {
 	for (int i = 0, n = val.size(); i < n; ++i)
 	{
@@ -56,7 +56,7 @@ void BodymovinParser::ParseAssets(const Json::Value& val, const std::string& dir
 
 		Asset a;
 
-		a.id = cval["id"].asString();
+		a.id = cval["id"].asString().c_str();
 
 		if (cval.isMember("layers"))
 		{
@@ -66,14 +66,14 @@ void BodymovinParser::ParseAssets(const Json::Value& val, const std::string& dir
 		{
 			a.w = cval["w"].asInt();
 			a.h = cval["h"].asInt();
-			a.filepath = dir + "\\" + cval["u"].asString() + cval["p"].asString();
+			a.filepath = dir + "\\" + cval["u"].asString().c_str() + cval["p"].asString().c_str();
 		}
 
 		m_assets.push_back(a);
 	}
 }
 
-void BodymovinParser::ParseLayers(const Json::Value& val, std::vector<Layer>& layers)
+void BodymovinParser::ParseLayers(const Json::Value& val, CU_VEC<Layer>& layers)
 {
 	if (val.size() == 0) {
 		return;
@@ -130,7 +130,7 @@ bool BodymovinParser::FloatVal::Float3::operator == (const Float3& f) const
 void BodymovinParser::FloatVal::Load(const Json::Value& val)
 {
 	if (val.isMember("x") && val["x"].isString()) {
-		expression = val["x"].asString();
+		expression = val["x"].asString().c_str();
 	}
 
 	bool anim = val["a"].asInt() == 1;
@@ -226,8 +226,8 @@ BodymovinParser::Layer::Layer()
 
 bool BodymovinParser::Layer::Load(const Json::Value& val)
 {
-	name = val["nm"].asString();
-	ref_id = val["refId"].asString();
+	name = val["nm"].asString().c_str();
+	ref_id = val["refId"].asString().c_str();
 
 	layer_id = val["ind"].asInt();
 	layer_type = val["ty"].asInt();
@@ -244,7 +244,7 @@ bool BodymovinParser::Layer::Load(const Json::Value& val)
 		}
 		solid_width = val["sw"].asInt();
 		solid_height = val["sh"].asInt();
-		solid_color = val["sc"].asString();
+		solid_color = val["sc"].asString().c_str();
 		break;
 	}
 
@@ -254,7 +254,7 @@ bool BodymovinParser::Layer::Load(const Json::Value& val)
 		parent_id = -1;
 	}
 
-	cl = val["cl"].asString();
+	cl = val["cl"].asString().c_str();
 
 	float time_stretch = 1;
 	if (val.isMember("sr")) {

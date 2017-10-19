@@ -3,10 +3,10 @@
 
 #include <cu/uncopyable.h>
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class MeshSymbol; class Mesh; class Symbol; }
@@ -20,7 +20,7 @@ class MeshSymLoader : private cu::Uncopyable
 public:
 	MeshSymLoader(const std::shared_ptr<s2::MeshSymbol>& sym);
 
-	void LoadJson(const std::string& filepath);	
+	void LoadJson(const CU_STR& filepath);	
 	void LoadBin(const simp::NodeMesh* node);
 
 private:

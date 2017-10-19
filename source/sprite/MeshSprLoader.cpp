@@ -20,7 +20,7 @@ MeshSprLoader::MeshSprLoader(const std::shared_ptr<s2::MeshSprite>& spr)
 {
 }
 
-void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void MeshSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_spr || !val.isMember("mesh")) {
 		return;
@@ -34,7 +34,7 @@ void MeshSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
 	mesh->LoadFromTransform(trans);
 
 	if (mesh_val.isMember("base_symbol")) {
-		std::string base_path = FilepathHelper::Absolute(dir, mesh_val["base_symbol"].asString());
+		CU_STR base_path = FilepathHelper::Absolute(dir, mesh_val["base_symbol"].asString().c_str());
 		auto base_sym = SymbolPool::Instance()->Fetch(base_path);
 		if (base_sym) {
 			m_spr->SetBaseSym(base_sym);
@@ -60,7 +60,7 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 		return;
 	}
 
-	std::vector<std::pair<int, sm::vec2> > trans;	
+	CU_VEC<std::pair<int, sm::vec2> > trans;	
 	int ptr = 0;
 	for (uint32_t i = 0; i < node->n; ++i) 
 	{

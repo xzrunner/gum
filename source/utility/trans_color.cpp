@@ -54,9 +54,9 @@ char* itoa(int i, char *a, int r)
 
 //#endif // __APPLE__
 
-s2::Color str2color(const std::string& str, s2::PIXEL_TYPE type)
+s2::Color str2color(const CU_STR& str, s2::PIXEL_TYPE type)
 {
-	std::string snum = str;
+	CU_STR snum = str;
 
 	if (snum.empty()) {
 		return s2::Color();
@@ -70,7 +70,7 @@ s2::Color str2color(const std::string& str, s2::PIXEL_TYPE type)
 		int n = atoi(snum.c_str());
 		char buffer[33];
 		itoa(n, buffer, 16);
-		snum = "0x" + std::string(buffer);
+		snum = "0x" + CU_STR(buffer);
 	}
 
 	int len = snum.length();
@@ -128,23 +128,23 @@ char hex2char(int v)
 }
 
 static inline
-std::string channel2char(int col) 
+CU_STR channel2char(int col) 
 {
 	assert(col >= 0 && col <= 255);
 
 	int high = col / 16,
 		low  = col % 16;
 
-	std::string ret;
+	CU_STR ret;
 	ret += hex2char(high);
 	ret += hex2char(low);
 
 	return ret;
 }
 
-std::string color2str(const s2::Color& col, s2::PIXEL_TYPE type)
+CU_STR color2str(const s2::Color& col, s2::PIXEL_TYPE type)
 {
-	std::string ret = "0x";
+	CU_STR ret = "0x";
 	if (type == s2::RGBA) {
 		ret += channel2char(col.r);
 		ret += channel2char(col.g);

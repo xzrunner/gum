@@ -17,7 +17,7 @@ int GlyphStyleID::Gen(const GlyphStyle& style)
  	}
 
 	int hash = Hash(style) % HASH_CAP;
-	std::vector<std::pair<GlyphStyle, int> >& list = m_hash[hash];
+	auto& list = m_hash[hash];
 	for (int i = 0, n = list.size(); i < n; ++i) {
 		if (list[i].first == style) {
 			m_last = list[i];

@@ -4,7 +4,6 @@
 #include <cu/cu_macro.h>
 #include <bimp/FilePath.h>
 
-#include <map>
 #include <memory>
 
 namespace gum
@@ -27,7 +26,7 @@ public:
 	int Count() const { return m_map_images.size(); }
 
 private:
-	std::map<bimp::FilePath, std::weak_ptr<Image>> m_map_images;
+	CU_MAP<bimp::FilePath, std::weak_ptr<Image>> m_map_images;
 
 	CU_SINGLETON_DECLARATION(ImagePool)
 

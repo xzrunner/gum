@@ -11,7 +11,7 @@ Scale9SprLoader::Scale9SprLoader(const std::shared_ptr<s2::Scale9Sprite>& spr)
 {
 }
 
-void Scale9SprLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void Scale9SprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_spr || !val.isMember("scale9")) {
 		return;

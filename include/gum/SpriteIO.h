@@ -8,6 +8,7 @@
 #include <sprite2/RenderFilter.h>
 #include <sprite2/CameraMode.h>
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
@@ -21,11 +22,11 @@ class SpriteIO
 public:
 	SpriteIO(bool compress, bool render_open);
 
-	void Load(const Json::Value& val, const s2::SprPtr& spr, const std::string& dir);
-	void Store(Json::Value& val, const s2::SprConstPtr& spr, const std::string& dir);
+	void Load(const Json::Value& val, const s2::SprPtr& spr, const CU_STR& dir);
+	void Store(Json::Value& val, const s2::SprConstPtr& spr, const CU_STR& dir);
 
-	void Load(const Json::Value& val, const std::string& dir);
-	void Store(Json::Value& val, const std::string& dir);
+	void Load(const Json::Value& val, const CU_STR& dir);
+	void Store(Json::Value& val, const CU_STR& dir);
 
 protected:
 	// geometry
@@ -37,8 +38,8 @@ protected:
 	// render
 	virtual void LoadRender(const s2::SprPtr& spr);
 	virtual void StoreRender(const s2::SprConstPtr& spr);
-	virtual void LoadRender(const Json::Value& val, const std::string& dir);
-	virtual void StoreRender(Json::Value& val, const std::string& dir);
+	virtual void LoadRender(const Json::Value& val, const CU_STR& dir);
+	virtual void StoreRender(Json::Value& val, const CU_STR& dir);
 
 	// info
 	virtual void LoadInfo(const s2::SprPtr& spr);
@@ -60,8 +61,8 @@ private:
 
 	void LoadShader(const s2::SprPtr& spr);
 	void StoreShader(const s2::RenderShader& shader);
-	void LoadShader(const Json::Value& val, const std::string& dir);
-	void StoreShader(Json::Value& val, const std::string& dir);
+	void LoadShader(const Json::Value& val, const CU_STR& dir);
+	void StoreShader(Json::Value& val, const CU_STR& dir);
 
 	void LoadCamera(const s2::SprPtr& spr);
 	void StoreCamera(const s2::RenderCamera& camera);	
@@ -85,7 +86,7 @@ public:
 	s2::CameraMode		m_camera;
 	
 	// info
-	std::string			m_name;
+	CU_STR			m_name;
 	bool                m_need_actor;
 	bool                m_integrate;
 

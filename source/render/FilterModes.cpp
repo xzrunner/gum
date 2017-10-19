@@ -26,7 +26,7 @@ FilterModes::FilterModes()
 	m_modes.push_back(Item(s2::FM_COL_GRADING, "color grading"));
 }
 
-s2::FilterMode FilterModes::Name2Mode(const std::string& name) const
+s2::FilterMode FilterModes::Name2Mode(const CU_STR& name) const
 {
 	if (name.empty()) {
 		return s2::FM_NULL;
@@ -41,7 +41,7 @@ s2::FilterMode FilterModes::Name2Mode(const std::string& name) const
 	return s2::FM_NULL;
 }
 
-std::string FilterModes::Mode2Name(s2::FilterMode id) const
+CU_STR FilterModes::Mode2Name(s2::FilterMode id) const
 {
 	for (int i = 0, n = m_modes.size(); i < n; ++i) {
 		const Item& item = m_modes[i];
@@ -54,7 +54,7 @@ std::string FilterModes::Mode2Name(s2::FilterMode id) const
 
 int FilterModes::QueryShaderIdx(s2::FilterMode mode) const
 {
-	std::map<s2::FilterMode, int>::const_iterator itr = 
+	CU_MAP<s2::FilterMode, int>::const_iterator itr = 
 		m_map2idx.find(mode);
 	if (itr == m_map2idx.end()) {
 		return 0;

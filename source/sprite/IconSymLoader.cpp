@@ -27,7 +27,7 @@ IconSymLoader::IconSymLoader(const std::shared_ptr<s2::IconSymbol>& sym)
 {
 }
 
-void IconSymLoader::LoadJson(const std::string& filepath)
+void IconSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
@@ -41,7 +41,7 @@ void IconSymLoader::LoadJson(const std::string& filepath)
 	reader.parse(fin, value);
 	fin.close();
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	// todo
 }
@@ -52,7 +52,7 @@ void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 		return;
 	}
 
-	std::vector<sm::vec2> vertices;
+	CU_VEC<sm::vec2> vertices;
 	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
 
 	std::unique_ptr<s2::Icon> icon;

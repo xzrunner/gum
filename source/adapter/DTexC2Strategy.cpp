@@ -34,7 +34,7 @@ bool DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h
 	Package* pkg = NULL;
 	int pkg_id = simp::NodeID::GetPkgID(id);
 	int node_id = simp::NodeID::GetNodeID(id);
-	std::map<int, Package*>::iterator itr = m_pkgs.find(pkg_id);
+	CU_MAP<int, Package*>::iterator itr = m_pkgs.find(pkg_id);
 	if (itr != m_pkgs.end()) {
 		pkg = itr->second;
 	} else {
@@ -71,7 +71,7 @@ void DTexC2Strategy::Update()
 
 void DTexC2Strategy::Clear()
 {
-	std::map<int, Package*>::iterator itr = m_pkgs.begin();
+	CU_MAP<int, Package*>::iterator itr = m_pkgs.begin();
 	for ( ; itr != m_pkgs.end(); ++itr) {
 		delete itr->second;
 	}

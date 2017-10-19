@@ -13,7 +13,7 @@ AudioSymLoader::AudioSymLoader(const std::shared_ptr<s2::AudioSymbol>& sym)
 {
 }
 
-void AudioSymLoader::Load(const std::string& filepath)
+void AudioSymLoader::Load(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;

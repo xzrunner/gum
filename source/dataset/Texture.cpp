@@ -23,7 +23,7 @@ Texture::~Texture()
 	RenderContext::Instance()->GetImpl()->ReleaseTexture(m_id);
 }
 
-void Texture::Load(const std::string& filepath)
+void Texture::Load(const CU_STR& filepath)
 {
 	int w, h, fmt;
 	uint8_t* pixels = gimg_import(filepath.c_str(), &w, &h, &fmt);

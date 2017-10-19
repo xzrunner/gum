@@ -29,15 +29,15 @@ extern "C" {
 namespace gum
 {
 
-void StringHelper::Split(const std::string& src, const std::string& mid, 
-						std::vector<std::string>& dst)
+void StringHelper::Split(const CU_STR& src, const CU_STR& mid, 
+						CU_VEC<CU_STR>& dst)
 {
 	char* cstr = new char [src.length()+1];
 	std::strcpy(cstr, src.c_str());
 	char* p = std::strtok(cstr, mid.c_str());
 	while (p!=0)
 	{
-		dst.push_back(std::string(p));
+		dst.push_back(CU_STR(p));
 		p = strtok(NULL, mid.c_str());
 	}
 	delete[] cstr;
@@ -45,7 +45,7 @@ void StringHelper::Split(const std::string& src, const std::string& mid,
 
 #ifdef NO_BOOST
 
-static std::string code_convert(const char* source_charset, const char* to_charset, const std::string& str)
+static CU_STR code_convert(const char* source_charset, const char* to_charset, const CU_STR& str)
 {
     iconv_t cd = libiconv_open(to_charset, source_charset);
     if (cd == (iconv_t)-1) {
@@ -61,11 +61,11 @@ static std::string code_convert(const char* source_charset, const char* to_chars
     char* outbuff = raw_outbuff;
     size_t outbuff_len = raw_outbuff_len;
 
-    std::string ret = "";
+    CU_STR ret = "";
     size_t ncov = libiconv(cd, &inbuff, &inbuff_len, &outbuff, &outbuff_len);
     if(ncov != (size_t)-1 ) {
         size_t len = raw_outbuff_len-outbuff_len;
-        ret = std::string(raw_outbuff, len);
+        ret = CU_STR(raw_outbuff, len);
     }else {
     	printf("iconv error !!!\n");
     }
@@ -77,7 +77,7 @@ static std::string code_convert(const char* source_charset, const char* to_chars
 
 #endif // NO_BOOST
 
-//std::string StringHelper::ToUtf8(const std::string& str)
+//CU_STR StringHelper::ToUtf8(const CU_STR& str)
 //{
 //	int size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(),
 //		str.length(), NULL, 0);
@@ -88,52 +88,52 @@ static std::string code_convert(const char* source_charset, const char* to_chars
 //	int utf8_size = WideCharToMultiByte(CP_UTF8, 0, utf16_str.c_str(),
 //		utf16_str.length(), NULL, 0,
 //		NULL, NULL);
-//	std::string utf8_str(utf8_size, '\0');
+//	CU_STR utf8_str(utf8_size, '\0');
 //	WideCharToMultiByte(CP_UTF8, 0, utf16_str.c_str(),
 //		utf16_str.length(), &utf8_str[0], utf8_size,
 //		NULL, NULL);
 //	return utf8_str;
 //}
 
-std::string StringHelper::UTF8ToGBK(const char *c_str)
+CU_STR StringHelper::UTF8ToGBK(const char *c_str)
 {
 	if(!c_str) {
-		return std::string();
+		return CU_STR();
 	} else {
-		return UTF8ToGBK(std::string(c_str));
+		return UTF8ToGBK(CU_STR(c_str));
 	}
 }
 
-std::string StringHelper::GBKToUTF8(const char *c_str)
+CU_STR StringHelper::GBKToUTF8(const char *c_str)
 {
 	if(!c_str) {
-		return std::string();
+		return CU_STR();
 	} else {
-		return GBKToUTF8(std::string(c_str));
+		return GBKToUTF8(CU_STR(c_str));
 	}
 }
 
-std::string StringHelper::UTF8ToGBK(const std::string& str)
+CU_STR StringHelper::UTF8ToGBK(const CU_STR& str)
 {
 #ifdef NO_BOOST
 	return code_convert("UTF-8", "GBK", str);
 #else
-	return boost::locale::conv::from_utf(str, "GBK");
+	return CU_STR(boost::locale::conv::from_utf(str.c_str(), "GBK"));
 #endif // NO_BOOST
 }
 
-std::string StringHelper::GBKToUTF8(const std::string& str)
+CU_STR StringHelper::GBKToUTF8(const CU_STR& str)
 {
 #ifdef NO_BOOST
 	return code_convert("GBK", "UTF-8", str);
 #else
-	return boost::locale::conv::to_utf<char>(str, "GBK");
+	return CU_STR(boost::locale::conv::to_utf<char>(str.c_str(), "GBK"));
 #endif // NO_BOOST
 }
 
-std::string StringHelper::FromChar(const char* c_str)
+CU_STR StringHelper::FromChar(const char* c_str)
 {
-	std::string str;
+	CU_STR str;
 	if (c_str) {
 		str.assign(c_str);
 	}

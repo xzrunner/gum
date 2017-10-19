@@ -24,7 +24,7 @@ void TextboxSprLoader::LoadJson(const Json::Value& val)
 	TextboxLoader loader(m_spr->GetTextbox());
 	loader.LoadJson(text_val);
 
-	m_spr->SetText(s2::UpdateParams(), text_val["text"].asString());
+	m_spr->SetText(s2::UpdateParams(), text_val["text"].asString().c_str());
 }
 
 void TextboxSprLoader::LoadBin(const simp::NodeLabel* node)

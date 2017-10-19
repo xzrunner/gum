@@ -10,9 +10,9 @@ TextboxSymbol::TextboxSymbol(uint32_t id)
 {
 }
 
-void TextboxSymbol::DrawText(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, const s2::Color& add, const std::string& text, int time, bool richtext) const
+void TextboxSymbol::DrawText(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul, const s2::Color& add, const CU_STR& text, int time, bool richtext) const
 {
-	GTxt::Instance()->Draw(dlist, style, mt, mul, add, text, time, richtext);
+	GTxt::Instance()->Draw(dlist, style, mt, mul, add, text.c_str(), time, richtext);
 }
 
 }

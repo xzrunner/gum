@@ -3,8 +3,6 @@
 //
 //#include "Symbol.h"
 //
-//#include <string>
-//
 //namespace gum
 //{
 //
@@ -13,7 +11,7 @@
 //class ImageSymbol : public Symbol
 //{
 //public:
-//	ImageSymbol(const std::string& filepath);
+//	ImageSymbol(const CU_STR& filepath);
 //
 //	virtual void Draw(const S2_MAT& mt) const;
 //
@@ -23,7 +21,7 @@
 //	void Load();
 //
 //private:
-//	std::string m_filepath;
+//	CU_STR m_filepath;
 //
 //	Texture* m_tex;
 //

@@ -18,7 +18,7 @@ TextureSymLoader::TextureSymLoader(const std::shared_ptr<s2::TextureSymbol>& sym
 {
 }
 
-void TextureSymLoader::LoadJson(const std::string& filepath)
+void TextureSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
@@ -36,7 +36,7 @@ void TextureSymLoader::LoadJson(const std::string& filepath)
 		return;
 	}
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	for (int i = 0, n = value["shapes"].size(); i < n; ++i) {
 		auto shape = ShapeLoader::LoadShape(value["shapes"][i], dir);

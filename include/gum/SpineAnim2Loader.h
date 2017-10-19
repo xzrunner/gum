@@ -31,9 +31,9 @@ public:
 		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL);
 	~SpineAnim2Loader();
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 
-	void LoadParser(const SpineParser& parser, const std::string& dir);
+	void LoadParser(const SpineParser& parser, const CU_STR& dir);
 
 private:
 	void Clear();
@@ -41,9 +41,9 @@ private:
 	void LoadJointsData(const SpineParser& parser);
 	void ConnectJoints(const SpineParser& parser);
 
-	void CreateSkins(const SpineParser& parser, const std::string& img_dir);
-	void CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const;
-	void CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const;
+	void CreateSkins(const SpineParser& parser, const CU_STR& img_dir);
+	void CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem& src, const CU_STR& img_dir) const;
+	void CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const CU_STR& img_dir) const;
 	void CreateSlots(const SpineParser& parser);
 	void CreateJoints();
 	void CreateIKs(const SpineParser& parser);
@@ -63,28 +63,28 @@ private:
 private:
 	struct JointData
 	{
-		std::string name;
+		CU_STR name;
 
-		std::vector<int> children;
+		CU_VEC<int> children;
 
-		JointData(const std::string& name) 
+		JointData(const CU_STR& name) 
 			: name(name) {}
 	};
 
 	struct SlotData
 	{
-		std::string name;
+		CU_STR name;
 
-		SlotData(const std::string& name) 
+		SlotData(const CU_STR& name) 
 			: name(name) {}
 	};
 
 	struct SkinData
 	{
-		std::string slot;
-		std::string name;
+		CU_STR slot;
+		CU_STR name;
 
-		SkinData(const std::string& slot, const std::string& name)
+		SkinData(const CU_STR& slot, const CU_STR& name)
 			: slot(slot), name(name) {}
 	};
 
@@ -96,16 +96,16 @@ private:
 	int m_num;
 
 	// middle
-	std::vector<JointData>     m_joints_data;
-	std::vector<SlotData>      m_slots_data;
-	std::vector<SkinData>      m_skins_data;
-	std::map<std::string, int> m_bone2joint;
-	std::map<std::string, int> m_map2skin;
+	CU_VEC<JointData>     m_joints_data;
+	CU_VEC<SlotData>      m_slots_data;
+	CU_VEC<SkinData>      m_skins_data;
+	CU_MAP<CU_STR, int> m_bone2joint;
+	CU_MAP<CU_STR, int> m_map2skin;
 
 	// dst
-	std::vector<rg_ik>   m_iks;
-	std::vector<rg_skin> m_skins;
-	std::vector<rg_slot> m_slots;
+	CU_VEC<rg_ik>   m_iks;
+	CU_VEC<rg_skin> m_skins;
+	CU_VEC<rg_slot> m_slots;
 	int            m_joint_count;
 	rg_joint**     m_joints;
 	rg_skeleton*   m_sk;

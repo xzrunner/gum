@@ -35,7 +35,7 @@ EasyAnim2Loader::~EasyAnim2Loader()
 	Clear();
 }
 
-void EasyAnim2Loader::LoadJson(const Json::Value& val, const std::string& dir)
+void EasyAnim2Loader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_sym) {
 		return;
@@ -71,7 +71,7 @@ void EasyAnim2Loader::Clear()
 	m_root = NULL;
 }
 
-void EasyAnim2Loader::LoadSprites(const Json::Value& val, const std::string& dir)
+void EasyAnim2Loader::LoadSprites(const Json::Value& val, const CU_STR& dir)
 {
 	m_sprs.reserve(m_num);
 	for (int i = 0; i < m_num; ++i) {
@@ -81,8 +81,8 @@ void EasyAnim2Loader::LoadSprites(const Json::Value& val, const std::string& dir
 
 void EasyAnim2Loader::LoadJoints(const Json::Value& val)
 {
-	std::vector<Joint> src_joints;
-	std::vector<Joint> dst_joints;
+	CU_VEC<Joint> src_joints;
+	CU_VEC<Joint> dst_joints;
 
 	for (int i = 0; i < m_num; ++i) 
 	{

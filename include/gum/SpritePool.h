@@ -2,9 +2,8 @@
 #define _GUM_SPRITE_POOL_H_
 
 #include <cu/cu_macro.h>
+#include <cu/cu_stl.h>
 #include <sprite2/s2_typedef.h>
-
-#include <map>
 
 #include <stdint.h>
 
@@ -23,7 +22,7 @@ public:
 	void Return(const s2::SprPtr& spr);
 
 private:
-	std::map<uint32_t, std::weak_ptr<s2::Sprite>> m_sym_id_cache;
+	CU_MAP<uint32_t, std::weak_ptr<s2::Sprite>> m_sym_id_cache;
 
 	CU_SINGLETON_DECLARATION(SpritePool);
 

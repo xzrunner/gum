@@ -47,7 +47,7 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_editable		= true;
 }
 
-void SpriteIO::Load(const Json::Value& val, const s2::SprPtr& spr, const std::string& dir)
+void SpriteIO::Load(const Json::Value& val, const s2::SprPtr& spr, const CU_STR& dir)
 {
 	Load(val, dir);
 
@@ -57,7 +57,7 @@ void SpriteIO::Load(const Json::Value& val, const s2::SprPtr& spr, const std::st
 	LoadEdit(spr);
 }
 
-void SpriteIO::Store(Json::Value& val, const s2::SprConstPtr& spr, const std::string& dir)
+void SpriteIO::Store(Json::Value& val, const s2::SprConstPtr& spr, const CU_STR& dir)
 {
 	StoreGeometry(spr);
 	StoreRender(spr);
@@ -67,7 +67,7 @@ void SpriteIO::Store(Json::Value& val, const s2::SprConstPtr& spr, const std::st
 	Store(val, dir);
 }
 
-void SpriteIO::Load(const Json::Value& val, const std::string& dir)
+void SpriteIO::Load(const Json::Value& val, const CU_STR& dir)
 {
 	LoadGeometry(val);
 	LoadRender(val, dir);
@@ -75,7 +75,7 @@ void SpriteIO::Load(const Json::Value& val, const std::string& dir)
 	LoadEdit(val);
 }
 
-void SpriteIO::Store(Json::Value& val, const std::string& dir)
+void SpriteIO::Store(Json::Value& val, const CU_STR& dir)
 {
 	StoreGeometry(val);
 	StoreRender(val, dir);
@@ -199,14 +199,14 @@ void SpriteIO::StoreRender(const s2::SprConstPtr& spr)
 	StoreCamera(spr->GetCamera());	
 }
 
-void SpriteIO::LoadRender(const Json::Value& val, const std::string& dir)
+void SpriteIO::LoadRender(const Json::Value& val, const CU_STR& dir)
 {
 	LoadColor(val);
 	LoadShader(val, dir);
 	LoadCamera(val);
 }
 
-void SpriteIO::StoreRender(Json::Value& val, const std::string& dir)
+void SpriteIO::StoreRender(Json::Value& val, const CU_STR& dir)
 {
 	StoreColor(val);
 	StoreShader(val, dir);
@@ -234,7 +234,7 @@ void SpriteIO::StoreInfo(const s2::SprConstPtr& spr)
 void SpriteIO::LoadInfo(const Json::Value& val)
 {
 	if (val.isMember("name")) {
-		m_name = val["name"].asString();
+		m_name = val["name"].asString().c_str();
 	} else {
 		m_name = "";
 	}
@@ -253,7 +253,7 @@ void SpriteIO::LoadInfo(const Json::Value& val)
 void SpriteIO::StoreInfo(Json::Value& val)
 {
 	if (!m_compress || !m_name.empty()) {
-		val["name"] = m_name;
+		val["name"] = m_name.c_str();
 	}
 	if (!m_compress || m_need_actor) {
 		val["actor"] = m_need_actor;
@@ -321,7 +321,7 @@ void SpriteIO::LoadColor(const Json::Value& val)
 {
 	m_col.SetMul(s2::Color(255, 255, 255, 255));
 	if (val.isMember("multi color")) {
-		std::string str = val["multi color"].asString();
+		CU_STR str = val["multi color"].asString().c_str();
 		if (!str.empty()) {
 			m_col.SetMul(str2color(str, s2::BGRA));
 		}
@@ -329,7 +329,7 @@ void SpriteIO::LoadColor(const Json::Value& val)
 
 	m_col.SetAdd(s2::Color(0, 0, 0, 0));
 	if (val.isMember("add color")) {
-		std::string str = val["add color"].asString();
+		CU_STR str = val["add color"].asString().c_str();
 		if (!str.empty()) {
 			m_col.SetAdd(str2color(str, s2::ABGR));
 		}
@@ -337,7 +337,7 @@ void SpriteIO::LoadColor(const Json::Value& val)
 
 	m_col.SetRMap(s2::Color(255, 0, 0, 0));
 	if (val.isMember("r trans")) {
-		std::string str = val["r trans"].asString();
+		CU_STR str = val["r trans"].asString().c_str();
 		if (!str.empty()) {
 			s2::Color col(str2color(str, s2::RGBA));
 			col.a = 0;
@@ -347,7 +347,7 @@ void SpriteIO::LoadColor(const Json::Value& val)
 
 	m_col.SetGMap(s2::Color(0, 255, 0, 0));
 	if (val.isMember("g trans")) {
-		std::string str = val["g trans"].asString();
+		CU_STR str = val["g trans"].asString().c_str();
 		if (!str.empty()) {
 			s2::Color col(str2color(str, s2::RGBA));
 			col.a = 0;
@@ -357,7 +357,7 @@ void SpriteIO::LoadColor(const Json::Value& val)
 
 	m_col.SetBMap(s2::Color(0, 0, 255, 0));
 	if (val.isMember("b trans")) {
-		std::string str = val["b trans"].asString();
+		CU_STR str = val["b trans"].asString().c_str();
 		if (!str.empty()) {
 			s2::Color col(str2color(str, s2::RGBA));
 			col.a = 0;
@@ -369,20 +369,20 @@ void SpriteIO::LoadColor(const Json::Value& val)
 void SpriteIO::StoreColor(Json::Value& val)
 {
 	if (!m_compress || m_col.GetMul() != s2::Color(255, 255, 255, 255)) {
-		val["multi color"]	= color2str(m_col.GetMul(), s2::BGRA);
+		val["multi color"]	= color2str(m_col.GetMul(), s2::BGRA).c_str();;
 	}
 	if (!m_compress || m_col.GetAdd() != s2::Color(0, 0, 0, 0)) {
-		val["add color"]	= color2str(m_col.GetAdd(), s2::ABGR);
+		val["add color"]	= color2str(m_col.GetAdd(), s2::ABGR).c_str();;
 	}
 
 	if (!m_compress || m_col.GetRMap().r != 255 || m_col.GetRMap().g != 0 || m_col.GetRMap().b != 0) {
-		val["r trans"]		= color2str(m_col.GetRMap(), s2::RGBA);
+		val["r trans"]		= color2str(m_col.GetRMap(), s2::RGBA).c_str();;
 	}
 	if (!m_compress || m_col.GetGMap().r != 0 || m_col.GetGMap().g != 255 || m_col.GetGMap().b != 0) {
-		val["g trans"]		= color2str(m_col.GetGMap(), s2::RGBA);
+		val["g trans"]		= color2str(m_col.GetGMap(), s2::RGBA).c_str();;
 	}
 	if (!m_compress || m_col.GetBMap().r != 0 || m_col.GetBMap().g != 0 || m_col.GetBMap().b != 255) {
-		val["b trans"]		= color2str(m_col.GetBMap(), s2::RGBA);
+		val["b trans"]		= color2str(m_col.GetBMap(), s2::RGBA).c_str();;
 	}
 }
 
@@ -408,7 +408,7 @@ void SpriteIO::StoreShader(const s2::RenderShader& shader)
 	m_downsample = shader.GetDownsample();
 }
 
-void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
+void SpriteIO::LoadShader(const Json::Value& val, const CU_STR& dir)
 {
 	m_blend = s2::BM_NULL;
 	m_fast_blend = s2::FBM_NULL;
@@ -422,12 +422,12 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 	}
 
 	if (val.isMember("blend")) {
-		std::string disc = val["blend"].asString();
+		CU_STR disc = val["blend"].asString().c_str();
 		m_blend = BlendModes::Instance()->Name2Mode(disc);
 	}
 
 	if (val.isMember("fast_blend")) {
-		std::string disc = val["fast_blend"].asString();
+		CU_STR disc = val["fast_blend"].asString().c_str();
 		m_fast_blend = FastBlendModes::Instance()->Name2Mode(disc);
 	}
 
@@ -435,14 +435,14 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 	{
 		if (val["filter"].isString()) 
 		{
-			std::string disc = val["filter"].asString();
+			CU_STR disc = val["filter"].asString().c_str();
 			s2::FilterMode mode = FilterModes::Instance()->Name2Mode(disc);
 			m_filter = s2::FilterFactory::Instance()->Create(mode);
 		} 
 		else 
 		{
 			const Json::Value& fval = val["filter"];
-			std::string disc = fval["mode"].asString();
+			CU_STR disc = fval["mode"].asString().c_str();
 			s2::FilterMode mode = FilterModes::Instance()->Name2Mode(disc);
 			m_filter = s2::FilterFactory::Instance()->Create(mode);
 			switch (mode)
@@ -481,7 +481,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 					filter->SetFactor(distortion, rise);
 					if (fval.isMember("filepath")) 
 					{
-						std::string filepath = fval["filepath"].asString();
+						CU_STR filepath = fval["filepath"].asString().c_str();
 						filepath = gum::FilepathHelper::Absolute(dir, filepath);
 						filter->SetFilepath(filepath);
 						
@@ -513,18 +513,18 @@ void SpriteIO::LoadShader(const Json::Value& val, const std::string& dir)
 	}
 }
 
-void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
+void SpriteIO::StoreShader(Json::Value& val, const CU_STR& dir)
 {
 	if (!m_render_open) {
 		return;
 	}
 
 	if (m_blend != s2::BM_NULL) {
-		val["blend"] = BlendModes::Instance()->ModeToName(m_blend);
+		val["blend"] = BlendModes::Instance()->ModeToName(m_blend).c_str();;
 	}
 
 	if (m_fast_blend != s2::FBM_NULL) {
-		val["fast_blend"] = FastBlendModes::Instance()->Mode2Name(m_fast_blend);
+		val["fast_blend"] = FastBlendModes::Instance()->Mode2Name(m_fast_blend).c_str();;
 	}
 
 	s2::FilterMode mode = s2::FM_NULL;
@@ -534,7 +534,7 @@ void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
 	if (mode != s2::FM_NULL)
 	{
 		Json::Value fval;
-		fval["mode"] = FilterModes::Instance()->Mode2Name(mode);
+		fval["mode"] = FilterModes::Instance()->Mode2Name(mode).c_str();;
 		switch (mode)
 		{
 		case s2::FM_EDGE_DETECTION:
@@ -558,7 +558,7 @@ void SpriteIO::StoreShader(Json::Value& val, const std::string& dir)
 		case s2::FM_HEAT_HAZE:
 			{
 				auto filter = static_cast<s2::RFHeatHaze*>(m_filter.get());
-				fval["filepath"] = gum::FilepathHelper::Relative(dir, filter->GetFilepath());
+				fval["filepath"] = gum::FilepathHelper::Relative(dir, filter->GetFilepath()).c_str();;
 				float distortion, rise;
 				filter->GetFactor(distortion, rise);
 				fval["distortion"] = distortion;
@@ -591,7 +591,7 @@ void SpriteIO::StoreCamera(const s2::RenderCamera& rc)
 void SpriteIO::LoadCamera(const Json::Value& val)
 {
 	if (val.isMember("camera")) {
-		std::string disc = val["camera"].asString();
+		CU_STR disc = val["camera"].asString().c_str();
 		m_camera = CameraModes::Instance()->Name2Mode(disc);
 	} else {
 		m_camera = s2::CM_ORTHO;
@@ -601,7 +601,7 @@ void SpriteIO::LoadCamera(const Json::Value& val)
 void SpriteIO::StoreCamera(Json::Value& val)
 {
 	if (m_camera != s2::CM_ORTHO) {
-		val["camera"] = CameraModes::Instance()->Mode2Name(m_camera);
+		val["camera"] = CameraModes::Instance()->Mode2Name(m_camera).c_str();;
 	}
 }
 

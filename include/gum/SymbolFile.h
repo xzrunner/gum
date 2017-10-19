@@ -2,9 +2,7 @@
 #define _GUM_SYMBOL_FILE_H_
 
 #include <cu/cu_macro.h>
-
-#include <string>
-#include <map>
+#include <cu/cu_stl.h>
 
 namespace gum
 {
@@ -12,19 +10,18 @@ namespace gum
 class SymbolFile
 {
 public:
-	int Type(const std::string& filepath) const;
+	int Type(const CU_STR& filepath) const;
 
-	const std::string& Tag(int type) const;
-
-private:
-	void Regist(int type, const std::string& tag);
-
-public:
-	static const std::string UNKNOWN_TAG;
+	const CU_STR& Tag(int type) const;
 
 private:
-	std::map<int, std::string> m_type2tag;
-	std::map<std::string, int> m_tag2type;
+	void Regist(int type, const CU_STR& tag);
+
+private:
+	CU_STR m_unknown_tag;
+
+	CU_MAP<int, CU_STR> m_type2tag;
+	CU_MAP<CU_STR, int> m_tag2type;
 
 	CU_SINGLETON_DECLARATION(SymbolFile);
 

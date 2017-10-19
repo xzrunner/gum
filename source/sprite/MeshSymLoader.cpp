@@ -30,7 +30,7 @@ MeshSymLoader::MeshSymLoader(const std::shared_ptr<s2::MeshSymbol>& sym)
 {
 }
 
-void MeshSymLoader::LoadJson(const std::string& filepath)
+void MeshSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
@@ -48,14 +48,14 @@ void MeshSymLoader::LoadJson(const std::string& filepath)
 		return;
 	}
 
-	std::string dir = FilepathHelper::Dir(filepath);
-	std::string base_path = FilepathHelper::Absolute(dir, value["base_symbol"].asString());
+	CU_STR dir = FilepathHelper::Dir(filepath);
+	CU_STR base_path = FilepathHelper::Absolute(dir, value["base_symbol"].asString().c_str());
 	auto base_sym = SymbolPool::Instance()->Fetch(base_path);
 	if (!base_sym) {
 		return;
 	}
 
-	std::string type = value["type"].asString();
+	CU_STR type = value["type"].asString().c_str();
 	std::unique_ptr<s2::Mesh> mesh;
 	if (type == "strip") {
 
@@ -101,10 +101,10 @@ std::unique_ptr<s2::Mesh> MeshSymLoader::LoadPointsMesh(const s2::SymConstPtr& b
 {
 	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 	
-	std::vector<sm::vec2> outline;
+	CU_VEC<sm::vec2> outline;
 	ArrayLoader::Load(outline, node->outline, node->outline_n, 16);
 
-	std::vector<sm::vec2> points;
+	CU_VEC<sm::vec2> points;
 	ArrayLoader::Load(points, node->points, node->points_n, 16);
 
 	sm::rect r = base_sym->GetBounding();
@@ -118,13 +118,13 @@ std::unique_ptr<s2::Mesh> MeshSymLoader::LoadTrianglesMesh(const s2::SymConstPtr
 {
 	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 
-	std::vector<sm::vec2> vertices;
+	CU_VEC<sm::vec2> vertices;
 	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
 
-	std::vector<sm::vec2> texcoords;
+	CU_VEC<sm::vec2> texcoords;
 	ArrayLoader::Load(texcoords, node->texcoords, node->texcoords_n, 8192);
 
-	std::vector<int> triangles;
+	CU_VEC<int> triangles;
 	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
 
 	auto pm_mesh = std::make_unique<pm::TrianglesMesh>(vertices, texcoords, triangles);
@@ -137,7 +137,7 @@ std::unique_ptr<s2::Mesh> MeshSymLoader::LoadSkin2Mesh(const s2::SymConstPtr& ba
 {
 	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 
-	std::vector<pm::Skin2Joint> joints;
+	CU_VEC<pm::Skin2Joint> joints;
 	int joints_n = 0;
 	for (uint32_t i = 0; i < node->vertices_n; ++i) {
 		joints_n += node->joints_n[i];
@@ -155,16 +155,16 @@ std::unique_ptr<s2::Mesh> MeshSymLoader::LoadSkin2Mesh(const s2::SymConstPtr& ba
 		joints.push_back(dst);
 	}
 
-	std::vector<int> vertices;
+	CU_VEC<int> vertices;
 	vertices.reserve(node->vertices_n);
 	for (uint32_t i = 0; i < node->vertices_n; ++i) {
 		vertices.push_back(node->joints_n[i]);
 	}
 
-	std::vector<sm::vec2> texcoords;
+	CU_VEC<sm::vec2> texcoords;
 	ArrayLoader::Load(texcoords, node->texcoords, node->texcoords_n, 8192);
 
-	std::vector<int> triangles;
+	CU_VEC<int> triangles;
 	ArrayLoader::Load(triangles, node->triangle, node->triangle_n);
 
 	auto pm_mesh = std::make_unique<pm::Skin2Mesh>(joints, vertices, texcoords, triangles);
@@ -177,10 +177,10 @@ std::unique_ptr<s2::Mesh> MeshSymLoader::CreatePointsMesh(const Json::Value& val
 {
 	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 
-	std::vector<sm::vec2> outline;
+	CU_VEC<sm::vec2> outline;
 	JsonSerializer::Load(val["shape"]["outline"], outline);
 
-	std::vector<sm::vec2> points;
+	CU_VEC<sm::vec2> points;
 	JsonSerializer::Load(val["shape"]["inner"], points);
 
 	sm::rect r = base_sym->GetBounding();

@@ -10,7 +10,7 @@ ResourceUID::Type ResourceUID::GetType(UID uid)
 	return static_cast<ResourceUID::Type>((uid & TYPE_MASK) >> DATA_SIZE);
 }
 
-UID ResourceUID::RawFile(const std::string& filepath)
+UID ResourceUID::RawFile(const CU_STR& filepath)
 {
 	return Compose(HashString(filepath), RES_RAW_FILE);
 }
@@ -38,7 +38,7 @@ UID ResourceUID::Actor(const s2::Actor* actor)
 	return Compose(actor_id, RES_ACTOR);
 }
 
-uint64_t ResourceUID::HashString(const std::string& str)
+uint64_t ResourceUID::HashString(const CU_STR& str)
 {
 	const char* c = str.c_str();
 

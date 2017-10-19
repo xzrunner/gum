@@ -23,13 +23,13 @@ Anim2SymLoader::Anim2SymLoader(const std::shared_ptr<s2::Anim2Symbol>& sym,
 {
 }
 
-void Anim2SymLoader::LoadJson(const std::string& filepath)
+void Anim2SymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
 	}
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	Json::Value val;
 	Json::Reader reader;
@@ -271,7 +271,7 @@ int Anim2SymLoader::CalcNodeSize(const simp::NodeAnim2* node)
 
 void Anim2SymLoader::InitJointChildren(rg_skeleton* sk)
 {
-	std::vector<int> node_tag;
+	CU_VEC<int> node_tag;
 	node_tag.resize(sk->joint_count, 0);
 	for (int i = 0; i < sk->joint_count; ++i) {
 		int parent = sk->joints[i]->parent;

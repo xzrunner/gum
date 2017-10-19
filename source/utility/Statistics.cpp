@@ -25,8 +25,6 @@
 #include <shaderlab/Statistics.h>
 #include <shaderlab/StatDrawCall.h>
 
-#include <string>
-
 #include <time.h>
 
 namespace gum
@@ -45,6 +43,8 @@ Statistics::Statistics()
 	, m_opt_enable(false)
 {
 	memset(&m_mem, 0, sizeof(m_mem));
+
+	EnableConsole(true);
 }
 
 void Statistics::EnableGraph(bool enable)
@@ -196,7 +196,7 @@ void Statistics::PrintScreen() const
 	sprintf(buf, "MEM: tot %.1f, tex %.1f, lua %.1f", m_mem.tot, m_mem.tex, m_mem.lua);
 	GTxt::Instance()->Draw(mt, buf, w);	
 
-	static std::string buf_str;
+	static CU_STR buf_str;
 	buf_str.reserve(512);
 
 	mt.Translate(0, -30);
@@ -239,13 +239,13 @@ void Statistics::PrintScreen() const
 
 	// memory detail
 	{
-		const std::map<int, float>& pkg2mem = s2::StatImages::Instance()->GetID2Mem();
-		std::map<float, int> mem2pkg;
-		std::map<int, float>::const_iterator itr = pkg2mem.begin();
+		const CU_MAP<int, float>& pkg2mem = s2::StatImages::Instance()->GetID2Mem();
+		CU_MAP<float, int> mem2pkg;
+		CU_MAP<int, float>::const_iterator itr = pkg2mem.begin();
 		for ( ; itr != pkg2mem.end(); ++itr) {
 			mem2pkg.insert(std::make_pair(itr->second, itr->first));
 		}
-		std::map<float, int>::const_reverse_iterator itr2 = mem2pkg.rbegin();
+		CU_MAP<float, int>::const_reverse_iterator itr2 = mem2pkg.rbegin();
 		static const int ROW_COUNT = 12;
 		mt.Translate(0, -10);
 		for (int i = 0; itr2 != mem2pkg.rend(); ++itr2, ++i)
@@ -309,7 +309,7 @@ void Statistics::PrintFile() const
 		time(NULL), m_tpf_smooth, sl_stat->GetVertices(), sl_stat->GetDrawCall());
 	m_fout << buf;
 
-// 	static std::string buf_str;
+// 	static CU_STR buf_str;
 // 	buf_str.reserve(1024);
 // 	s2::StatTopNodes::Instance()->Print(buf_str);
 // 	m_fout << buf_str;

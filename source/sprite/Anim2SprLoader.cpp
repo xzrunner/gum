@@ -13,7 +13,7 @@ Anim2SprLoader::Anim2SprLoader(const std::shared_ptr<s2::Anim2Sprite>& spr)
 {
 }
 
-void Anim2SprLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void Anim2SprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_spr || !val.isMember("anim2")) {
 		return;

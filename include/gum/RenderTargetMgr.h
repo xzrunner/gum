@@ -2,9 +2,8 @@
 #define _GUM_RENDER_TARGET_MGR_H_
 
 #include <cu/cu_macro.h>
+#include <cu/cu_stl.h>
 #include <SM_Vector.h>
-
-#include <vector>
 
 namespace gum
 {
@@ -33,7 +32,7 @@ private:
 private:
 	sm::ivec2 m_size;
 	
-	std::vector<Item> m_items;
+	CU_VEC<Item> m_items;
 
 	CU_SINGLETON_DECLARATION(RenderTargetMgr);
 

@@ -2,12 +2,11 @@
 #define _GUM_SKELETON_SYM_LOADER_H_
 
 #include <cu/uncopyable.h>
-
 #include <SM_Vector.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class SkeletonSymbol; class Joint; class Sprite; class JointPose; }
@@ -25,7 +24,7 @@ public:
 		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL,
 		const std::shared_ptr<const JointLoader>& joint_loader = NULL);
 
-	void LoadJson(const std::string& filepath);
+	void LoadJson(const CU_STR& filepath);
 
 private:
 	std::shared_ptr<s2::SkeletonSymbol> m_sym;

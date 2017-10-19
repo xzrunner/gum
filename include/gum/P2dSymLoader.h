@@ -5,10 +5,10 @@
 #include <SM_Vector.h>
 #include <sprite2/Color.h>
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class Symbol; class Particle2dSymbol; }
@@ -27,14 +27,14 @@ public:
 	void Store(const std::shared_ptr<s2::Particle2dSymbol>& sym) const;
 	void Store(p2d_emitter_cfg* cfg) const;
 
-	void LoadJson(const std::string& filepath);	
+	void LoadJson(const CU_STR& filepath);	
 	void LoadBin(const simp::NodeParticle2d* node);
 
 private:
-	void LoadComponent(const std::string& dir, const Json::Value& comp_val);
+	void LoadComponent(const CU_STR& dir, const Json::Value& comp_val);
 
 protected:
-	virtual s2::SymPtr LoadSymbol(const std::string& filepath) const;
+	virtual s2::SymPtr LoadSymbol(const CU_STR& filepath) const;
 
 public:
 	struct Component
@@ -49,7 +49,7 @@ public:
 		float alpha_start, alpha_end;
 
 		uint32_t sym_id;
-		std::string filepath;
+		CU_STR filepath;
 
 		Component()
 			: angle_start(0)
@@ -65,7 +65,7 @@ public:
 	}; // Component
 
 public:
-	std::string name;
+	CU_STR name;
 
 	int mode_type;
 
@@ -119,7 +119,7 @@ public:
 
 	float direction, direction_var;
 
-	std::vector<Component> components;
+	CU_VEC<Component> components;
 
 }; // P2dSymLoader
 

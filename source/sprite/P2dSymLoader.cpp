@@ -119,7 +119,7 @@ void P2dSymLoader::Store(p2d_emitter_cfg* cfg) const
 	}
 }
 
-void P2dSymLoader::LoadJson(const std::string& filepath)
+void P2dSymLoader::LoadJson(const CU_STR& filepath)
 {
 	Json::Value value;
 	Json::Reader reader;
@@ -129,7 +129,7 @@ void P2dSymLoader::LoadJson(const std::string& filepath)
 	reader.parse(fin, value);
 	fin.close();
 
-	name = value["name"].asString();
+	name = value["name"].asString().c_str();
 
 	mode_type = value["mode_type"].asInt();
 
@@ -191,7 +191,7 @@ void P2dSymLoader::LoadJson(const std::string& filepath)
 	direction			= static_cast<float>(value["direction"]["center"].asDouble() * SM_DEG_TO_RAD);
 	direction_var		= static_cast<float>(value["direction"]["offset"].asDouble() * SM_DEG_TO_RAD);
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 	for (int i = 0, n = value["components"].size(); i < n; ++i) {
 		LoadComponent(dir, value["components"][i]);
 	}
@@ -280,7 +280,7 @@ void P2dSymLoader::LoadBin(const simp::NodeParticle2d* node)
 	}
 }
 
-void P2dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp_val)
+void P2dSymLoader::LoadComponent(const CU_STR& dir, const Json::Value& comp_val)
 {
 	Component comp;
 
@@ -300,13 +300,13 @@ void P2dSymLoader::LoadComponent(const std::string& dir, const Json::Value& comp
 		comp.alpha_end   = static_cast<float>(comp_val["alpha"]["end"].asInt());
 	}
 
-	comp.filepath = comp_val["filepath"].asString();
+	comp.filepath = comp_val["filepath"].asString().c_str();
 	comp.filepath = FilepathHelper::Absolute(dir, comp.filepath);
 
 	components.push_back(comp);
 }
 
-s2::SymPtr P2dSymLoader::LoadSymbol(const std::string& filepath) const
+s2::SymPtr P2dSymLoader::LoadSymbol(const CU_STR& filepath) const
 {
 	return SymbolPool::Instance()->Fetch(filepath);
 }

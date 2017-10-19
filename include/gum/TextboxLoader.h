@@ -5,8 +5,6 @@
 
 #include <json/json.h>
 
-#include <string>
-
 namespace s2 { class Textbox; }
 namespace simp { class NodeLabel; }
 

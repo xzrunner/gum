@@ -1,8 +1,6 @@
 #ifndef _GUM_RESOURCE_H_
 #define _GUM_RESOURCE_H_
 
-#include <string>
-
 namespace bimp { class FilePath; }
 
 namespace gum

@@ -2,11 +2,8 @@
 #define _GUM_CAMERA_MODES_H_
 
 #include <cu/cu_macro.h>
-
+#include <cu/cu_stl.h>
 #include <sprite2/CameraMode.h>
-
-#include <string>
-#include <vector>
 
 namespace gum
 {
@@ -14,21 +11,21 @@ namespace gum
 class CameraModes
 {
 public:
-	s2::CameraMode Name2Mode(const std::string& name) const;
-	std::string Mode2Name(s2::CameraMode mode) const;
+	s2::CameraMode Name2Mode(const CU_STR& name) const;
+	CU_STR Mode2Name(s2::CameraMode mode) const;
 
 private:
 	struct Item
 	{
-		Item(s2::CameraMode mode, const std::string& name)
+		Item(s2::CameraMode mode, const CU_STR& name)
 			: mode(mode), name(name) {}
 
 		s2::CameraMode mode;
-		std::string name;
+		CU_STR name;
 	};
 
 private:
-	std::vector<Item> m_modes;
+	CU_VEC<Item> m_modes;
 
 	CU_SINGLETON_DECLARATION(CameraModes);
 

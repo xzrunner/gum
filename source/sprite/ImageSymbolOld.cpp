@@ -7,7 +7,7 @@
 //namespace gum
 //{
 //
-//ImageSymbol::ImageSymbol(const std::string& filepath)
+//ImageSymbol::ImageSymbol(const CU_STR& filepath)
 //	: m_filepath(filepath)
 //	, m_tex(NULL)
 //{
@@ -104,7 +104,7 @@
 //	z[2] = 0;
 //	z[3] = 250;
 //
-//	std::vector<sm::vec3> positions3;
+//	CU_VEC<sm::vec3> positions3;
 //	positions3.push_back(sm::vec3(positions[0].x, positions[0].y, z[0]));
 //	positions3.push_back(sm::vec3(positions[1].x, positions[1].y, z[1]));
 //	positions3.push_back(sm::vec3(positions[2].x, positions[2].y, z[2]));
@@ -112,7 +112,7 @@
 //	positions3.push_back(sm::vec3(positions[2].x, positions[2].y, z[2]));
 //	positions3.push_back(sm::vec3(positions[3].x, positions[3].y, z[3]));
 //
-//	std::vector<sm::vec2> texcoords;
+//	CU_VEC<sm::vec2> texcoords;
 //	texcoords.push_back(sm::vec2(0, 0));
 //	texcoords.push_back(sm::vec2(1, 0));
 //	texcoords.push_back(sm::vec2(1, 1));

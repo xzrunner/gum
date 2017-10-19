@@ -4,10 +4,10 @@
 #include <cu/uncopyable.h>
 #include <sprite2/Color.h>
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 struct t2d_emitter_cfg;
@@ -26,21 +26,21 @@ public:
 	void Store(const std::shared_ptr<s2::TrailSymbol>& sym) const;
 	void Store(t2d_emitter_cfg* cfg) const;
 
-	void LoadJson(const std::string& filepath);
+	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeTrail* node);
 
 private:
-	void LoadImageComp(const std::string& dir, const Json::Value& comp_val);
+	void LoadImageComp(const CU_STR& dir, const Json::Value& comp_val);
 	void LoadShapeComp(const Json::Value& comp_val);
 
 protected:
-	virtual s2::SymPtr LoadSymbol(const std::string& filepath) const;
+	virtual s2::SymPtr LoadSymbol(const CU_STR& filepath) const;
 
 public:
 	struct CompImage
 	{
 		uint32_t sym_id;
-		std::string filepath;
+		CU_STR filepath;
 		float scale_begin, scale_end;
 		s2::Color mul_col_begin, mul_col_end;
 		s2::Color add_col_begin, add_col_end;
@@ -75,8 +75,8 @@ public:
 
 	float fadeout_time;
 
-	std::vector<CompImage> comp_images;
-	std::vector<CompShape> comp_shapes;
+	CU_VEC<CompImage> comp_images;
+	CU_VEC<CompShape> comp_shapes;
 
 }; // TrailSymLoader
 

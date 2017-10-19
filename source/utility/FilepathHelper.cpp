@@ -10,53 +10,53 @@
 namespace gum
 {
 
-std::string FilepathHelper::Relative(const std::string& base, const std::string& path)
+CU_STR FilepathHelper::Relative(const CU_STR& base, const CU_STR& path)
 {
 #ifndef NO_BOOST
-	return boost::filesystem::relative(path, base).string();
+	return boost::filesystem::relative(path.c_str(), base.c_str()).string().c_str();
 #else
 	assert(0);
 	return "";
 #endif // NO_BOOST
 }
 
-std::string FilepathHelper::Absolute(const std::string& base, const std::string& path)
+CU_STR FilepathHelper::Absolute(const CU_STR& base, const CU_STR& path)
 {
 #ifndef NO_BOOST
-	return boost::filesystem::absolute(path, base).string();
+	return boost::filesystem::absolute(path.c_str(), base.c_str()).string().c_str();
 #else
 	assert(0);
 	return "";
 #endif // NO_BOOST
 }
 
-std::string FilepathHelper::Dir(const std::string& path)
+CU_STR FilepathHelper::Dir(const CU_STR& path)
 {
 #ifndef NO_BOOST
-	return boost::filesystem::path(path).parent_path().string();
+	return boost::filesystem::path(path.c_str()).parent_path().string().c_str();
 #else
 	assert(0);
 	return "";
 #endif // NO_BOOST
 }
 
-std::string FilepathHelper::Filename(const std::string& path)
+CU_STR FilepathHelper::Filename(const CU_STR& path)
 {
 #ifndef NO_BOOST
-	return boost::filesystem::path(path).filename().string();
+	return boost::filesystem::path(path.c_str()).filename().string().c_str();
 #else
 	assert(0);
 	return "";
 #endif // NO_BOOST
 }
 
-std::string FilepathHelper::Format(const std::string& path)
+CU_STR FilepathHelper::Format(const CU_STR& path)
 {	
 #ifndef NO_BOOST
-	std::string ret = path;
+	CU_STR ret = path;
 
 	if (Exists(ret)) {
-		ret = boost::filesystem::canonical(ret).string();
+		ret = boost::filesystem::canonical(ret.c_str()).string().c_str();
 	}
 
 //	char from = '\\', to = '/';
@@ -72,10 +72,10 @@ std::string FilepathHelper::Format(const std::string& path)
 #endif // NO_BOOST
 }
 
-bool FilepathHelper::Exists(const std::string& path)
+bool FilepathHelper::Exists(const CU_STR& path)
 {
 #ifndef NO_BOOST
-	return boost::filesystem::exists(path);
+	return boost::filesystem::exists(path.c_str());
 #else
 	assert(0);
 	return "";

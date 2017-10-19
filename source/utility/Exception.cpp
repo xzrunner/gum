@@ -8,7 +8,7 @@
 namespace gum
 {
 
-Exception::Exception(const std::string& msg)
+Exception::Exception(const CU_STR& msg)
 	: m_message(msg)
 {
 }
@@ -22,7 +22,7 @@ Exception::Exception(const char* fmt, ...)
 	int size_out = vsnprintf(buff, sizeof(buff) - 1, fmt, args);
 	va_end(args);
 	if (size_out != -1) {
-		m_message = std::string(buff);
+		m_message = CU_STR(buff);
 	}
 }
 

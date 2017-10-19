@@ -2,6 +2,7 @@
 #define _GUM_P2D_SPR_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
@@ -18,7 +19,7 @@ class P2dSprLoader : private cu::Uncopyable
 public:
 	P2dSprLoader(const std::shared_ptr<s2::Particle2dSprite>& spr);
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeParticle2dSpr* node);
 
 private:

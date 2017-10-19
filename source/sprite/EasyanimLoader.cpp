@@ -26,7 +26,7 @@ EasyAnimLoader::EasyAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
 	}
 }
 
-void EasyAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void EasyAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_sym) {
 		return;
@@ -47,7 +47,7 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 	for (int layer = 0; layer < node->n; ++layer)
 	{
 		const simp::NodeAnimation::Layer* src_layer = &node->layers[layer];
-		auto dst_layer = std::make_unique<s2::AnimSymbol::Layer>();
+		auto dst_layer = mm::allocate_unique<s2::AnimSymbol::Layer>();
 		int frame_n = src_layer->n;
 		dst_layer->frames.reserve(frame_n);
 		for (int frame = 0; frame < frame_n; ++frame)
@@ -64,14 +64,14 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 	}
 }
 
-void EasyAnimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
+void EasyAnimLoader::LoadLayers(const Json::Value& val, const CU_STR& dir)
 {
 	int layer_n = val.size();
 	for (int layer = 0; layer < layer_n; ++layer)
 	{
 		const Json::Value& layer_val = val[layer];
-		auto dst_layer = std::make_unique<s2::AnimSymbol::Layer>();
-		dst_layer->name = layer_val["name"].asString();
+		auto dst_layer = mm::allocate_unique<s2::AnimSymbol::Layer>();
+		dst_layer->name = layer_val["name"].asString().c_str();
 		int frame_n = layer_val["frame"].size();
 		dst_layer->frames.reserve(frame_n);
 		for (int frame = 0; frame < frame_n; ++frame)
@@ -89,7 +89,7 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const std::string& dir)
 }
 
 void EasyAnimLoader::LoadActors(const Json::Value& src, s2::AnimSymbol::Frame& dst,
-								const std::string& dir)
+								const CU_STR& dir)
 {
 	int actor_n = src["actor"].size();
 	dst.sprs.reserve(actor_n);
@@ -107,7 +107,7 @@ void EasyAnimLoader::LoadLerps(const Json::Value& src, s2::AnimSymbol::Frame& ds
 	{
 		std::unique_ptr<s2::ILerp> lerp = nullptr;
 		const Json::Value& val = src["lerp"][i]["val"];
-		std::string type = val["type"].asString();
+		CU_STR type = val["type"].asString().c_str();
 		if (type == "circle")
 		{
 			float scale = val["scale"].asInt() * 0.01f;

@@ -2,10 +2,10 @@
 #define _GUM_ICON_SYM_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class IconSymbol; }
@@ -19,7 +19,7 @@ class IconSymLoader : private cu::Uncopyable
 public:
 	IconSymLoader(const std::shared_ptr<s2::IconSymbol>& sym);
 
-	void LoadJson(const std::string& filepath);	
+	void LoadJson(const CU_STR& filepath);	
 	void LoadBin(const simp::NodeIcon* node);
 
 private:

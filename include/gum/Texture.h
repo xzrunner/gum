@@ -2,8 +2,7 @@
 #define _GUM_TEXTURE_H_
 
 #include <unirender/ur_typedef.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -16,7 +15,7 @@ public:
 	Texture();
 	~Texture();
 
-	void Load(const std::string& filepath);
+	void Load(const CU_STR& filepath);
 	void Load(const uint8_t* data, int width, int height, ur::TEXTURE_FORMAT format);
 
 	int GetWidth() const { return m_width; }

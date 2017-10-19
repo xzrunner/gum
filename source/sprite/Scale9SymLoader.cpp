@@ -28,7 +28,7 @@ Scale9SymLoader::Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym,
 	}
 }
 
-void Scale9SymLoader::LoadJson(const std::string& filepath)
+void Scale9SymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
@@ -42,7 +42,7 @@ void Scale9SymLoader::LoadJson(const std::string& filepath)
 	reader.parse(fin, val);
 	fin.close();
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	const Json::Value& spr_val = val["sprite"];
 

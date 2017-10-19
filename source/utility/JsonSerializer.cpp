@@ -3,7 +3,7 @@
 namespace gum
 {
 
-void JsonSerializer::Store(const std::vector<sm::vec2>& points, Json::Value& value)
+void JsonSerializer::Store(const CU_VEC<sm::vec2>& points, Json::Value& value)
 {
 	for (int i = 0, n = points.size(); i < n; ++i)
 	{
@@ -12,7 +12,7 @@ void JsonSerializer::Store(const std::vector<sm::vec2>& points, Json::Value& val
 	}
 }
 
-void JsonSerializer::Load(const Json::Value& value, std::vector<sm::vec2>& points)
+void JsonSerializer::Load(const Json::Value& value, CU_VEC<sm::vec2>& points)
 {
 	if (value.isArray())
 	{
@@ -50,7 +50,7 @@ void JsonSerializer::Load(const Json::Value& value, std::vector<sm::vec2>& point
 	}
 }
 
-void JsonSerializer::Store(const std::vector<s2::Color>& colors, Json::Value& value)
+void JsonSerializer::Store(const CU_VEC<s2::Color>& colors, Json::Value& value)
 {
 	for (int i = 0, n = colors.size(); i < n; ++i)
 	{
@@ -61,7 +61,7 @@ void JsonSerializer::Store(const std::vector<s2::Color>& colors, Json::Value& va
 	}
 }
 
-void JsonSerializer::Load(const Json::Value& value, std::vector<s2::Color>& colors)
+void JsonSerializer::Load(const Json::Value& value, CU_VEC<s2::Color>& colors)
 {
 	colors.reserve(value["r"].size());
 

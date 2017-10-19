@@ -12,7 +12,7 @@ P2dSprLoader::P2dSprLoader(const std::shared_ptr<s2::Particle2dSprite>& spr)
 {
 }
 
-void P2dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void P2dSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_spr || !val.isMember("particle2d")) {
 		return;

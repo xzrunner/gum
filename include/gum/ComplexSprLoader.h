@@ -2,6 +2,7 @@
 #define _GUM_COMPLEX_SPR_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
@@ -18,7 +19,7 @@ class ComplexSprLoader : private cu::Uncopyable
 public:
 	ComplexSprLoader(const std::shared_ptr<s2::ComplexSprite>& spr);
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeComplexSpr* node);
 
 private:

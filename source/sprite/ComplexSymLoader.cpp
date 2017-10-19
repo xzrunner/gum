@@ -18,7 +18,7 @@ ComplexSymLoader::ComplexSymLoader(const std::shared_ptr<s2::ComplexSymbol>& sym
 {
 }
 
-void ComplexSymLoader::LoadJson(const std::string& filepath)
+void ComplexSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
@@ -39,7 +39,7 @@ void ComplexSymLoader::LoadJson(const std::string& filepath)
 	scissor.ymax = static_cast<float>(value["ymax"].asInt());
 	m_sym->SetScissor(scissor);
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	m_sym->Clear();
 	for (int i = 0, n = value["sprite"].size(); i < n; ++i) {
@@ -61,7 +61,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 	scissor.ymax = node->scissor[3];
 	m_sym->SetScissor(scissor);
 
-	std::vector<s2::SprPtr> children;
+	CU_VEC<s2::SprPtr> children;
 	children.reserve(node->sprs_n);
 
 	m_sym->Clear();
@@ -77,7 +77,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		m_sym->Add(spr);
 	}
 
-	mm::AllocVector<s2::ComplexSymbol::Action> dst;
+	CU_VEC<s2::ComplexSymbol::Action> dst;
 	dst.reserve(node->actions_n);
 	for (int i = 0; i < node->actions_n; ++i) 
 	{
@@ -104,11 +104,11 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 
 //void ComplexSymLoader::LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym)
 //{
-//	const std::vector<s2::Sprite*>& children = sym->GetChildren();
+//	const CU_VEC<s2::Sprite*>& children = sym->GetChildren();
 //
-//	std::vector<Action> src;
+//	CU_VEC<Action> src;
 //	LoadJsonAction(val, src);
-//	std::vector<s2::ComplexSymbol::Action> dst;
+//	CU_VEC<s2::ComplexSymbol::Action> dst;
 //	dst.reserve(src.size());
 //	for (int i = 0, n = src.size(); i < n; ++i) {
 //		const Action& src_action = src[i];
@@ -126,7 +126,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 //	sym->SetActions(dst);
 //}
 //
-//void ComplexSymLoader::LoadJsonAction(const Json::Value& val, std::vector<Action>& actions)
+//void ComplexSymLoader::LoadJsonAction(const Json::Value& val, CU_VEC<Action>& actions)
 //{
 //	if (!val.isMember("action")) {
 //		return;
@@ -136,7 +136,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 //	for (int i = 0, n = actions_val.size(); i < n; ++i) {
 //		const Json::Value& src = actions_val[i];
 //		Action dst;
-//		dst.name = src["name"].asString();
+//		dst.name = src["name"].asString().c_str();
 //		dst.idx.reserve(src["sprite"].size());
 //		for (int j = 0, m = src["sprite"].size(); j < m; ++j) {
 //			dst.idx.push_back(src["sprite"][j].asInt());

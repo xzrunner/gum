@@ -5,8 +5,6 @@
 
 #include <sprite2/ImageSymbol.h>
 
-#include <string>
-
 namespace simp { class NodePicture; }
 
 namespace gum

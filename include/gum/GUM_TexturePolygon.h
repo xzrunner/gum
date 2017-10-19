@@ -2,8 +2,7 @@
 #define _GUM_TEXTURE_POLYGON_H_
 
 #include <sprite2/TexturePolygon.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace gum
 {
@@ -13,7 +12,7 @@ class Image;
 class TexturePolygon : public s2::TexturePolygon
 {
 public:
-	TexturePolygon(const std::string& filepath);
+	TexturePolygon(const CU_STR& filepath);
 
 }; // TexturePolygon
 

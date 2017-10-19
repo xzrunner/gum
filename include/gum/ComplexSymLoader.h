@@ -2,10 +2,10 @@
 #define _GUM_COMPLEX_SYM_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class ComplexSymbol; }
@@ -19,18 +19,18 @@ class ComplexSymLoader : private cu::Uncopyable
 public:
 	ComplexSymLoader(const std::shared_ptr<s2::ComplexSymbol>& sym);
 
-	void LoadJson(const std::string& filepath);
+	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeComplex* node);
 
 public:
 	struct Action
 	{
-		std::string name;
-		std::vector<int> idx;
+		CU_STR name;
+		CU_VEC<int> idx;
 	};
 
 // 	static void LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym);
-// 	static void LoadJsonAction(const Json::Value& val, std::vector<Action>& actions);
+// 	static void LoadJsonAction(const Json::Value& val, CU_VEC<Action>& actions);
 
 private:
 	std::shared_ptr<s2::ComplexSymbol> m_sym;

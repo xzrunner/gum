@@ -3,10 +3,9 @@
 
 #include <cu/cu_macro.h>
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
-
-#include <string>
 
 #include <stdint.h>
 
@@ -22,8 +21,8 @@ public:
 	 *  @brief
 	 *    raw, json res
 	 */	
-	s2::SprPtr Create(const std::string& filepath) const;
-	s2::SprPtr Create(const Json::Value& val, const std::string& dir) const;
+	s2::SprPtr Create(const CU_STR& filepath) const;
+	s2::SprPtr Create(const Json::Value& val, const CU_STR& dir) const;
 
 	/**
 	 *  @brief

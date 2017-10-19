@@ -2,6 +2,7 @@
 #define _GUM_STAT_TAG_H_
 
 #include <cu/cu_macro.h>
+#include <cu/cu_stl.h>
 
 #include <fstream>
 
@@ -14,7 +15,7 @@ public:
 	void Enable(bool enable);
 	bool IsEnable() const { return m_enable; }
 
-	void Print(const std::string& type, const std::string& msg) const;
+	void Print(const CU_STR& type, const CU_STR& msg) const;
 	void PrintScreen() const;
 
 	void Flush();
@@ -25,8 +26,8 @@ private:
 private:
 	bool m_enable;
 
-	mutable std::string m_type;
-	mutable std::string m_msg;
+	mutable CU_STR m_type;
+	mutable CU_STR m_msg;
 
 	mutable std::ofstream m_fout;
 

@@ -2,8 +2,7 @@
 #define _GUM_TEXTBOX_SYMBOL_H_
 
 #include <sprite2/TextboxSymbol.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace gum
 {
@@ -20,7 +19,7 @@ protected:
 	 *    s2::TextboxSymbol
 	 */
 	virtual void DrawText(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, 
-		const s2::Color& mul, const s2::Color& add, const std::string& text, int time, bool richtext) const;
+		const s2::Color& mul, const s2::Color& add, const CU_STR& text, int time, bool richtext) const;
 
 }; // TextboxSymbol
 

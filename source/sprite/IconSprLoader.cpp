@@ -12,7 +12,7 @@ IconSprLoader::IconSprLoader(const std::shared_ptr<s2::IconSprite>& spr)
 {
 }
 
-void IconSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void IconSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 }
 

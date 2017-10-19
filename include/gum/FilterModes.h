@@ -2,12 +2,8 @@
 #define _GUM_FILTER_MODES_H_
 
 #include <cu/cu_macro.h>
-
+#include <cu/cu_stl.h>
 #include <sprite2/FilterMode.h>
-
-#include <map>
-#include <vector>
-#include <string>
 
 namespace gum
 {
@@ -15,25 +11,25 @@ namespace gum
 class FilterModes
 {
 public:
-	s2::FilterMode Name2Mode(const std::string& name) const;
-	std::string Mode2Name(s2::FilterMode id) const;
+	s2::FilterMode Name2Mode(const CU_STR& name) const;
+	CU_STR Mode2Name(s2::FilterMode id) const;
 
 	int QueryShaderIdx(s2::FilterMode mode) const;
 
 private:
 	struct Item
 	{
-		Item(s2::FilterMode id, const std::string& name)
+		Item(s2::FilterMode id, const CU_STR& name)
 			: id(id), name(name){}
 
 		s2::FilterMode id;
-		std::string name;
+		CU_STR name;
 	};
 
 private:
-	std::map<s2::FilterMode, int> m_map2idx;
+	CU_MAP<s2::FilterMode, int> m_map2idx;
 
-	std::vector<Item> m_modes;
+	CU_VEC<Item> m_modes;
 
 	CU_SINGLETON_DECLARATION(FilterModes);
 

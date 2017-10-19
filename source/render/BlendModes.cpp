@@ -1,7 +1,5 @@
 #include "BlendModes.h"
 
-#include <string>
-
 namespace gum
 {
 
@@ -47,7 +45,7 @@ BlendModes::BlendModes()
 // 	m_modes.push_back(Item(s2::BM_LUMINOSITY, "luminosity"));
 }
 
-s2::BlendMode BlendModes::Name2Mode(const std::string& name) const
+s2::BlendMode BlendModes::Name2Mode(const CU_STR& name) const
 {
 	if (name.empty()) {
 		return s2::BM_NULL;
@@ -62,7 +60,7 @@ s2::BlendMode BlendModes::Name2Mode(const std::string& name) const
 	return s2::BM_NULL;
 }
 
-std::string BlendModes::ModeToName(s2::BlendMode mode) const
+CU_STR BlendModes::ModeToName(s2::BlendMode mode) const
 {
 	for (int i = 0, n = m_modes.size(); i < n; ++i) {
 		const Item& item = m_modes[i];

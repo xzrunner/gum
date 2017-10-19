@@ -41,25 +41,25 @@ BodymovinAnimLoader::BodymovinAnimLoader(const std::shared_ptr<s2::AnimSymbol>& 
 	}
 }
 
-void BodymovinAnimLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void BodymovinAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	BodymovinParser parser;
 	parser.Parse(val, dir);
 
-	std::map<std::string, s2::SprPtr> map_assets;
+	CU_MAP<CU_STR, s2::SprPtr> map_assets;
 	LoadAssets(map_assets, parser.GetAssets(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight(), parser.GetStartFrame(), parser.GetEndFrame());
 	LoadLayers(map_assets, parser.GetLayers(), parser.GetFrameRate(), parser.GetWidth(), parser.GetHeight(), parser.GetStartFrame(), parser.GetEndFrame(), m_sym);
 }
 
-void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
-									 const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+void BodymovinAnimLoader::LoadLayers(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+									 const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 									 int width, int height, int start_frame, int end_frame)
 {
 	LoadLayers(map_assets, layers, frame_rate, width, height, start_frame, end_frame, m_sym);
 }
 
-void BodymovinAnimLoader::LoadAssets(std::map<std::string, s2::SprPtr>& map_assets,
-									 const std::vector<BodymovinParser::Asset>& assets, int frame_rate, 
+void BodymovinAnimLoader::LoadAssets(CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+									 const CU_VEC<BodymovinParser::Asset>& assets, int frame_rate, 
 									 int width, int height, int start_frame, int end_frame)
 {
 	for (int i = 0, n = assets.size(); i < n; ++i)
@@ -81,8 +81,8 @@ void BodymovinAnimLoader::LoadAssets(std::map<std::string, s2::SprPtr>& map_asse
 	}
 }
 
-void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
-									 const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+void BodymovinAnimLoader::LoadLayers(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+									 const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 									 int width, int height, int start_frame, int end_frame, 
 	                                 const std::shared_ptr<s2::AnimSymbol>& sym)
 {
@@ -90,8 +90,8 @@ void BodymovinAnimLoader::LoadLayers(const std::map<std::string, s2::SprPtr>& ma
 	LoadLayersPost(layers, sym, frame_rate, width, height, start_frame, end_frame);
 }
 
-void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::SprPtr>& map_assets,
-										 const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+										 const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 										 int width, int height, int start_frame, int end_frame, 
 	                                     const std::shared_ptr<s2::AnimSymbol>& sym)
 {
@@ -136,11 +136,11 @@ void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::SprPtr>
 
 		assert(s_spr && e_spr);
 
-		std::string spr_name = "_" + gum::StringHelper::UTF8ToGBK(src.name);
+		CU_STR spr_name = "_" + gum::StringHelper::UTF8ToGBK(src.name);
 		s_spr->SetName(spr_name);
 		e_spr->SetName(spr_name);
 
-		auto dst = std::make_unique<s2::AnimSymbol::Layer>();
+		auto dst = mm::allocate_unique<s2::AnimSymbol::Layer>();
 
 		auto s_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
 		auto e_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
@@ -211,7 +211,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const std::map<std::string, s2::SprPtr>
 	}
 }
 
-void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Layer>& layers,
+void BodymovinAnimLoader::LoadLayersPost(const CU_VEC<BodymovinParser::Layer>& layers,
 										 const std::shared_ptr<s2::AnimSymbol>& sym, int frame_rate, 
 	                                     int width, int height, int start_frame, int end_frame)
 {
@@ -219,21 +219,22 @@ void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Laye
 	left_top.x = - width * 0.5f;
 	left_top.y = height * 0.5f;
 
-	const std::vector<std::unique_ptr<s2::AnimSymbol::Layer>>& _layers = sym->GetLayers();
+	auto& _layers = sym->GetLayers();
 
-	std::map<int, int> map_layerid2idx;
+	CU_MAP<int, int> map_layerid2idx;
 	for (int i = 0, n = layers.size(); i < n; ++i) {
 		map_layerid2idx.insert(std::make_pair(layers[i].layer_id, i));
 	}
 
-	std::vector<bool> flags(_layers.size(), false);
+	CU_VEC<bool> flags;
+	flags.resize(_layers.size(), false);
 	while (true)
 	{
 		bool fail = false;
 		for (int i = 0, n = layers.size(); i < n; ++i)
 		{
 			const BodymovinParser::Layer& src = layers[i];
-			const std::unique_ptr<s2::AnimSymbol::Layer>& dst = _layers[i];
+			auto& dst = _layers[i];
 
 			int src_w = 0, src_h = 0;
 			if (src.layer_type == BodymovinParser::LAYER_PRE_COMP) {
@@ -252,7 +253,7 @@ void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Laye
 			{
 				const BodymovinParser::Layer* parent = NULL;
 				int p_idx = -1;
-				std::map<int, int>::iterator itr = map_layerid2idx.find(src.parent_id);
+				CU_MAP<int, int>::iterator itr = map_layerid2idx.find(src.parent_id);
 				if (itr != map_layerid2idx.end()) {
 					p_idx = itr->second;
 					parent = &layers[p_idx];
@@ -279,7 +280,7 @@ void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Laye
 							int pid = parent->parent_id;
 							parent = NULL;
 							if (pid != -1) {
-								std::map<int, int>::iterator itr = map_layerid2idx.find(pid);
+								CU_MAP<int, int>::iterator itr = map_layerid2idx.find(pid);
 								if (itr != map_layerid2idx.end()) {
 									parent = &layers[itr->second];
 								}
@@ -304,7 +305,7 @@ void BodymovinAnimLoader::LoadLayersPost(const std::vector<BodymovinParser::Laye
 	for (int i = 0, n = layers.size(); i < n; ++i)
 	{
 		const BodymovinParser::Layer& src = layers[i];
-		const std::unique_ptr<s2::AnimSymbol::Layer>& dst = _layers[i];
+		auto& dst = _layers[i];
 
 		LoadBlendMode(dst->frames, src.blend_mode);
 
@@ -334,7 +335,7 @@ int BodymovinAnimLoader::Frame2Time(int frame, int frame_rate)
 	return (int)(std::ceil((float)frame / frame_rate * FPS)) + 1;
 }
 
-void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::FramePtr>& frames,
+void BodymovinAnimLoader::InsertKeyframe(CU_VEC<s2::AnimSymbol::FramePtr>& frames,
 										 const BodymovinParser::FloatVal& val,
 										 int frame_rate, int end_frame)
 {
@@ -350,7 +351,7 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::FramePtr>& 
 	}
 }
 
-void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::FramePtr>& frames, int time, int end_time)
+void BodymovinAnimLoader::InsertKeyframe(CU_VEC<s2::AnimSymbol::FramePtr>& frames, int time, int end_time)
 {
 	if (end_time > 0 && time > end_time) {
 		return;
@@ -397,7 +398,7 @@ void BodymovinAnimLoader::InsertKeyframe(std::vector<s2::AnimSymbol::FramePtr>& 
 	}
 }
 
-void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+void BodymovinAnimLoader::LoadAnchor(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 									 const BodymovinParser::FloatVal& val, 
 									 int frame_rate, int w, int h)
 {
@@ -450,7 +451,7 @@ void BodymovinAnimLoader::LoadAnchor(std::vector<s2::AnimSymbol::FramePtr>& fram
 	}
 }
 
-bool BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+bool BodymovinAnimLoader::LoadOpacity(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 									  const BodymovinParser::FloatVal& val, 
 									  int frame_rate)
 {
@@ -500,7 +501,7 @@ bool BodymovinAnimLoader::LoadOpacity(std::vector<s2::AnimSymbol::FramePtr>& fra
 	return ret;
 }
 
-void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+void BodymovinAnimLoader::LoadPosition(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 									   const BodymovinParser::FloatVal& val, 
 									   int frame_rate,
 									   const sm::vec2& left_top)
@@ -540,7 +541,7 @@ void BodymovinAnimLoader::LoadPosition(std::vector<s2::AnimSymbol::FramePtr>& fr
 	}
 }
 
-void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::FramePtr>& frames,
+void BodymovinAnimLoader::LoadRotate(CU_VEC<s2::AnimSymbol::FramePtr>& frames,
 									 const BodymovinParser::FloatVal& val, 
 									 int frame_rate)
 {
@@ -574,7 +575,7 @@ void BodymovinAnimLoader::LoadRotate(std::vector<s2::AnimSymbol::FramePtr>& fram
 	}
 }
 
-void BodymovinAnimLoader::LoadScale(std::vector<s2::AnimSymbol::FramePtr>& frames,
+void BodymovinAnimLoader::LoadScale(CU_VEC<s2::AnimSymbol::FramePtr>& frames,
 									const BodymovinParser::FloatVal& val, 
 									int frame_rate)
 {
@@ -610,7 +611,7 @@ void BodymovinAnimLoader::LoadScale(std::vector<s2::AnimSymbol::FramePtr>& frame
 }
 
 BodymovinParser::FloatVal::Float3 
-BodymovinAnimLoader::GetLerpVal(const std::vector<BodymovinParser::FloatVal::KeyFrame>& frames, 
+BodymovinAnimLoader::GetLerpVal(const CU_VEC<BodymovinParser::FloatVal::KeyFrame>& frames, 
 								int frame, int frame_rate)
 {
 	if (frame <= Frame2Time(frames.front().frame, frame_rate)) 
@@ -649,7 +650,7 @@ BodymovinAnimLoader::GetLerpVal(const std::vector<BodymovinParser::FloatVal::Key
 	return frames.front().s_val;
 }
 
-s2::SprPtr BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int width, int height) const
+s2::SprPtr BodymovinAnimLoader::CreateSolidSpr(const CU_STR& color, int width, int height) const
 {
 	auto sym = m_sym_loader->Create(s2::SYM_SHAPE);
 	assert(sym);
@@ -665,7 +666,8 @@ s2::SprPtr BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int wid
 	// region
 	float hw = width * 0.5f,
 		  hh = height * 0.5f;
-	std::vector<sm::vec2> outline(4);
+	CU_VEC<sm::vec2> outline;
+	outline.resize(4);
 	outline[0].Set(-hw, -hh);
 	outline[1].Set( hw, -hh);
 	outline[2].Set( hw,  hh);
@@ -683,7 +685,7 @@ s2::SprPtr BodymovinAnimLoader::CreateSolidSpr(const std::string& color, int wid
 	return spr;
 }
 
-void BodymovinAnimLoader::LoadBlendMode(std::vector<s2::AnimSymbol::FramePtr>& frames, int body_bm)
+void BodymovinAnimLoader::LoadBlendMode(CU_VEC<s2::AnimSymbol::FramePtr>& frames, int body_bm)
 {
 	if (body_bm == 0) {
 		return;
@@ -758,7 +760,7 @@ void BodymovinAnimLoader::LoadBlendMode(std::vector<s2::AnimSymbol::FramePtr>& f
 	}
 }
 
-void BodymovinAnimLoader::LoadIntegrate(std::vector<s2::AnimSymbol::FramePtr>& frames)
+void BodymovinAnimLoader::LoadIntegrate(CU_VEC<s2::AnimSymbol::FramePtr>& frames)
 {
 	for (int i = 0, n = frames.size(); i < n; ++i) {
 		const s2::AnimSymbol::FramePtr& f = frames[i];
@@ -769,7 +771,7 @@ void BodymovinAnimLoader::LoadIntegrate(std::vector<s2::AnimSymbol::FramePtr>& f
 	}
 }
 
-void BodymovinAnimLoader::LoadExpression(std::vector<s2::AnimSymbol::FramePtr>& frames,
+void BodymovinAnimLoader::LoadExpression(CU_VEC<s2::AnimSymbol::FramePtr>& frames,
 										 const BodymovinParser::Transform& trans)
 {
 	if (frames.empty()) {
@@ -777,10 +779,10 @@ void BodymovinAnimLoader::LoadExpression(std::vector<s2::AnimSymbol::FramePtr>& 
 	}
 
 	// wiggle
-	if (trans.position.expression.find("wiggle") != std::string::npos)
+	if (trans.position.expression.find("wiggle") != CU_STR::npos)
 	{
-		const std::string& exp = trans.position.expression;
-		std::string params = exp.substr(exp.find("wiggle(") + 7);
+		const CU_STR& exp = trans.position.expression;
+		CU_STR params = exp.substr(exp.find("wiggle(") + 7);
 
 		int freq, amp;
 		sscanf(params.c_str(), "%d, %d", &freq, &amp);
@@ -796,7 +798,7 @@ void BodymovinAnimLoader::LoadExpression(std::vector<s2::AnimSymbol::FramePtr>& 
 	}
 
 	// in out back
-	if (trans.scale.expression.find("easeandwizz_outBack") != std::string::npos)
+	if (trans.scale.expression.find("easeandwizz_outBack") != CU_STR::npos)
 	{
 		for (int i = 0, n = frames.size(); i < n; ++i) {
 			const s2::AnimSymbol::FramePtr& frame = frames[i];

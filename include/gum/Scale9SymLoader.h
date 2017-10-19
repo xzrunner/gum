@@ -2,10 +2,10 @@
 #define _GUM_SCALE9_SYM_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 #include <stdint.h>
@@ -24,7 +24,7 @@ public:
 	Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym, 
 		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
-	void LoadJson(const std::string& filepath);
+	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeScale9* node);
 
 private:

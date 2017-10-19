@@ -6,15 +6,13 @@
 
 //#include <model3/ResourceAPI.h>
 
-#include <string>
-
 namespace gum
 {
 
 CU_SINGLETON_DEFINITION(Model3);
 
 static void* 
-create_img(const std::string& filepath)
+create_img(const CU_STR& filepath)
 {
 //	return ImageMgr::Instance()->Create(filepath);
 	return nullptr;

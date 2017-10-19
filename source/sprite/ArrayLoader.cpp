@@ -7,7 +7,7 @@
 namespace gum
 {
 
-void ArrayLoader::Load(std::vector<sm::vec2>& dst, const uint16_t* src, int src_n, int precision)
+void ArrayLoader::Load(CU_VEC<sm::vec2>& dst, const uint16_t* src, int src_n, int precision)
 {
 	dst.reserve(src_n);
 	int idx = 0;
@@ -18,7 +18,7 @@ void ArrayLoader::Load(std::vector<sm::vec2>& dst, const uint16_t* src, int src_
 	}	
 }
 
-void ArrayLoader::Load(std::vector<int>& dst, const uint16_t* src, int src_n)
+void ArrayLoader::Load(CU_VEC<int>& dst, const uint16_t* src, int src_n)
 {
 	dst.reserve(src_n);
 	for (int i = 0; i < src_n; ++i) {
@@ -26,7 +26,7 @@ void ArrayLoader::Load(std::vector<int>& dst, const uint16_t* src, int src_n)
 	}
 }
 
-void ArrayLoader::Load(std::vector<sm::vec2>& dst, const uint32_t* src, int src_n)
+void ArrayLoader::Load(CU_VEC<sm::vec2>& dst, const uint32_t* src, int src_n)
 {
 	dst.reserve(src_n);
 	int idx = 0;

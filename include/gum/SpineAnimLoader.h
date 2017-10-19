@@ -5,10 +5,10 @@
 
 #include <cu/uncopyable.h>
 #include <sprite2/JointPose.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
-#include <string>
 #include <memory>
 
 namespace s2 { class AnimSymbol; class SkeletonPose; class SkeletonSymbol; }
@@ -26,8 +26,8 @@ public:
 		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL,
 		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
-	void LoadJson(const Json::Value& val, const std::string& dir,
-		const std::string& filepath);
+	void LoadJson(const Json::Value& val, const CU_STR& dir,
+		const CU_STR& filepath);
 
 private:
 	void BuildBone2PoseTable();
@@ -47,10 +47,10 @@ private:
 	std::shared_ptr<s2::SkeletonSymbol> m_sk_sym;
 
 	// table for bone to pose index
-	std::vector<int> m_bone2pose;
+	CU_VEC<int> m_bone2pose;
 
 	// index to current each pose
-	std::vector<int> m_pose_ptrs;
+	CU_VEC<int> m_pose_ptrs;
 
 }; // SpineAnimLoader
 

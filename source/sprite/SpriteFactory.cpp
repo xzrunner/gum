@@ -137,7 +137,7 @@ s2::SprPtr SpriteFactory::Create(const s2::SymPtr& sym, uint32_t id, bool create
 	return spr;
 }
 
-s2::SprPtr SpriteFactory::Create(const std::string& filepath) const
+s2::SprPtr SpriteFactory::Create(const CU_STR& filepath) const
 {
 	auto sym = SymbolPool::Instance()->Fetch(filepath);
 	if (!sym) {
@@ -152,11 +152,11 @@ s2::SprPtr SpriteFactory::Create(const std::string& filepath) const
 	}
 }
 
-s2::SprPtr SpriteFactory::Create(const Json::Value& val, const std::string& dir) const
+s2::SprPtr SpriteFactory::Create(const Json::Value& val, const CU_STR& dir) const
 {
 	s2::SprPtr spr = NULL;
 
-	std::string filepath = val["filepath"].asString();
+	CU_STR filepath = val["filepath"].asString().c_str();
 	filepath = FilepathHelper::Absolute(dir, filepath);
 	spr = Create(filepath);
 	if (!spr) {
@@ -465,7 +465,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 	case simp::TYPE_AUDIO:
 		{
 			int audio_id = simp::NodeID::GetNodeID(id);
-			std::string filepath = simp::AudioIDMgr::Instance()->QueryAudioPath(audio_id);
+			auto filepath = simp::AudioIDMgr::Instance()->QueryAudioPath(audio_id);
 			if (!filepath.empty()) {
 				spr = SpriteFactory::Instance()->Create(filepath);
 			}

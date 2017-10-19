@@ -1,7 +1,5 @@
 #include "FastBlendModes.h"
 
-#include <string>
-
 namespace gum
 {
 
@@ -14,7 +12,7 @@ FastBlendModes::FastBlendModes()
 	m_modes.push_back(Item(s2::FBM_SUBTRACT, "subtract"));
 }
 
-s2::FastBlendMode FastBlendModes::Name2Mode(const std::string& name) const
+s2::FastBlendMode FastBlendModes::Name2Mode(const CU_STR& name) const
 {
 	if (name.empty()) {
 		return s2::FBM_NULL;
@@ -29,7 +27,7 @@ s2::FastBlendMode FastBlendModes::Name2Mode(const std::string& name) const
 	return s2::FBM_NULL;
 }
 
-std::string FastBlendModes::Mode2Name(s2::FastBlendMode mode) const
+CU_STR FastBlendModes::Mode2Name(s2::FastBlendMode mode) const
 {
 	for (int i = 0, n = m_modes.size(); i < n; ++i) {
 		const Item& item = m_modes[i];

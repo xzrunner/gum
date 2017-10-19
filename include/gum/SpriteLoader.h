@@ -2,6 +2,7 @@
 #define _GUM_SPRITE_LOADER_H_
 
 #include <sprite2/s2_typedef.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
@@ -12,8 +13,8 @@ class SpriteLoader
 {
 public:
 	virtual s2::SprPtr Create(const s2::SymPtr& sym) const;
-	virtual s2::SprPtr Create(const std::string& filepath) const;
-	virtual s2::SprPtr Create(const Json::Value& val, const std::string& dir) const;
+	virtual s2::SprPtr Create(const CU_STR& filepath) const;
+	virtual s2::SprPtr Create(const Json::Value& val, const CU_STR& dir) const;
 
 }; // SpriteLoader
 

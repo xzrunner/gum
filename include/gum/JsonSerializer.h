@@ -4,10 +4,9 @@
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include <sprite2/Color.h>
+#include <cu/cu_stl.h>
 
 #include <json/value.h>
-
-#include <vector>
 
 namespace gum
 {
@@ -15,11 +14,11 @@ namespace gum
 class JsonSerializer
 {
 public:
-	static void Store(const std::vector<sm::vec2>& points, Json::Value& value);
-	static void Load(const Json::Value& value, std::vector<sm::vec2>& points);
+	static void Store(const CU_VEC<sm::vec2>& points, Json::Value& value);
+	static void Load(const Json::Value& value, CU_VEC<sm::vec2>& points);
 
-	static void Store(const std::vector<s2::Color>& colors, Json::Value& value);
-	static void Load(const Json::Value& value, std::vector<s2::Color>& colors);
+	static void Store(const CU_VEC<s2::Color>& colors, Json::Value& value);
+	static void Load(const Json::Value& value, CU_VEC<s2::Color>& colors);
 
 	static void Store(const sm::rect& r, Json::Value& value);
 	static void Load(const Json::Value& value, sm::rect& r);

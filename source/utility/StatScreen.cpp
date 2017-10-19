@@ -35,9 +35,9 @@ void StatScreen::Enable(bool enable)
 	if (enable) {
 		m_rt = new RenderTarget(RT_EDGE, RT_EDGE);
 #ifdef __ANDROID__
-		std::string filepath = "/sdcard/lr_stat_screen.bin";
+		CU_STR filepath = "/sdcard/lr_stat_screen.bin";
 #else
-		std::string filepath = "lr_stat_screen.bin";
+		CU_STR filepath = "lr_stat_screen.bin";
 #endif // __ANDROID__
 		m_fout.open(filepath.c_str(), std::ofstream::out | std::ofstream::binary | std::ofstream::app);
 	} else {
@@ -114,7 +114,7 @@ void StatScreen::Flush()
 	uint8_t* pixels = new uint8_t[RT_EDGE * RT_EDGE * 3];
 	memset(pixels, 0, RT_EDGE * RT_EDGE * 3);
 	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 3, 0, 0, RT_EDGE, RT_EDGE);
-	std::string filepath = StringHelper::ToString(first_time) + ".png";
+	CU_STR filepath = StringHelper::ToString(first_time) + ".png";
 	gimg_export(filepath.c_str(), pixels, RT_EDGE, RT_EDGE, GPF_RGB, true);
 	delete[] pixels;
 

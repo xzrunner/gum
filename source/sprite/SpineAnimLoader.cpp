@@ -36,8 +36,8 @@ SpineAnimLoader::SpineAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
 	}
 }
 
-void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
-							   const std::string& filepath)
+void SpineAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir,
+							   const CU_STR& filepath)
 {
 	m_sym->SetFPS(static_cast<int>(FPS));
 
@@ -51,7 +51,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const std::string& dir,
 
 	BuildBone2PoseTable();
 
-	auto layer = std::make_unique<s2::AnimSymbol::Layer>();
+	auto layer = mm::allocate_unique<s2::AnimSymbol::Layer>();
 	
 	int bone_num = m_src_anim->bones.size();
 	m_pose_ptrs.resize(bone_num * 3, 0);
@@ -86,7 +86,7 @@ void SpineAnimLoader::BuildBone2PoseTable()
 	auto& all_joints = sk->GetAllJoints();
 	for (int i = 0, n = m_src_anim->bones.size(); i < n; ++i) 
 	{
-		const std::string& name = m_src_anim->bones[i].name;
+		const CU_STR& name = m_src_anim->bones[i].name;
 		int idx = -1;
 		for (int j = 0, m = all_joints.size(); j < m; ++j) {
 			if (all_joints[j]->GetName() == name) {

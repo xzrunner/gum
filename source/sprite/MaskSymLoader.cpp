@@ -18,7 +18,7 @@ MaskSymLoader::MaskSymLoader(const std::shared_ptr<s2::MaskSymbol>& sym)
 {
 }
 
-void MaskSymLoader::LoadJson(const std::string& filepath)
+void MaskSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
@@ -36,17 +36,17 @@ void MaskSymLoader::LoadJson(const std::string& filepath)
 		return;
 	}
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	auto psym = S2_VI_PTR_DOWN_CAST<s2::MaskSymbol>(m_sym);
 
-	std::string base_path = FilepathHelper::Absolute(dir, value["base"]["filepath"].asString());
+	CU_STR base_path = FilepathHelper::Absolute(dir, value["base"]["filepath"].asString().c_str());
 	auto base = SpriteFactory::Instance()->Create(base_path);
 	if (base) {
 		psym->SetBase(base);
 	}
 
-	std::string mask_path = FilepathHelper::Absolute(dir, value["mask"]["filepath"].asString());
+	CU_STR mask_path = FilepathHelper::Absolute(dir, value["mask"]["filepath"].asString().c_str());
 	auto mask = SpriteFactory::Instance()->Create(mask_path);
 	if (mask) {
 		psym->SetMask(mask);

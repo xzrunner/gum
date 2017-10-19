@@ -61,7 +61,7 @@ SymbolFactory::SymbolFactory()
 {
 }
 
-s2::SymPtr SymbolFactory::Create(const std::string& filepath, int type) const
+s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 {
 	s2::SymPtr ret = NULL;
 
@@ -255,7 +255,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 
 				bool async = true;
 				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
-				loader.Load(bimp::FilePath(fp.GetFilepath(), fp.GetOffset()), s_pkg->GetScale(), async);
+				loader.Load(fp, s_pkg->GetScale(), async);
 				const timp::Package::TextureDesc& tex = t_pkg->GetTexDesc(pic->texid);
 				auto& img = sym->GetImage();
 				if (img && async) {
@@ -271,7 +271,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 			}
 			else
 			{
-				std::string filepath = ProxyImage::GetFilepath(pic->texid - simp::NodePicture::MAX_IN_PKG);
+				CU_STR filepath = ProxyImage::GetFilepath(pic->texid - simp::NodePicture::MAX_IN_PKG);
 				auto img = ImagePool::Instance()->Query(bimp::FilePath(filepath));
 				assert(img);
 
@@ -414,7 +414,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	return ret;
 }
 
-s2::SymPtr SymbolFactory::Create(const std::string& pkg_name, const std::string& node_name) const
+s2::SymPtr SymbolFactory::Create(const CU_STR& pkg_name, const CU_STR& node_name) const
 {
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(pkg_name, node_name);
 	if (id != 0xffffffff) {

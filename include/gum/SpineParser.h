@@ -2,10 +2,9 @@
 #define _GUM_SPINE_PARSER_H_
 
 #include <SM_Vector.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
-
-#include <string>
 
 namespace gum
 {
@@ -21,8 +20,8 @@ public:
 public:
 	struct Bone
 	{
-		std::string name;
-		std::string parent;
+		CU_STR name;
+		CU_STR parent;
 		sm::vec2	pos;
 		float		angle;
 		sm::vec2	scale;
@@ -33,16 +32,16 @@ public:
 
 	struct Slot
 	{
-		std::string name;
-		std::string bone;
-		std::string attachment;
+		CU_STR name;
+		CU_STR bone;
+		CU_STR attachment;
 	};
 
 	struct IK
 	{
-		std::string name;
-		std::vector<std::string> bones;
-		std::string target;
+		CU_STR name;
+		CU_VEC<CU_STR> bones;
+		CU_STR target;
 		bool bend_positive;
 	};
 
@@ -56,8 +55,8 @@ public:
 
 	struct SkinItem
 	{
-		std::string name;
-		std::string path;
+		CU_STR name;
+		CU_STR path;
 
 		SKIN_TYPE   type;
 
@@ -77,20 +76,20 @@ public:
 				float weight;
 			};
 
-			std::vector<Joint> joints;
+			CU_VEC<Joint> joints;
 		};
 
 		// mesh
-		std::vector<sm::vec2> vertices;
-		std::vector<SkinnedVertex> skinned_vertices;
-		std::vector<sm::vec2> texcoords;
-		std::vector<int> triangles;
+		CU_VEC<sm::vec2> vertices;
+		CU_VEC<SkinnedVertex> skinned_vertices;
+		CU_VEC<sm::vec2> texcoords;
+		CU_VEC<int> triangles;
 	};
 
 	struct Skin
 	{
-		std::string name;
-		std::vector<SkinItem> items;
+		CU_STR name;
+		CU_VEC<SkinItem> items;
 	};
 
 	struct Rotate
@@ -119,39 +118,39 @@ public:
 
 	struct AnimBone
 	{
-		std::string name;
-		std::vector<Rotate> rotates;
-		std::vector<Translate> translates;
-		std::vector<Scale> scales;
+		CU_STR name;
+		CU_VEC<Rotate> rotates;
+		CU_VEC<Translate> translates;
+		CU_VEC<Scale> scales;
 	};
 
 	struct AnimSlot
 	{
-		std::string name;
-		std::vector<std::pair<float, std::string> > skins;
+		CU_STR name;
+		CU_VEC<std::pair<float, CU_STR> > skins;
 	};
 
 	struct Deform
 	{
 		float time;
 		int offset;
-		std::vector<sm::vec2> vertices;
+		CU_VEC<sm::vec2> vertices;
 	};
 
 	struct AnimDeform
 	{
-		std::string slot;
-		std::string skin;
-		std::vector<Deform> samples;
+		CU_STR slot;
+		CU_STR skin;
+		CU_VEC<Deform> samples;
 	};
 
 	struct Animation
 	{
 
-		std::string name;
-		std::vector<AnimBone> bones;
-		std::vector<AnimSlot> slots;
-		std::vector<AnimDeform> deforms;
+		CU_STR name;
+		CU_VEC<AnimBone> bones;
+		CU_VEC<AnimSlot> slots;
+		CU_VEC<AnimDeform> deforms;
 	};
 
 	const SkinItem* QuerySkin(const Slot& slot) const;
@@ -170,23 +169,23 @@ private:
 	void ParseAnimations(const Json::Value& val);
 	void ParseAnimBond(const Json::Value& val, AnimBone& bone);
 	void ParseAnimSlot(const Json::Value& val, AnimSlot& slot);
-	void ParseAnimDeforms(const Json::Value& val, std::vector<AnimDeform>& deforms);
+	void ParseAnimDeforms(const Json::Value& val, CU_VEC<AnimDeform>& deforms);
 	void ParseAnimDeform(const Json::Value& val, AnimDeform& deform);
 
 public:
 	bool m_parse_anim;
 
-	std::string img_dir;
+	CU_STR img_dir;
 
-	std::vector<Bone> bones;
+	CU_VEC<Bone> bones;
 
-	std::vector<Slot> slots;
+	CU_VEC<Slot> slots;
 
-	std::vector<IK> iks;
+	CU_VEC<IK> iks;
 
-	std::vector<Skin> skins;
+	CU_VEC<Skin> skins;
 
-	std::vector<Animation> anims;
+	CU_VEC<Animation> anims;
 
 }; // SpineParser
 

@@ -4,10 +4,8 @@
 #include "BodymovinParser.h"
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 #include <sprite2/AnimSymbol.h>
-
-#include <string>
-#include <vector>
 
 namespace s2 { class AnimSymbol; }
 
@@ -24,55 +22,55 @@ public:
 		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL,
 		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 
-	void LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
-		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+	void LoadLayers(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+		const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 		int width, int height, int start_frame, int end_frame);
 
 private:
-	void LoadAssets(std::map<std::string, s2::SprPtr>& map_assets,
-		const std::vector<BodymovinParser::Asset>& assets, int frame_rate, 
+	void LoadAssets(CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+		const CU_VEC<BodymovinParser::Asset>& assets, int frame_rate, 
 		int width, int height, int start_frame, int end_frame);
-	void LoadLayers(const std::map<std::string, s2::SprPtr>& map_assets,
-		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+	void LoadLayers(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+		const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 		int width, int height, int start_frame, int end_frame, 
 		const std::shared_ptr<s2::AnimSymbol>& sym);
-	void LoadLayersPrev(const std::map<std::string, s2::SprPtr>& map_assets,
-		const std::vector<BodymovinParser::Layer>& layers, int frame_rate, 
+	void LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
+		const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 		int width, int height, int start_frame, int end_frame, 
 		const std::shared_ptr<s2::AnimSymbol>& sym);
-	void LoadLayersPost(const std::vector<BodymovinParser::Layer>& layers,
+	void LoadLayersPost(const CU_VEC<BodymovinParser::Layer>& layers,
 		const std::shared_ptr<s2::AnimSymbol>& sym, int frame_rate, int width, int height,
 		int start_frame, int end_frame);
 	
 	static int Frame2Time(int frame, int frame_rate);
 
-	static void InsertKeyframe(std::vector<s2::AnimSymbol::FramePtr>& frames,
+	static void InsertKeyframe(CU_VEC<s2::AnimSymbol::FramePtr>& frames,
 		const BodymovinParser::FloatVal& val, int frame_rate, int end_frame);
-	static void InsertKeyframe(std::vector<s2::AnimSymbol::FramePtr>& frames, int time, int end_time);
+	static void InsertKeyframe(CU_VEC<s2::AnimSymbol::FramePtr>& frames, int time, int end_time);
 
-	static void LoadAnchor(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+	static void LoadAnchor(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, int w, int h);	
-	static bool LoadOpacity(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+	static bool LoadOpacity(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
-	static void LoadPosition(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+	static void LoadPosition(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate, const sm::vec2& left_top);	
-	static void LoadRotate(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+	static void LoadRotate(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
-	static void LoadScale(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+	static void LoadScale(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 		const BodymovinParser::FloatVal& val, int frame_rate);	
 
 	static BodymovinParser::FloatVal::Float3 GetLerpVal(
-		const std::vector<BodymovinParser::FloatVal::KeyFrame>& frames, int frame, int frame_rate);
+		const CU_VEC<BodymovinParser::FloatVal::KeyFrame>& frames, int frame, int frame_rate);
 
-	s2::SprPtr CreateSolidSpr(const std::string& color, int width, int height) const;
+	s2::SprPtr CreateSolidSpr(const CU_STR& color, int width, int height) const;
 
-	static void LoadBlendMode(std::vector<s2::AnimSymbol::FramePtr>& frames, int bm);
+	static void LoadBlendMode(CU_VEC<s2::AnimSymbol::FramePtr>& frames, int bm);
 
-	static void LoadIntegrate(std::vector<s2::AnimSymbol::FramePtr>& frames);
+	static void LoadIntegrate(CU_VEC<s2::AnimSymbol::FramePtr>& frames);
 	
-	static void LoadExpression(std::vector<s2::AnimSymbol::FramePtr>& frames, 
+	static void LoadExpression(CU_VEC<s2::AnimSymbol::FramePtr>& frames, 
 		const BodymovinParser::Transform& trans);
 
 private:

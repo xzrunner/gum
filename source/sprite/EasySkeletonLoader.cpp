@@ -39,7 +39,7 @@ EasySkeletonLoader::~EasySkeletonLoader()
 	Clear();
 }
 
-void EasySkeletonLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void EasySkeletonLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_sym) {
 		return;
@@ -72,7 +72,7 @@ void EasySkeletonLoader::Clear()
 	m_root.reset();
 }
 
-void EasySkeletonLoader::LoadSprites(const Json::Value& val, const std::string& dir)
+void EasySkeletonLoader::LoadSprites(const Json::Value& val, const CU_STR& dir)
 {
 	m_sprs.reserve(m_num);
 	for (int i = 0; i < m_num; ++i) {
@@ -84,7 +84,7 @@ void EasySkeletonLoader::LoadJoints(const Json::Value& val)
 {
 	m_joints.reserve(m_num);
 
-	std::vector<Joint> src_joints;
+	CU_VEC<Joint> src_joints;
 	for (int i = 0; i < m_num; ++i) 
 	{
 		auto spr = m_sprs[i];

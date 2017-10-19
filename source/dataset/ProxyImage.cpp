@@ -29,7 +29,7 @@ void ProxyImage::Init(int id, int w, int h, int format)
 	m_s2_tex->Init(w, h, id);	
 }
 
-std::string ProxyImage::GetFilepath(int id)
+CU_STR ProxyImage::GetFilepath(int id)
 {
 	return "_proxy" + StringHelper::ToString(id);
 }

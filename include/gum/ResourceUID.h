@@ -2,8 +2,7 @@
 #define _GUM_RESOURCE_UID_H_
 
 #include <sprite2/s2_typedef.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -32,7 +31,7 @@ public:
 public:
 	static Type GetType(UID uid);
 
-	static UID RawFile(const std::string& filepath);
+	static UID RawFile(const CU_STR& filepath);
 	static UID Glyph(int unicode, const GlyphStyle& gs);
 	static UID BinNode(uint32_t node_id);
 	static UID Sprite(int spr_id);
@@ -45,7 +44,7 @@ private:
 	static const uint64_t TYPE_MASK = 0xff00000000000000;
 
 private:
-	static uint64_t HashString(const std::string& str);
+	static uint64_t HashString(const CU_STR& str);
 
 	static UID Compose(uint64_t data, Type type);
 

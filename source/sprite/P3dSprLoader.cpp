@@ -12,7 +12,7 @@ P3dSprLoader::P3dSprLoader(const std::shared_ptr<s2::Particle3dSprite>& spr)
 {
 }
 
-void P3dSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void P3dSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_spr || !val.isMember("particle3d")) {
 		return;

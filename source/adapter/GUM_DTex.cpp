@@ -41,8 +41,6 @@
 #include <sprite2/S2_Symbol.h>
 #include <unirender/UR_RenderContext.h>
 
-#include <string>
-
 #include <assert.h>
 
 namespace dtex { class Package; }
@@ -83,7 +81,8 @@ clear_color_part(float xmin, float ymin, float xmax, float ymax)
 	ymin = h * 0.5f * (ymin + 1);
 	ymax = h * 0.5f * (ymax + 1);
 
-	std::vector<sm::vec2> triangles(4);
+	CU_VEC<sm::vec2> triangles;
+	triangles.resize(4);
 	triangles[0].Set(xmin, ymin);
 	triangles[1].Set(xmin, ymax);
 	triangles[2].Set(xmax, ymin);
@@ -282,7 +281,7 @@ load_texture(int pkg_id, int tex_idx, int lod)
 	assert(t_pkg);
 	const bimp::FilePath& filepath = t_pkg->GetTexPath(tex_idx, lod);
 	
-	ImageLoader loader(bimp::FilePath(filepath.GetFilepath(), filepath.GetOffset()));
+	ImageLoader loader(filepath);
 	bool ret = loader.Load();
 	if (!ret) {
 		return;
@@ -518,22 +517,21 @@ void DTex::CreatePkg(int pkg_id)
 	const timp::Package* src = timp::PkgMgr::Instance()->Query(pkg_id);
 	assert(src);
 
-	dtex::Package* dst = new dtex::Package(pkg_id);
+	dtex::PackagePtr dst = mm::allocate_unique<dtex::Package>(pkg_id);
 
 	auto& textures = src->GetAllTextures();
 	for (int i = 0, n = textures.size(); i < n; ++i) 
 	{
 		const timp::Package::TextureDesc& desc = textures[i];
-		dtex::Texture* tex = new dtex::TextureRaw(1);
+
+		void* buf = mm::AllocHelper::Allocate(sizeof(dtex::TextureRaw));
+		dtex::Texture* tex = new (buf) dtex::TextureRaw(1);
 		tex->SetFormat(desc.type);
 		tex->SetSize(desc.w, desc.h);
-		dst->AddTexture(tex);
+		dst->AddTexture(dtex::TexturePtr(tex, dtex::Texture::deleter));
 	}
 
-	bool succ = dtex::PkgMgr::Instance()->Add(dst, pkg_id);
-	if (!succ) {
-		delete dst;
-	}
+	dtex::PkgMgr::Instance()->Add(dst, pkg_id);
 }
 
 void DTex::LoadSymStart()
@@ -608,9 +606,9 @@ void DTex::Flush()
 
 void DTex::DebugDraw() const
 {
-// 	const std::map<std::string, dtex::Cache*>& caches 
+// 	const CU_MAP<CU_STR, dtex::Cache*>& caches 
 // 		= dtex::CacheMgr::Instance()->FetchAll();
-// 	std::map<std::string, dtex::Cache*>::const_iterator itr = caches.begin();
+// 	CU_MAP<CU_STR, dtex::Cache*>::const_iterator itr = caches.begin();
 // 	for ( ; itr != caches.end(); ++itr) {
 // 		itr->second->DebugDraw();
 // 	}

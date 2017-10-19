@@ -29,7 +29,7 @@ SpineSkeletonLoader::SpineSkeletonLoader(const std::shared_ptr<s2::SkeletonSymbo
 	}
 }
 
-void SpineSkeletonLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void SpineSkeletonLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_sym) {
 		return;
@@ -40,7 +40,7 @@ void SpineSkeletonLoader::LoadJson(const Json::Value& val, const std::string& di
 	LoadParser(parser, dir);
 }
 
-void SpineSkeletonLoader::LoadParser(const SpineParser& parser, const std::string& dir)
+void SpineSkeletonLoader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 {
 	if (!m_sym) {
 		return;
@@ -50,7 +50,7 @@ void SpineSkeletonLoader::LoadParser(const SpineParser& parser, const std::strin
 
 	m_num = parser.bones.size();
 
-	std::string img_dir = FilepathHelper::Absolute(dir, parser.img_dir);
+	CU_STR img_dir = FilepathHelper::Absolute(dir, parser.img_dir);
 	LoadSprites(parser, img_dir);
 	LoadJoints(parser);
 	InitRoot();
@@ -69,7 +69,7 @@ void SpineSkeletonLoader::Clear()
 	m_root.reset();
 }
 
-void SpineSkeletonLoader::LoadSprites(const SpineParser& parser, const std::string& img_dir)
+void SpineSkeletonLoader::LoadSprites(const SpineParser& parser, const CU_STR& img_dir)
 {
 	m_sprs.reserve(m_num);
 	for (int i = 0, n = parser.slots.size(); i < n; ++i)
@@ -80,7 +80,7 @@ void SpineSkeletonLoader::LoadSprites(const SpineParser& parser, const std::stri
 			m_sprs.push_back(NULL);
 			continue;
 		}
-		std::string filepath = FilepathHelper::Absolute(img_dir, item->name + ".png");
+		CU_STR filepath = FilepathHelper::Absolute(img_dir, item->name + ".png");
 		auto spr = m_spr_loader->Create(filepath);
 		spr->SetAngle(item->angle);
 		spr->SetPosition(item->pos);
@@ -162,7 +162,7 @@ void SpineSkeletonLoader::InitPose(const SpineParser& parser)
 
 void SpineSkeletonLoader::InitSkeleton(const SpineParser& parser)
 {
-	std::vector<std::shared_ptr<s2::Joint>> joints;
+	CU_VEC<std::shared_ptr<s2::Joint>> joints;
 	joints.reserve(m_joints.size());
 	for (int i = 0, n = parser.slots.size(); i < n; ++i) 
 	{

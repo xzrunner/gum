@@ -21,16 +21,16 @@ void MeshIO::Load(const Json::Value& val, pm::MeshTransform& trans, const s2::Me
 {
 	if (val.isMember("trans"))
 	{
-		std::vector<sm::vec2> from, to;
+		CU_VEC<sm::vec2> from, to;
 		gum::JsonSerializer::Load(val["trans"]["from"], from);
 		gum::JsonSerializer::Load(val["trans"]["to"], to);
 		assert(from.size() == to.size());
 
-		std::vector<sm::vec2> vertices, texcoords;
-		std::vector<int> triangles;
+		CU_VEC<sm::vec2> vertices, texcoords;
+		CU_VEC<int> triangles;
 		mesh.DumpToTriangles(vertices, texcoords, triangles);
 
-		std::vector<std::pair<int, sm::vec2> > t;
+		CU_VEC<std::pair<int, sm::vec2> > t;
 		for (int i = 0, n = from.size(); i < n; ++i) {
 			bool succ = false;
 			for (int j = 0, m = vertices.size(); j < m; ++j) {
@@ -47,7 +47,7 @@ void MeshIO::Load(const Json::Value& val, pm::MeshTransform& trans, const s2::Me
 	else
 	{
 		const Json::Value& trans_val = val["transform"];
-		std::vector<std::pair<int, sm::vec2> > t;
+		CU_VEC<std::pair<int, sm::vec2> > t;
 		for (int i = 0, n = trans_val["idx"].size(); i < n; ++i) 
 		{
 			int idx = trans_val["idx"][i].asInt();
@@ -62,7 +62,7 @@ void MeshIO::Load(const Json::Value& val, pm::MeshTransform& trans, const s2::Me
 void MeshIO::Store(Json::Value& val, const pm::MeshTransform& trans, const s2::Mesh& mesh)
 {
 	Json::Value& trans_val = val["transform"];
-	const std::vector<std::pair<int, sm::vec2> >& t = trans.GetTrans();
+	const CU_VEC<std::pair<int, sm::vec2> >& t = trans.GetTrans();
 	for (int i = 0, n = t.size(); i < n; ++i) {
 		trans_val["idx"][i] = t[i].first;
 		trans_val["off_x"][i] = t[i].second.x;
@@ -82,7 +82,7 @@ void MeshIO::Store(Json::Value& val, const pm::MeshTransform& trans, const s2::M
 //		int parent;
 //	};
 //
-//	std::vector<Joint> joints;
+//	CU_VEC<Joint> joints;
 //	joints.reserve(val["joint"].size());
 //	for (int i = 0, n = val["joint"].size(); i < n; ++i)
 //	{
@@ -93,7 +93,7 @@ void MeshIO::Store(Json::Value& val, const pm::MeshTransform& trans, const s2::M
 //		joints.push_back(dst);
 //	}
 //
-//	std::vector<s2::MeshJoint*> mjoints;
+//	CU_VEC<s2::MeshJoint*> mjoints;
 //	mjoints.reserve(joints.size());
 //	s2::MeshJoint* root = NULL;
 //	for (int i = 0, n = joints.size(); i < n; ++i)
@@ -119,13 +119,13 @@ void MeshIO::Store(Json::Value& val, const pm::MeshTransform& trans, const s2::M
 //		return;
 //	}
 //
-//	std::vector<const s2::MeshJoint*> joints;
+//	CU_VEC<const s2::MeshJoint*> joints;
 //	std::queue<const s2::MeshJoint*> buf;
 //	buf.push(root);
 //	while (!buf.empty()) {
 //		const s2::MeshJoint* joint = buf.front(); buf.pop();
 //		joints.push_back(joint);
-//		const std::vector<s2::MeshJoint*>& children = joint->GetChildren();
+//		const CU_VEC<s2::MeshJoint*>& children = joint->GetChildren();
 //		for (int i = 0, n = children.size(); i < n; ++i) {
 //			buf.push(children[i]);
 //		}

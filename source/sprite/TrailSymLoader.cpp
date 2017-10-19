@@ -93,7 +93,7 @@ void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
 	}
 }
 
-void TrailSymLoader::LoadJson(const std::string& filepath)
+void TrailSymLoader::LoadJson(const CU_STR& filepath)
 {
 	Json::Value value;
 	Json::Reader reader;
@@ -112,7 +112,7 @@ void TrailSymLoader::LoadJson(const std::string& filepath)
 
 	fadeout_time = static_cast<float>(value["fadeout_time"].asDouble() * 0.001f);
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 	for (int i = 0, n = value["components"].size(); i < n; ++i)
 	{
 		if (mode == T2D_MODE_IMAGE) {
@@ -170,11 +170,11 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 	}
 }
 
-void TrailSymLoader::LoadImageComp(const std::string& dir, const Json::Value& comp_val)
+void TrailSymLoader::LoadImageComp(const CU_STR& dir, const Json::Value& comp_val)
 {
 	CompImage comp;
 
-	comp.filepath = comp_val["filepath"].asString();
+	comp.filepath = comp_val["filepath"].asString().c_str();
 	comp.filepath = FilepathHelper::Absolute(dir, comp.filepath);
 
 	comp.scale_begin = static_cast<float>(comp_val["scale"]["start"].asDouble() * 0.01f);
@@ -201,7 +201,7 @@ void TrailSymLoader::LoadShapeComp(const Json::Value& comp_val)
 	comp_shapes.push_back(comp);
 }
 
-s2::SymPtr TrailSymLoader::LoadSymbol(const std::string& filepath) const
+s2::SymPtr TrailSymLoader::LoadSymbol(const CU_STR& filepath) const
 {
 	return SymbolPool::Instance()->Fetch(filepath);
 }

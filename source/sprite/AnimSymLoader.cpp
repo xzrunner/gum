@@ -25,13 +25,13 @@ AnimSymLoader::AnimSymLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
 {
 }
 
-void AnimSymLoader::LoadJson(const std::string& filepath)
+void AnimSymLoader::LoadJson(const CU_STR& filepath)
 {
 	if (!m_sym) {
 		return;
 	}
 
-	std::string dir = FilepathHelper::Dir(filepath);
+	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	Json::Value val;
 	Json::Reader reader;

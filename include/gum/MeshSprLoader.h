@@ -2,6 +2,7 @@
 #define _GUM_MESH_SPR_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
 
@@ -18,7 +19,7 @@ class MeshSprLoader : private cu::Uncopyable
 public:
 	MeshSprLoader(const std::shared_ptr<s2::MeshSprite>& spr);
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeMeshSpr* node);
 
 private:

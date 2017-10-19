@@ -2,8 +2,8 @@
 #define _GUM_IMAGE_SYM_LOADER_H_
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
-#include <string>
 #include <memory>
 
 namespace bimp { class FilePath; }

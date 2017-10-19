@@ -1,10 +1,10 @@
 #ifndef _GUM_STRING_HELPER_H_
 #define _GUM_STRING_HELPER_H_
 
-#include <vector>
+#include <cu/cu_stl.h>
+
 #include <sstream>
 #include <algorithm>
-#include <string>
 #include <fstream>
 
 #include <stdint.h>
@@ -16,56 +16,56 @@ class StringHelper
 {
 public:
 	template<typename T>
-	static std::string ToString(const T& d) {
+	static CU_STR ToString(const T& d) {
 		std::stringstream ss;
 		ss << d;
-		return ss.str();
+		return CU_STR(ss.str());
 	}
 
 	template<typename T>
-	static void FromString(const std::string& str, T& ret) {
-		std::stringstream ss(str);
+	static void FromString(const CU_STR& str, T& ret) {
+		std::stringstream ss(str.c_str());
 		ss >> ret;
 	}
 
 	template<typename T>
-	static T FromString(const std::string& str) {
+	static T FromString(const CU_STR& str) {
 		std::stringstream ss(str);
 		T ret;
 		ss >> ret;
 		return ret;
 	}
 
-	static void ToLower(std::string& str)
+	static void ToLower(CU_STR& str)
 	{
 		std::transform(str.begin(), str.end(), str.begin(), ::tolower);
 	}
 
-	static void ToUpper(std::string& str)
+	static void ToUpper(CU_STR& str)
 	{
 		std::transform(str.begin(), str.end(), str.begin(), ::toupper);
 	}
 
-	static std::string GetLine(std::ifstream& fin)
+	static CU_STR GetLine(std::ifstream& fin)
 	{
-		std::string line;
+		CU_STR line;
 		while ((line.empty() || line == " ") && getline(fin, line))
 			;
 		return line;
 	}
 
-	static void Split(const std::string& src, const std::string& mid, 
-		std::vector<std::string>& dst);
+	static void Split(const CU_STR& src, const CU_STR& mid, 
+		CU_VEC<CU_STR>& dst);
 
-//	static std::string ToUtf8(const std::string& str);
+//	static CU_STR ToUtf8(const CU_STR& str);
 
-	static std::string UTF8ToGBK(const std::string& str);
-	static std::string GBKToUTF8(const std::string& str);
+	static CU_STR UTF8ToGBK(const CU_STR& str);
+	static CU_STR GBKToUTF8(const CU_STR& str);
 
-	static std::string UTF8ToGBK(const char * c_str);
-	static std::string GBKToUTF8(const char * c_str);
+	static CU_STR UTF8ToGBK(const char * c_str);
+	static CU_STR GBKToUTF8(const char * c_str);
 
-	static std::string FromChar(const char* c_str);
+	static CU_STR FromChar(const char* c_str);
 
 }; // StringHelper
 

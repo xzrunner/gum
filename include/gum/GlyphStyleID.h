@@ -4,8 +4,7 @@
 #include "GlyphStyle.h"
 
 #include <cu/cu_macro.h>
-
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace gum
 {
@@ -25,7 +24,7 @@ private:
 
 private:
 	int m_next_id;
-	std::vector<std::pair<GlyphStyle, int> > m_hash[HASH_CAP];
+	CU_VEC<std::pair<GlyphStyle, int> > m_hash[HASH_CAP];
 
  	std::pair<GlyphStyle, int> m_last;
 	

@@ -4,10 +4,9 @@
 #include <cu/uncopyable.h>
 #include <simp/NodeAnimation.h>
 #include <sprite2/AnimSymbol.h>
+#include <cu/cu_stl.h>
 
 #include <json/json.h>
-
-#include <string>
 
 namespace s2 { class AnimSymbol; class Sprite; }
 namespace simp { class NodeAnimation; }
@@ -23,12 +22,12 @@ public:
 	EasyAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
 		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
 
-	void LoadJson(const Json::Value& val, const std::string& dir);
+	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeAnimation* node);
 
 private:
-	void LoadLayers(const Json::Value& val, const std::string& dir);
- 	void LoadActors(const Json::Value& src, s2::AnimSymbol::Frame& dst, const std::string& dir);
+	void LoadLayers(const Json::Value& val, const CU_STR& dir);
+ 	void LoadActors(const Json::Value& src, s2::AnimSymbol::Frame& dst, const CU_STR& dir);
  	void LoadLerps(const Json::Value& src, s2::AnimSymbol::Frame& dst);
 
 	void LoadActors(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame& dst);

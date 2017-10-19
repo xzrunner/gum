@@ -3,9 +3,7 @@
 
 #include <SM_Rect.h>
 #include <cu/cu_macro.h>
-
-#include <map>
-#include <set>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -68,7 +66,7 @@ private:
 	void LoadPackage(Package* pkg);
 
 private:
-	std::map<int, Package*> m_pkgs;
+	CU_MAP<int, Package*> m_pkgs;
 
 	int m_max_no_update_count;
 	int m_no_update_count;

@@ -4,7 +4,7 @@
 namespace gum
 {
 
-s2::SymPtr SymbolLoader::Create(const std::string& filepath, int type) const
+s2::SymPtr SymbolLoader::Create(const CU_STR& filepath, int type) const
 {
 	return SymbolPool::Instance()->Fetch(filepath, type);
 }

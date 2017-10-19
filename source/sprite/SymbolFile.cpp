@@ -10,9 +10,8 @@ namespace gum
 
 CU_SINGLETON_DEFINITION(SymbolFile);
 
-const std::string SymbolFile::UNKNOWN_TAG = "unknown";
-
 SymbolFile::SymbolFile()
+	: m_unknown_tag("unknown")
 {
 	Regist(s2::SYM_SCALE9,		"scale9");
 	Regist(s2::SYM_ICON,		"icon");
@@ -29,7 +28,7 @@ SymbolFile::SymbolFile()
 	Regist(s2::SYM_SKELETON,	"skeleton");
 }
 
-int SymbolFile::Type(const std::string& filepath) const
+int SymbolFile::Type(const CU_STR& filepath) const
 {
 	if (filepath.empty()) {
 		return s2::SYM_INVALID;
@@ -40,7 +39,7 @@ int SymbolFile::Type(const std::string& filepath) const
 		return s2::SYM_INVALID;
 	}
 
-	std::string ext = filepath.substr(pos + 1);
+	CU_STR ext = filepath.substr(pos + 1);
 	StringHelper::ToLower(ext);
 	if (ext == "png" || ext == "jpg" || ext == "bmp" || ext == "ppm" || ext == "pvr" || ext == "pkm") 
 	{
@@ -48,15 +47,15 @@ int SymbolFile::Type(const std::string& filepath) const
 	}
 	else if (ext == "json") 
 	{
-		const std::string filename = filepath.substr(0, filepath.find_last_of('.'));
+		const CU_STR filename = filepath.substr(0, filepath.find_last_of('.'));
 		int pos = filename.find_last_of('_');
 		if (pos == -1) {
 			return s2::SYM_UNKNOWN;
 		}
 
-		std::string tag = filename.substr(pos + 1);
+		CU_STR tag = filename.substr(pos + 1);
 		StringHelper::ToLower(tag);
-		std::map<std::string, int>::const_iterator itr = m_tag2type.find(tag);
+		CU_MAP<CU_STR, int>::const_iterator itr = m_tag2type.find(tag);
 		if (itr != m_tag2type.end()) {
 			return itr->second;
 		} else {
@@ -70,17 +69,17 @@ int SymbolFile::Type(const std::string& filepath) const
 	return s2::SYM_UNKNOWN;
 }
 
-const std::string& SymbolFile::Tag(int type) const
+const CU_STR& SymbolFile::Tag(int type) const
 {
-	std::map<int, std::string>::const_iterator itr = m_type2tag.find(type);
+	CU_MAP<int, CU_STR>::const_iterator itr = m_type2tag.find(type);
 	if (itr != m_type2tag.end()) {
 		return itr->second;
 	} else {
-		return UNKNOWN_TAG;
+		return m_unknown_tag;
 	}
 }
 
-void SymbolFile::Regist(int type, const std::string& tag)
+void SymbolFile::Regist(int type, const CU_STR& tag)
 {
 	m_type2tag.insert(std::make_pair(type, tag));
 	m_tag2type.insert(std::make_pair(tag, type));

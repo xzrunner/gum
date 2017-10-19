@@ -45,7 +45,7 @@ SpineAnim2Loader::~SpineAnim2Loader()
 	Clear();
 }
 
-void SpineAnim2Loader::LoadJson(const Json::Value& val, const std::string& dir)
+void SpineAnim2Loader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_sym) {
 		return;
@@ -56,7 +56,7 @@ void SpineAnim2Loader::LoadJson(const Json::Value& val, const std::string& dir)
 	LoadParser(parser, dir);
 }
 
-void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& dir)
+void SpineAnim2Loader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 {
 	if (!m_sym) {
 		return;
@@ -66,7 +66,7 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const std::string& 
 
 	m_num = parser.bones.size();
 
-	std::string img_dir = FilepathHelper::Absolute(dir, parser.img_dir);
+	CU_STR img_dir = FilepathHelper::Absolute(dir, parser.img_dir);
 
 	LoadJointsData(parser);
 	ConnectJoints(parser);
@@ -125,12 +125,12 @@ void SpineAnim2Loader::LoadJointsData(const SpineParser& parser)
 //		m_joints_data.push_back(JointData(slot.name, slot.bone, slot.attachment));
 //	}
 //
-//	std::map<std::string, SpineParser::Bone>::const_iterator itr 
+//	CU_MAP<CU_STR, SpineParser::Bone>::const_iterator itr 
 //		= parser.bones.begin();
 //	for ( ; itr != parser.bones.end(); ++itr)
 //	{
 //		const SpineParser::Bone& bone = itr->second;
-//		std::map<std::string, int>::iterator itr_joint 
+//		CU_MAP<CU_STR, int>::iterator itr_joint 
 //			= m_bone2joint.find(bone.name);
 //		if (itr_joint != m_bone2joint.end()) {
 //			continue;
@@ -150,7 +150,7 @@ void SpineAnim2Loader::ConnectJoints(const SpineParser& parser)
 			continue;
 		}
 
-		std::map<std::string, int>::iterator itr_joint 
+		CU_MAP<CU_STR, int>::iterator itr_joint 
 			= m_bone2joint.find(bone.name);
 		assert(itr_joint != m_bone2joint.end());
 		int child = itr_joint->second;
@@ -172,7 +172,7 @@ void SpineAnim2Loader::ConnectJoints(const SpineParser& parser)
 	}
 }
 
-void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string& img_dir)
+void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const CU_STR& img_dir)
 {
 	int skin_count = 0;
 	for (int i = 0, n = parser.skins.size(); i < n; ++i) {
@@ -214,7 +214,7 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const std::string&
 	}
 }
 
-void SpineAnim2Loader::CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const
+void SpineAnim2Loader::CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem& src, const CU_STR& img_dir) const
 {
 	dst.local.trans[0] = src.pos.x;
 	dst.local.trans[1] = src.pos.y;
@@ -222,20 +222,20 @@ void SpineAnim2Loader::CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem
 	dst.local.scale[0] = 1;
 	dst.local.scale[1] = 1;
 
-	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
+	CU_STR filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 	auto sym = m_sym_loader->Create(filepath);
 	m_sym->AddCachedSym(sym);
 	dst.ud = static_cast<void*>(sym.get());
 	dst.type = SKIN_IMG;
 }
 
-void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const std::string& img_dir) const
+void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem& src, const CU_STR& img_dir) const
 {
-	std::string filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
+	CU_STR filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 	auto base_sym = m_sym_loader->Create(filepath);
 
 	// fix texcoords for image trimed
-	std::vector<sm::vec2> texcoords = src.texcoords;
+	CU_VEC<sm::vec2> texcoords = src.texcoords;
 	if (base_sym->Type() == s2::SYM_IMAGE) 
 	{
 		auto img_sym = S2_VI_PTR_DOWN_CAST<s2::ImageSymbol>(base_sym);
@@ -259,14 +259,14 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 	{
 		assert(!src.skinned_vertices.empty());
 
-		std::vector<pm::Skin2Joint> joints;
+		CU_VEC<pm::Skin2Joint> joints;
 		int joints_n = 0;
 		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i) {
 			joints_n += src.skinned_vertices[i].joints.size();
 		}
 		joints.reserve(joints_n);
 
-		std::vector<int> vertices;
+		CU_VEC<int> vertices;
 		vertices.reserve(src.skinned_vertices.size());
 
 		for (int i = 0, n = src.skinned_vertices.size(); i < n; ++i) 
@@ -307,12 +307,12 @@ void SpineAnim2Loader::CreateSlots(const SpineParser& parser)
 		const SpineParser::Slot& src = parser.slots[i];
 		rg_slot dst;
 
-		std::map<std::string, int>::iterator itr_joint = m_bone2joint.find(src.bone);
+		CU_MAP<CU_STR, int>::iterator itr_joint = m_bone2joint.find(src.bone);
 		assert(itr_joint != m_bone2joint.end());
 		dst.joint = itr_joint->second;
 
 		dst.skin = RG_SKIN_UNKNOWN;
-		std::map<std::string, int>::iterator itr_skin = m_map2skin.find(src.attachment);
+		CU_MAP<CU_STR, int>::iterator itr_skin = m_map2skin.find(src.attachment);
 		if (itr_skin != m_map2skin.end()) {
 			dst.skin = itr_skin->second;
 		}
@@ -359,14 +359,14 @@ void SpineAnim2Loader::CreateIKs(const SpineParser& parser)
 		memset(dst.length, 0, sizeof(dst.length));
 		for (int j = 0, m = src.bones.size(); j < m; ++j) 
 		{
-			std::map<std::string, int>::iterator itr_joint 
+			CU_MAP<CU_STR, int>::iterator itr_joint 
 				= m_bone2joint.find(src.bones[j]);
 			assert(itr_joint != m_bone2joint.end());
 			int id = itr_joint->second;
 			dst.joints[j] = id;
 			dst.length[j] = parser.bones[id].length;
 		}
-		std::map<std::string, int>::iterator itr_joint 
+		CU_MAP<CU_STR, int>::iterator itr_joint 
 			= m_bone2joint.find(src.target);
 		assert(itr_joint != m_bone2joint.end());
 		dst.target = itr_joint->second;
@@ -440,7 +440,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::Animation& anim)
 	m_tl_joints = (rg_tl_joint**)malloc(sizeof(struct rg_tl_joint*) * m_sk->joint_count);
 	for (int i = 0; i < m_sk->joint_count; ++i) 
 	{
-		const std::string& name = m_joints_data[i].name;
+		const CU_STR& name = m_joints_data[i].name;
 		const SpineParser::AnimBone* bone = NULL;
 		for (int j = 0, m = anim.bones.size(); j < m; ++j) {
 			if (name == anim.bones[j].name) {
@@ -548,7 +548,7 @@ void SpineAnim2Loader::LoadTimelineSkins(const SpineParser::Animation& anim)
 	m_tl_skins = (rg_tl_skin**)malloc(sizeof(struct rg_tl_skin*) * m_sk->slot_count);
 	for (int i = 0; i < m_sk->slot_count; ++i)
 	{
-		const std::string& name = m_slots_data[i].name;
+		const CU_STR& name = m_slots_data[i].name;
 		const SpineParser::AnimSlot* slot = NULL;
 		for (int j = 0, m = anim.slots.size(); j < m; ++j) {
 			if (name == anim.slots[j].name) {
@@ -580,7 +580,7 @@ void SpineAnim2Loader::LoadTimelineSkins(const SpineParser::AnimSlot* slot, stru
 		if (slot->skins[i].second.empty()) {
 			skin->skins[i].skin = RG_SKIN_NULL;
 		} else {
-			std::map<std::string, int>::iterator itr 
+			CU_MAP<CU_STR, int>::iterator itr 
 				= m_map2skin.find(slot->skins[i].second);
 			assert(itr != m_map2skin.end());
 			skin->skins[i].skin = itr->second;

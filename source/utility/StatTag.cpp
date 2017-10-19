@@ -5,8 +5,6 @@
 #include <sprite2/pre_defined.h>
 #include S2_MAT_HEADER
 
-#include <string>
-
 #include <time.h>
 
 namespace gum
@@ -41,7 +39,7 @@ void StatTag::Enable(bool enable)
 	}
 }
 
-void StatTag::Print(const std::string& type, const std::string& msg) const
+void StatTag::Print(const CU_STR& type, const CU_STR& msg) const
 {
 	if (!m_enable) {
 		return;

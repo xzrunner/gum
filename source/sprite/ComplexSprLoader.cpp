@@ -11,7 +11,7 @@ ComplexSprLoader::ComplexSprLoader(const std::shared_ptr<s2::ComplexSprite>& spr
 {
 }
 
-void ComplexSprLoader::LoadJson(const Json::Value& val, const std::string& dir)
+void ComplexSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
 	if (!m_spr || !val.isMember("complex")) {
 		return;

@@ -14,7 +14,7 @@ public:
 
 	void Init(int id, int w, int h, int format);
 
-	static std::string GetFilepath(int id);
+	static CU_STR GetFilepath(int id);
 
 }; // ProxyImage
 
