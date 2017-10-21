@@ -295,7 +295,11 @@ void Statistics::PrintConsole() const
 		if (fps_curr != 0) {
 			curr_cost = 1000.0f / fps_curr;
 		}
-		LOGI("fps %.1f, cost %.1f, dc %d, vertices %d, cost avg %.1f\n", 
+		//LOGI("fps %.1f, cost %.1f, dc %d, vertices %d, cost avg %.1f, debug count %d\n", 
+		//	1000.0f / m_tpf_smooth, m_tpf_smooth, dc, count, curr_cost, s2::SprActors::GetCount());
+		//s2::SprActors::ResetCount();
+
+		LOGI("fps %.1f, cost %.1f, dc %d, vertices %d, cost avg %.1f\n",
 			1000.0f / m_tpf_smooth, m_tpf_smooth, dc, count, curr_cost);
 	}
 }

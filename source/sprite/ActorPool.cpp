@@ -46,7 +46,7 @@ s2::ActorPtr ActorPool::Fetch(const uint32_t sym_id, bool& is_new)
 
 void ActorPool::Return(const s2::ActorPtr& actor)
 {
-	int sym_id = actor->GetSpr()->GetSymbol()->GetID();
+	int sym_id = actor->GetSprRaw()->GetSymbol()->GetID();
 	auto itr = m_sym_id_cache.find(sym_id);
 	if (itr == m_sym_id_cache.end()) {
 		m_sym_id_cache.insert(std::make_pair(sym_id, actor));
