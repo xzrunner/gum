@@ -563,8 +563,12 @@ extern "C"
 void* gum_create_actor_by_id(int id)
 {
 	auto spr = SpriteFactory::Instance()->CreateFromSym(id, true);
+
 	auto actor = s2::ActorFactory::Create(nullptr, spr);
-	return s2::ActorProxyPool::Instance()->Create(actor);
+
+	s2::ActorProxy* ret;
+	s2::ActorProxyPool::Instance()->Create(actor, ret);
+	return ret;
 }
 
 extern "C"
@@ -572,8 +576,12 @@ void* gum_create_actor_from_file(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 	auto spr = SpriteFactory::Instance()->Create(gbk_filepath);
+
 	auto actor = s2::ActorFactory::Create(nullptr, spr);
-	return s2::ActorProxyPool::Instance()->Create(actor);
+
+	s2::ActorProxy* ret;
+	s2::ActorProxyPool::Instance()->Create(actor, ret);
+	return ret;
 }
 
 extern "C"
@@ -586,7 +594,9 @@ void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new)
 		return NULL;
 	} else {
 		auto actor = gum::ActorPool::Instance()->Fetch(id, *is_new);
-		return s2::ActorProxyPool::Instance()->Create(actor);
+		s2::ActorProxy* proxy;
+		s2::ActorProxyPool::Instance()->Create(actor, proxy);
+		return proxy;
 	}
 }
 
