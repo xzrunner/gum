@@ -7,11 +7,11 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := gum
 
 LOCAL_C_INCLUDES  := \
+	${CLIB_PATH} \
 	${RIGGING_SRC_PATH} \
 	${GUM_SRC_PATH}/include \
 	${GUM_SRC_PATH}/include/gum \
 	${SM_SRC_PATH} \
-	${CU_SRC_PATH} \
 	${FS_SRC_PATH} \
 	${SIMP_SRC_PATH}/include \
 	${BIMP_SRC_PATH}/include \
@@ -36,8 +36,9 @@ LOCAL_C_INCLUDES  := \
 	${OPENAL_SRC_PATH} \
 	${LUA_SRC_PATH} \
 	${FLATTEN_SRC_PATH}/include \
+	${MEMMGR_SRC_PATH}/include \
 
-LOCAL_CPPFLAGS  := -DNO_BOOST -g -std=c++1y
+LOCAL_CPPFLAGS  := -DNO_BOOST -g
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH)/source/ -name "*.cpp" -print)) \
