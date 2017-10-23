@@ -4,6 +4,8 @@
 #include <cu/cu_macro.h>
 #include <multitask/Task.h>
 
+#include <memory>
+
 namespace bimp { class ImportStream; }
 
 namespace gum

@@ -35,7 +35,7 @@ void TestPackComplex::Init()
 		spr->SetPosition(sm::vec2(0, 0));
 		m_sprites.push_back(spr);
 
-		s2::ComplexSprite* cspr = VI_DOWNCASTING<s2::ComplexSprite*>(spr->FetchChild("action"));
+		s2::ComplexSprite* cspr = S2_VI_DOWN_CAST<s2::ComplexSprite*>(spr->FetchChild("action"));
 		cspr->SetAction("c");
 	}
 }

@@ -130,18 +130,18 @@ void SpineParser::ParseSkins(const Json::Value& val)
 		const std::string& key = key_skins[i];
 		const Json::Value& src_skin = val[key];
 		Skin skin;
-		skin.name = key;
+		skin.name = key.c_str();
 		Json::Value::Members key_items = src_skin.getMemberNames();
 		for (int j = 0, m = key_items.size(); j < m; ++j)
 		{
 			const std::string& key = key_items[j];
 			const Json::Value& src_item = src_skin[key];
 			SkinItem item;
-			item.name = key;
+			item.name = key.c_str();
 			if (src_item.isMember("name")) {
 				item.path = src_item["name"].asString().c_str();
 			} else {
-				item.path = key;
+				item.path = key.c_str();
 			}
 
 			item.type = SKIN_IMAGE;
@@ -249,7 +249,7 @@ void SpineParser::ParseAnimations(const Json::Value& val)
 		const std::string& key = key_anis[i];
 		const Json::Value& src = val[key];
 		Animation dst;
-		dst.name = key;
+		dst.name = key.c_str();
 
 		Json::Value::Members key_bones = src["bones"].getMemberNames();
 		dst.bones.reserve(key_bones.size());
@@ -257,7 +257,7 @@ void SpineParser::ParseAnimations(const Json::Value& val)
 		{
 			const std::string& key = key_bones[j];
 			AnimBone bone;
-			bone.name = key;
+			bone.name = key.c_str();
 			ParseAnimBond(src["bones"][key], bone);
 			dst.bones.push_back(bone);
 		}
@@ -268,7 +268,7 @@ void SpineParser::ParseAnimations(const Json::Value& val)
 		{
 			const std::string& key = key_slots[j];
 			AnimSlot slot;
-			slot.name = key;
+			slot.name = key.c_str();
 			ParseAnimSlot(src["slots"][key]["attachment"], slot);
 			dst.slots.push_back(slot);
 		}
@@ -350,8 +350,8 @@ void SpineParser::ParseAnimDeforms(const Json::Value& val, CU_VEC<AnimDeform>& d
 		{
 			const std::string& skin = key_skins[j];
 			AnimDeform deform;
-			deform.slot = slot;
-			deform.skin = skin;
+			deform.slot = slot.c_str();
+			deform.skin = skin.c_str();
 			ParseAnimDeform(val[slot][skin], deform);
 			deforms.push_back(deform);
 		}

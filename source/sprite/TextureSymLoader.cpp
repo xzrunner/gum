@@ -41,7 +41,8 @@ void TextureSymLoader::LoadJson(const CU_STR& filepath)
 	for (int i = 0, n = value["shapes"].size(); i < n; ++i) {
 		auto shape = ShapeLoader::LoadShape(value["shapes"][i], dir);
 		auto poly_shape = static_cast<s2::PolygonShape*>(std::move(shape).release());
-		m_sym->AddPolygon(std::unique_ptr<s2::PolygonShape>(poly_shape));
+		auto poly_shape_ptr = std::unique_ptr<s2::PolygonShape>(poly_shape);
+		m_sym->AddPolygon(poly_shape_ptr);
 	}
 }
 
@@ -58,7 +59,8 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 		{
 			auto shape_sym = S2_VI_PTR_DOWN_CAST<s2::ShapeSymbol>(sym);
 			auto poly_shape = static_cast<s2::PolygonShape*>(std::move(shape_sym->GetShape()).release());
-			m_sym->AddPolygon(std::unique_ptr<s2::PolygonShape>(poly_shape));
+			auto poly_shape_ptr = std::unique_ptr<s2::PolygonShape>(poly_shape);
+			m_sym->AddPolygon(poly_shape_ptr);
 		}
 	}
 }

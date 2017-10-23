@@ -58,7 +58,8 @@ void EasySkeletonLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 	InitRoot();
 	InitPose();
 
-	m_sym->SetSkeleton(std::make_unique<s2::Skeleton>(m_root, m_joints));
+	std::unique_ptr<s2::Skeleton> skeleton(std::make_unique<s2::Skeleton>(m_root, m_joints));
+	m_sym->SetSkeleton(skeleton);
 }
 
 void EasySkeletonLoader::Clear()

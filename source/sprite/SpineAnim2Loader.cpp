@@ -293,7 +293,7 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 	auto sym = m_sym_loader->Create(s2::SYM_MESH);
 	auto s2_mesh = std::make_unique<s2::Mesh>(base_sym);
 	s2_mesh->SetMesh(std::move(pm_mesh));
-	S2_VI_PTR_DOWN_CAST<s2::MeshSymbol>(sym)->SetMesh(std::move(s2_mesh));
+	S2_VI_PTR_DOWN_CAST<s2::MeshSymbol>(sym)->SetMesh(s2_mesh);
 
 	m_sym->AddCachedSym(sym);
 	dst.ud = static_cast<void*>(sym.get());

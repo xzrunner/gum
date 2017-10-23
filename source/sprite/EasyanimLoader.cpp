@@ -60,7 +60,7 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 			LoadLerps(src_frame, *dst_frame);
 			dst_layer->frames.push_back(std::move(dst_frame));
 		}
-		m_sym->AddLayer(std::move(dst_layer));
+		m_sym->AddLayer(dst_layer);
 	}
 }
 
@@ -84,7 +84,7 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const CU_STR& dir)
 			LoadLerps(frame_val, *dst_frame);
 			dst_layer->frames.push_back(std::move(dst_frame));
 		}
-		m_sym->AddLayer(std::move(dst_layer));
+		m_sym->AddLayer(dst_layer);
 	}
 }
 

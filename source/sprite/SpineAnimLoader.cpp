@@ -76,7 +76,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir,
 		UpdateNextTime(next_time);
 	}
 
-	m_sym->AddLayer(std::move(layer));
+	m_sym->AddLayer(layer);
 }
 
 void SpineAnimLoader::BuildBone2PoseTable()

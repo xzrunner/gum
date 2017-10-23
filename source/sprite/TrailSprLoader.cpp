@@ -7,19 +7,9 @@
 namespace gum
 {
 
-TrailSprLoader::TrailSprLoader(s2::TrailSprite* spr)
+TrailSprLoader::TrailSprLoader(const std::shared_ptr<s2::TrailSprite>& spr)
 	: m_spr(spr)
 {
-	if (m_spr) {
-		m_spr->AddReference();
-	}
-}
-
-TrailSprLoader::~TrailSprLoader()
-{
-	if (m_spr) {
-		m_spr->RemoveReference();
-	}
 }
 
 void TrailSprLoader::LoadJson(const Json::Value& val, const std::string& dir)

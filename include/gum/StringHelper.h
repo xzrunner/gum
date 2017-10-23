@@ -19,7 +19,7 @@ public:
 	static CU_STR ToString(const T& d) {
 		std::stringstream ss;
 		ss << d;
-		return CU_STR(ss.str());
+		return CU_STR(ss.str().c_str());
 	}
 
 	template<typename T>

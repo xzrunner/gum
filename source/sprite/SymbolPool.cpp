@@ -62,7 +62,7 @@ s2::SymPtr SymbolPool::Fetch(const CU_STR& filepath, int type)
 {
 	CU_STR fixed_path = filepath;
 	StringHelper::ToLower(fixed_path);
-	auto& itr = m_path_cache.find(fixed_path);
+	auto itr = m_path_cache.find(fixed_path);
 	if (itr != m_path_cache.end()) {
 		s2::SymPtr sym = itr->second.lock();
 		if (sym) {

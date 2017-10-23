@@ -31,7 +31,7 @@ void ProxyImage::Init(int id, int w, int h, int format)
 
 CU_STR ProxyImage::GetFilepath(int id)
 {
-	return "_proxy" + StringHelper::ToString(id);
+	return CU_STR("_proxy") + StringHelper::ToString(id);
 }
 
 }

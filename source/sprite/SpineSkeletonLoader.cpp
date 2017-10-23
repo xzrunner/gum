@@ -185,7 +185,8 @@ void SpineSkeletonLoader::InitSkeleton(const SpineParser& parser)
 		joint->SetName(itr->first);
 	}
 
-	m_sym->SetSkeleton(std::make_unique<s2::Skeleton>(m_root, joints));
+	auto skeleton(std::make_unique<s2::Skeleton>(m_root, joints));
+	m_sym->SetSkeleton(skeleton);
 }
 
 }

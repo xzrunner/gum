@@ -207,7 +207,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_a
 			pre_in_null->SetColor(col);
 		}
 
-		sym->AddLayer(std::move(dst));
+		sym->AddLayer(dst);
 	}
 }
 
