@@ -121,7 +121,7 @@ void P3dSymLoader::Store(const std::shared_ptr<s2::P3dEmitterCfg>& p3d_cfg) cons
 			p3d_cfg->InsertCachedSym(sym);
 			dst.ud = static_cast<void*>(sym.get());
 		} else {
-			LOGW("P3dSymLoader::Store err comp\n");
+			LOGW("%s", "P3dSymLoader::Store err comp\n");
 		}
 	}
 }

@@ -30,7 +30,7 @@ public:
 
 	template<typename T>
 	static T FromString(const CU_STR& str) {
-		std::stringstream ss(str);
+		std::stringstream ss(str.c_str());
 		T ret;
 		ss >> ret;
 		return ret;
