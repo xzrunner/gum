@@ -1,7 +1,7 @@
 #ifndef _GUM_PROXY_IMAGE_H_
 #define _GUM_PROXY_IMAGE_H_
 
-#include "Image.h"
+#include "gum/Image.h"
 
 namespace gum
 {

@@ -1,13 +1,13 @@
-#include "GUM_Facade.h"
-#include "DTexC2Strategy.h"
-#include "SymbolPool.h"
-#include "GUM_GTxt.h"
+#include "gum/Facade.h"
+#include "gum/DTexC2Strategy.h"
+#include "gum/SymbolPool.h"
+#include "gum/GTxt.h"
 #ifndef S2_DISABLE_MODEL
 // todo
-//#include "GUM_Model3.h"
+//#include "gum/Model3.h"
 #endif // S2_DISABLE_MODEL
 #include "gum/ThreadPool.h"
-#include "gum/GUM_Audio.h"
+#include "gum/Audio.h"
 
 namespace gum
 {

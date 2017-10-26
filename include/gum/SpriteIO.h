@@ -7,7 +7,7 @@
 #include <sprite2/FastBlendMode.h>
 #include <sprite2/RenderFilter.h>
 #include <sprite2/CameraMode.h>
-#include <sprite2/s2_typedef.h>
+#include <sprite2/typedef.h>
 #include <cu/cu_stl.h>
 
 #include <json/json.h>

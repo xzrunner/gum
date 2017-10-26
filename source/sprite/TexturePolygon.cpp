@@ -1,5 +1,5 @@
-#include "GUM_TexturePolygon.h"
-#include "SymbolPool.h"
+#include "gum/TexturePolygon.h"
+#include "gum/SymbolPool.h"
 
 #include <sprite2/ImageSymbol.h>
 #include <sprite2/SymType.h>

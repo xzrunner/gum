@@ -1,8 +1,8 @@
-#include "ImageLoader.h"
-#include "RenderContext.h"
+#include "gum/ImageLoader.h"
+#include "gum/RenderContext.h"
 #include <gum/Config.h>
-#include "Image.h"
-#include "LoadImageTask.h"
+#include "gum/Image.h"
+#include "gum/LoadImageTask.h"
 #include "gum/ThreadPool.h"
 
 #include <gimg_import.h>
@@ -11,7 +11,7 @@
 #include <gimg_etc2.h>
 #include <timp/TextureFormat.h>
 #include <timp/TextureLoader.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 
 #include <stdlib.h>
 

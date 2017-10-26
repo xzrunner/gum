@@ -1,10 +1,10 @@
-#include "ShapeSymLoader.h"
-#include "FilepathHelper.h"
+#include "gum/ShapeSymLoader.h"
+#include "gum/FilepathHelper.h"
 #include "gum/ShapeType.h"
-#include "SymbolPool.h"
-#include "GUM_ImageSymbol.h"
-#include "Image.h"
-#include "ArrayLoader.h"
+#include "gum/SymbolPool.h"
+#include "gum/ImageSymbol.h"
+#include "gum/Image.h"
+#include "gum/ArrayLoader.h"
 
 #include <sprite2/ShapeSymbol.h>
 #include <sprite2/Color.h>

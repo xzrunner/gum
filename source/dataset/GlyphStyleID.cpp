@@ -1,4 +1,4 @@
-#include "GlyphStyleID.h"
+#include "gum/GlyphStyleID.h"
 
 namespace gum
 {

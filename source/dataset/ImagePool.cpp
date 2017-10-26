@@ -1,5 +1,5 @@
-#include "ImagePool.h"
-#include "Image.h"
+#include "gum/ImagePool.h"
+#include "gum/Image.h"
 
 namespace gum
 {

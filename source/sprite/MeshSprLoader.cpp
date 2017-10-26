@@ -1,10 +1,10 @@
-#include "MeshSprLoader.h"
-#include "MeshSymLoader.h"
-#include "FilepathHelper.h"
-#include "SymbolPool.h"
-#include "MeshIO.h"
+#include "gum/MeshSprLoader.h"
+#include "gum/MeshSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/SymbolPool.h"
+#include "gum/MeshIO.h"
 
-#include <sprite2/S2_Mesh.h>
+#include <sprite2/Mesh.h>
 #include <sprite2/MeshSprite.h>
 #include <sprite2/MeshSymbol.h>
 #include <simp/NodeMeshSpr.h>

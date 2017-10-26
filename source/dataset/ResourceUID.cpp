@@ -1,6 +1,6 @@
-#include "ResourceUID.h"
-#include "GlyphStyle.h"
-#include "GlyphStyleID.h"
+#include "gum/ResourceUID.h"
+#include "gum/GlyphStyle.h"
+#include "gum/GlyphStyleID.h"
 
 namespace gum
 {

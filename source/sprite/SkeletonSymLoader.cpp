@@ -1,8 +1,8 @@
-#include "SkeletonSymLoader.h"
-#include "FilepathHelper.h"
-#include "EasySkeletonLoader.h"
-#include "SpineSkeletonLoader.h"
-#include "ExtendSymFile.h"
+#include "gum/SkeletonSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/EasySkeletonLoader.h"
+#include "gum/SpineSkeletonLoader.h"
+#include "gum/ExtendSymFile.h"
 
 #include <sprite2/SkeletonSymbol.h>
 

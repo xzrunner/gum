@@ -1,5 +1,5 @@
 #include "gum/lua_wrap_audio.h"
-#include "gum/GUM_Audio.h"
+#include "gum/Audio.h"
 
 #include <uniaudio/AudioContext.h>
 #include <uniaudio/Source.h>

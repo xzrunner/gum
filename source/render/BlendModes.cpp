@@ -1,4 +1,4 @@
-#include "BlendModes.h"
+#include "gum/BlendModes.h"
 
 namespace gum
 {

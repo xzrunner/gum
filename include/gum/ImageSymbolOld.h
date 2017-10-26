@@ -1,7 +1,7 @@
 //#ifndef _GUM_IMAGE_SYMBOL_OLD_H_
 //#define _GUM_IMAGE_SYMBOL_OLD_H_
 //
-//#include "Symbol.h"
+//#include "gum/Symbol.h"
 //
 //namespace gum
 //{

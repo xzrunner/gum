@@ -1,10 +1,10 @@
-#include "MeshIO.h"
-#include "JsonSerializer.h"
-#include "SkeletonIO.h"
+#include "gum/MeshIO.h"
+#include "gum/JsonSerializer.h"
+#include "gum/SkeletonIO.h"
 
 #include <SM_Vector.h>
 #include <polymesh/MeshTransform.h>
-#include <sprite2/S2_Mesh.h>
+#include <sprite2/Mesh.h>
 
 #include <queue>
 

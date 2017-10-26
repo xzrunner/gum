@@ -1,12 +1,12 @@
-#include "EasySkeletonLoader.h"
-#include "SpriteLoader.h"
-#include "JointLoader.h"
-#include "SpriteFactory.h"
-#include "SkeletonIO.h"
+#include "gum/EasySkeletonLoader.h"
+#include "gum/SpriteLoader.h"
+#include "gum/JointLoader.h"
+#include "gum/SpriteFactory.h"
+#include "gum/SkeletonIO.h"
 
 #include <SM_Calc.h>
 #include <sprite2/SkeletonSymbol.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/Joint.h>
 #include <sprite2/Skeleton.h>
 

@@ -1,5 +1,5 @@
-#include "RenderTargetMgr.h"
-#include "RenderTarget.h"
+#include "gum/RenderTargetMgr.h"
+#include "gum/RenderTarget.h"
 
 #include <dtex2/DebugDraw.h>
 

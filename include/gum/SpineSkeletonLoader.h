@@ -2,7 +2,7 @@
 #define _GUM_SPINE_SKELETON_LOADER_H_
 
 #include <cu/uncopyable.h>
-#include <sprite2/s2_typedef.h>
+#include <sprite2/typedef.h>
 #include <cu/cu_stl.h>
 
 #include <json/value.h>

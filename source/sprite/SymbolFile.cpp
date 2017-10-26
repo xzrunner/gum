@@ -1,4 +1,4 @@
-#include "SymbolFile.h"
+#include "gum/SymbolFile.h"
 #include "gum/StringHelper.h"
 
 #include <sprite2/SymType.h>

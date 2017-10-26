@@ -1,6 +1,6 @@
-//#include "GUM_ImageSymbol.h"
-//#include "Texture.h"
-//#include "render/RenderContext.h"
+//#include "gum/ImageSymbol.h"
+//#include "gum/Texture.h"
+//#include "gum/render/RenderContext.h"
 //
 //#include <shaderlab.h>
 //

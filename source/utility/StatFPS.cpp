@@ -1,5 +1,5 @@
-#include "StatFPS.h"
-#include "LoadImageTask.h"
+#include "gum/StatFPS.h"
+#include "gum/LoadImageTask.h"
 
 #include <glp_loop.h>
 #include <dtex2/LoadResTask.h>

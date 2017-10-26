@@ -1,10 +1,10 @@
-#include "SpineAnimLoader.h"
-#include "SpineParser.h"
-#include "SymbolLoader.h"
-#include "SpriteLoader.h"
-#include "FilepathHelper.h"
+#include "gum/SpineAnimLoader.h"
+#include "gum/SpineParser.h"
+#include "gum/SymbolLoader.h"
+#include "gum/SpriteLoader.h"
+#include "gum/FilepathHelper.h"
 
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/AnimSymbol.h>
 #include <sprite2/SkeletonSymbol.h>
 #include <sprite2/SkeletonSprite.h>

@@ -1,4 +1,4 @@
-#include "ComplexSprLoader.h"
+#include "gum/ComplexSprLoader.h"
 
 #include <sprite2/ComplexSprite.h>
 #include <simp/NodeComplexSpr.h>

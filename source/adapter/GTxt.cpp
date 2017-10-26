@@ -1,11 +1,11 @@
-#include "GUM_GTxt.h"
+#include "gum/GTxt.h"
 #include "gum/StringHelper.h"
-#include "SymbolPool.h"
-#include "GUM_ImageSymbol.h"
-#include "Image.h"
-#include "GlyphStyle.h"
-#include "GUM_DTex.h"
-#include "ResourceUID.h"
+#include "gum/SymbolPool.h"
+#include "gum/ImageSymbol.h"
+#include "gum/Image.h"
+#include "gum/GlyphStyle.h"
+#include "gum/DTex.h"
+#include "gum/ResourceUID.h"
 
 #include <gtxt_util.h>
 #include <shaderlab/ShaderMgr.h>
@@ -13,11 +13,11 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/Shape2Shader.h>
 #include <simp/NodeFactory.h>
-#include <sprite2/S2_RVG.h>
+#include <sprite2/RVG.h>
 #include <sprite2/RenderColor.h>
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/Symbol.h>
 #include <sprite2/RenderParams.h>
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/Symbol.h>
 #include <sprite2/DrawNode.h>
 #include <cooking.h>
 

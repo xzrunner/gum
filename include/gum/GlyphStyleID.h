@@ -1,7 +1,7 @@
 #ifndef _GUM_GLYPH_STYLE_ID_H_
 #define _GUM_GLYPH_STYLE_ID_H_
 
-#include "GlyphStyle.h"
+#include "gum/GlyphStyle.h"
 
 #include <cu/cu_macro.h>
 #include <cu/cu_stl.h>

@@ -1,7 +1,7 @@
 #ifndef _GUM_DTEX_H_
 #define _GUM_DTEX_H_
 
-#include "ResourceUID.h"
+#include "gum/ResourceUID.h"
 
 #include <SM_Rect.h>
 #include <cu/cu_macro.h>

@@ -1,5 +1,5 @@
-#include "DTexC2Strategy.h"
-#include "GUM_DTex.h"
+#include "gum/DTexC2Strategy.h"
+#include "gum/DTex.h"
 
 #include <simp/NodeID.h>
 #include <simp/NodeFactory.h>

@@ -1,4 +1,4 @@
-#include "GUM_Audio.h"
+#include "gum/Audio.h"
 #include "gum/ThreadPool.h"
 
 #include <uniaudio/Callback.h>

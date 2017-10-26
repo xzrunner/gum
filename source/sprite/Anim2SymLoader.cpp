@@ -1,13 +1,13 @@
-#include "Anim2SymLoader.h"
-#include "FilepathHelper.h"
-#include "EasyAnim2Loader.h"
-#include "SpineAnim2Loader.h"
-#include "SymbolPool.h"
-#include "ExtendSymFile.h"
+#include "gum/Anim2SymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/EasyAnim2Loader.h"
+#include "gum/SpineAnim2Loader.h"
+#include "gum/SymbolPool.h"
+#include "gum/ExtendSymFile.h"
 
 #include <sprite2/Anim2Symbol.h>
 #include <simp/NodeAnim2.h>
-#include <bimp/bimp_typedef.h>
+#include <bimp/typedef.h>
 
 #include <fstream>
 

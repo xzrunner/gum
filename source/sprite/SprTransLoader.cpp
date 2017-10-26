@@ -1,13 +1,13 @@
-#include "SprTransLoader.h"
+#include "gum/SprTransLoader.h"
 
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/RenderColor.h>
 #include <sprite2/RenderShader.h>
 #include <sprite2/RenderCamera.h>
-#include <sprite2/s2_trans_color.h>
+#include <sprite2/trans_color.h>
 #include <simp/NodeTrans.h>
 
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/Symbol.h>
 
 namespace gum
 {

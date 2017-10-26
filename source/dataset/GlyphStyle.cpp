@@ -1,4 +1,4 @@
-#include "GlyphStyle.h"
+#include "gum/GlyphStyle.h"
 
 #include <gtxt_glyph.h>
 

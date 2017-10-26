@@ -4,7 +4,7 @@
 #include <cu/uncopyable.h>
 #include <SM_Vector.h>
 #include <sprite2/Color.h>
-#include <sprite2/s2_typedef.h>
+#include <sprite2/typedef.h>
 #include <cu/cu_stl.h>
 
 #include <json/json.h>

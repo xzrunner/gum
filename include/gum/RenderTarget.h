@@ -2,7 +2,7 @@
 #define _GUM_RENDER_TARGET_H_
 
 #include <SM_Rect.h>
-#include <sprite2/S2_RenderTarget.h>
+#include <sprite2/RenderTarget.h>
 
 namespace gum
 {

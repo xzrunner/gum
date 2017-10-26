@@ -1,5 +1,5 @@
-#include "SpriteLoader.h"
-#include "SpriteFactory.h"
+#include "gum/SpriteLoader.h"
+#include "gum/SpriteFactory.h"
 
 namespace gum
 {

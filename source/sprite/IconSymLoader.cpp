@@ -1,8 +1,8 @@
-#include "IconSymLoader.h"
-#include "IconType.h"
-#include "FilepathHelper.h"
-#include "SymbolPool.h"
-#include "ArrayLoader.h"
+#include "gum/IconSymLoader.h"
+#include "gum/IconType.h"
+#include "gum/FilepathHelper.h"
+#include "gum/SymbolPool.h"
+#include "gum/ArrayLoader.h"
 
 #include <sprite2/IconSymbol.h>
 #include <sprite2/StaticRectIcon.h>

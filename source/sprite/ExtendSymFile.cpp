@@ -1,4 +1,4 @@
-#include "ExtendSymFile.h"
+#include "gum/ExtendSymFile.h"
 
 namespace gum
 {

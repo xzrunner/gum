@@ -1,5 +1,5 @@
-#include "GUM_TextboxSymbol.h"
-#include "GUM_GTxt.h"
+#include "gum/TextboxSymbol.h"
+#include "gum/GTxt.h"
 #include "gum/StringHelper.h"
 
 namespace gum

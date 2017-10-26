@@ -1,4 +1,4 @@
-#include "JointLoader.h"
+#include "gum/JointLoader.h"
 
 #include <sprite2/Joint.h>
 

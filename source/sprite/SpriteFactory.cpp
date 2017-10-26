@@ -1,18 +1,18 @@
-#include "SpriteFactory.h"
-#include "SymbolPool.h"
-#include "FilepathHelper.h"
-#include "SpriteIO.h"
-#include "SymbolFactory.h"
+#include "gum/SpriteFactory.h"
+#include "gum/SymbolPool.h"
+#include "gum/FilepathHelper.h"
+#include "gum/SpriteIO.h"
+#include "gum/SymbolFactory.h"
 
-#include "Scale9SprLoader.h"
-#include "IconSprLoader.h"
-#include "TextboxSprLoader.h"
-#include "ComplexSprLoader.h"
-#include "AnimSprLoader.h"
-#include "Anim2SprLoader.h"
-#include "P3dSprLoader.h"
-#include "P2dSprLoader.h"
-#include "MeshSprLoader.h"
+#include "gum/Scale9SprLoader.h"
+#include "gum/IconSprLoader.h"
+#include "gum/TextboxSprLoader.h"
+#include "gum/ComplexSprLoader.h"
+#include "gum/AnimSprLoader.h"
+#include "gum/Anim2SprLoader.h"
+#include "gum/P3dSprLoader.h"
+#include "gum/P2dSprLoader.h"
+#include "gum/MeshSprLoader.h"
 
 #include <simp/simp_types.h>
 #include <simp/NodeFactory.h>
@@ -30,7 +30,7 @@
 #include <simp/NodeAnim2Spr.h>
 #include <simp/AudioIDMgr.h>
 
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/Symbol.h>
 #include <sprite2/AnchorSprite.h>
 #include <sprite2/ImageSprite.h>
 #include <sprite2/Scale9Sprite.h>

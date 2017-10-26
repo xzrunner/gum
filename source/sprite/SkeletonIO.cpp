@@ -1,4 +1,4 @@
-#include "SkeletonIO.h"
+#include "gum/SkeletonIO.h"
 
 #include <sprite2/Joint.h>
 #include <sprite2/JointPose.h>

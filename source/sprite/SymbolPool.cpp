@@ -1,12 +1,12 @@
-#include "SymbolPool.h"
+#include "gum/SymbolPool.h"
 #include "gum/StringHelper.h"
-#include "SymbolFactory.h"
-#include "GUM_ImageSymbol.h"
-#include "Image.h"
+#include "gum/SymbolFactory.h"
+#include "gum/ImageSymbol.h"
+#include "gum/Image.h"
 
 #include <logger.h>
-#include <sprite2/S2_Symbol.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Symbol.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/SymbolVisitor.h>
 
 namespace gum

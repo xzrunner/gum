@@ -1,4 +1,4 @@
-#include "Anim2SprLoader.h"
+#include "gum/Anim2SprLoader.h"
 
 #include <sprite2/Anim2Sprite.h>
 #include <sprite2/UpdateParams.h>

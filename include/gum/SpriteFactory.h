@@ -2,7 +2,7 @@
 #define _GUM_SPRITE_FACTORY_H_
 
 #include <cu/cu_macro.h>
-#include <sprite2/s2_typedef.h>
+#include <sprite2/typedef.h>
 #include <cu/cu_stl.h>
 
 #include <json/json.h>

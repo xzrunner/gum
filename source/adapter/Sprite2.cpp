@@ -1,14 +1,14 @@
-#include "GUM_Sprite2.h"
-#include "GUM_DTex.h"
-#include "RenderTargetMgr.h"
-#include "RenderTarget.h"
-#include "GUM_Audio.h"
+#include "gum/Sprite2.h"
+#include "gum/DTex.h"
+#include "gum/RenderTargetMgr.h"
+#include "gum/RenderTarget.h"
+#include "gum/Audio.h"
 #include "gum/ThreadPool.h"
 
-#include <sprite2/S2_RenderTargetMgr.h>
-#include <sprite2/S2_RenderTarget.h>
-#include <sprite2/S2_Sprite.h>
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/RenderTargetMgr.h>
+#include <sprite2/RenderTarget.h>
+#include <sprite2/Sprite.h>
+#include <sprite2/Symbol.h>
 #include <sprite2/RenderParams.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/AudioContext.h>

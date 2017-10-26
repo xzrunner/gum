@@ -1,7 +1,7 @@
 #ifndef _GUM_TEXTURE_H_
 #define _GUM_TEXTURE_H_
 
-#include <unirender/ur_typedef.h>
+#include <unirender/typedef.h>
 #include <cu/cu_stl.h>
 
 #include <stdint.h>

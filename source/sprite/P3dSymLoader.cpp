@@ -1,10 +1,10 @@
 #include <string.h>
 
-#include "P3dSymLoader.h"
-#include "FilepathHelper.h"
-#include "JsonSerializer.h"
+#include "gum/P3dSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/JsonSerializer.h"
 #include "gum/Exception.h"
-#include "SymbolPool.h"
+#include "gum/SymbolPool.h"
 
 #include <logger.h>
 #include <sm_const.h>

@@ -1,5 +1,5 @@
-#include "SymbolLoader.h"
-#include "SymbolPool.h"
+#include "gum/SymbolLoader.h"
+#include "gum/SymbolPool.h"
 
 namespace gum
 {

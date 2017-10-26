@@ -1,9 +1,9 @@
-#include "AnimSymLoader.h"
-#include "FilepathHelper.h"
-#include "EasyAnimLoader.h"
-#include "SpineAnimLoader.h"
-#include "ExtendSymFile.h"
-#include "BodymovinAnimLoader.h"
+#include "gum/AnimSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/EasyAnimLoader.h"
+#include "gum/SpineAnimLoader.h"
+#include "gum/ExtendSymFile.h"
+#include "gum/BodymovinAnimLoader.h"
 
 #include <sprite2/AnimSymbol.h>
 

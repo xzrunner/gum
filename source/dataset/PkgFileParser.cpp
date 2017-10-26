@@ -1,9 +1,9 @@
-#include "PkgFileParser.h"
+#include "gum/PkgFileParser.h"
 
 #include <fs_file.h>
 #include <simp/NodeFactory.h>
 #include <timp/PkgMgr.h>
-#include <timp/TIMP_Package.h>
+#include <timp/Package.h>
 
 namespace gum
 {

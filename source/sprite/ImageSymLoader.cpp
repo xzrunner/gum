@@ -1,7 +1,7 @@
-#include "ImageSymLoader.h"
-#include "GUM_ImageSymbol.h"
-#include "Image.h"
-#include "ImagePool.h"
+#include "gum/ImageSymLoader.h"
+#include "gum/ImageSymbol.h"
+#include "gum/Image.h"
+#include "gum/ImagePool.h"
 
 #include <simp/NodeID.h>
 

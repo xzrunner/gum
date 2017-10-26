@@ -1,17 +1,17 @@
-#include "SpriteIO.h"
-#include "trans_color.h"
-#include "BlendModes.h"
-#include "CameraModes.h"
-#include "FastBlendModes.h"
-#include "FilterModes.h"
-#include "FilepathHelper.h"
-#include "Image.h"
-#include "ImagePool.h"
+#include "gum/SpriteIO.h"
+#include "gum/trans_color.h"
+#include "gum/BlendModes.h"
+#include "gum/CameraModes.h"
+#include "gum/FastBlendModes.h"
+#include "gum/FilterModes.h"
+#include "gum/FilepathHelper.h"
+#include "gum/Image.h"
+#include "gum/ImagePool.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/HeatHazeProg.h>
 #include <shaderlab/FilterShader.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/FilterFactory.h>
 #include <sprite2/RFEdgeDetection.h>
 #include <sprite2/RFGaussianBlur.h>

@@ -1,8 +1,8 @@
-#include <sprite2/s2_config.h>
+#include <sprite2/config.h>
 #ifndef S2_DISABLE_MODEL
 
-#include "GUM_Model3.h"
-#include "Image.h"
+#include "gum/Model3.h"
+#include "gum/Image.h"
 
 //#include <model3/ResourceAPI.h>
 

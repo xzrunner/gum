@@ -1,4 +1,4 @@
-#include "Scale9SprLoader.h"
+#include "gum/Scale9SprLoader.h"
 
 #include <sprite2/Scale9Sprite.h>
 #include <simp/NodeScale9Spr.h>

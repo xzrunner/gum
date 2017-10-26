@@ -1,9 +1,9 @@
-#include "EasyAnimLoader.h"
-#include "SpriteFactory.h"
-#include "SprTransLoader.h"
-#include "SpriteLoader.h"
+#include "gum/EasyAnimLoader.h"
+#include "gum/SpriteFactory.h"
+#include "gum/SprTransLoader.h"
+#include "gum/SpriteLoader.h"
 
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/LerpCircle.h>
 #include <sprite2/LerpSpiral.h>
 #include <sprite2/LerpWiggle.h>

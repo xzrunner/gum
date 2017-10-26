@@ -1,5 +1,5 @@
-#include "AudioSymLoader.h"
-#include "GUM_Audio.h"
+#include "gum/AudioSymLoader.h"
+#include "gum/Audio.h"
 
 #include <sprite2/AudioSymbol.h>
 #include <uniaudio/AudioContext.h>

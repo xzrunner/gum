@@ -1,7 +1,7 @@
-#include "ShapeLoader.h"
-#include "JsonSerializer.h"
-#include "FilepathHelper.h"
-#include "GUM_TexturePolygon.h"
+#include "gum/ShapeLoader.h"
+#include "gum/JsonSerializer.h"
+#include "gum/FilepathHelper.h"
+#include "gum/TexturePolygon.h"
 
 #include <sprite2/PolygonShape.h>
 #include <sprite2/ColorPolygon.h>

@@ -1,12 +1,12 @@
-#include "GUM_ImageSymbol.h"
-#include "Image.h"
-#include "RenderContext.h"
-#include "GUM_DTex.h"
-#include "DTexC2Strategy.h"
-#include "ProxyImage.h"
+#include "gum/ImageSymbol.h"
+#include "gum/Image.h"
+#include "gum/RenderContext.h"
+#include "gum/DTex.h"
+#include "gum/DTexC2Strategy.h"
+#include "gum/ProxyImage.h"
 
 #include <shaderlab/ShaderMgr.h>
-#include <sprite2/S2_Texture.h>
+#include <sprite2/Texture.h>
 #include <sprite2/RenderParams.h>
 
 #include <string.h>

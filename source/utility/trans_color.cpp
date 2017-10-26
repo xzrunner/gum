@@ -1,4 +1,4 @@
-#include "trans_color.h"
+#include "gum/trans_color.h"
 
 #include <assert.h>
 #include <stdlib.h>

@@ -1,13 +1,13 @@
 #include <string.h>
 
-#include "Scale9SymLoader.h"
-#include "FilepathHelper.h"
-#include "SpriteFactory.h"
-#include "SymbolPool.h"
-#include "SpriteLoader.h"
+#include "gum/Scale9SymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/SpriteFactory.h"
+#include "gum/SymbolPool.h"
+#include "gum/SpriteLoader.h"
 
 #include <sprite2/Scale9Symbol.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <simp/NodeScale9.h>
 #include <sm_const.h>
 

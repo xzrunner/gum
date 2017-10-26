@@ -1,16 +1,16 @@
-#include "GUM_DTex.h"
-#include "ImageLoader.h"
-#include "ImagePool.h"
-#include "RenderContext.h"
-#include "ProxyImage.h"
-#include "DTexC2Strategy.h"
+#include "gum/DTex.h"
+#include "gum/ImageLoader.h"
+#include "gum/ImagePool.h"
+#include "gum/RenderContext.h"
+#include "gum/ProxyImage.h"
+#include "gum/DTexC2Strategy.h"
 #include "gum/ThreadPool.h"
 #include "gum/SymbolPool.h"
-#include "gum/GUM_ImageSymbol.h"
+#include "gum/ImageSymbol.h"
 
 #include <logger.h>
-#include <bimp/BIMP_ImportStream.h>
-#include <timp/TIMP_Package.h>
+#include <bimp/ImportStream.h>
+#include <timp/Package.h>
 #include <timp/PkgMgr.h>
 #include <timp/TextureLoader.h>
 #include <simp/RelocateTexcoords.h>
@@ -20,8 +20,8 @@
 #include <simp/NodePicture.h>
 #include <dtex2/RenderAPI.h>
 #include <dtex2/ResourceAPI.h>
-#include <dtex2/DTEX_Package.h>
-#include <dtex2/DTEX_PkgMgr.h>
+#include <dtex2/Package.h>
+#include <dtex2/PkgMgr.h>
 #include <dtex2/TextureRaw.h>
 #include <dtex2/Cache.h>
 #include <dtex2/CacheMgr.h>
@@ -32,14 +32,14 @@
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
-#include <sprite2/S2_RVG.h>
-#include <sprite2/S2_RenderContext.h>
+#include <sprite2/RVG.h>
+#include <sprite2/RenderContext.h>
 #include <sprite2/RenderCtxStack.h>
 #include <sprite2/RenderScissor.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/StatImages.h>
-#include <sprite2/S2_Symbol.h>
-#include <unirender/UR_RenderContext.h>
+#include <sprite2/Symbol.h>
+#include <unirender/RenderContext.h>
 
 #include <assert.h>
 

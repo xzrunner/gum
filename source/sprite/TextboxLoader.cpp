@@ -1,5 +1,5 @@
-#include "TextboxLoader.h"
-#include "trans_color.h"
+#include "gum/TextboxLoader.h"
+#include "gum/trans_color.h"
 
 #include <sprite2/Textbox.h>
 #include <simp/NodeLabel.h>

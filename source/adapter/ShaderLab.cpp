@@ -1,5 +1,5 @@
-#include "GUM_ShaderLab.h"
-#include "RenderContext.h"
+#include "gum/ShaderLab.h"
+#include "gum/RenderContext.h"
 #include "gum/ThreadPool.h"
 
 #include <shaderlab/ShaderMgr.h>

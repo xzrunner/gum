@@ -1,22 +1,22 @@
-#include "MeshSymLoader.h"
-#include "FilepathHelper.h"
-#include "SymbolPool.h"
-#include "JsonSerializer.h"
-#include "MeshIO.h"
-#include "ArrayLoader.h"
+#include "gum/MeshSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/SymbolPool.h"
+#include "gum/JsonSerializer.h"
+#include "gum/MeshIO.h"
+#include "gum/ArrayLoader.h"
 
 #include <simp/NodeMesh.h>
 #include <simp/from_int.h>
-#include <simp/SIMP_PointsMesh.h>
-#include <simp/SIMP_TrianglesMesh.h>
-#include <simp/SIMP_Skin2Mesh.h>
+#include <simp/PointsMesh.h>
+#include <simp/TrianglesMesh.h>
+#include <simp/Skin2Mesh.h>
 #include <simp/from_int.h>
 #include <polymesh/PointsMesh.h>
 #include <polymesh/TrianglesMesh.h>
 #include <polymesh/Skin2Mesh.h>
 #include <polymesh/MeshTransform.h>
 #include <sprite2/MeshSymbol.h>
-#include <sprite2/S2_Mesh.h>
+#include <sprite2/Mesh.h>
 
 #include <json/json.h>
 

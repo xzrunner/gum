@@ -1,12 +1,12 @@
-#include "EasyAnim2Loader.h"
-#include "SymbolLoader.h"
-#include "SpriteFactory.h"
-#include "SkeletonIO.h"
+#include "gum/EasyAnim2Loader.h"
+#include "gum/SymbolLoader.h"
+#include "gum/SpriteFactory.h"
+#include "gum/SkeletonIO.h"
 
 #include <SM_Calc.h>
 #include <rigging.h>
 #include <sprite2/Anim2Symbol.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 
 #include <queue>
 

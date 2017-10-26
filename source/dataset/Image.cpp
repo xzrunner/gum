@@ -1,10 +1,10 @@
-#include "Image.h"
-#include "ImageLoader.h"
-#include "RenderContext.h"
+#include "gum/Image.h"
+#include "gum/ImageLoader.h"
+#include "gum/RenderContext.h"
 
-#include <sprite2/S2_Texture.h>
+#include <sprite2/Texture.h>
 #include <sprite2/StatImages.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 
 #include <assert.h>
 

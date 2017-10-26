@@ -4,7 +4,7 @@
 #include <cu/cu_macro.h>
 #include <cu/cu_stl.h>
 #include <sprite2/SymType.h>
-#include <sprite2/s2_typedef.h>
+#include <sprite2/typedef.h>
 
 #include <functional>
 

@@ -1,11 +1,11 @@
-#include "BodymovinAnimLoader.h"
-#include "SymbolLoader.h"
-#include "SpriteLoader.h"
+#include "gum/BodymovinAnimLoader.h"
+#include "gum/SymbolLoader.h"
+#include "gum/SpriteLoader.h"
 #include "gum/StringHelper.h"
 
 #include <sm_const.h>
 #include <logger.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/ImageSymbol.h>
 #include <sprite2/RenderColor.h>
 #include <sprite2/ShapeSymbol.h>

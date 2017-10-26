@@ -1,9 +1,9 @@
-#include "MaskSymLoader.h"
-#include "FilepathHelper.h"
-#include "SpriteFactory.h"
+#include "gum/MaskSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/SpriteFactory.h"
 
 #include <sprite2/MaskSymbol.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <simp/NodeMask.h>
 
 #include <json/json.h>

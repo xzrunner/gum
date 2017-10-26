@@ -2,7 +2,7 @@
 #define _GUM_GTXT_H_
 
 #include <sprite2/pre_defined.h>
-#include <sprite2/s2_typedef.h>
+#include <sprite2/typedef.h>
 #include <cu/cu_macro.h>
 #include <cu/cu_stl.h>
 #include <SM_Matrix.h>

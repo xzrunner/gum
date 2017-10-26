@@ -1,9 +1,9 @@
-#include "ActorPool.h"
-#include "SpriteFactory.h"
+#include "gum/ActorPool.h"
+#include "gum/SpriteFactory.h"
 
-#include <sprite2/S2_Sprite.h>
-#include <sprite2/S2_Actor.h>
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/Sprite.h>
+#include <sprite2/Actor.h>
+#include <sprite2/Symbol.h>
 #include <sprite2/ActorFactory.h>
 
 namespace gum

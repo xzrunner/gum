@@ -1,4 +1,4 @@
-#include "P3dSprLoader.h"
+#include "gum/P3dSprLoader.h"
 
 #include <sprite2/Particle3dSprite.h>
 #include <simp/NodeParticle3dSpr.h>

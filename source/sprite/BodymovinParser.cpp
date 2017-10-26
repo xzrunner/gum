@@ -1,5 +1,5 @@
-#include "BodymovinParser.h"
-#include "FilepathHelper.h"
+#include "gum/BodymovinParser.h"
+#include "gum/FilepathHelper.h"
 
 #include <fstream>
 #include <algorithm>

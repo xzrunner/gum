@@ -1,5 +1,5 @@
-#include "TextboxSprLoader.h"
-#include "TextboxLoader.h"
+#include "gum/TextboxSprLoader.h"
+#include "gum/TextboxLoader.h"
 
 #include <sprite2/TextboxSprite.h>
 #include <sprite2/UpdateParams.h>

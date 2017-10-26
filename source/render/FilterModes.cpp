@@ -1,4 +1,4 @@
-#include "FilterModes.h"
+#include "gum/FilterModes.h"
 
 namespace gum
 {

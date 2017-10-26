@@ -1,16 +1,16 @@
-#include "LoadImageTask.h"
-#include "Image.h"
-#include "RenderContext.h"
+#include "gum/LoadImageTask.h"
+#include "gum/Image.h"
+#include "gum/RenderContext.h"
 
 #include <gimg_import.h>
 #include <gimg_typedef.h>
 #include <gimg_pvr.h>
 #include <gimg_etc2.h>
 #include <bimp/FileLoader.h>
-#include <bimp/BIMP_ImportStream.h>
+#include <bimp/ImportStream.h>
 #include <timp/TextureFormat.h>
 #include <timp/TextureLoader.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 
 #include <stdlib.h>
 #include <assert.h>

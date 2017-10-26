@@ -1,4 +1,4 @@
-#include "SpineParser.h"
+#include "gum/SpineParser.h"
 
 #include <sm_const.h>
 

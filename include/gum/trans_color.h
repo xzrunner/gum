@@ -2,7 +2,7 @@
 #define _GUM_TRANS_COLOR_H_
 
 #include <sprite2/Color.h>
-#include <sprite2/s2_trans_color.h>
+#include <sprite2/trans_color.h>
 #include <cu/cu_stl.h>
 
 namespace gum

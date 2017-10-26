@@ -1,4 +1,4 @@
-#include "CameraModes.h"
+#include "gum/CameraModes.h"
 
 namespace gum
 {

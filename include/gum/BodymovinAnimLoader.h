@@ -1,7 +1,7 @@
 #ifndef _GUM_BODYMOVIN_ANIM_LOADER_H_
 #define _GUM_BODYMOVIN_ANIM_LOADER_H_
 
-#include "BodymovinParser.h"
+#include "gum/BodymovinParser.h"
 
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>

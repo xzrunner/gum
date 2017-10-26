@@ -1,7 +1,7 @@
-#include "TextureSymLoader.h"
-#include "FilepathHelper.h"
-#include "ShapeLoader.h"
-#include "SymbolFactory.h"
+#include "gum/TextureSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/ShapeLoader.h"
+#include "gum/SymbolFactory.h"
 
 #include <sprite2/TextureSymbol.h>
 #include <sprite2/PolygonShape.h>

@@ -1,4 +1,4 @@
-#include "IconSprLoader.h"
+#include "gum/IconSprLoader.h"
 
 #include <sprite2/IconSprite.h>
 #include <simp/NodeIconSpr.h>

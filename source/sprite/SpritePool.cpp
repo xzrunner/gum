@@ -1,8 +1,8 @@
-#include "SpritePool.h"
-#include "SpriteFactory.h"
+#include "gum/SpritePool.h"
+#include "gum/SpriteFactory.h"
 
-#include <sprite2/S2_Sprite.h>
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/Sprite.h>
+#include <sprite2/Symbol.h>
 
 namespace gum
 {

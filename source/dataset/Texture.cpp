@@ -1,12 +1,12 @@
-#include "Texture.h"
-#include "RenderContext.h"
+#include "gum/Texture.h"
+#include "gum/RenderContext.h"
 #include "gum/StringHelper.h"
 #include "gum/Exception.h"
 
 #include <gum/Config.h>
 #include <gimg_import.h>
 #include <gimg_typedef.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 
 namespace gum
 {

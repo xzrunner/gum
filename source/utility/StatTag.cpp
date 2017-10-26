@@ -1,5 +1,5 @@
 #include "gum/StatTag.h"
-#include "gum/GUM_GTxt.h"
+#include "gum/GTxt.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <sprite2/pre_defined.h>

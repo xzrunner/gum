@@ -1,7 +1,7 @@
 #include "gum/Statistics.h"
 #include "gum/StatFPS.h"
 #include "gum/StatTag.h"
-#include "gum/GUM_GTxt.h"
+#include "gum/GTxt.h"
 #include "gum/SymbolPool.h"
 #include "gum/Image.h"
 #include "gum/ImagePool.h"
@@ -18,9 +18,9 @@
 #include <sprite2/StatSymCount.h>
 #include <sprite2/StatSprCount.h>
 #include <sprite2/StatImages.h>
-#include <sprite2/S2_Sprite.h>
-#include <sprite2/S2_Actor.h>
-#include <sprite2/S2_Symbol.h>
+#include <sprite2/Sprite.h>
+#include <sprite2/Actor.h>
+#include <sprite2/Symbol.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Statistics.h>
 #include <shaderlab/StatDrawCall.h>

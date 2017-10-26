@@ -1,10 +1,10 @@
 #include <string.h>
 
-#include "TrailSymLoader.h"
-#include "FilepathHelper.h"
-#include "JsonSerializer.h"
+#include "gum/TrailSymLoader.h"
+#include "gum/FilepathHelper.h"
+#include "gum/JsonSerializer.h"
 #include "gum/Exception.h"
-#include "SymbolPool.h"
+#include "gum/SymbolPool.h"
 
 #include <logger.h>
 #include <mt_2d.h>

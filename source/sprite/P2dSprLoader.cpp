@@ -1,4 +1,4 @@
-#include "P2dSprLoader.h"
+#include "gum/P2dSprLoader.h"
 
 #include <sprite2/Particle2dSprite.h>
 #include <simp/from_int.h>

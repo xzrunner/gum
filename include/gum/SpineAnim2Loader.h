@@ -1,7 +1,7 @@
 #ifndef _GUM_SPINE_ANIM2_LOADER_H_
 #define _GUM_SPINE_ANIM2_LOADER_H_
 
-#include "SpineParser.h"
+#include "gum/SpineParser.h"
 
 #include <cu/uncopyable.h>
 #include <rigging.h>

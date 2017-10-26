@@ -1,17 +1,17 @@
 #include <string.h>
 
-#include "SpineAnim2Loader.h"
-#include "SymbolLoader.h"
-#include "SpineParser.h"
-#include "FilepathHelper.h"
+#include "gum/SpineAnim2Loader.h"
+#include "gum/SymbolLoader.h"
+#include "gum/SpineParser.h"
+#include "gum/FilepathHelper.h"
 
 #include <rigging.h>
 #include <polymesh/TrianglesMesh.h>
 #include <polymesh/Skin2Mesh.h>
 #include <sprite2/Anim2Symbol.h>
-#include <sprite2/S2_Sprite.h>
+#include <sprite2/Sprite.h>
 #include <sprite2/MeshSymbol.h>
-#include <sprite2/S2_Mesh.h>
+#include <sprite2/Mesh.h>
 #include <sprite2/ImageSymbol.h>
 
 #include <assert.h>
