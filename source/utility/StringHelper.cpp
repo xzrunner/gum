@@ -118,7 +118,8 @@ CU_STR StringHelper::UTF8ToGBK(const CU_STR& str)
 #ifdef NO_BOOST
 	return code_convert("UTF-8", "GBK", str);
 #else
-	return CU_STR(boost::locale::conv::from_utf(str.c_str(), "GBK"));
+	std::string std_str = boost::locale::conv::from_utf(str.c_str(), "GBK");
+	return CU_STR(std_str.c_str());
 #endif // NO_BOOST
 }
 
@@ -127,7 +128,8 @@ CU_STR StringHelper::GBKToUTF8(const CU_STR& str)
 #ifdef NO_BOOST
 	return code_convert("GBK", "UTF-8", str);
 #else
-	return CU_STR(boost::locale::conv::to_utf<char>(str.c_str(), "GBK"));
+	std::string std_str = boost::locale::conv::to_utf<char>(str.c_str(), "GBK");
+	return CU_STR(std_str.c_str());
 #endif // NO_BOOST
 }
 
