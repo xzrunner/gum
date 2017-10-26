@@ -52,9 +52,9 @@ CU_SINGLETON_DEFINITION(DTex);
 
 static const int IMG_ID = -3;
 
-static void (*DRAW_BEGIN)() = NULL;
-static void (*DRAW_END)() = NULL;
-static void (*ERROR_RELOAD)() = NULL;
+static void (*DRAW_BEGIN)() = nullptr;
+static void (*DRAW_END)() = nullptr;
+static void (*ERROR_RELOAD)() = nullptr;
 
 /************************************************************************/
 /* draw                                                                 */
@@ -558,7 +558,7 @@ void DTex::LoadSymFinish()
 const float* DTex::QuerySymbol(UID sym_id, int& tex_id, int& block_id) const
 {
 	if (!m_c2_enable) {
-		return NULL;
+		return nullptr;
 	}
 
 	int b_id;
@@ -568,7 +568,7 @@ const float* DTex::QuerySymbol(UID sym_id, int& tex_id, int& block_id) const
 		block_id = b_id;
 		return node->GetTexcoords();
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 

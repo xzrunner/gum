@@ -199,14 +199,14 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 			dst->samples[j].time   = src.samples[j]->time;
 			dst->samples[j].offset = src.samples[j]->offset;
 			dst->samples[j].count  = src.samples[j]->count;
-			dst->samples[j].data   = NULL;
+			dst->samples[j].data   = nullptr;
 		}
 		ptr += SIZEOF_RG_DEFORM_SAMPLE * dst->count;
 
 		for (int j = 0; j < dst->count; ++j) 
 		{
 			if (dst->samples[j].count == 0) {
-				dst->samples[j].data = NULL;
+				dst->samples[j].data = nullptr;
 			} else {
 				dst->samples[j].data = (float*)ptr;
 				int sz = sizeof(float) * 2 * dst->samples[j].count;

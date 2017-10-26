@@ -28,11 +28,11 @@ SpineAnim2Loader::SpineAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym,
 	, m_sym_loader(sym_loader)
 	, m_num(0)
 	, m_joint_count(0)
-	, m_joints(NULL)
-	, m_sk(NULL)
-	, m_root(NULL)
-	, m_tl_joints(NULL)
-	, m_tl_skins(NULL)
+	, m_joints(nullptr)
+	, m_sk(nullptr)
+	, m_root(nullptr)
+	, m_tl_joints(nullptr)
+	, m_tl_skins(nullptr)
 	, m_max_frame(0)
 {
 	if (!m_sym_loader) {
@@ -98,7 +98,7 @@ void SpineAnim2Loader::Clear()
 {
 	m_num = 0;
 
-//	m_root = NULL;
+//	m_root = nullptr;
 }
 
 void SpineAnim2Loader::LoadJointsData(const SpineParser& parser)
@@ -195,7 +195,7 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const CU_STR& img_
 			m_map2skin.insert(std::make_pair(src.name, ptr++));
 
 			rg_skin skin;
-			skin.ud = NULL;
+			skin.ud = nullptr;
 			switch (src.type)
 			{
 			case SpineParser::SKIN_IMAGE:
@@ -441,7 +441,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::Animation& anim)
 	for (int i = 0; i < m_sk->joint_count; ++i) 
 	{
 		const CU_STR& name = m_joints_data[i].name;
-		const SpineParser::AnimBone* bone = NULL;
+		const SpineParser::AnimBone* bone = nullptr;
 		for (int j = 0, m = anim.bones.size(); j < m; ++j) {
 			if (name == anim.bones[j].name) {
 				bone = &anim.bones[j];
@@ -449,7 +449,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::Animation& anim)
 			}
 		}
 		if (!bone) {
-			m_tl_joints[i] = NULL;
+			m_tl_joints[i] = nullptr;
 			continue;
 		}
 
@@ -549,7 +549,7 @@ void SpineAnim2Loader::LoadTimelineSkins(const SpineParser::Animation& anim)
 	for (int i = 0; i < m_sk->slot_count; ++i)
 	{
 		const CU_STR& name = m_slots_data[i].name;
-		const SpineParser::AnimSlot* slot = NULL;
+		const SpineParser::AnimSlot* slot = nullptr;
 		for (int j = 0, m = anim.slots.size(); j < m; ++j) {
 			if (name == anim.slots[j].name) {
 				slot = &anim.slots[j];
@@ -557,7 +557,7 @@ void SpineAnim2Loader::LoadTimelineSkins(const SpineParser::Animation& anim)
 			}
 		}
 		if (!slot) {
-			m_tl_skins[i] = NULL;
+			m_tl_skins[i] = nullptr;
 			continue;
 		}
 

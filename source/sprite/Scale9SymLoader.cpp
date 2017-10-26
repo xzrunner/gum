@@ -106,7 +106,7 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 	s2::SprPtr grids[9];
 	memset(grids, 0, sizeof(grids));
 
-	const simp::NodeScale9::Grid* grid = NULL;
+	const simp::NodeScale9::Grid* grid = nullptr;
 
 	int idx = 0;
 	s2::SCALE9_TYPE type = s2::SCALE9_TYPE(node->type);
@@ -193,11 +193,11 @@ s2::SprPtr Scale9SymLoader::LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t m
 {
 	auto sym = SymbolPool::Instance()->Fetch(sym_id);
 	if (!sym) {
-		return NULL;
+		return nullptr;
 	}
 	auto spr = SpriteFactory::Instance()->Create(sym);
 	if (!spr) {
-		return NULL;
+		return nullptr;
 	}
 	float angle = dir * SM_PI / 2;
 	spr->SetAngle(angle);

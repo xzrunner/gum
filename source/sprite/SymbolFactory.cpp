@@ -57,13 +57,13 @@ namespace gum
 CU_SINGLETON_DEFINITION(SymbolFactory);
 
 SymbolFactory::SymbolFactory()
-	: m_anchor_sym(NULL)
+	: m_anchor_sym(nullptr)
 {
 }
 
 s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 {
-	s2::SymPtr ret = NULL;
+	s2::SymPtr ret = nullptr;
 
 	if (type == s2::SYM_UNKNOWN) {
 		type = SymbolFile::Instance()->Type(filepath);
@@ -228,13 +228,13 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 		return m_anchor_sym;
 	}
 
-	s2::SymPtr ret = NULL;
+	s2::SymPtr ret = nullptr;
 
 	int type;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
 	if(!data) {
 		LOGW("Create sym fail: id %u", id);
-		return NULL;
+		return nullptr;
 	}
 	switch (type)
 	{
@@ -242,7 +242,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 		{
 			const simp::NodePicture* pic = (const simp::NodePicture*)data;
 			sm::vec2 offset(pic->offx * 0.5f, pic->offy * 0.5f);
-			std::shared_ptr<ImageSymbol> sym = NULL;
+			std::shared_ptr<ImageSymbol> sym = nullptr;
 			if (pic->texid < simp::NodePicture::MAX_IN_PKG)
 			{
 				int pkg_id = simp::NodeID::GetPkgID(id);
@@ -333,7 +333,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_ANIMATION:
 		{
 			auto sym = mm::allocate_shared<s2::AnimSymbol>(id);
-			AnimSymLoader loader(sym, NULL, NULL);
+			AnimSymLoader loader(sym, nullptr, nullptr);
 			loader.LoadBin((const simp::NodeAnimation*)data);
 			ret = sym;
 		}
@@ -422,7 +422,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& pkg_name, const CU_STR& node_name
 	} else {
 		LOGW("Create sym fail: pkg %s, node %s", 
 			pkg_name.c_str(), node_name.c_str());
-		return NULL;
+		return nullptr;
 	}
 }
 

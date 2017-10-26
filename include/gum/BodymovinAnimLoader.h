@@ -19,8 +19,8 @@ class BodymovinAnimLoader : private cu::Uncopyable
 {
 public:
 	BodymovinAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
-		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL,
-		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
+		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr,
+		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
 

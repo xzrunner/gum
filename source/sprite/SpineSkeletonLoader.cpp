@@ -77,7 +77,7 @@ void SpineSkeletonLoader::LoadSprites(const SpineParser& parser, const CU_STR& i
 		const SpineParser::Slot& slot = parser.slots[i];
 		const SpineParser::SkinItem* item = parser.QuerySkin(slot);
 		if (!item) {
-			m_sprs.push_back(NULL);
+			m_sprs.push_back(nullptr);
 			continue;
 		}
 		CU_STR filepath = FilepathHelper::Absolute(img_dir, item->name + ".png");
@@ -108,7 +108,7 @@ void SpineSkeletonLoader::LoadJoints(const SpineParser& parser)
 		if (itr_joint != m_joints.end()) {
 			continue;
 		}
-		auto joint = m_joint_loader->Create(NULL, s2::JointPose());
+		auto joint = m_joint_loader->Create(nullptr, s2::JointPose());
 		m_joints.insert(std::make_pair(bone.name, joint));
 	}
 
@@ -145,7 +145,7 @@ void SpineSkeletonLoader::InitPose(const SpineParser& parser)
 	auto itr = m_joints.begin();
 	for ( ; itr != m_joints.end(); ++itr)
 	{
-		const SpineParser::Bone* src = NULL;
+		const SpineParser::Bone* src = nullptr;
 		for (int i = 0, n = parser.bones.size(); i < n; ++i) {
 			if (parser.bones[i].name == itr->first) {
 				src = &parser.bones[i];

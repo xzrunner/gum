@@ -65,7 +65,7 @@ void BodymovinAnimLoader::LoadAssets(CU_MAP<CU_STR, s2::SprPtr>& map_assets,
 	for (int i = 0, n = assets.size(); i < n; ++i)
 	{
 		const BodymovinParser::Asset& a = assets[i];
-		s2::SprPtr spr = NULL;
+		s2::SprPtr spr = nullptr;
 		if (a.layers.empty()) 
 		{
 			spr = m_spr_loader->Create(a.filepath);
@@ -114,7 +114,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_a
 			src_h = src.solid_height;
 		}
 
-		s2::SprPtr s_spr = NULL, e_spr = NULL;
+		s2::SprPtr s_spr = nullptr, e_spr = nullptr;
 		if (src.layer_type == BodymovinParser::LAYER_PRE_COMP ||
 			src.layer_type == BodymovinParser::LAYER_IMAGE)
 		{
@@ -163,7 +163,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_a
 		e_frame->index = end_time;
 
 		// insert frame
-		s2::SprPtr start_null = NULL, pre_in_null = NULL;
+		s2::SprPtr start_null = nullptr, pre_in_null = nullptr;
 		if (src.start_frame < src.in_frame) 
 		{
 			// start frame
@@ -251,7 +251,7 @@ void BodymovinAnimLoader::LoadLayersPost(const CU_VEC<BodymovinParser::Layer>& l
 			}
 			else
 			{
-				const BodymovinParser::Layer* parent = NULL;
+				const BodymovinParser::Layer* parent = nullptr;
 				int p_idx = -1;
 				CU_MAP<int, int>::iterator itr = map_layerid2idx.find(src.parent_id);
 				if (itr != map_layerid2idx.end()) {
@@ -278,7 +278,7 @@ void BodymovinAnimLoader::LoadLayersPost(const CU_VEC<BodymovinParser::Layer>& l
 							LoadScale(dst->frames, parent->trans.scale, frame_rate);
 
 							int pid = parent->parent_id;
-							parent = NULL;
+							parent = nullptr;
 							if (pid != -1) {
 								CU_MAP<int, int>::iterator itr = map_layerid2idx.find(pid);
 								if (itr != map_layerid2idx.end()) {

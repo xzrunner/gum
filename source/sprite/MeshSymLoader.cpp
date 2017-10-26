@@ -79,7 +79,7 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 		return;
 	}
 
-	std::unique_ptr<s2::Mesh> mesh = NULL;
+	std::unique_ptr<s2::Mesh> mesh = nullptr;
 	switch (node->shape->type)
 	{
 	case simp::MESH_POINTS:

@@ -37,9 +37,9 @@ s2::ActorPtr ActorPool::Fetch(const uint32_t sym_id, bool& is_new)
 		is_new = true;
 		auto spr = SpriteFactory::Instance()->CreateFromSym(sym_id, true);
 		if (spr) {
-			return s2::ActorFactory::Create(NULL, spr);
+			return s2::ActorFactory::Create(nullptr, spr);
 		} else {
-			return NULL;
+			return nullptr;
 		}
 	}
 }

@@ -21,8 +21,8 @@ class SkeletonSymLoader : private cu::Uncopyable
 {
 public:
 	SkeletonSymLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym, 
-		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL,
-		const std::shared_ptr<const JointLoader>& joint_loader = NULL);
+		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr,
+		const std::shared_ptr<const JointLoader>& joint_loader = nullptr);
 
 	void LoadJson(const CU_STR& filepath);
 

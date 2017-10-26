@@ -24,7 +24,7 @@ EasySkeletonLoader::EasySkeletonLoader(const std::shared_ptr<s2::SkeletonSymbol>
 	, m_spr_loader(spr_loader)
 	, m_joint_loader(joint_loader)
 	, m_num(0)
-	, m_root(NULL)
+	, m_root(nullptr)
 {
 	if (!m_spr_loader) {
 		m_spr_loader = std::make_shared<SpriteLoader>();
@@ -90,7 +90,7 @@ void EasySkeletonLoader::LoadJoints(const Json::Value& val)
 	{
 		auto spr = m_sprs[i];
 		const Json::Value& joints_val = val[i]["joint"];
-		std::shared_ptr<s2::Joint> dst_joint = NULL;
+		std::shared_ptr<s2::Joint> dst_joint = nullptr;
 		for (int j = 0, m = joints_val.size(); j < m; ++j) 
 		{
 			const Json::Value& joint_val = joints_val[j];

@@ -24,7 +24,7 @@ class EasyAnim2Loader : private cu::Uncopyable
 {
 public:
 	EasyAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
-		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL);
+		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr);
 	~EasyAnim2Loader();
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
@@ -52,7 +52,7 @@ private:
 
 		int idx;
 
-		Joint() : skin(NULL), parent(-1), idx(-1) {}
+		Joint() : skin(nullptr), parent(-1), idx(-1) {}
 	};
 
 private:

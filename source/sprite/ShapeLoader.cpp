@@ -17,7 +17,7 @@ std::unique_ptr<s2::Shape> ShapeLoader::LoadShape(const Json::Value& val, const 
 		return LoadPolygon(val, dir);
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 std::unique_ptr<s2::PolygonShape> ShapeLoader::LoadPolygon(const Json::Value& val, const CU_STR& dir)

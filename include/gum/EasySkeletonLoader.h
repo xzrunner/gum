@@ -22,8 +22,8 @@ class EasySkeletonLoader : private cu::Uncopyable
 {
 public:
 	EasySkeletonLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym, 
-		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL,
-		const std::shared_ptr<const JointLoader>& joint_loader = NULL);
+		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr,
+		const std::shared_ptr<const JointLoader>& joint_loader = nullptr);
 	~EasySkeletonLoader();
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);

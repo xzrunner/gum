@@ -26,7 +26,7 @@ private:
 		RenderTarget* rt;
 		bool available;
 
-		Item() : rt(NULL), available(true) {}
+		Item() : rt(nullptr), available(true) {}
 	};
 
 private:

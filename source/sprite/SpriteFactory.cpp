@@ -71,10 +71,10 @@ SpriteFactory::SpriteFactory()
 s2::SprPtr SpriteFactory::Create(const s2::SymPtr& sym, uint32_t id, bool create_actors) const
 {
 	if (!sym) {
-		return NULL;
+		return nullptr;
 	}
 
-	s2::SprPtr spr = NULL;
+	s2::SprPtr spr = nullptr;
 	switch (sym->Type())
 	{
 	case s2::SYM_IMAGE:
@@ -141,7 +141,7 @@ s2::SprPtr SpriteFactory::Create(const CU_STR& filepath) const
 {
 	auto sym = SymbolPool::Instance()->Fetch(filepath);
 	if (!sym) {
-		return NULL;
+		return nullptr;
 	} else {
 		auto spr = Create(sym, -1, false);
 		if (spr) {
@@ -154,13 +154,13 @@ s2::SprPtr SpriteFactory::Create(const CU_STR& filepath) const
 
 s2::SprPtr SpriteFactory::Create(const Json::Value& val, const CU_STR& dir) const
 {
-	s2::SprPtr spr = NULL;
+	s2::SprPtr spr = nullptr;
 
 	CU_STR filepath = val["filepath"].asString().c_str();
 	filepath = FilepathHelper::Absolute(dir, filepath);
 	spr = Create(filepath);
 	if (!spr) {
-		return NULL;
+		return nullptr;
 	}
 
 	SpriteIO io(true, true);
@@ -256,7 +256,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 		return std::make_shared<s2::AnchorSprite>(SymbolFactory::Instance()->Create(id));
 	}
 
-	s2::SprPtr spr = NULL;
+	s2::SprPtr spr = nullptr;
 	int type = simp::TYPE_INVALID;
 	const void* data = simp::NodeFactory::Instance()->Create(id, &type);
 	if (!data && type == simp::TYPE_INVALID)
@@ -264,7 +264,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 		int pkg_id = simp::NodeID::GetPkgID(id);
 		int node_id = simp::NodeID::GetNodeID(id);
 		LOGW("Create spr fail: id %d, pkg %d, node %d\n", id, pkg_id, node_id);
-		return NULL;
+		return nullptr;
 	}
 	switch (type)
 	{
@@ -490,7 +490,7 @@ s2::SprPtr SpriteFactory::CreateFromSym(uint32_t id, bool create_actors)
 	auto sym = SymbolPool::Instance()->Fetch(id);
 	if (!sym) {
 		LOGW("Create spr fail: err sym %u", id);
-		return NULL;
+		return nullptr;
 	} else {
 		return Create(sym, -1, create_actors);
 	}

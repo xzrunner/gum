@@ -31,7 +31,7 @@ bool DTexC2Strategy::OnC2QueryFail(uint32_t id, int tex_id, int tex_w, int tex_h
 		return false;
 	}
 
-	Package* pkg = NULL;
+	Package* pkg = nullptr;
 	int pkg_id = simp::NodeID::GetPkgID(id);
 	int node_id = simp::NodeID::GetNodeID(id);
 	CU_MAP<int, Package*>::iterator itr = m_pkgs.find(pkg_id);

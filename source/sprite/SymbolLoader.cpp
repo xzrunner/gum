@@ -11,7 +11,7 @@ s2::SymPtr SymbolLoader::Create(const CU_STR& filepath, int type) const
 
 s2::SymPtr SymbolLoader::Create(int type) const
 {
-	return NULL;
+	return nullptr;
 }
 
 }

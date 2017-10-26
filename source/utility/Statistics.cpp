@@ -310,7 +310,7 @@ void Statistics::PrintFile() const
 
 	static char buf[512];
 	sprintf(buf, "timestamp %lu, cost %.1f, vertices %d, dc %d\n", 
-		time(NULL), m_tpf_smooth, sl_stat->GetVertices(), sl_stat->GetDrawCall());
+		time(nullptr), m_tpf_smooth, sl_stat->GetVertices(), sl_stat->GetDrawCall());
 	m_fout << buf;
 
 // 	static CU_STR buf_str;

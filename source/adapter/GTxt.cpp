@@ -236,11 +236,11 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 	int ft_count = gtxt_ft_get_font_cout();
 	UID uid = ResourceUID::Glyph(unicode, GlyphStyle(gs));
 
-	const float* texcoords = NULL;
+	const float* texcoords = nullptr;
 	bool exist = false;
 	if (gs->font < ft_count && !DTex::Instance()->ExistGlyph(uid)) {
 		exist = false;
-		texcoords = NULL;
+		texcoords = nullptr;
 	} else {
 		exist = true;
 		texcoords = DTex::Instance()->QuerySymbol(uid, tex_id, block_id);
@@ -292,7 +292,7 @@ ext_sym_create(const char* str) {
 	}
 	CU_VEC<CU_STR> tokens;
 	StringHelper::Split(src, " =", tokens);
-	s2::SymPtr sym = NULL;
+	s2::SymPtr sym = nullptr;
 	if (tokens.size() == 2) {
 		if (tokens[0] == "path") {
 			sym = SymbolPool::Instance()->Fetch(tokens[1]);
@@ -369,9 +369,9 @@ GTxt::GTxt()
 
 	gtxt_ft_create();
 
-	gtxt_glyph_create(m_cap_bitmap, m_cap_layout, NULL, get_uf_layout);
+	gtxt_glyph_create(m_cap_bitmap, m_cap_layout, nullptr, get_uf_layout);
 
-	gtxt_richtext_ext_sym_cb_init(&ext_sym_create, &ext_sym_release, &ext_sym_get_size, &ext_sym_render, NULL);
+	gtxt_richtext_ext_sym_cb_init(&ext_sym_create, &ext_sym_release, &ext_sym_get_size, &ext_sym_render, nullptr);
 }
 
 GTxt::~GTxt() 
@@ -504,8 +504,8 @@ void GTxt::Draw(const S2_MAT& mt, const CU_STR& str, int width) const
 
 	render_params rp;
 	rp.mt = &mt;
-	rp.mul = NULL;
-	rp.add = NULL;
+	rp.mul = nullptr;
+	rp.add = nullptr;
 
 	gtxt_label_draw(str.c_str(), &style, (void*)&rp);
 }

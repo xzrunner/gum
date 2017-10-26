@@ -29,7 +29,7 @@ void AnimSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 	m_spr->SetStartRandom(s2::UpdateParams(), anim_val["start_random"].asBool());
 
 	if (anim_val.isMember("active")) {
-		m_spr->SetActive(anim_val["active"].asBool(), NULL);
+		m_spr->SetActive(anim_val["active"].asBool(), nullptr);
 	}
 }
 

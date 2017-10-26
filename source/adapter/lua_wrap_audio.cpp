@@ -24,7 +24,7 @@ lcreate(lua_State* L)
 {
 	const char* filepath = luaL_checkstring(L, 1);
 	bool stream = lua_toboolean(L, 2);
-	void* source = NULL;
+	void* source = nullptr;
 	try {
 		Audio* audio = Audio::Instance();
 		if (audio->IsEnable()) {
@@ -165,7 +165,7 @@ extern "C" int luaopen_gum_audio(lua_State* L)
 		{ "play", lplay },
 		{ "stop", lstop },
 
-		{ NULL, NULL },		
+		{ nullptr, nullptr },		
 	};
 	luaL_newlib(L, l);
 	return 1;

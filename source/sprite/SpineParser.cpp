@@ -37,7 +37,7 @@ void SpineParser::Parse(const Json::Value& val)
 
 const SpineParser::SkinItem* SpineParser::QuerySkin(const Slot& slot) const
 {
-	const Skin* skin = NULL;
+	const Skin* skin = nullptr;
 	for (int i = 0, n = skins.size(); i < n; ++i) {
 		if (skins[i].name == slot.name) {
 			skin = &skins[i];
@@ -53,7 +53,7 @@ const SpineParser::SkinItem* SpineParser::QuerySkin(const Slot& slot) const
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void SpineParser::Clear()

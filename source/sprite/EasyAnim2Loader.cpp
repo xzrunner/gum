@@ -21,9 +21,9 @@ EasyAnim2Loader::EasyAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym,
 	, m_sym_loader(sym_loader)
 	, m_num(0)
 	, m_joint_count(0)
-	, m_joints(NULL)
-	, m_sk(NULL)
-	, m_root(NULL)
+	, m_joints(nullptr)
+	, m_sk(nullptr)
+	, m_root(nullptr)
 {
 	if (!m_sym_loader) {
 		m_sym_loader = std::make_shared<SymbolLoader>();
@@ -68,7 +68,7 @@ void EasyAnim2Loader::Clear()
 
 	m_sprs.clear();
 
-	m_root = NULL;
+	m_root = nullptr;
 }
 
 void EasyAnim2Loader::LoadSprites(const Json::Value& val, const CU_STR& dir)

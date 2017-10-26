@@ -22,7 +22,7 @@ class Scale9SymLoader : private cu::Uncopyable
 {
 public:
 	Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym, 
-		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
+		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
 	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeScale9* node);

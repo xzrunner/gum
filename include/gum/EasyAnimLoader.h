@@ -20,7 +20,7 @@ class EasyAnimLoader : private cu::Uncopyable
 {
 public:
 	EasyAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
-		const std::shared_ptr<const SpriteLoader>& spr_loader = NULL);
+		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeAnimation* node);

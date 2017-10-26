@@ -18,7 +18,7 @@ CU_SINGLETON_DEFINITION(StatScreen);
 
 StatScreen::StatScreen()
 	: m_enable(false)
-	, m_rt(NULL)
+	, m_rt(nullptr)
 	, m_x(0)
 	, m_y(0)
 {
@@ -53,7 +53,7 @@ void StatScreen::Print(const RenderTarget* src)
 		return;
 	}
 
-	time_t t = time(NULL);
+	time_t t = time(nullptr);
 	m_timestamps[m_y * GRID_COUNT + m_x] = t;
 
 	sm::rect r_src;

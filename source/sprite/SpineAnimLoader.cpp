@@ -25,8 +25,8 @@ SpineAnimLoader::SpineAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
 	, m_spr_loader(spr_loader)
-	, m_sk_sym(NULL)
-	, m_src_anim(NULL)
+	, m_sk_sym(nullptr)
+	, m_src_anim(nullptr)
 {
 	if (!m_sym_loader) {
 		m_sym_loader = std::make_shared<SymbolLoader>();

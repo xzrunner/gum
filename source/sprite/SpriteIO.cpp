@@ -502,7 +502,7 @@ void SpriteIO::LoadShader(const Json::Value& val, const CU_STR& dir)
 						filepath = gum::FilepathHelper::Absolute(dir, filepath);
 						filter->SetFilepath(filepath);
 						
-						sl::HeatHazeProg* prog = NULL;
+						sl::HeatHazeProg* prog = nullptr;
 						sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 						sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
 						if (shader) {

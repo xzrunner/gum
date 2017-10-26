@@ -83,7 +83,7 @@ extern "C"
 void gum_init(void (*error_reload)(), void* arg1, void* arg2)
 {
 	try {
-		DTex::Instance()->InitHook(NULL, NULL, error_reload);
+		DTex::Instance()->InitHook(nullptr, nullptr, error_reload);
 
 		Sprite2::Instance()->Init();
 
@@ -363,7 +363,7 @@ extern "C"
 bool gum_pkg_exists(const char* name)
 {
 	CU_STR gbk_name = StringHelper::UTF8ToGBK(name);
-	return simp::NodeFactory::Instance()->QueryPkg(gbk_name) != NULL;
+	return simp::NodeFactory::Instance()->QueryPkg(gbk_name) != nullptr;
 }
 
 extern "C"
@@ -395,7 +395,7 @@ bool gum_create_pkg2(const char* name, int id, const char* pkg_path)
 	CU_STR gbk_pkg_path = StringHelper::UTF8ToGBK(pkg_path);
 
 	struct fs_file* file = fs_open(gbk_pkg_path.c_str(), "rb");
-	if (file == NULL) {
+	if (file == nullptr) {
 		fault("Can't open pkg file: %s\n", gbk_pkg_path.c_str());
 	}
 
@@ -500,7 +500,7 @@ char** gum_pkg_get_export_names(const char* name, int* count)
 	const simp::Package* pkg = simp::NodeFactory::Instance()->QueryPkg(gbk_name);
 	if (!pkg) {
 		*count = 0;
-		return NULL;
+		return nullptr;
 	}
 
 	CU_VEC<CU_STR> names;
@@ -531,7 +531,7 @@ void* gum_create_sym_model(const void* model)
 	sym->SetModel(const_cast<m3::Model*>(m3_model));
 	return sym;	
 #else
-	return NULL;
+	return nullptr;
 #endif // S2_DISABLE_MODEL
 }
 
@@ -553,7 +553,7 @@ void* gum_create_actor(const char* pkg, const char* spr)
 	CU_STR gbk_spr = StringHelper::UTF8ToGBK(spr);
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
 	if (id == 0xffffffff) {
-		return NULL;
+		return nullptr;
 	} else {
 		return gum_create_actor_by_id(id);
 	}
@@ -591,7 +591,7 @@ void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new)
 	CU_STR gbk_spr = StringHelper::UTF8ToGBK(spr);
 	uint32_t id = simp::NodeFactory::Instance()->GetNodeID(gbk_pkg, gbk_spr);
 	if (id == 0xffffffff) {
-		return NULL;
+		return nullptr;
 	} else {
 		auto actor = gum::ActorPool::Instance()->Fetch(id, *is_new);
 		s2::ActorProxy* proxy;

@@ -9,7 +9,7 @@
 //
 //ImageSymbol::ImageSymbol(const CU_STR& filepath)
 //	: m_filepath(filepath)
-//	, m_tex(NULL)
+//	, m_tex(nullptr)
 //{
 //	Load();
 //}

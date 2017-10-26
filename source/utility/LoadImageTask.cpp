@@ -24,7 +24,7 @@ namespace gum
 
 LoadImageTask::LoadImageTask(const std::shared_ptr<Image>& img)
 	: m_img(img)
-	, m_data(NULL)
+	, m_data(nullptr)
 	, m_size(0)
 {
 	if (m_img) {
@@ -139,7 +139,7 @@ void LoadImageTask::Flush()
 void LoadImageTask::OnLoad(bimp::ImportStream& is)
 {
 	if (m_data) {
-		free(m_data); m_data = NULL;
+		free(m_data); m_data = nullptr;
 	}
 	m_size = is.Size();
 	m_data = malloc(m_size);
@@ -162,10 +162,10 @@ void LoadImageTask::Initialize(const std::shared_ptr<Image>& img)
 void LoadImageTask::Terminate()
 {
 	if (m_img) {
-		m_img = NULL;
+		m_img = nullptr;
 	}
 
-	free(m_data); m_data = NULL;
+	free(m_data); m_data = nullptr;
 	m_size = 0;
 }
 

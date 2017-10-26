@@ -25,7 +25,7 @@ class Anim2SymLoader : private cu::Uncopyable
 {
 public:
 	Anim2SymLoader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
-		const std::shared_ptr<const SymbolLoader>& sym_loader = NULL);
+		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr);
 
 	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeAnim2* node);

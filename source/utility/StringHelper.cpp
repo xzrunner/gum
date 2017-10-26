@@ -38,7 +38,7 @@ void StringHelper::Split(const CU_STR& src, const CU_STR& mid,
 	while (p!=0)
 	{
 		dst.push_back(CU_STR(p));
-		p = strtok(NULL, mid.c_str());
+		p = strtok(nullptr, mid.c_str());
 	}
 	delete[] cstr;
 }
@@ -80,18 +80,18 @@ static CU_STR code_convert(const char* source_charset, const char* to_charset, c
 //CU_STR StringHelper::ToUtf8(const CU_STR& str)
 //{
 //	int size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(),
-//		str.length(), NULL, 0);
+//		str.length(), nullptr, 0);
 //	std::wstring utf16_str(size, '\0');
 //	MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(),
 //		str.length(), &utf16_str[0], size);
 //
 //	int utf8_size = WideCharToMultiByte(CP_UTF8, 0, utf16_str.c_str(),
-//		utf16_str.length(), NULL, 0,
-//		NULL, NULL);
+//		utf16_str.length(), nullptr, 0,
+//		nullptr, nullptr);
 //	CU_STR utf8_str(utf8_size, '\0');
 //	WideCharToMultiByte(CP_UTF8, 0, utf16_str.c_str(),
 //		utf16_str.length(), &utf8_str[0], utf8_size,
-//		NULL, NULL);
+//		nullptr, nullptr);
 //	return utf8_str;
 //}
 

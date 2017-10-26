@@ -95,12 +95,12 @@ void MeshIO::Store(Json::Value& val, const pm::MeshTransform& trans, const s2::M
 //
 //	CU_VEC<s2::MeshJoint*> mjoints;
 //	mjoints.reserve(joints.size());
-//	s2::MeshJoint* root = NULL;
+//	s2::MeshJoint* root = nullptr;
 //	for (int i = 0, n = joints.size(); i < n; ++i)
 //	{
 //		const Joint& src = joints[i];
 //		if (src.parent == -1) {
-//			mjoints.push_back(root = new s2::MeshJoint(NULL, src.world));
+//			mjoints.push_back(root = new s2::MeshJoint(nullptr, src.world));
 //		} else {
 //			assert(src.parent < mjoints.size());
 //			mjoints.push_back(new s2::MeshJoint(mjoints[src.parent], src.world));

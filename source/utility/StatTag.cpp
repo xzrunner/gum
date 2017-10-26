@@ -79,7 +79,7 @@ void StatTag::Flush()
 
 void StatTag::PrintFile() const
 {
-	m_fout << "timestamp " << time(NULL) << ", type " << m_type << ", msg " << m_msg << '\n';
+	m_fout << "timestamp " << time(nullptr) << ", type " << m_type << ", msg " << m_msg << '\n';
 
 	static const int FLUSH_COUNT = 10;
 	static int count = 0;

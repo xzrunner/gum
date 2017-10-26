@@ -19,7 +19,7 @@ void Facade::Initialize()
 //	Model3::Instance();
 #endif // S2_DISABLE_MODEL
 
-	Audio::Instance()->Initialize(NULL, NULL);
+	Audio::Instance()->Initialize(nullptr, nullptr);
 }
 
 void Facade::Terminate()

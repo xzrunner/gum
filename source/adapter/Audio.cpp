@@ -14,7 +14,7 @@ namespace gum
 CU_SINGLETON_DEFINITION(Audio)
 
 Audio::Audio() 
-	: m_ctx(NULL)
+	: m_ctx(nullptr)
 	, m_enable(true)
 {
 	InitCallback();
@@ -47,7 +47,7 @@ void Audio::Initialize(void* arg1, void* arg2)
 #endif // __ANDROID__
 	} catch (std::exception&) {
 		if (m_ctx) {
-			delete m_ctx, m_ctx = NULL;
+			delete m_ctx, m_ctx = nullptr;
 		}
 		m_enable = false;
 	}
