@@ -2,100 +2,103 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="render">
-      <UniqueIdentifier>{efe7db9c-79a2-42ac-ab80-9bc0d4895d53}</UniqueIdentifier>
+      <UniqueIdentifier>{8659fa66-8086-4d36-bf2f-a4c3621a9610}</UniqueIdentifier>
     </Filter>
     <Filter Include="render\modes">
-      <UniqueIdentifier>{15846772-b96d-41cc-95e8-ed21842904bb}</UniqueIdentifier>
+      <UniqueIdentifier>{eca8e4ad-3847-44a5-9067-ff5db48ed3f4}</UniqueIdentifier>
     </Filter>
     <Filter Include="render\rt">
-      <UniqueIdentifier>{fc10cdf1-e709-4559-abd6-25e7f997997b}</UniqueIdentifier>
+      <UniqueIdentifier>{1e79281e-cc15-44e9-aa43-5f559564ad47}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset">
-      <UniqueIdentifier>{5124e410-8781-482d-a00e-f37fdd3cefa9}</UniqueIdentifier>
+      <UniqueIdentifier>{f3294e79-3334-42f4-9629-0520e483898b}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\image">
-      <UniqueIdentifier>{fa971985-2f7f-44ba-82c1-9f09d7dc326d}</UniqueIdentifier>
+      <UniqueIdentifier>{06477218-022b-47db-9d75-124b360d8aeb}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\glyph">
-      <UniqueIdentifier>{d811f401-cd53-4fc8-83d9-9e47106fd868}</UniqueIdentifier>
+      <UniqueIdentifier>{fca9f44c-77ce-4074-9bdf-20ee447f1a83}</UniqueIdentifier>
     </Filter>
     <Filter Include="utility">
-      <UniqueIdentifier>{d1ebf6d4-9c54-4abc-83dc-48b81004534a}</UniqueIdentifier>
+      <UniqueIdentifier>{63a11b30-6ecb-438c-a157-3f2f713212bb}</UniqueIdentifier>
     </Filter>
     <Filter Include="utility\stat">
-      <UniqueIdentifier>{fff0ae91-d2e0-4258-850b-d49fdaf6da83}</UniqueIdentifier>
+      <UniqueIdentifier>{6bb7e365-a035-4273-9be7-a366ada9e230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\task">
+      <UniqueIdentifier>{f9dca895-c7a2-445d-a638-3cb81de58123}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite">
-      <UniqueIdentifier>{71c9f6ce-6b2b-4149-ac65-3534e6f850b5}</UniqueIdentifier>
+      <UniqueIdentifier>{6139a7fa-171e-4b8c-89a8-c9eacd23dc93}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\01.picture">
-      <UniqueIdentifier>{6e3bedb7-55d7-4524-a35c-19a90c94af2b}</UniqueIdentifier>
+      <UniqueIdentifier>{50a9a61e-4ed8-4fc5-b1bb-4a0d9c0fe75d}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\02.scale9">
-      <UniqueIdentifier>{3ce628af-6500-4fa3-aed6-5d4281fe0fda}</UniqueIdentifier>
+      <UniqueIdentifier>{1407c601-9f44-41ca-baf8-f8f7ee430262}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\03.icon">
-      <UniqueIdentifier>{e35b4589-ca0d-4de3-aedd-28545c555556}</UniqueIdentifier>
+      <UniqueIdentifier>{7eb06d34-2d6f-4d01-a6c0-436f186038d9}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\04.texture">
-      <UniqueIdentifier>{e30b2c30-b291-4f8a-b135-96145726fe47}</UniqueIdentifier>
+      <UniqueIdentifier>{68723930-1ad2-485a-8b4a-5e7a776b67ba}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\05.label">
-      <UniqueIdentifier>{47d0c5ed-eaee-473f-a080-be43dd3ee6ba}</UniqueIdentifier>
+      <UniqueIdentifier>{d79fe916-7724-40f4-aae9-9a2ec6cc4acd}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\06.complex">
-      <UniqueIdentifier>{dbcefa12-c2fa-4a6c-ac7c-91098f9e31cc}</UniqueIdentifier>
+      <UniqueIdentifier>{5879ec58-188d-455d-8f51-72d6f31a4fb3}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\07.animation">
-      <UniqueIdentifier>{6d4d04cd-48da-429d-b705-96f380e60ae9}</UniqueIdentifier>
+      <UniqueIdentifier>{7e7ad4f0-80be-4a73-a5d1-910180dca2d2}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\08.particle3d">
-      <UniqueIdentifier>{5d1dae16-e14e-40d5-bf7f-eaf48440dc97}</UniqueIdentifier>
+      <UniqueIdentifier>{bc57a0a3-b512-4c42-9c91-afd8a7a5013d}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\09.particle2d">
-      <UniqueIdentifier>{d61f7276-50a8-42ea-a30a-cda765b32a9a}</UniqueIdentifier>
+      <UniqueIdentifier>{494957ee-5e27-4885-a438-031ad2595484}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\10.shape">
-      <UniqueIdentifier>{535546d6-eabb-45ec-8635-d49be0518706}</UniqueIdentifier>
+      <UniqueIdentifier>{daebed83-1e89-4a07-82dd-cbd252ec0916}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\11.mesh">
-      <UniqueIdentifier>{cdd80234-e939-40e4-be68-15469fa7bd09}</UniqueIdentifier>
+      <UniqueIdentifier>{aa995ef8-3d9f-416a-bef6-263ff88fb6c5}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\12.mask">
-      <UniqueIdentifier>{166d5df9-f9e0-4c1d-a323-0a3528cf2785}</UniqueIdentifier>
+      <UniqueIdentifier>{fc2a56e6-d663-4640-a5ca-b06fbec69d85}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\13.trail">
-      <UniqueIdentifier>{cdae3ad3-cbee-409f-965f-62ad91f68c9c}</UniqueIdentifier>
+      <UniqueIdentifier>{3f1eeac6-c429-449d-9b92-c8fbb196e379}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\14.skeleton">
-      <UniqueIdentifier>{a3870d9b-4cd4-4dd5-921d-65612f9d5e32}</UniqueIdentifier>
+      <UniqueIdentifier>{31b8e9ab-036e-41c8-94d7-bdf8dbbc38ce}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\loader">
-      <UniqueIdentifier>{55681176-6f16-4591-83b7-296b3898bc90}</UniqueIdentifier>
+      <UniqueIdentifier>{10a2637e-8196-4f8b-bd88-d692b021c5fb}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\loader\cb">
-      <UniqueIdentifier>{5b58eaf0-ebef-4163-bafd-6455b081f878}</UniqueIdentifier>
+      <UniqueIdentifier>{77164391-b321-4cb3-91c9-4480c068d072}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\loader\parser">
-      <UniqueIdentifier>{893f7010-2daf-4105-8d43-df0379b03c23}</UniqueIdentifier>
+      <UniqueIdentifier>{730b90e8-c583-45af-93fd-f605511e1646}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\07.anim2">
-      <UniqueIdentifier>{82293b7b-1c1e-4f67-a9c9-c5a579749c98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sprite\pool">
-      <UniqueIdentifier>{d2d39c4b-28d3-4c60-9cfe-d9939df418df}</UniqueIdentifier>
+      <UniqueIdentifier>{b2466fcc-3aa8-42b2-91da-e8c8aa48be15}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\factory">
-      <UniqueIdentifier>{96ae252e-3de1-4742-8127-3ea75bf80ef7}</UniqueIdentifier>
+      <UniqueIdentifier>{67c4e840-32ec-421a-ba58-901fe8ea9ac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprite\pool">
+      <UniqueIdentifier>{aac44464-4a72-42a7-b586-c31f1ba4c416}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\15.model">
-      <UniqueIdentifier>{87d1b038-2043-48be-9421-885b43b2b120}</UniqueIdentifier>
+      <UniqueIdentifier>{2c1d2a14-110a-46c8-a529-38251779ded7}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprite\16.audio">
-      <UniqueIdentifier>{ef4b5e2a-097d-49f7-ad6b-628195ede719}</UniqueIdentifier>
+      <UniqueIdentifier>{b392c428-4de7-45ba-a8dd-74e09d7d83b4}</UniqueIdentifier>
     </Filter>
     <Filter Include="adapter">
-      <UniqueIdentifier>{f9967184-f796-4b1b-8a6e-b50838f72cc1}</UniqueIdentifier>
+      <UniqueIdentifier>{64c18692-1c97-4353-b913-6d2f67574570}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +162,6 @@
     <ClCompile Include="..\..\..\source\utility\JsonSerializer.cpp">
       <Filter>utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\utility\LoadImageTask.cpp">
-      <Filter>utility</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\utility\StringHelper.cpp">
       <Filter>utility</Filter>
     </ClCompile>
@@ -180,14 +180,14 @@
     <ClCompile Include="..\..\..\source\utility\StatTag.cpp">
       <Filter>utility\stat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\utility\LoadImageTask.cpp">
+      <Filter>utility\task</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\ExtendSymFile.cpp">
       <Filter>sprite</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\SymbolFile.cpp">
       <Filter>sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\GUM_ImageSymbol.cpp">
-      <Filter>sprite\01.picture</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\ImageSymbolOld.cpp">
       <Filter>sprite\01.picture</Filter>
@@ -209,9 +209,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\TextureSymLoader.cpp">
       <Filter>sprite\04.texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\GUM_TextboxSymbol.cpp">
-      <Filter>sprite\05.label</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\TextboxLoader.cpp">
       <Filter>sprite\05.label</Filter>
@@ -252,13 +249,7 @@
     <ClCompile Include="..\..\..\source\sprite\P2dSymLoader.cpp">
       <Filter>sprite\09.particle2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\GUM_TexturePolygon.cpp">
-      <Filter>sprite\10.shape</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\ShapeLoader.cpp">
-      <Filter>sprite\10.shape</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\ShapeSaver.cpp">
       <Filter>sprite\10.shape</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\ShapeSymLoader.cpp">
@@ -272,9 +263,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\MaskSymLoader.cpp">
       <Filter>sprite\12.mask</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\TrailSprLoader.cpp">
-      <Filter>sprite\13.trail</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\TrailSymLoader.cpp">
       <Filter>sprite\13.trail</Filter>
@@ -330,17 +318,20 @@
     <ClCompile Include="..\..\..\source\sprite\SpineAnim2Loader.cpp">
       <Filter>sprite\07.anim2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\SpritePool.cpp">
-      <Filter>sprite\pool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\SymbolPool.cpp">
-      <Filter>sprite\pool</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\SpriteFactory.cpp">
       <Filter>sprite\factory</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\SymbolFactory.cpp">
       <Filter>sprite\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\ActorPool.cpp">
+      <Filter>sprite\pool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\SpritePool.cpp">
+      <Filter>sprite\pool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\SymbolPool.cpp">
+      <Filter>sprite\pool</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\AudioLoader.cpp">
       <Filter>sprite\16.audio</Filter>
@@ -351,25 +342,44 @@
     <ClCompile Include="..\..\..\source\adapter\DTexC2Strategy.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\adapter\GUM_Audio.cpp">
+    <ClCompile Include="..\..\..\source\adapter\lua_wrap_audio.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\adapter\GUM_DRect.cpp">
+    <ClCompile Include="..\..\..\source\c_wrap_gum.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\ImagePool.cpp">
+      <Filter>dataset\image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\ImageSymbol.cpp">
+      <Filter>sprite\01.picture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\adapter\Audio.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\adapter\GUM_DTex.cpp">
+    <ClCompile Include="..\..\..\source\adapter\Cooking.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\adapter\GUM_GTxt.cpp">
+    <ClCompile Include="..\..\..\source\adapter\DTex.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\adapter\GUM_ShaderLab.cpp">
+    <ClCompile Include="..\..\..\source\adapter\GTxt.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\adapter\GUM_Sprite2.cpp">
+    <ClCompile Include="..\..\..\source\adapter\Model3.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\GUM_Facade.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\ShaderLab.cpp">
+      <Filter>adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\adapter\Sprite2.cpp">
+      <Filter>adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Facade.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TextboxSymbol.cpp">
+      <Filter>sprite\05.label</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\TexturePolygon.cpp">
+      <Filter>sprite\10.shape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\gum\RenderContext.h">
@@ -397,9 +407,6 @@
       <Filter>dataset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\Resource.h">
-      <Filter>dataset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\ResourceManager.h">
       <Filter>dataset</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ResourceUID.h">
@@ -435,10 +442,10 @@
     <ClInclude Include="..\..\..\include\gum\FilepathHelper.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\JsonSerializer.h">
+    <ClInclude Include="..\..\..\include\gum\gum_config.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\LoadImageTask.h">
+    <ClInclude Include="..\..\..\include\gum\JsonSerializer.h">
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\StringHelper.h">
@@ -459,14 +466,14 @@
     <ClInclude Include="..\..\..\include\gum\StatTag.h">
       <Filter>utility\stat</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\LoadImageTask.h">
+      <Filter>utility\task</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ExtendSymFile.h">
       <Filter>sprite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\SymbolFile.h">
       <Filter>sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_ImageSymbol.h">
-      <Filter>sprite\01.picture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ImageSymbolOld.h">
       <Filter>sprite\01.picture</Filter>
@@ -491,9 +498,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\TextureSymLoader.h">
       <Filter>sprite\04.texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_TextboxSymbol.h">
-      <Filter>sprite\05.label</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\TextboxLoader.h">
       <Filter>sprite\05.label</Filter>
@@ -534,13 +538,7 @@
     <ClInclude Include="..\..\..\include\gum\P2dSymLoader.h">
       <Filter>sprite\09.particle2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_TexturePolygon.h">
-      <Filter>sprite\10.shape</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ShapeLoader.h">
-      <Filter>sprite\10.shape</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\ShapeSaver.h">
       <Filter>sprite\10.shape</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ShapeSymLoader.h">
@@ -555,11 +553,11 @@
     <ClInclude Include="..\..\..\include\gum\MeshSymLoader.h">
       <Filter>sprite\11.mesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\MeshType.h">
+      <Filter>sprite\11.mesh</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\gum\MaskSymLoader.h">
       <Filter>sprite\12.mask</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\TrailSprLoader.h">
-      <Filter>sprite\13.trail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\TrailSymLoader.h">
       <Filter>sprite\13.trail</Filter>
@@ -615,17 +613,20 @@
     <ClInclude Include="..\..\..\include\gum\SpineAnim2Loader.h">
       <Filter>sprite\07.anim2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\SpritePool.h">
-      <Filter>sprite\pool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\SymbolPool.h">
-      <Filter>sprite\pool</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\gum\SpriteFactory.h">
       <Filter>sprite\factory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\SymbolFactory.h">
       <Filter>sprite\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\ActorPool.h">
+      <Filter>sprite\pool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\SpritePool.h">
+      <Filter>sprite\pool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\SymbolPool.h">
+      <Filter>sprite\pool</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\AudioLoader.h">
       <Filter>sprite\16.audio</Filter>
@@ -636,29 +637,43 @@
     <ClInclude Include="..\..\..\include\gum\DTexC2Strategy.h">
       <Filter>adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_Audio.h">
+    <ClInclude Include="..\..\..\include\gum\lua_wrap_audio.h">
       <Filter>adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_DRect.h">
+    <ClInclude Include="..\..\..\include\c_wrap_gum.h" />
+    <ClInclude Include="..\..\..\include\gum\ImagePool.h">
+      <Filter>dataset\image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\ImageSymbol.h">
+      <Filter>sprite\01.picture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\Audio.h">
       <Filter>adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_DTex.h">
+    <ClInclude Include="..\..\..\include\gum\Cooking.h">
       <Filter>adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_GTxt.h">
+    <ClInclude Include="..\..\..\include\gum\DTex.h">
       <Filter>adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_ShaderLab.h">
+    <ClInclude Include="..\..\..\include\gum\GTxt.h">
       <Filter>adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_Sprite2.h">
+    <ClInclude Include="..\..\..\include\gum\Model3.h">
       <Filter>adapter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\GUM_Facade.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\include\gum\ResourceManager.inl">
-      <Filter>dataset</Filter>
-    </None>
+    <ClInclude Include="..\..\..\include\gum\ShaderLab.h">
+      <Filter>adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\Sprite2.h">
+      <Filter>adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\Facade.h" />
+    <ClInclude Include="..\..\..\include\gum\TextboxSymbol.h">
+      <Filter>sprite\05.label</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\TexturePolygon.h">
+      <Filter>sprite\10.shape</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

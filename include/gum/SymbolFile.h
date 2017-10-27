@@ -14,12 +14,13 @@ public:
 
 	const CU_STR& Tag(int type) const;
 
+public:
+	static CU_STR UNKNOWN_TAG;
+
 private:
 	void Regist(int type, const CU_STR& tag);
 
 private:
-	CU_STR m_unknown_tag;
-
 	CU_MAP<int, CU_STR> m_type2tag;
 	CU_MAP<CU_STR, int> m_tag2type;
 

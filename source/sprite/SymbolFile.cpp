@@ -10,8 +10,9 @@ namespace gum
 
 CU_SINGLETON_DEFINITION(SymbolFile);
 
+CU_STR SymbolFile::UNKNOWN_TAG = "unknown";
+
 SymbolFile::SymbolFile()
-	: m_unknown_tag("unknown")
 {
 	Regist(s2::SYM_SCALE9,		"scale9");
 	Regist(s2::SYM_ICON,		"icon");
@@ -75,7 +76,7 @@ const CU_STR& SymbolFile::Tag(int type) const
 	if (itr != m_type2tag.end()) {
 		return itr->second;
 	} else {
-		return m_unknown_tag;
+		return UNKNOWN_TAG;
 	}
 }
 

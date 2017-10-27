@@ -8,6 +8,7 @@
 #include "gum/ResourceUID.h"
 
 #include <gtxt_util.h>
+#include <gtxt_richtext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Sprite2Shader.h>

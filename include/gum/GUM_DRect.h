@@ -1,7 +1,7 @@
 //#ifndef _GUM_DRECT_H_
 //#define _GUM_DRECT_H_
 //
-//#include <CU_Singleton.h>
+//#include <cu/cu_macro.h>
 //#include <SM_Vector.h>
 //#include <sprite2/S2_RenderContext.h>
 //
@@ -30,7 +30,7 @@
 //
 //	bool m_draw_init;
 //
-//	SINGLETON_DECLARATION(DRect)
+//	CU_SINGLETON_DECLARATION(DRect)
 //
 //}; // DRect
 //

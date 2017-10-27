@@ -52,7 +52,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\gum;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\cooking\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;..\..\..\..\multitask\include;..\..\..\..\editor-external\cjson\include;..\..\..\..\editor-external\json\include;..\..\..\..\editor-external\lzma\include;..\..\..\..\editor-external\pthread\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\gl\include;..\..\..\..\editor-external\libjpeg\include;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\assimp\include;..\..\..\..\editor-external\boost\include;..\..\..\..\editor-external\openal32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\cu\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\cooking\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\cooking\include;..\..\..\..\editor-external\cjson\include;..\..\..\..\editor-external\json\include;..\..\..\..\editor-external\lzma\include;..\..\..\..\editor-external\pthread\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\gl\include;..\..\..\..\editor-external\libjpeg\include;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\assimp\include;..\..\..\..\editor-external\boost\include;..\..\..\..\editor-external\openal32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -67,7 +67,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\gum;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\cu\src\cu;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\cooking\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;..\..\..\..\multitask\include;..\..\..\..\editor-external\cjson\include;..\..\..\..\editor-external\json\include;..\..\..\..\editor-external\lzma\include;..\..\..\..\editor-external\pthread\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\gl\include;..\..\..\..\editor-external\libjpeg\include;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\assimp\include;..\..\..\..\editor-external\boost\include;..\..\..\..\editor-external\openal32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\uniaudio\include;..\..\..\..\particle\src;..\..\..\..\dtex2\include;..\..\..\..\drect\include;..\..\..\..\shaderlab\include\;..\..\..\..\model3\src\model3;..\..\..\..\logger\src\logger;..\..\..\..\fs\src\fs;..\..\..\..\sm\src\sm;..\..\..\..\ds\src\ds;..\..\..\..\cu\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\gimg\src\gimg;..\..\..\..\sprite2\include;..\..\..\..\cooking\include;..\..\..\..\polymesh\include;..\..\..\..\bimp\include;..\..\..\..\simp\include;..\..\..\..\timp\include;..\..\..\..\glp\src\glp;..\..\..\..\unirender\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\polymesh\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\cooking\include;..\..\..\..\editor-external\cjson\include;..\..\..\..\editor-external\json\include;..\..\..\..\editor-external\lzma\include;..\..\..\..\editor-external\pthread\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\gl\include;..\..\..\..\editor-external\libjpeg\include;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\assimp\include;..\..\..\..\editor-external\boost\include;..\..\..\..\editor-external\openal32\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -80,22 +80,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\adapter\DTexC2Strategy.cpp" />
-    <ClCompile Include="..\..\..\source\adapter\GUM_Audio.cpp" />
-    <ClCompile Include="..\..\..\source\adapter\GUM_DRect.cpp" />
-    <ClCompile Include="..\..\..\source\adapter\GUM_DTex.cpp" />
-    <ClCompile Include="..\..\..\source\adapter\GUM_GTxt.cpp" />
-    <ClCompile Include="..\..\..\source\adapter\GUM_ShaderLab.cpp" />
-    <ClCompile Include="..\..\..\source\adapter\GUM_Sprite2.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\Audio.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\Cooking.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\DTex.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\GTxt.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\Model3.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\ShaderLab.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\Sprite2.cpp" />
+    <ClCompile Include="..\..\..\source\adapter\lua_wrap_audio.cpp" />
+    <ClCompile Include="..\..\..\source\c_wrap_gum.cpp" />
     <ClCompile Include="..\..\..\source\dataset\GlyphStyle.cpp" />
     <ClCompile Include="..\..\..\source\dataset\GlyphStyleID.cpp" />
     <ClCompile Include="..\..\..\source\dataset\Image.cpp" />
     <ClCompile Include="..\..\..\source\dataset\ImageLoader.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\ImagePool.cpp" />
     <ClCompile Include="..\..\..\source\dataset\PkgFileParser.cpp" />
     <ClCompile Include="..\..\..\source\dataset\ProxyImage.cpp" />
     <ClCompile Include="..\..\..\source\dataset\ResourceUID.cpp" />
     <ClCompile Include="..\..\..\source\dataset\Texture.cpp" />
     <ClCompile Include="..\..\..\source\dataset\ThreadPool.cpp" />
-    <ClCompile Include="..\..\..\source\GUM_Facade.cpp" />
+    <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\render\BlendModes.cpp" />
     <ClCompile Include="..\..\..\source\render\CameraModes.cpp" />
     <ClCompile Include="..\..\..\source\render\FastBlendModes.cpp" />
@@ -103,6 +107,7 @@
     <ClCompile Include="..\..\..\source\render\RenderContext.cpp" />
     <ClCompile Include="..\..\..\source\render\RenderTarget.cpp" />
     <ClCompile Include="..\..\..\source\render\RenderTargetMgr.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ActorPool.cpp" />
     <ClCompile Include="..\..\..\source\sprite\Anim2SprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\Anim2SymLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\AnimSprLoader.cpp" />
@@ -118,9 +123,9 @@
     <ClCompile Include="..\..\..\source\sprite\EasyAnimLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\EasySkeletonLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ExtendSymFile.cpp" />
-    <ClCompile Include="..\..\..\source\sprite\GUM_ImageSymbol.cpp" />
-    <ClCompile Include="..\..\..\source\sprite\GUM_TextboxSymbol.cpp" />
-    <ClCompile Include="..\..\..\source\sprite\GUM_TexturePolygon.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ImageSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TextboxSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TexturePolygon.cpp" />
     <ClCompile Include="..\..\..\source\sprite\IconSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\IconSymLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ImageSymbolOld.cpp" />
@@ -137,7 +142,6 @@
     <ClCompile Include="..\..\..\source\sprite\Scale9SprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\Scale9SymLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ShapeLoader.cpp" />
-    <ClCompile Include="..\..\..\source\sprite\ShapeSaver.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ShapeSymLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\SkeletonIO.cpp" />
     <ClCompile Include="..\..\..\source\sprite\SkeletonSymLoader.cpp" />
@@ -157,7 +161,6 @@
     <ClCompile Include="..\..\..\source\sprite\TextboxLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TextboxSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TextureSymLoader.cpp" />
-    <ClCompile Include="..\..\..\source\sprite\TrailSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TrailSymLoader.cpp" />
     <ClCompile Include="..\..\..\source\utility\Config.cpp" />
     <ClCompile Include="..\..\..\source\utility\Exception.cpp" />
@@ -172,6 +175,8 @@
     <ClCompile Include="..\..\..\source\utility\trans_color.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\c_wrap_gum.h" />
+    <ClInclude Include="..\..\..\include\gum\ActorPool.h" />
     <ClInclude Include="..\..\..\include\gum\Anim2SprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\Anim2SymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\AnimSprLoader.h" />
@@ -197,30 +202,35 @@
     <ClInclude Include="..\..\..\include\gum\FilterModes.h" />
     <ClInclude Include="..\..\..\include\gum\GlyphStyle.h" />
     <ClInclude Include="..\..\..\include\gum\GlyphStyleID.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_Audio.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_DRect.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_DTex.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_Facade.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_GTxt.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_ImageSymbol.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_ShaderLab.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_Sprite2.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_TextboxSymbol.h" />
-    <ClInclude Include="..\..\..\include\gum\GUM_TexturePolygon.h" />
+    <ClInclude Include="..\..\..\include\gum\Audio.h" />
+    <ClInclude Include="..\..\..\include\gum\gum_config.h" />
+    <ClInclude Include="..\..\..\include\gum\Cooking.h" />
+    <ClInclude Include="..\..\..\include\gum\DTex.h" />
+    <ClInclude Include="..\..\..\include\gum\Facade.h" />
+    <ClInclude Include="..\..\..\include\gum\GTxt.h" />
+    <ClInclude Include="..\..\..\include\gum\ImageSymbol.h" />
+    <ClInclude Include="..\..\..\include\gum\Model3.h" />
+    <ClInclude Include="..\..\..\include\gum\ShaderLab.h" />
+    <ClInclude Include="..\..\..\include\gum\Sprite2.h" />
+    <ClInclude Include="..\..\..\include\gum\TextboxSymbol.h" />
+    <ClInclude Include="..\..\..\include\gum\TexturePolygon.h" />
     <ClInclude Include="..\..\..\include\gum\IconSprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\IconSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\IconType.h" />
     <ClInclude Include="..\..\..\include\gum\Image.h" />
     <ClInclude Include="..\..\..\include\gum\ImageLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\ImagePool.h" />
     <ClInclude Include="..\..\..\include\gum\ImageSymbolOld.h" />
     <ClInclude Include="..\..\..\include\gum\ImageSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\JointLoader.h" />
     <ClInclude Include="..\..\..\include\gum\JsonSerializer.h" />
     <ClInclude Include="..\..\..\include\gum\LoadImageTask.h" />
+    <ClInclude Include="..\..\..\include\gum\lua_wrap_audio.h" />
     <ClInclude Include="..\..\..\include\gum\MaskSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\MeshIO.h" />
     <ClInclude Include="..\..\..\include\gum\MeshSprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\MeshSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\MeshType.h" />
     <ClInclude Include="..\..\..\include\gum\P2dSprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\P2dSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\P3dSprLoader.h" />
@@ -231,12 +241,10 @@
     <ClInclude Include="..\..\..\include\gum\RenderTarget.h" />
     <ClInclude Include="..\..\..\include\gum\RenderTargetMgr.h" />
     <ClInclude Include="..\..\..\include\gum\Resource.h" />
-    <ClInclude Include="..\..\..\include\gum\ResourceManager.h" />
     <ClInclude Include="..\..\..\include\gum\ResourceUID.h" />
     <ClInclude Include="..\..\..\include\gum\Scale9SprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\Scale9SymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\ShapeLoader.h" />
-    <ClInclude Include="..\..\..\include\gum\ShapeSaver.h" />
     <ClInclude Include="..\..\..\include\gum\ShapeSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\ShapeType.h" />
     <ClInclude Include="..\..\..\include\gum\SkeletonIO.h" />
@@ -264,12 +272,8 @@
     <ClInclude Include="..\..\..\include\gum\Texture.h" />
     <ClInclude Include="..\..\..\include\gum\TextureSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\ThreadPool.h" />
-    <ClInclude Include="..\..\..\include\gum\TrailSprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\TrailSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\trans_color.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\include\gum\ResourceManager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

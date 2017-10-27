@@ -13,7 +13,7 @@
 //namespace gum
 //{
 //
-//SINGLETON_DEFINITION(DRect);
+//CU_SINGLETON_DEFINITION(DRect);
 //
 //DRect::DRect()
 //	: m_draw_init(false)
