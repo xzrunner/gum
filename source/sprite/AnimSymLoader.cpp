@@ -16,7 +16,7 @@
 namespace gum
 {
 
-AnimSymLoader::AnimSymLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
+AnimSymLoader::AnimSymLoader(s2::AnimSymbol& sym,
 							 const std::shared_ptr<const SymbolLoader>& sym_loader,
 							 const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
@@ -27,10 +27,6 @@ AnimSymLoader::AnimSymLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
 
 void AnimSymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	Json::Value val;
@@ -64,8 +60,8 @@ void AnimSymLoader::LoadJson(const CU_STR& filepath)
 		break;
 	}
 
-	m_sym->LoadCopy();
-	m_sym->BuildCurr();
+	m_sym.LoadCopy();
+	m_sym.BuildCurr();
 }
 
 void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
@@ -73,8 +69,8 @@ void AnimSymLoader::LoadBin(const simp::NodeAnimation* node)
 	EasyAnimLoader loader(m_sym, m_spr_loader);
 	loader.LoadBin(node);
 
-	m_sym->LoadCopy();
-	m_sym->BuildCurr();
+	m_sym.LoadCopy();
+	m_sym.BuildCurr();
 }
 
 }

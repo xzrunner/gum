@@ -6,32 +6,28 @@
 namespace gum
 {
 
-ComplexSprLoader::ComplexSprLoader(const std::shared_ptr<s2::ComplexSprite>& spr)
+ComplexSprLoader::ComplexSprLoader(s2::ComplexSprite& spr)
 	: m_spr(spr)
 {
 }
 
 void ComplexSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_spr || !val.isMember("complex")) {
+	if (!val.isMember("complex")) {
 		return;
 	}
 
 	int action = val["complex"]["action"].asInt();
-	m_spr->SetAction(action);
+	m_spr.SetAction(action);
 }
 
 void ComplexSprLoader::LoadBin(const simp::NodeComplexSpr* node)
 {
-	if (!m_spr) {
-		return;
-	}
-
 	int action = node->action;
 	if (action == 0xffff) {
 		action = -1;
 	}
-	m_spr->SetAction(action);
+	m_spr.SetAction(action);
 }
 
 }

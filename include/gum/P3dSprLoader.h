@@ -6,8 +6,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class Particle3dSprite; }
 namespace simp { class NodeParticle3dSpr; }
 
@@ -17,13 +15,13 @@ namespace gum
 class P3dSprLoader : private cu::Uncopyable
 {
 public:
-	P3dSprLoader(const std::shared_ptr<s2::Particle3dSprite>& spr);
+	P3dSprLoader(s2::Particle3dSprite& spr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeParticle3dSpr* node);
 
 private:
-	std::shared_ptr<s2::Particle3dSprite> m_spr;
+	s2::Particle3dSprite& m_spr;
 
 }; // P3dSprLoader
 

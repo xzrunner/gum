@@ -6,8 +6,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class MeshSprite; }
 namespace simp { class NodeMeshSpr; }
 
@@ -17,13 +15,13 @@ namespace gum
 class MeshSprLoader : private cu::Uncopyable
 {
 public:
-	MeshSprLoader(const std::shared_ptr<s2::MeshSprite>& spr);
+	MeshSprLoader(s2::MeshSprite& spr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeMeshSpr* node);
 
 private:
-	std::shared_ptr<s2::MeshSprite> m_spr;
+	s2::MeshSprite& m_spr;
 
 }; // MeshSprLoader
 

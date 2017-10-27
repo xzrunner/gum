@@ -16,7 +16,7 @@
 namespace gum
 {
 
-Anim2SymLoader::Anim2SymLoader(const std::shared_ptr<s2::Anim2Symbol>& sym,
+Anim2SymLoader::Anim2SymLoader(s2::Anim2Symbol& sym,
 							   const std::shared_ptr<const SymbolLoader>& sym_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
@@ -25,10 +25,6 @@ Anim2SymLoader::Anim2SymLoader(const std::shared_ptr<s2::Anim2Symbol>& sym,
 
 void Anim2SymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	Json::Value val;
@@ -85,7 +81,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 	sk->slot_count = node->slot_count;
 	sk->skin_count = node->skin_count;
 	//// skins
-	m_sym->ClearCachedSym();
+	m_sym.ClearCachedSym();
 	for (int i = 0; i < sk->skin_count; ++i) 
 	{
 		const simp::NodeAnim2::Skin& src = node->skins[i];
@@ -93,7 +89,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 		dst->type = src.type;
 		LoadBinSRT(dst->local, src.local);
 		auto sym = SymbolPool::Instance()->Fetch(src.node);
-		m_sym->AddCachedSym(sym);
+		m_sym.AddCachedSym(sym);
 		dst->ud = static_cast<void*>(sym.get());
 		ptr += SIZEOF_RG_SKIN;
 	}
@@ -215,7 +211,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 			}
 		}
 	}	
-	m_sym->SetAnim(anim);
+	m_sym.SetAnim(anim);
 }
 
 int Anim2SymLoader::CalcNodeSize(const simp::NodeAnim2* node)

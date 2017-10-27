@@ -73,7 +73,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_IMAGE:
 		{
 			auto sym = mm::allocate_shared<ImageSymbol>();
-			ImageSymLoader loader(sym);
+			ImageSymLoader loader(*sym);
 			loader.Load(bimp::FilePath(filepath), 1, false);
 			ret = sym;
 		}
@@ -81,7 +81,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_SCALE9:
 		{
 			auto sym = mm::allocate_shared<s2::Scale9Symbol>();
-			Scale9SymLoader loader(sym);
+			Scale9SymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -89,7 +89,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_ICON:
 		{
 			auto sym = mm::allocate_shared<s2::IconSymbol>();
-			IconSymLoader loader(sym);
+			IconSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -97,7 +97,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_TEXTURE:
 		{
 			auto sym = mm::allocate_shared<s2::TextureSymbol>();
-			TextureSymLoader loader(sym);
+			TextureSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -120,7 +120,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_COMPLEX:
 		{
 			auto sym = mm::allocate_shared<s2::ComplexSymbol>();
-			ComplexSymLoader loader(sym);
+			ComplexSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -128,7 +128,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_ANIMATION:
 		{
 			auto sym = mm::allocate_shared<s2::AnimSymbol>();
-			AnimSymLoader loader(sym);
+			AnimSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -136,7 +136,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_ANIM2:
 		{
 			auto sym = mm::allocate_shared<s2::Anim2Symbol>();
-			Anim2SymLoader loader(sym);
+			Anim2SymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -162,7 +162,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_SHAPE:
 		{
 			auto sym = mm::allocate_shared<s2::ShapeSymbol>();
-			ShapeSymLoader loader(sym);
+			ShapeSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -170,7 +170,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_MESH:
 		{
 			auto sym = mm::allocate_shared<s2::MeshSymbol>();
-			MeshSymLoader loader(sym);
+			MeshSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -178,7 +178,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_MASK:
 		{
 			auto sym = mm::allocate_shared<s2::MaskSymbol>();
-			MaskSymLoader loader(sym);
+			MaskSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -195,7 +195,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_SKELETON:
 		{
 			auto sym = mm::allocate_shared<s2::SkeletonSymbol>();
-			SkeletonSymLoader loader(sym);
+			SkeletonSymLoader loader(*sym);
 			loader.LoadJson(filepath);
 			ret = sym;
 		}
@@ -203,7 +203,7 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_AUDIO:
 		{
 			auto sym = mm::allocate_shared<s2::AudioSymbol>();
-			AudioSymLoader loader(sym);
+			AudioSymLoader loader(*sym);
 			loader.Load(filepath);
 			ret = sym;
 		}
@@ -251,7 +251,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 				const bimp::FilePath& fp = t_pkg->GetTexPath(pic->texid, 0);
 
 				sym = mm::allocate_shared<ImageSymbol>(id);
-				ImageSymLoader loader(sym);
+				ImageSymLoader loader(*sym);
 
 				bool async = true;
 				const simp::Package* s_pkg = simp::NodeFactory::Instance()->QueryPkg(pkg_id);
@@ -293,7 +293,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_SCALE9:
 		{
 			auto sym = mm::allocate_shared<s2::Scale9Symbol>(id);
-			Scale9SymLoader loader(sym);
+			Scale9SymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeScale9*)data);
 			ret = sym;
 		}
@@ -301,7 +301,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_ICON:
 		{
 			auto sym = mm::allocate_shared<s2::IconSymbol>(id);
-			IconSymLoader loader(sym);
+			IconSymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeIcon*)data);
 			ret = sym;
 		}
@@ -309,7 +309,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_TEXTURE:
 		{
 			auto sym = mm::allocate_shared<s2::TextureSymbol>(id);
-			TextureSymLoader loader(sym);
+			TextureSymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeTexture*)data);
 			ret = sym;
 		}
@@ -325,7 +325,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_COMPLEX:
 		{
 			auto sym = mm::allocate_shared<s2::ComplexSymbol>(id);
-			ComplexSymLoader loader(sym);
+			ComplexSymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeComplex*)data);
 			ret = sym;
 		}
@@ -333,7 +333,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_ANIMATION:
 		{
 			auto sym = mm::allocate_shared<s2::AnimSymbol>(id);
-			AnimSymLoader loader(sym, nullptr, nullptr);
+			AnimSymLoader loader(*sym, nullptr, nullptr);
 			loader.LoadBin((const simp::NodeAnimation*)data);
 			ret = sym;
 		}
@@ -341,7 +341,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_ANIM2:
 		{
 			auto sym = mm::allocate_shared<s2::Anim2Symbol>(id);
-			Anim2SymLoader loader(sym);
+			Anim2SymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeAnim2*)data);
 			ret = sym;
 		}
@@ -367,7 +367,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_SHAPE:
 		{
 			auto sym = mm::allocate_shared<s2::ShapeSymbol>(id);
-			ShapeSymLoader loader(sym);
+			ShapeSymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeShape*)data);
 			ret = sym;
 		}
@@ -375,7 +375,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_MESH:
 		{
 			auto sym = mm::allocate_shared<s2::MeshSymbol>(id);
-			MeshSymLoader loader(sym);
+			MeshSymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeMesh*)data);
 			ret = sym;
 		}
@@ -383,7 +383,7 @@ s2::SymPtr SymbolFactory::Create(uint32_t id) const
 	case simp::TYPE_MASK:
 		{
 			auto sym = mm::allocate_shared<s2::MaskSymbol>(id);
-			MaskSymLoader loader(sym);
+			MaskSymLoader loader(*sym);
 			loader.LoadBin((const simp::NodeMask*)data);
 			ret = sym;
 		}

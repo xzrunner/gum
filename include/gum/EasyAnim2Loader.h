@@ -23,7 +23,7 @@ class JointLoader;
 class EasyAnim2Loader : private cu::Uncopyable
 {
 public:
-	EasyAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
+	EasyAnim2Loader(s2::Anim2Symbol& sym, 
 		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr);
 	~EasyAnim2Loader();
 
@@ -56,7 +56,7 @@ private:
 	};
 
 private:
-	std::shared_ptr<s2::Anim2Symbol> m_sym;
+	s2::Anim2Symbol& m_sym;
 
 	std::shared_ptr<const SymbolLoader> m_sym_loader;
 

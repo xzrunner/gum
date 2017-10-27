@@ -7,8 +7,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class Anim2Symbol; }
 namespace simp { class NodeAnim2; }
 
@@ -24,7 +22,7 @@ class JointLoader;
 class Anim2SymLoader : private cu::Uncopyable
 {
 public:
-	Anim2SymLoader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
+	Anim2SymLoader(s2::Anim2Symbol& sym, 
 		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr);
 
 	void LoadJson(const CU_STR& filepath);
@@ -36,7 +34,7 @@ private:
 	static void InitJointChildren(rg_skeleton* sk);
 
 private:
-	std::shared_ptr<s2::Anim2Symbol> m_sym;
+	s2::Anim2Symbol& m_sym;
 
 	std::shared_ptr<const SymbolLoader> m_sym_loader;
 

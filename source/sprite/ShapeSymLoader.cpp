@@ -22,17 +22,13 @@
 namespace gum
 {
 
-ShapeSymLoader::ShapeSymLoader(const std::shared_ptr<s2::ShapeSymbol>& sym)
+ShapeSymLoader::ShapeSymLoader(s2::ShapeSymbol& sym)
 	: m_sym(sym)
 {
 }
 
 void ShapeSymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Json::Value value;
 	Json::Reader reader;
 	std::locale::global(std::locale(""));
@@ -48,10 +44,6 @@ void ShapeSymLoader::LoadJson(const CU_STR& filepath)
 
 void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	s2::Color col;
 	col.FromRGBA(node->color);
 
@@ -67,7 +59,7 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 			poly->SetOutline(vertices);
 			poly->Build();
 			poly_shape->SetPolygon(std::move(poly));
-			m_sym->SetShape(std::move(poly_shape));
+			m_sym.SetShape(std::move(poly_shape));
 		}
 		break;
 	case gum::SHAPE_POLYGON_TEXTURE:
@@ -85,7 +77,7 @@ void ShapeSymLoader::LoadBin(const simp::NodeShape* node)
 			poly->SetOutline(vertices);
 			poly->Build();
 			poly_shape->SetPolygon(std::move(poly));
-			m_sym->SetShape(std::move(poly_shape));
+			m_sym.SetShape(std::move(poly_shape));
 		}
 		break;
 	}

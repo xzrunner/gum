@@ -4,8 +4,6 @@
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>
 
-#include <memory>
-
 namespace s2 { class AnimSymbol; }
 namespace simp { class NodeAnimation; }
 
@@ -18,7 +16,7 @@ class SpriteLoader;
 class AnimSymLoader : private cu::Uncopyable
 {
 public:
-	AnimSymLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+	AnimSymLoader(s2::AnimSymbol& sym, 
 		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr,
 		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
@@ -26,7 +24,7 @@ public:
 	void LoadBin(const simp::NodeAnimation* node);
 
 private:
-	std::shared_ptr<s2::AnimSymbol> m_sym;
+	s2::AnimSymbol& m_sym;
 
 	std::shared_ptr<const SymbolLoader> m_sym_loader;
 	std::shared_ptr<const SpriteLoader> m_spr_loader;

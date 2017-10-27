@@ -4,8 +4,6 @@
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>
 
-#include <memory>
-
 namespace bimp { class FilePath; }
 
 namespace gum
@@ -16,12 +14,12 @@ class ImageSymbol;
 class ImageSymLoader : private cu::Uncopyable
 {
 public:
-	ImageSymLoader(const std::shared_ptr<ImageSymbol>& sym);
+	ImageSymLoader(ImageSymbol& sym);
 
 	void Load(const bimp::FilePath& res_path, float scale, bool async);
 
 private:
-	std::shared_ptr<ImageSymbol> m_sym;
+	ImageSymbol& m_sym;
 
 }; // ImageSymLoader
 

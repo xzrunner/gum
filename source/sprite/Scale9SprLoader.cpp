@@ -6,25 +6,25 @@
 namespace gum
 {
 
-Scale9SprLoader::Scale9SprLoader(const std::shared_ptr<s2::Scale9Sprite>& spr)
+Scale9SprLoader::Scale9SprLoader(s2::Scale9Sprite& spr)
 	: m_spr(spr)
 {
 }
 
 void Scale9SprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_spr || !val.isMember("scale9")) {
+	if (!val.isMember("scale9")) {
 		return;
 	}
 
 	float w = static_cast<float>(val["scale9"]["width"].asDouble());
 	float h = static_cast<float>(val["scale9"]["height"].asDouble());
-	m_spr->Resize(w, h);
+	m_spr.Resize(w, h);
 }
 
 void Scale9SprLoader::LoadBin(const simp::NodeScale9Spr* node)
 {
-	m_spr->Resize(node->width, node->height);
+	m_spr.Resize(node->width, node->height);
 }
 
 }

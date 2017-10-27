@@ -6,8 +6,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class Anim2Sprite; }
 namespace simp { class NodeAnim2Spr; }
 
@@ -17,13 +15,13 @@ namespace gum
 class Anim2SprLoader : private cu::Uncopyable
 {
 public:
-	Anim2SprLoader(const std::shared_ptr<s2::Anim2Sprite>& spr);
+	Anim2SprLoader(s2::Anim2Sprite& spr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeAnim2Spr* node);
 
 private:
-	std::shared_ptr<s2::Anim2Sprite> m_spr;
+	s2::Anim2Sprite& m_spr;
 
 }; // Anim2SprLoader
 

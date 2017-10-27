@@ -18,7 +18,7 @@
 namespace gum
 {
 
-Scale9SymLoader::Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym, 
+Scale9SymLoader::Scale9SymLoader(s2::Scale9Symbol& sym, 
 	                             const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
@@ -30,10 +30,6 @@ Scale9SymLoader::Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym,
 
 void Scale9SymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Json::Value val;
 	Json::Reader reader;
 	std::locale::global(std::locale(""));
@@ -98,7 +94,7 @@ void Scale9SymLoader::LoadJson(const CU_STR& filepath)
 
 	int w = val["width"].asInt(),
 		h = val["height"].asInt();
-	m_sym->GetScale9().Build(type, w, h, grids, 0, 0, 0, 0);
+	m_sym.GetScale9().Build(type, w, h, grids, 0, 0, 0, 0);
 }
 
 void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
@@ -185,7 +181,7 @@ void Scale9SymLoader::LoadBin(const simp::NodeScale9* node)
 	}
 
 	const int DEFAULT_SIZE = 256;
-	m_sym->GetScale9().Build(type, DEFAULT_SIZE, DEFAULT_SIZE, grids, 
+	m_sym.GetScale9().Build(type, DEFAULT_SIZE, DEFAULT_SIZE, grids, 
 		node->left, node->right, node->top, node->down);
 }
 

@@ -26,7 +26,7 @@ namespace gum
 
 static const float FPS = 30.0f;
 
-BodymovinAnimLoader::BodymovinAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
+BodymovinAnimLoader::BodymovinAnimLoader(s2::AnimSymbol& sym,
 										 const std::shared_ptr<const SymbolLoader>& sym_loader,
 										 const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
@@ -74,7 +74,7 @@ void BodymovinAnimLoader::LoadAssets(CU_MAP<CU_STR, s2::SprPtr>& map_assets,
 		{
 			auto sym = m_sym_loader->Create(s2::SYM_ANIMATION);
 			auto anim_sym = S2_VI_PTR_DOWN_CAST<s2::AnimSymbol>(sym);
-			LoadLayers(map_assets, a.layers, frame_rate, width, height, start_frame, end_frame, anim_sym);
+			LoadLayers(map_assets, a.layers, frame_rate, width, height, start_frame, end_frame, *anim_sym);
 			spr = m_spr_loader->Create(sym);
 		}
 		map_assets.insert(std::make_pair(a.id, spr));
@@ -84,7 +84,7 @@ void BodymovinAnimLoader::LoadAssets(CU_MAP<CU_STR, s2::SprPtr>& map_assets,
 void BodymovinAnimLoader::LoadLayers(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
 									 const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 									 int width, int height, int start_frame, int end_frame, 
-	                                 const std::shared_ptr<s2::AnimSymbol>& sym)
+	                                 s2::AnimSymbol& sym)
 {
 	LoadLayersPrev(map_assets, layers, frame_rate, width, height, start_frame, end_frame, sym);
 	LoadLayersPost(layers, sym, frame_rate, width, height, start_frame, end_frame);
@@ -93,9 +93,9 @@ void BodymovinAnimLoader::LoadLayers(const CU_MAP<CU_STR, s2::SprPtr>& map_asset
 void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
 										 const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 										 int width, int height, int start_frame, int end_frame, 
-	                                     const std::shared_ptr<s2::AnimSymbol>& sym)
+	                                     s2::AnimSymbol& sym)
 {
-	sym->SetFPS(static_cast<int>(FPS));
+	sym.SetFPS(static_cast<int>(FPS));
 
 	sm::vec2 left_top;
 	left_top.x = - width * 0.5f;
@@ -207,19 +207,19 @@ void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_a
 			pre_in_null->SetColor(col);
 		}
 
-		sym->AddLayer(dst);
+		sym.AddLayer(dst);
 	}
 }
 
 void BodymovinAnimLoader::LoadLayersPost(const CU_VEC<BodymovinParser::Layer>& layers,
-										 const std::shared_ptr<s2::AnimSymbol>& sym, int frame_rate, 
+										 s2::AnimSymbol& sym, int frame_rate, 
 	                                     int width, int height, int start_frame, int end_frame)
 {
 	sm::vec2 left_top;
 	left_top.x = - width * 0.5f;
 	left_top.y = height * 0.5f;
 
-	auto& _layers = sym->GetLayers();
+	auto& _layers = sym.GetLayers();
 
 	CU_MAP<int, int> map_layerid2idx;
 	for (int i = 0, n = layers.size(); i < n; ++i) {

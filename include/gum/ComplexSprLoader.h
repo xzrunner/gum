@@ -6,8 +6,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class ComplexSprite; }
 namespace simp { class NodeComplexSpr; }
 
@@ -17,13 +15,13 @@ namespace gum
 class ComplexSprLoader : private cu::Uncopyable
 {
 public:
-	ComplexSprLoader(const std::shared_ptr<s2::ComplexSprite>& spr);
+	ComplexSprLoader(s2::ComplexSprite& spr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeComplexSpr* node);
 
 private:
-	std::shared_ptr<s2::ComplexSprite> m_spr;
+	s2::ComplexSprite& m_spr;
 
 }; // ComplexSprLoader
 

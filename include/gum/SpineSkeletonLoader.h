@@ -7,8 +7,6 @@
 
 #include <json/value.h>
 
-#include <memory>
-
 namespace s2 { class SkeletonSymbol; class Sprite; class Joint; }
 
 namespace gum
@@ -21,7 +19,7 @@ class SpineParser;
 class SpineSkeletonLoader : private cu::Uncopyable
 {
 public:
-	SpineSkeletonLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym, 
+	SpineSkeletonLoader(s2::SkeletonSymbol& sym, 
 		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr,
 		const std::shared_ptr<const JointLoader>& joint_loader = nullptr);
 
@@ -39,7 +37,7 @@ private:
 	void InitSkeleton(const SpineParser& parser);
 
 private:
-	std::shared_ptr<s2::SkeletonSymbol> m_sym;
+	s2::SkeletonSymbol& m_sym;
 
 	std::shared_ptr<const SpriteLoader> m_spr_loader;
 	std::shared_ptr<const JointLoader> m_joint_loader;

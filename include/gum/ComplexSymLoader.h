@@ -6,8 +6,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class ComplexSymbol; }
 namespace simp { class NodeComplex; }
 
@@ -17,7 +15,7 @@ namespace gum
 class ComplexSymLoader : private cu::Uncopyable
 {
 public:
-	ComplexSymLoader(const std::shared_ptr<s2::ComplexSymbol>& sym);
+	ComplexSymLoader(s2::ComplexSymbol& sym);
 
 	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeComplex* node);
@@ -33,7 +31,7 @@ public:
 // 	static void LoadJsonAction(const Json::Value& val, CU_VEC<Action>& actions);
 
 private:
-	std::shared_ptr<s2::ComplexSymbol> m_sym;
+	s2::ComplexSymbol& m_sym;
 
 }; // ComplexSymLoader
 

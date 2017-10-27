@@ -8,8 +8,6 @@
 
 #include <json/value.h>
 
-#include <memory>
-
 namespace s2 { class Anim2Symbol; class Symbol; }
 
 struct rg_joint;
@@ -27,7 +25,7 @@ class SpineParser;
 class SpineAnim2Loader : private cu::Uncopyable
 {
 public:
-	SpineAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym, 
+	SpineAnim2Loader(s2::Anim2Symbol& sym, 
 		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr);
 	~SpineAnim2Loader();
 
@@ -89,7 +87,7 @@ private:
 	};
 
 private:
-	std::shared_ptr<s2::Anim2Symbol> m_sym;
+	s2::Anim2Symbol& m_sym;
 
 	std::shared_ptr<const SymbolLoader> m_sym_loader;
 

@@ -8,23 +8,19 @@
 namespace gum
 {
 
-AudioSymLoader::AudioSymLoader(const std::shared_ptr<s2::AudioSymbol>& sym)
+AudioSymLoader::AudioSymLoader(s2::AudioSymbol& sym)
 	: m_sym(sym)
 {
 }
 
 void AudioSymLoader::Load(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Audio* audio = Audio::Instance();
 	if (!audio->IsEnable()) {
 		return;
 	}
 	auto source = audio->GetContext()->CreateSource(filepath, true);
-	m_sym->SetSource(source);
+	m_sym.SetSource(source);
 }
 
 }

@@ -19,7 +19,7 @@ class SpriteLoader;
 class EasyAnimLoader : private cu::Uncopyable
 {
 public:
-	EasyAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+	EasyAnimLoader(s2::AnimSymbol& sym, 
 		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
@@ -34,7 +34,7 @@ private:
 	void LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSymbol::Frame& dst);
 
 private:
-	std::shared_ptr<s2::AnimSymbol> m_sym;
+	s2::AnimSymbol& m_sym;
 
 	std::shared_ptr<const SpriteLoader> m_spr_loader;
 

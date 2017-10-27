@@ -11,7 +11,7 @@
 namespace gum
 {
 
-SkeletonSymLoader::SkeletonSymLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym,
+SkeletonSymLoader::SkeletonSymLoader(s2::SkeletonSymbol& sym,
 									 const std::shared_ptr<const SpriteLoader>& spr_loader,
 									 const std::shared_ptr<const JointLoader>& joint_loader)
 	: m_sym(sym)
@@ -22,10 +22,6 @@ SkeletonSymLoader::SkeletonSymLoader(const std::shared_ptr<s2::SkeletonSymbol>& 
 
 void SkeletonSymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	CU_STR dir = FilepathHelper::Dir(filepath);
 
 	Json::Value val;

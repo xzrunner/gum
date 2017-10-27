@@ -14,12 +14,12 @@ namespace gum
 class AudioSymLoader : private cu::Uncopyable
 {
 public:
-	AudioSymLoader(const std::shared_ptr<s2::AudioSymbol>& sym);
+	AudioSymLoader(s2::AudioSymbol& sym);
 
 	void Load(const CU_STR& filepath);
 
 private:
-	std::shared_ptr<s2::AudioSymbol> m_sym;
+	s2::AudioSymbol& m_sym;
 
 }; // AudioSymLoader
 

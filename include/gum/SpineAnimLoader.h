@@ -9,8 +9,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class AnimSymbol; class SkeletonPose; class SkeletonSymbol; }
 
 namespace gum
@@ -22,7 +20,7 @@ class SpriteLoader;
 class SpineAnimLoader : private cu::Uncopyable
 {
 public:
-	SpineAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+	SpineAnimLoader(s2::AnimSymbol& sym, 
 		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr,
 		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
@@ -37,7 +35,7 @@ private:
 	void UpdateNextTime(float next_time);
 
 private:
-	std::shared_ptr<s2::AnimSymbol> m_sym;
+	s2::AnimSymbol& m_sym;
 
 	std::shared_ptr<const SymbolLoader> m_sym_loader;
 	std::shared_ptr<const SpriteLoader> m_spr_loader;

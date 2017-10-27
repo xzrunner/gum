@@ -6,8 +6,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 #include <stdint.h>
 
 namespace s2 { class Scale9Symbol; class Sprite; }
@@ -21,7 +19,7 @@ class SpriteLoader;
 class Scale9SymLoader : private cu::Uncopyable
 {
 public:
-	Scale9SymLoader(const std::shared_ptr<s2::Scale9Symbol>& sym, 
+	Scale9SymLoader(s2::Scale9Symbol& sym, 
 		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
 	void LoadJson(const CU_STR& filepath);
@@ -31,7 +29,7 @@ private:
 	std::shared_ptr<s2::Sprite> LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror);
 
 private:
-	std::shared_ptr<s2::Scale9Symbol> m_sym;
+	s2::Scale9Symbol& m_sym;
 
 	std::shared_ptr<const SpriteLoader> m_spr_loader;
 

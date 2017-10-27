@@ -174,13 +174,13 @@ s2::SprPtr SpriteFactory::Create(const Json::Value& val, const CU_STR& dir) cons
 		break;
 	case s2::SYM_SCALE9:
 		{
-			Scale9SprLoader loader(S2_VI_PTR_DOWN_CAST<s2::Scale9Sprite>(spr));
+			Scale9SprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::Scale9Sprite>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
 	case s2::SYM_ICON:
 		{
-			IconSprLoader loader(S2_VI_PTR_DOWN_CAST<s2::IconSprite>(spr));
+			IconSprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::IconSprite>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
@@ -190,37 +190,37 @@ s2::SprPtr SpriteFactory::Create(const Json::Value& val, const CU_STR& dir) cons
 		break;
 	case s2::SYM_TEXTBOX:
 		{
-			TextboxSprLoader loader(S2_VI_PTR_DOWN_CAST<s2::TextboxSprite>(spr));
+			TextboxSprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::TextboxSprite>(spr));
 			loader.LoadJson(val);
 		}
 		break;
 	case s2::SYM_COMPLEX:
 		{
-			ComplexSprLoader loader(S2_VI_PTR_DOWN_CAST<s2::ComplexSprite>(spr));
+			ComplexSprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::ComplexSprite>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
 	case s2::SYM_ANIMATION:
 		{
-			AnimSprLoader loader(S2_VI_PTR_DOWN_CAST<s2::AnimSprite>(spr));
+			AnimSprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::AnimSprite>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
 	case s2::SYM_PARTICLE3D:
 		{
-			P3dSprLoader loader(S2_VI_PTR_DOWN_CAST<s2::Particle3dSprite>(spr));
+			P3dSprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::Particle3dSprite>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
 	case s2::SYM_PARTICLE2D:
 		{
-			P2dSprLoader loader(S2_VI_PTR_DOWN_CAST<s2::Particle2dSprite>(spr));
+			P2dSprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::Particle2dSprite>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
 	case s2::SYM_MESH:
 		{
-			MeshSprLoader loader(S2_VI_PTR_DOWN_CAST<s2::MeshSprite>(spr));
+			MeshSprLoader loader(*S2_VI_PTR_DOWN_CAST<s2::MeshSprite>(spr));
 			loader.LoadJson(val, dir);
 		}
 		break;
@@ -285,7 +285,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto s9_spr = mm::allocate_shared<s2::Scale9Sprite>(sym, id);
 				if (s9_spr)
 				{
-					Scale9SprLoader loader(s9_spr);
+					Scale9SprLoader loader(*s9_spr);
 					loader.LoadBin(node);
 					spr = s9_spr;
 				}
@@ -301,7 +301,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto icon_spr = mm::allocate_shared<s2::IconSprite>(sym, id);
 				if (icon_spr)
 				{
-					IconSprLoader loader(icon_spr);
+					IconSprLoader loader(*icon_spr);
 					loader.LoadBin(node);
 					spr = icon_spr;
 				}
@@ -328,7 +328,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto tb_spr = S2_VI_PTR_DOWN_CAST<s2::TextboxSprite>(SpriteFactory::Instance()->Create(sym, id, true));
 				if (tb_spr)
 				{
-					TextboxSprLoader loader(tb_spr);
+					TextboxSprLoader loader(*tb_spr);
 					loader.LoadBin(node);
 					spr = tb_spr;
 				}
@@ -343,7 +343,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 			{
 				auto comp_spr = S2_VI_PTR_DOWN_CAST<s2::ComplexSprite>(SpriteFactory::Instance()->Create(sym, id, true));
 				if (comp_spr) {
-					ComplexSprLoader loader(comp_spr);
+					ComplexSprLoader loader(*comp_spr);
 					loader.LoadBin(node);
 					spr = comp_spr;
 				}
@@ -359,7 +359,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto anim_spr = S2_VI_PTR_DOWN_CAST<s2::AnimSprite>(SpriteFactory::Instance()->Create(sym, id, true));
 				if (anim_spr)
 				{
-					AnimSprLoader loader(anim_spr);
+					AnimSprLoader loader(*anim_spr);
 					loader.LoadBin(node);
 					spr = anim_spr;
 				}
@@ -375,7 +375,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto anim2_spr = S2_VI_PTR_DOWN_CAST<s2::Anim2Sprite>(SpriteFactory::Instance()->Create(sym, id, true));
 				if (anim2_spr)
 				{
-					Anim2SprLoader loader(anim2_spr);
+					Anim2SprLoader loader(*anim2_spr);
 					loader.LoadBin(node);
 					spr = anim2_spr;
 				}
@@ -391,7 +391,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto p3d_spr = S2_VI_PTR_DOWN_CAST<s2::Particle3dSprite>(SpriteFactory::Instance()->Create(sym, id, true));
 				if (p3d_spr)
 				{
-					P3dSprLoader loader(p3d_spr);
+					P3dSprLoader loader(*p3d_spr);
 					loader.LoadBin(node);
 					spr = p3d_spr;
 				}
@@ -407,7 +407,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto p2d_spr = S2_VI_PTR_DOWN_CAST<s2::Particle2dSprite>(SpriteFactory::Instance()->Create(sym, id, true));
 				if (p2d_spr)
 				{
-					P2dSprLoader loader(p2d_spr);
+					P2dSprLoader loader(*p2d_spr);
 					loader.LoadBin(node);
 					spr = p2d_spr;
 				}
@@ -432,7 +432,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 				auto mesh_spr = S2_VI_PTR_DOWN_CAST<s2::MeshSprite>(SpriteFactory::Instance()->Create(sym, id, true));
 				if (mesh_spr)
 				{
-					MeshSprLoader loader(mesh_spr);
+					MeshSprLoader loader(*mesh_spr);
 					loader.LoadBin(node);
 					spr = mesh_spr;
 				}

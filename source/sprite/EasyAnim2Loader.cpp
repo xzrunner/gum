@@ -15,7 +15,7 @@
 namespace gum
 {
 
-EasyAnim2Loader::EasyAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym,
+EasyAnim2Loader::EasyAnim2Loader(s2::Anim2Symbol& sym,
 								 const std::shared_ptr<const SymbolLoader>& sym_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
@@ -37,10 +37,6 @@ EasyAnim2Loader::~EasyAnim2Loader()
 
 void EasyAnim2Loader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Clear();
 
 	m_num = val["skeleton"].size();

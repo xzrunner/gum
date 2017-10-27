@@ -7,14 +7,14 @@
 namespace gum
 {
 
-P3dSprLoader::P3dSprLoader(const std::shared_ptr<s2::Particle3dSprite>& spr)
+P3dSprLoader::P3dSprLoader(s2::Particle3dSprite& spr)
 	: m_spr(spr)
 {
 }
 
 void P3dSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_spr || !val.isMember("particle3d")) {
+	if (!val.isMember("particle3d")) {
 		return;
 	}
 
@@ -24,13 +24,13 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 	if (p_val.isMember("loop")) {
 		loop = p_val["loop"].asBool();
 	}
-	m_spr->SetLoop(loop);
+	m_spr.SetLoop(loop);
 
 	bool local_mode_draw = false;
 	if (p_val.isMember("loop")) {
 		local_mode_draw = p_val["local_mode_draw"].asBool();
 	}
-	m_spr->SetLocal(local_mode_draw);
+	m_spr.SetLocal(local_mode_draw);
 
 	s2::Particle3dSprite::ReuseType reuse = s2::Particle3dSprite::REUSE_COMMON;
 	if (p_val.isMember("reuse")) {
@@ -40,32 +40,28 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 			reuse = s2::Particle3dSprite::ReuseType(p_val["reuse"].asInt());
 		}
 	}
-	m_spr->SetReuse(reuse);
+	m_spr.SetReuse(reuse);
 
 	bool alone = false;
 	if (p_val.isMember("alone")) {
 		alone = p_val["alone"].asBool();
 	}
-	m_spr->SetAlone(alone);
+	m_spr.SetAlone(alone);
 
 	if (p_val.isMember("start_radius")) {
 		float start_radius = static_cast<float>(p_val["start_radius"].asDouble());
-		m_spr->SetStartRadius(start_radius);
+		m_spr.SetStartRadius(start_radius);
 	}
 }
 
 void P3dSprLoader::LoadBin(const simp::NodeParticle3dSpr* node)
 {
-	if (!m_spr) {
-		return;
-	}
+	m_spr.SetLoop(simp::int2bool(node->loop));
+	m_spr.SetLocal(simp::int2bool(node->local));
+	m_spr.SetAlone(simp::int2bool(node->alone));
+	m_spr.SetReuse(s2::Particle3dSprite::ReuseType(node->reuse));
 
-	m_spr->SetLoop(simp::int2bool(node->loop));
-	m_spr->SetLocal(simp::int2bool(node->local));
-	m_spr->SetAlone(simp::int2bool(node->alone));
-	m_spr->SetReuse(s2::Particle3dSprite::ReuseType(node->reuse));
-
-	m_spr->SetStartRadius(node->radius);
+	m_spr.SetStartRadius(node->radius);
 }
 
 }

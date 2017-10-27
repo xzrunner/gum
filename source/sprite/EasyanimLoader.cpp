@@ -16,7 +16,7 @@
 namespace gum
 {
 
-EasyAnimLoader::EasyAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+EasyAnimLoader::EasyAnimLoader(s2::AnimSymbol& sym, 
 	                           const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
 	, m_spr_loader(spr_loader)
@@ -28,22 +28,14 @@ EasyAnimLoader::EasyAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
 
 void EasyAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	int fps = val["fps"].asInt();
-	m_sym->SetFPS(fps);
+	m_sym.SetFPS(fps);
 
 	LoadLayers(val["layer"], dir);
 }
 
 void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	for (int layer = 0; layer < node->n; ++layer)
 	{
 		const simp::NodeAnimation::Layer* src_layer = &node->layers[layer];
@@ -60,7 +52,7 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 			LoadLerps(src_frame, *dst_frame);
 			dst_layer->frames.push_back(std::move(dst_frame));
 		}
-		m_sym->AddLayer(dst_layer);
+		m_sym.AddLayer(dst_layer);
 	}
 }
 
@@ -84,7 +76,7 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const CU_STR& dir)
 			LoadLerps(frame_val, *dst_frame);
 			dst_layer->frames.push_back(std::move(dst_frame));
 		}
-		m_sym->AddLayer(dst_layer);
+		m_sym.AddLayer(dst_layer);
 	}
 }
 

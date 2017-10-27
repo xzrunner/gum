@@ -17,7 +17,7 @@
 namespace gum
 {
 
-EasySkeletonLoader::EasySkeletonLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym,
+EasySkeletonLoader::EasySkeletonLoader(s2::SkeletonSymbol& sym,
 									   const std::shared_ptr<const SpriteLoader>& spr_loader,
 									   const std::shared_ptr<const JointLoader>& joint_loader)
 	: m_sym(sym)
@@ -41,10 +41,6 @@ EasySkeletonLoader::~EasySkeletonLoader()
 
 void EasySkeletonLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Clear();
 
 	m_num = val["skeleton"].size();
@@ -59,7 +55,7 @@ void EasySkeletonLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 	InitPose();
 
 	std::unique_ptr<s2::Skeleton> skeleton(std::make_unique<s2::Skeleton>(m_root, m_joints));
-	m_sym->SetSkeleton(skeleton);
+	m_sym.SetSkeleton(skeleton);
 }
 
 void EasySkeletonLoader::Clear()

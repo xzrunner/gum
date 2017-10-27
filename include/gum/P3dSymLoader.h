@@ -8,8 +8,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class Particle3dSymbol; class Symbol; class P3dEmitterCfg; }
 namespace simp { class NodeParticle3d; }
 

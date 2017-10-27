@@ -14,7 +14,7 @@
 namespace gum
 {
 
-SpineSkeletonLoader::SpineSkeletonLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym,
+SpineSkeletonLoader::SpineSkeletonLoader(s2::SkeletonSymbol& sym,
 										 const std::shared_ptr<const SpriteLoader>& spr_loader,
 										 const std::shared_ptr<const JointLoader>& joint_loader)
 	: m_sym(sym)
@@ -31,10 +31,6 @@ SpineSkeletonLoader::SpineSkeletonLoader(const std::shared_ptr<s2::SkeletonSymbo
 
 void SpineSkeletonLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	SpineParser parser(false);
 	parser.Parse(val);
 	LoadParser(parser, dir);
@@ -42,10 +38,6 @@ void SpineSkeletonLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 
 void SpineSkeletonLoader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Clear();
 
 	m_num = parser.bones.size();
@@ -186,7 +178,7 @@ void SpineSkeletonLoader::InitSkeleton(const SpineParser& parser)
 	}
 
 	auto skeleton(std::make_unique<s2::Skeleton>(m_root, joints));
-	m_sym->SetSkeleton(skeleton);
+	m_sym.SetSkeleton(skeleton);
 }
 
 }

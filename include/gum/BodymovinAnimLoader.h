@@ -18,7 +18,7 @@ class SpriteLoader;
 class BodymovinAnimLoader : private cu::Uncopyable
 {
 public:
-	BodymovinAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym, 
+	BodymovinAnimLoader(s2::AnimSymbol& sym, 
 		const std::shared_ptr<const SymbolLoader>& sym_loader = nullptr,
 		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr);
 
@@ -35,13 +35,13 @@ private:
 	void LoadLayers(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
 		const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 		int width, int height, int start_frame, int end_frame, 
-		const std::shared_ptr<s2::AnimSymbol>& sym);
+		s2::AnimSymbol& sym);
 	void LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_assets,
 		const CU_VEC<BodymovinParser::Layer>& layers, int frame_rate, 
 		int width, int height, int start_frame, int end_frame, 
-		const std::shared_ptr<s2::AnimSymbol>& sym);
+		s2::AnimSymbol& sym);
 	void LoadLayersPost(const CU_VEC<BodymovinParser::Layer>& layers,
-		const std::shared_ptr<s2::AnimSymbol>& sym, int frame_rate, int width, int height,
+		s2::AnimSymbol& sym, int frame_rate, int width, int height,
 		int start_frame, int end_frame);
 	
 	static int Frame2Time(int frame, int frame_rate);
@@ -74,7 +74,7 @@ private:
 		const BodymovinParser::Transform& trans);
 
 private:
-	std::shared_ptr<s2::AnimSymbol> m_sym;
+	s2::AnimSymbol& m_sym;
 
 	std::shared_ptr<const SymbolLoader> m_sym_loader;
 	std::shared_ptr<const SpriteLoader> m_spr_loader;

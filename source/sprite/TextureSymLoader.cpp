@@ -13,17 +13,13 @@
 namespace gum
 {
 
-TextureSymLoader::TextureSymLoader(const std::shared_ptr<s2::TextureSymbol>& sym)
+TextureSymLoader::TextureSymLoader(s2::TextureSymbol& sym)
 	: m_sym(sym)
 {
 }
 
 void TextureSymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Json::Value value;
 	Json::Reader reader;
 	std::locale::global(std::locale(""));
@@ -42,16 +38,12 @@ void TextureSymLoader::LoadJson(const CU_STR& filepath)
 		auto shape = ShapeLoader::LoadShape(value["shapes"][i], dir);
 		auto poly_shape = static_cast<s2::PolygonShape*>(std::move(shape).release());
 		auto poly_shape_ptr = std::unique_ptr<s2::PolygonShape>(poly_shape);
-		m_sym->AddPolygon(poly_shape_ptr);
+		m_sym.AddPolygon(poly_shape_ptr);
 	}
 }
 
 void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	for (uint32_t i = 0; i < node->n; ++i) 
 	{
 		auto sym = SymbolFactory::Instance()->Create(node->polys[i]);
@@ -60,7 +52,7 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 			auto shape_sym = S2_VI_PTR_DOWN_CAST<s2::ShapeSymbol>(sym);
 			auto poly_shape = static_cast<s2::PolygonShape*>(std::move(shape_sym->GetShape()).release());
 			auto poly_shape_ptr = std::unique_ptr<s2::PolygonShape>(poly_shape);
-			m_sym->AddPolygon(poly_shape_ptr);
+			m_sym.AddPolygon(poly_shape_ptr);
 		}
 	}
 }

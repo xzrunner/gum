@@ -8,8 +8,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class SkeletonSymbol; class Sprite; class Joint; }
 
 namespace gum
@@ -21,7 +19,7 @@ class JointLoader;
 class EasySkeletonLoader : private cu::Uncopyable
 {
 public:
-	EasySkeletonLoader(const std::shared_ptr<s2::SkeletonSymbol>& sym, 
+	EasySkeletonLoader(s2::SkeletonSymbol& sym, 
 		const std::shared_ptr<const SpriteLoader>& spr_loader = nullptr,
 		const std::shared_ptr<const JointLoader>& joint_loader = nullptr);
 	~EasySkeletonLoader();
@@ -48,7 +46,7 @@ private:
 	};
 
 private:
-	std::shared_ptr<s2::SkeletonSymbol> m_sym;
+	s2::SkeletonSymbol& m_sym;
 
 	std::shared_ptr<const SpriteLoader> m_spr_loader;
 	std::shared_ptr<const JointLoader> m_joint_loader;

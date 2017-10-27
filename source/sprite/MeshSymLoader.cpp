@@ -25,17 +25,13 @@
 namespace gum
 {
 
-MeshSymLoader::MeshSymLoader(const std::shared_ptr<s2::MeshSymbol>& sym)
+MeshSymLoader::MeshSymLoader(s2::MeshSymbol& sym)
 	: m_sym(sym)
 {
 }
 
 void MeshSymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Json::Value value;
 	Json::Reader reader;
 	std::locale::global(std::locale(""));
@@ -64,16 +60,12 @@ void MeshSymLoader::LoadJson(const CU_STR& filepath)
 	}
 
 	if (mesh) {
-		m_sym->SetMesh(mesh);
+		m_sym.SetMesh(mesh);
 	}
 }
 
 void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	auto base_sym = SymbolPool::Instance()->Fetch(node->base_id);
 	if (!base_sym) {
 		return;
@@ -94,7 +86,7 @@ void MeshSymLoader::LoadBin(const simp::NodeMesh* node)
 	default:
 		break;
 	}
-	m_sym->SetMesh(mesh);
+	m_sym.SetMesh(mesh);
 }
 
 std::unique_ptr<s2::Mesh> MeshSymLoader::LoadPointsMesh(const s2::SymConstPtr& base_sym, simp::PointsMesh* node)

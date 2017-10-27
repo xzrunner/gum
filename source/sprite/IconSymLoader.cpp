@@ -22,17 +22,13 @@
 namespace gum
 {
 
-IconSymLoader::IconSymLoader(const std::shared_ptr<s2::IconSymbol>& sym)
+IconSymLoader::IconSymLoader(s2::IconSymbol& sym)
 	: m_sym(sym)
 {
 }
 
 void IconSymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Json::Value value;
 	Json::Reader reader;
 	std::locale::global(std::locale(""));
@@ -48,10 +44,6 @@ void IconSymLoader::LoadJson(const CU_STR& filepath)
 
 void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	CU_VEC<sm::vec2> vertices;
 	ArrayLoader::Load(vertices, node->vertices, node->vertices_n, 16);
 
@@ -97,7 +89,7 @@ void IconSymLoader::LoadBin(const simp::NodeIcon* node)
 	}
 
 	if (icon) {
-		m_sym->SetIcon(icon);
+		m_sym.SetIcon(icon);
 	}
 }
 

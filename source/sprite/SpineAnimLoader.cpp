@@ -19,7 +19,7 @@ namespace gum
 static const float FPS = 30.0f;
 static const int DEFAULT_ANIM = 0;
 
-SpineAnimLoader::SpineAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
+SpineAnimLoader::SpineAnimLoader(s2::AnimSymbol& sym,
 								 const std::shared_ptr<const SymbolLoader>& sym_loader,
 								 const std::shared_ptr<const SpriteLoader>& spr_loader)
 	: m_sym(sym)
@@ -39,7 +39,7 @@ SpineAnimLoader::SpineAnimLoader(const std::shared_ptr<s2::AnimSymbol>& sym,
 void SpineAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir,
 							   const CU_STR& filepath)
 {
-	m_sym->SetFPS(static_cast<int>(FPS));
+	m_sym.SetFPS(static_cast<int>(FPS));
 
 	SpineParser parser;
 	parser.Parse(val);
@@ -76,7 +76,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir,
 		UpdateNextTime(next_time);
 	}
 
-	m_sym->AddLayer(layer);
+	m_sym.AddLayer(layer);
 }
 
 void SpineAnimLoader::BuildBone2PoseTable()

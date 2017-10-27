@@ -8,8 +8,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 struct t2d_emitter_cfg;
 
 namespace s2 { class Symbol; class TrailSymbol; }

@@ -22,7 +22,7 @@ namespace gum
 
 static const int ANIM_IDX = 0;
 
-SpineAnim2Loader::SpineAnim2Loader(const std::shared_ptr<s2::Anim2Symbol>& sym,
+SpineAnim2Loader::SpineAnim2Loader(s2::Anim2Symbol& sym,
 								   const std::shared_ptr<const SymbolLoader>& sym_loader)
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
@@ -47,10 +47,6 @@ SpineAnim2Loader::~SpineAnim2Loader()
 
 void SpineAnim2Loader::LoadJson(const Json::Value& val, const CU_STR& dir)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	SpineParser parser(true);
 	parser.Parse(val);
 	LoadParser(parser, dir);
@@ -58,10 +54,6 @@ void SpineAnim2Loader::LoadJson(const Json::Value& val, const CU_STR& dir)
 
 void SpineAnim2Loader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Clear();
 
 	m_num = parser.bones.size();
@@ -91,7 +83,7 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 	anim->timeline.skins   = m_tl_skins;
 	anim->timeline.deforms = m_tl_deforms;
 	anim->max_frame        = m_max_frame;
-	m_sym->SetAnim(anim);
+	m_sym.SetAnim(anim);
 }
 
 void SpineAnim2Loader::Clear()
@@ -179,7 +171,7 @@ void SpineAnim2Loader::CreateSkins(const SpineParser& parser, const CU_STR& img_
 		skin_count += parser.skins[i].items.size();
 	}
 
-	m_sym->ClearCachedSym();
+	m_sym.ClearCachedSym();
 
 	m_skins.reserve(skin_count);
 	int ptr = 0;
@@ -224,7 +216,7 @@ void SpineAnim2Loader::CreateImageSkin(rg_skin& dst, const SpineParser::SkinItem
 
 	CU_STR filepath = FilepathHelper::Absolute(img_dir, src.path + ".png");
 	auto sym = m_sym_loader->Create(filepath);
-	m_sym->AddCachedSym(sym);
+	m_sym.AddCachedSym(sym);
 	dst.ud = static_cast<void*>(sym.get());
 	dst.type = SKIN_IMG;
 }
@@ -295,7 +287,7 @@ void SpineAnim2Loader::CreateMeshSkin(rg_skin& dst, const SpineParser::SkinItem&
 	s2_mesh->SetMesh(std::move(pm_mesh));
 	S2_VI_PTR_DOWN_CAST<s2::MeshSymbol>(sym)->SetMesh(s2_mesh);
 
-	m_sym->AddCachedSym(sym);
+	m_sym.AddCachedSym(sym);
 	dst.ud = static_cast<void*>(sym.get());
 }
 

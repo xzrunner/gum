@@ -13,17 +13,13 @@
 namespace gum
 {
 
-ComplexSymLoader::ComplexSymLoader(const std::shared_ptr<s2::ComplexSymbol>& sym)
+ComplexSymLoader::ComplexSymLoader(s2::ComplexSymbol& sym)
 	: m_sym(sym)
 {
 }
 
 void ComplexSymLoader::LoadJson(const CU_STR& filepath)
 {
-	if (!m_sym) {
-		return;
-	}
-
 	Json::Value value;
 	Json::Reader reader;
 	std::locale::global(std::locale(""));
@@ -37,15 +33,15 @@ void ComplexSymLoader::LoadJson(const CU_STR& filepath)
 	scissor.xmax = static_cast<float>(value["xmax"].asInt());
 	scissor.ymin = static_cast<float>(value["ymin"].asInt());
 	scissor.ymax = static_cast<float>(value["ymax"].asInt());
-	m_sym->SetScissor(scissor);
+	m_sym.SetScissor(scissor);
 
 	CU_STR dir = FilepathHelper::Dir(filepath);
 
-	m_sym->Clear();
+	m_sym.Clear();
 	for (int i = 0, n = value["sprite"].size(); i < n; ++i) {
 		auto spr = SpriteFactory::Instance()->Create(value["sprite"][i], dir);
 		if (spr) {
-			m_sym->Add(spr);
+			m_sym.Add(spr);
 		}
 	}
 
@@ -59,12 +55,12 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 	scissor.ymin = node->scissor[1];
 	scissor.xmax = node->scissor[2];
 	scissor.ymax = node->scissor[3];
-	m_sym->SetScissor(scissor);
+	m_sym.SetScissor(scissor);
 
 	CU_VEC<s2::SprPtr> children;
 	children.reserve(node->sprs_n);
 
-	m_sym->Clear();
+	m_sym.Clear();
 	for (int i = 0; i < node->sprs_n; ++i) 
 	{
 		auto spr = SpriteFactory::Instance()->Create(node->sprs[i]);
@@ -74,7 +70,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 		}
 
 		SprTransLoader::Load(spr, node->trans[i]);
-		m_sym->Add(spr);
+		m_sym.Add(spr);
 	}
 
 	CU_VEC<s2::ComplexSymbol::Action> dst;
@@ -99,7 +95,7 @@ void ComplexSymLoader::LoadBin(const simp::NodeComplex* node)
 			dst.push_back(dst_action);
 		}
 	}
-	m_sym->SetActions(dst);
+	m_sym.SetActions(dst);
 }
 
 //void ComplexSymLoader::LoadJsonAction(const Json::Value& val, s2::ComplexSymbol* sym)

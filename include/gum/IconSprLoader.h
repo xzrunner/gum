@@ -6,8 +6,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class IconSprite; }
 namespace simp { class NodeIconSpr; }
 
@@ -17,13 +15,13 @@ namespace gum
 class IconSprLoader : private cu::Uncopyable
 {
 public:
-	IconSprLoader(const std::shared_ptr<s2::IconSprite>& spr);
+	IconSprLoader(s2::IconSprite& spr);
 
 	void LoadJson(const Json::Value& val, const CU_STR& dir);
 	void LoadBin(const simp::NodeIconSpr* node);
 
 private:
-	std::shared_ptr<s2::IconSprite> m_spr;
+	s2::IconSprite& m_spr;
 
 }; // IconSprLoader
 

@@ -7,8 +7,6 @@
 
 #include <json/json.h>
 
-#include <memory>
-
 namespace s2 { class MeshSymbol; class Mesh; class Symbol; }
 namespace simp { class NodeMesh; class PointsMesh; class TrianglesMesh; class Skin2Mesh; }
 
@@ -18,7 +16,7 @@ namespace gum
 class MeshSymLoader : private cu::Uncopyable
 {
 public:
-	MeshSymLoader(const std::shared_ptr<s2::MeshSymbol>& sym);
+	MeshSymLoader(s2::MeshSymbol& sym);
 
 	void LoadJson(const CU_STR& filepath);	
 	void LoadBin(const simp::NodeMesh* node);
@@ -31,7 +29,7 @@ private:
 	static std::unique_ptr<s2::Mesh> CreatePointsMesh(const Json::Value& val, const s2::SymConstPtr& base_sym);
 
 private:
-	std::shared_ptr<s2::MeshSymbol> m_sym;
+	s2::MeshSymbol& m_sym;
 
 }; // MeshSymLoader
 
