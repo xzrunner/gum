@@ -10,8 +10,6 @@ namespace gum
 
 CU_SINGLETON_DEFINITION(SymbolFile);
 
-CU_STR SymbolFile::UNKNOWN_TAG = "unknown";
-
 SymbolFile::SymbolFile()
 {
 	Regist(s2::SYM_SCALE9,		"scale9");
@@ -27,6 +25,8 @@ SymbolFile::SymbolFile()
 	Regist(s2::SYM_MASK,		"mask");
 	Regist(s2::SYM_TRAIL,		"trail");
 	Regist(s2::SYM_SKELETON,	"skeleton");
+
+	UNKNOWN_TAG = "unknown";
 }
 
 int SymbolFile::Type(const CU_STR& filepath) const

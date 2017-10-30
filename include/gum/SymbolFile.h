@@ -15,7 +15,7 @@ public:
 	const CU_STR& Tag(int type) const;
 
 public:
-	static CU_STR UNKNOWN_TAG;
+	CU_STR UNKNOWN_TAG;
 
 private:
 	void Regist(int type, const CU_STR& tag);
