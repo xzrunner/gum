@@ -36,9 +36,14 @@ void TextureSymLoader::LoadJson(const CU_STR& filepath)
 
 	for (int i = 0, n = value["shapes"].size(); i < n; ++i) {
 		auto shape = ShapeLoader::LoadShape(value["shapes"][i], dir);
+#ifndef S2_SHAPE_SHARED_PTR
 		auto poly_shape = S2_VI_DOWN_CAST<s2::PolygonShape*>(std::move(shape).release());
 		auto poly_shape_ptr = std::unique_ptr<s2::PolygonShape>(poly_shape);
 		m_sym.AddPolygon(poly_shape_ptr);
+#else
+		auto shape_shared = std::shared_ptr<s2::Shape>(std::move(shape));
+		m_sym.AddPolygon(S2_VI_PTR_DOWN_CAST<s2::PolygonShape>(shape_shared));
+#endif // S2_SHAPE_SHARED_PTR
 	}
 }
 
@@ -50,9 +55,13 @@ void TextureSymLoader::LoadBin(const simp::NodeTexture* node)
 		if (sym)
 		{
 			auto shape_sym = S2_VI_PTR_DOWN_CAST<s2::ShapeSymbol>(sym);
+#ifndef S2_SHAPE_SHARED_PTR
 			auto poly_shape = S2_VI_DOWN_CAST<s2::PolygonShape*>(std::move(shape_sym->GetShape()).release());
 			auto poly_shape_ptr = std::unique_ptr<s2::PolygonShape>(poly_shape);
 			m_sym.AddPolygon(poly_shape_ptr);
+#else
+			m_sym.AddPolygon(S2_VI_PTR_DOWN_CAST<s2::PolygonShape>(shape_sym->GetShape()));
+#endif // S2_SHAPE_SHARED_PTR
 		}
 	}
 }

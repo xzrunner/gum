@@ -3,6 +3,8 @@
 
 #include <json/json.h>
 
+#include <memory>
+
 namespace s2 { class Shape; class PolygonShape; }
 
 namespace gum
@@ -11,10 +13,10 @@ namespace gum
 class ShapeSaver
 {
 public:
-	static void Store(const s2::Shape* shape, Json::Value& val);
+	static void Store(const std::shared_ptr<const s2::Shape>& shape, Json::Value& val);
 
 private:
-	static void StorePolygon(const s2::PolygonShape* polygon, Json::Value& val);
+	static void StorePolygon(const std::shared_ptr<const s2::PolygonShape>& polygon, Json::Value& val);
 
 }; // ShapeSaver
 

@@ -64,16 +64,18 @@ void TrailSymLoader::Store(t2d_emitter_cfg* cfg) const
 			dst.mode.A.scale_begin = src.scale_begin;
 			dst.mode.A.scale_end = src.scale_end;
 
+			std::shared_ptr<s2::Symbol> sym = nullptr;
 			if (!src.filepath.empty()) {
-				dst.mode.A.ud = static_cast<void*>(LoadSymbol(src.filepath).get());
-				if (!dst.mode.A.ud) {
-					LOGW("TrailSymLoader::Store err comp %s\n", src.filepath.c_str());
-				}
+				sym = LoadSymbol(src.filepath);
 			} else {
-				dst.mode.A.ud = static_cast<void*>(SymbolPool::Instance()->Fetch(src.sym_id).get());
-				if (!dst.mode.A.ud) {
-					LOGW("TrailSymLoader::Store err comp %d\n", src.sym_id);
-				}
+				sym = SymbolPool::Instance()->Fetch(src.sym_id);
+			}
+			if (sym) {
+				// todo: cache sym
+//				cfg->InsertCachedSym(sym);
+				dst.mode.A.ud = static_cast<void*>(sym.get());
+			} else {
+				LOGW("%s", "TrailSymLoader::Store err comp\n");
 			}
 		}
 	} else {

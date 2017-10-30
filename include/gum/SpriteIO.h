@@ -8,6 +8,7 @@
 #include <sprite2/RenderFilter.h>
 #include <sprite2/CameraMode.h>
 #include <sprite2/typedef.h>
+#include <sprite2/config.h>
 #include <cu/cu_stl.h>
 
 #include <json/json.h>

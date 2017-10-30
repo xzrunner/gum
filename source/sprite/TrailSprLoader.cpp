@@ -1,4 +1,4 @@
-#include "TrailSprLoader.h"
+#include "gum/TrailSprLoader.h"
 
 #include <sprite2/TrailSprite.h>
 #include <simp/NodeTrailSpr.h>

@@ -1,5 +1,5 @@
-#include "ShapeSaver.h"
-#include "JsonSerializer.h"
+#include "gum/ShapeSaver.h"
+#include "gum/JsonSerializer.h"
 
 #include <sprite2/Shape.h>
 #include <sprite2/ShapeType.h>
@@ -11,17 +11,17 @@
 namespace gum
 {
 
-void ShapeSaver::Store(const s2::Shape* shape, Json::Value& val)
+void ShapeSaver::Store(const std::shared_ptr<const s2::Shape>& shape, Json::Value& val)
 {
 	switch (shape->Type())
 	{
 	case s2::SHAPE_POLYGON:
-		StorePolygon(S2_VI_DOWN_CAST<const s2::PolygonShape*>(shape), val);
+		StorePolygon(S2_VI_PTR_DOWN_CAST<const s2::PolygonShape>(shape), val);
 		break;
 	}
 }
 
-void ShapeSaver::StorePolygon(const s2::PolygonShape* poly_shape, Json::Value& val)
+void ShapeSaver::StorePolygon(const std::shared_ptr<const s2::PolygonShape>& poly_shape, Json::Value& val)
 {
 	val["type"] = "polygon";
 		
