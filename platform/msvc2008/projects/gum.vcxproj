@@ -124,6 +124,7 @@
     <ClCompile Include="..\..\..\source\sprite\EasySkeletonLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ExtendSymFile.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ImageSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\ShapeSaver.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TextboxSymbol.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TexturePolygon.cpp" />
     <ClCompile Include="..\..\..\source\sprite\IconSprLoader.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="..\..\..\source\sprite\TextboxLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TextboxSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TextureSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TrailSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TrailSymLoader.cpp" />
     <ClCompile Include="..\..\..\source\utility\Config.cpp" />
     <ClCompile Include="..\..\..\source\utility\Exception.cpp" />
@@ -211,6 +213,7 @@
     <ClInclude Include="..\..\..\include\gum\ImageSymbol.h" />
     <ClInclude Include="..\..\..\include\gum\Model3.h" />
     <ClInclude Include="..\..\..\include\gum\ShaderLab.h" />
+    <ClInclude Include="..\..\..\include\gum\ShapeSaver.h" />
     <ClInclude Include="..\..\..\include\gum\Sprite2.h" />
     <ClInclude Include="..\..\..\include\gum\TextboxSymbol.h" />
     <ClInclude Include="..\..\..\include\gum\TexturePolygon.h" />
@@ -272,6 +275,7 @@
     <ClInclude Include="..\..\..\include\gum\Texture.h" />
     <ClInclude Include="..\..\..\include\gum\TextureSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\ThreadPool.h" />
+    <ClInclude Include="..\..\..\include\gum\TrailSprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\TrailSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\trans_color.h" />
   </ItemGroup>

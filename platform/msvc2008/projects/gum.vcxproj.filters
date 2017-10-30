@@ -380,6 +380,12 @@
     <ClCompile Include="..\..\..\source\sprite\TexturePolygon.cpp">
       <Filter>sprite\10.shape</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\TrailSprLoader.cpp">
+      <Filter>sprite\13.trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\ShapeSaver.cpp">
+      <Filter>sprite\10.shape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\gum\RenderContext.h">
@@ -673,6 +679,12 @@
       <Filter>sprite\05.label</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\TexturePolygon.h">
+      <Filter>sprite\10.shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\TrailSprLoader.h">
+      <Filter>sprite\13.trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\ShapeSaver.h">
       <Filter>sprite\10.shape</Filter>
     </ClInclude>
   </ItemGroup>
