@@ -42,7 +42,7 @@ private:
 
 	const SpineParser::Animation* m_src_anim;
 
-	std::shared_ptr<s2::SkeletonSymbol> m_sk_sym;
+	std::shared_ptr<s2::SkeletonSymbol> m_sk_sym = nullptr;
 
 	// table for bone to pose index
 	CU_VEC<int> m_bone2pose;

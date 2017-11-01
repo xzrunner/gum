@@ -25,7 +25,6 @@ SpineAnimLoader::SpineAnimLoader(s2::AnimSymbol& sym,
 	: m_sym(sym)
 	, m_sym_loader(sym_loader)
 	, m_spr_loader(spr_loader)
-	, m_sk_sym(nullptr)
 	, m_src_anim(nullptr)
 {
 	if (!m_sym_loader) {

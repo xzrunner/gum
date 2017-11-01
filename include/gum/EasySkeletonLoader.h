@@ -54,7 +54,7 @@ private:
 	int m_num;
 	CU_VEC<s2::SprPtr> m_sprs;
 	CU_VEC<std::shared_ptr<s2::Joint>> m_joints;
-	std::shared_ptr<s2::Joint> m_root;
+	std::shared_ptr<s2::Joint> m_root = nullptr;
 
 }; // EasySkeletonLoader
 

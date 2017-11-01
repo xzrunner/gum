@@ -57,7 +57,6 @@ namespace gum
 CU_SINGLETON_DEFINITION(SymbolFactory);
 
 SymbolFactory::SymbolFactory()
-	: m_anchor_sym(nullptr)
 {
 }
 

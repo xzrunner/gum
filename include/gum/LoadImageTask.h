@@ -31,7 +31,7 @@ private:
 	class FileLoader;
 
 private:
-	std::shared_ptr<Image> m_img;
+	std::shared_ptr<Image> m_img = nullptr;
 
 	void*  m_data;
 	size_t m_size;

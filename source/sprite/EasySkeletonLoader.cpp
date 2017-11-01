@@ -24,7 +24,6 @@ EasySkeletonLoader::EasySkeletonLoader(s2::SkeletonSymbol& sym,
 	, m_spr_loader(spr_loader)
 	, m_joint_loader(joint_loader)
 	, m_num(0)
-	, m_root(nullptr)
 {
 	if (!m_spr_loader) {
 		m_spr_loader = std::make_shared<SpriteLoader>();

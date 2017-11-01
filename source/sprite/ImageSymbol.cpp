@@ -15,8 +15,7 @@ namespace gum
 {
  
 ImageSymbol::ImageSymbol()
-	: m_img(nullptr)
-	, m_packed(false)
+	: m_packed(false)
 {
 	InitTexcoords();
 	ClearCache();
@@ -24,7 +23,6 @@ ImageSymbol::ImageSymbol()
 
 ImageSymbol::ImageSymbol(uint32_t id)
 	: s2::ImageSymbol(id)
-	, m_img(nullptr)
 	, m_packed(false)
 {
 	InitTexcoords();

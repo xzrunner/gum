@@ -30,7 +30,7 @@ public:
 	s2::SymPtr Create(const CU_STR& pkg_name, const CU_STR& node_name) const;
 
 private:
-	mutable s2::SymPtr m_anchor_sym;
+	mutable s2::SymPtr m_anchor_sym = nullptr;
 
 	CU_SINGLETON_DECLARATION(SymbolFactory);
 

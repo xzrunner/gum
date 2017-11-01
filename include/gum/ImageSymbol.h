@@ -45,7 +45,7 @@ private:
 	void ClearCache();
 
 private:
-	std::shared_ptr<Image> m_img;
+	std::shared_ptr<Image> m_img = nullptr;
 
 	float m_texcoords[8];
 

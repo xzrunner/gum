@@ -45,14 +45,14 @@ private:
 		s2::JointPose world_pose;
 		s2::JointPose skin_pose;
 
-		s2::SprPtr skin;
+		s2::SprPtr skin = nullptr;
 
 		int parent;
 		CU_VEC<int> children;
 
 		int idx;
 
-		Joint() : skin(nullptr), parent(-1), idx(-1) {}
+		Joint() : parent(-1), idx(-1) {}
 	};
 
 private:
