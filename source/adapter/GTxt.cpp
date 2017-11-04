@@ -23,7 +23,7 @@
 #include <sprite2/RenderParams.h>
 #include <sprite2/Symbol.h>
 #include <sprite2/DrawNode.h>
-#include <cooking.h>
+#include <cooking/Facade.h>
 
 #include <json/json.h>
 
