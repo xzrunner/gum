@@ -9,11 +9,14 @@
 
 #include <gtxt_util.h>
 #include <gtxt_richtext.h>
+#include <gtxt_freetype.h>
+#include <gtxt_label.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/Shape2Shader.h>
 #include <simp/NodeFactory.h>
+
 #include <sprite2/RVG.h>
 #include <sprite2/RenderColor.h>
 #include <sprite2/Symbol.h>
@@ -23,10 +26,6 @@
 #include <cooking.h>
 
 #include <json/json.h>
-
-extern "C" {
-	#include <gtxt.h>
-}
 
 #include <fstream>
 
