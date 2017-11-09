@@ -40,7 +40,7 @@ void TextureSymLoader::LoadJson(const CU_STR& filepath)
 		auto poly_shape = S2_VI_DOWN_CAST<s2::PolygonShape*>(std::move(shape).release());
 		auto poly_shape_ptr = std::unique_ptr<s2::PolygonShape>(poly_shape);
 #else
-		auto poly_shape = static_cast<s2::PolygonShape*>(std::move(shape).release());
+		auto poly_shape = dynamic_cast<s2::PolygonShape*>(std::move(shape).release());
 		auto poly_shape_ptr = std::shared_ptr<s2::PolygonShape>(poly_shape);
 #endif // S2_SHAPE_SHARED_PTR
 		m_sym.AddPolygon(poly_shape_ptr);
