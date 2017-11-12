@@ -12,8 +12,8 @@ class RenderTarget : public s2::RenderTarget
 public:
 	RenderTarget(int width, int height);
 
-	virtual void Bind();
-	virtual void Unbind();
+	virtual void Bind() override;
+	virtual void Unbind() override;
 
 	void Draw(const sm::rect& src, const sm::rect& dst, int dst_w = 0, int dst_h = 0) const;
 

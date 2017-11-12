@@ -13,7 +13,7 @@
 //public:
 //	ImageSymbol(const CU_STR& filepath);
 //
-//	virtual void Draw(const S2_MAT& mt) const;
+//	virtual void Draw(const S2_MAT& mt) const override;
 //
 //	void Draw25(const S2_MAT& mt) const;
 //

@@ -22,14 +22,14 @@ public:
 	 *  @interface
 	 *    s2::ImageSymbol
 	 */
-	virtual sm::vec2 GetNoTrimedSize() const;
+	virtual sm::vec2 GetNoTrimedSize() const override;
 
 	/**
 	 *  @interface
 	 *    s2::ImageSymbol
 	 */
-	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const;
-	virtual bool OnQueryTexcoordsFail() const;
+	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const override;
+	virtual bool OnQueryTexcoordsFail() const override;
 
 	void SetImage(const std::shared_ptr<Image>& img);
 	const std::shared_ptr<Image>& GetImage() const { return m_img; }

@@ -247,7 +247,7 @@ public:
 	{}
 
 protected:
-	virtual void OnLoad(bimp::ImportStream& is) 
+	virtual void OnLoad(bimp::ImportStream& is) override
 	{
 		m_parser_cb(is.Stream(), is.Size(), m_ud);
 	}
@@ -393,7 +393,7 @@ relocate_pkg(int src_pkg, int src_tex, int src_lod, int dst_tex_id, int dst_fmt,
 class RelocatePageVisitor : public simp::PageVisitor
 {
 public:
-	virtual void Visit(const simp::Page* page) 
+	virtual void Visit(const simp::Page* page) override
 	{
 		simp::RelocateTexcoords::Instance()->Do(page);
 	}

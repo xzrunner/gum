@@ -18,7 +18,7 @@ public:
 	LoadImageTask(const std::shared_ptr<Image>& img);
 	virtual ~LoadImageTask();
 
-	virtual void Run();
+	virtual void Run() override;
 
 	void Flush();
 
