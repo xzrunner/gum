@@ -20,7 +20,6 @@
 #include "gum/MaskSymLoader.h"
 #include "gum/TrailSymLoader.h"
 #include "gum/SkeletonSymLoader.h"
-#include "gum/AudioSymLoader.h"
 
 #include <logger.h>
 #include <simp/NodeFactory.h>
@@ -202,8 +201,6 @@ s2::SymPtr SymbolFactory::Create(const CU_STR& filepath, int type) const
 	case s2::SYM_AUDIO:
 		{
 			auto sym = mm::allocate_shared<s2::AudioSymbol>();
-			AudioSymLoader loader(*sym);
-			loader.Load(filepath);
 			ret = sym;
 		}
 		break;

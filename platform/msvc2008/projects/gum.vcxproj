@@ -114,7 +114,7 @@
     <ClCompile Include="..\..\..\source\sprite\AnimSymLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ArrayLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\AudioLoader.cpp" />
-    <ClCompile Include="..\..\..\source\sprite\AudioSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\AudioSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\BodymovinAnimLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\BodymovinParser.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ComplexSprLoader.cpp" />
@@ -185,7 +185,7 @@
     <ClInclude Include="..\..\..\include\gum\AnimSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\ArrayLoader.h" />
     <ClInclude Include="..\..\..\include\gum\AudioLoader.h" />
-    <ClInclude Include="..\..\..\include\gum\AudioSymLoader.h" />
+    <ClInclude Include="..\..\..\include\gum\AudioSprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\BlendModes.h" />
     <ClInclude Include="..\..\..\include\gum\BodymovinAnimLoader.h" />
     <ClInclude Include="..\..\..\include\gum\BodymovinParser.h" />

@@ -336,9 +336,6 @@
     <ClCompile Include="..\..\..\source\sprite\AudioLoader.cpp">
       <Filter>sprite\16.audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprite\AudioSymLoader.cpp">
-      <Filter>sprite\16.audio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\adapter\DTexC2Strategy.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
@@ -385,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\ShapeSaver.cpp">
       <Filter>sprite\10.shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\AudioSprLoader.cpp">
+      <Filter>sprite\16.audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -637,9 +637,6 @@
     <ClInclude Include="..\..\..\include\gum\AudioLoader.h">
       <Filter>sprite\16.audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\AudioSymLoader.h">
-      <Filter>sprite\16.audio</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\gum\DTexC2Strategy.h">
       <Filter>adapter</Filter>
     </ClInclude>
@@ -686,6 +683,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ShapeSaver.h">
       <Filter>sprite\10.shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\AudioSprLoader.h">
+      <Filter>sprite\16.audio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
