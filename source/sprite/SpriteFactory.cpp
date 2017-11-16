@@ -13,6 +13,7 @@
 #include "gum/P3dSprLoader.h"
 #include "gum/P2dSprLoader.h"
 #include "gum/MeshSprLoader.h"
+#include "gum/AudioSprLoader.h"
 
 #include <simp/simp_types.h>
 #include <simp/NodeFactory.h>
@@ -28,6 +29,7 @@
 #include <simp/NodeMaskSpr.h>
 #include <simp/NodeTrailSpr.h>
 #include <simp/NodeAnim2Spr.h>
+#include <simp/NodeAudioSpr.h>
 #include <simp/AudioIDMgr.h>
 
 #include <sprite2/Symbol.h>
@@ -457,19 +459,24 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 			}
 		}
 		break;
-	case simp::TYPE_SCALE9: case simp::TYPE_ICON: case simp::TYPE_TEXTURE: case simp::TYPE_COMPLEX: case simp::TYPE_ANIMATION:
-	case simp::TYPE_PARTICLE3D: case simp::TYPE_PARTICLE2D: case simp::TYPE_SHAPE: case simp::TYPE_MESH: case simp::TYPE_MASK:
-	case simp::TYPE_TRAIL:
-		spr = CreateFromSym(id, false);
-		break;
-	case simp::TYPE_AUDIO:
+	case simp::TYPE_AUDIO_SPR:
 		{
-			int audio_id = simp::NodeID::GetNodeID(id);
+			const simp::NodeAudioSpr* node = (const simp::NodeAudioSpr*)data;
+			int audio_id = simp::NodeID::GetNodeID(node->sym);
 			auto filepath = simp::AudioIDMgr::Instance()->QueryAudioPath(audio_id);
-			if (!filepath.empty()) {
-				spr = SpriteFactory::Instance()->Create(filepath);
+			if (!filepath.empty())
+			{
+				auto audio_spr = S2_VI_PTR_DOWN_CAST<s2::AudioSprite>(SpriteFactory::Instance()->Create(filepath));
+				AudioSprLoader loader(*audio_spr);
+				loader.Load(filepath);
+				spr = audio_spr;
 			}
 		}
+		break;
+	case simp::TYPE_SCALE9: case simp::TYPE_ICON: case simp::TYPE_TEXTURE: case simp::TYPE_COMPLEX: case simp::TYPE_ANIMATION:
+	case simp::TYPE_PARTICLE3D: case simp::TYPE_PARTICLE2D: case simp::TYPE_SHAPE: case simp::TYPE_MESH: case simp::TYPE_MASK:
+	case simp::TYPE_TRAIL: case simp::TYPE_AUDIO:
+		spr = CreateFromSym(id, false);
 		break;
 	default:
 		LOGW("Create spr fail: unknown type %d", type);
