@@ -19,6 +19,8 @@ public:
 	bool IsEnable() const { return m_enable && m_ctx; }
 	void SetEnable(bool enable) { m_enable = enable; }
 
+	void Stop();
+
 private:
 	void InitCallback();
 

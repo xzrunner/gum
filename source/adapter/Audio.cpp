@@ -58,6 +58,13 @@ void Audio::Terminate()
 	delete m_ctx;
 }
 
+void Audio::Stop()
+{
+	if (m_ctx) {
+		m_ctx->Stop();
+	}
+}
+
 static void 
 register_async_update(void (*update)(void* arg), void* arg)
 {
