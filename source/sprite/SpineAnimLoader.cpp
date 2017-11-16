@@ -50,7 +50,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir,
 
 	BuildBone2PoseTable();
 
-	auto layer = mm::allocate_unique<s2::AnimSymbol::Layer>();
+	auto layer = CU_MAKE_UNIQUE<s2::AnimSymbol::Layer>();
 	
 	int bone_num = m_src_anim->bones.size();
 	m_pose_ptrs.resize(bone_num * 3, 0);
@@ -64,7 +64,7 @@ void SpineAnimLoader::LoadJson(const Json::Value& val, const CU_STR& dir,
 			next_time = time;
 		}
 
-		auto frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
+		auto frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 		frame->index = static_cast<int>(next_time * FPS) + 1;
 		frame->tween = true;
 		auto spr = m_spr_loader->Create(m_sk_sym);

@@ -6,6 +6,8 @@
 
 #include <json/json.h>
 
+#include <memory>
+
 namespace s2 { class TrailSprite; }
 namespace simp { class NodeTrailSpr; }
 

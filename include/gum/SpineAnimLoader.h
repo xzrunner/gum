@@ -9,6 +9,8 @@
 
 #include <json/json.h>
 
+#include <memory>
+
 namespace s2 { class AnimSymbol; class SkeletonPose; class SkeletonSymbol; }
 
 namespace gum

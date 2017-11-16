@@ -517,7 +517,7 @@ void DTex::CreatePkg(int pkg_id)
 	const timp::Package* src = timp::PkgMgr::Instance()->Query(pkg_id);
 	assert(src);
 
-	dtex::PackagePtr dst = mm::allocate_unique<dtex::Package>(pkg_id);
+	dtex::PackagePtr dst = CU_MAKE_UNIQUE<dtex::Package>(pkg_id);
 
 	auto& textures = src->GetAllTextures();
 	for (int i = 0, n = textures.size(); i < n; ++i) 

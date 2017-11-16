@@ -39,13 +39,13 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 	for (int layer = 0; layer < node->n; ++layer)
 	{
 		const simp::NodeAnimation::Layer* src_layer = &node->layers[layer];
-		auto dst_layer = mm::allocate_unique<s2::AnimSymbol::Layer>();
+		auto dst_layer = CU_MAKE_UNIQUE<s2::AnimSymbol::Layer>();
 		int frame_n = src_layer->n;
 		dst_layer->frames.reserve(frame_n);
 		for (int frame = 0; frame < frame_n; ++frame)
 		{
 			const simp::NodeAnimation::Frame* src_frame = src_layer->frames[frame];
-			auto dst_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
+			auto dst_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 			dst_frame->index = src_frame->index;
 			dst_frame->tween = simp::int2bool(src_frame->tween);
 			LoadActors(src_frame, *dst_frame);
@@ -62,14 +62,14 @@ void EasyAnimLoader::LoadLayers(const Json::Value& val, const CU_STR& dir)
 	for (int layer = 0; layer < layer_n; ++layer)
 	{
 		const Json::Value& layer_val = val[layer];
-		auto dst_layer = mm::allocate_unique<s2::AnimSymbol::Layer>();
+		auto dst_layer = CU_MAKE_UNIQUE<s2::AnimSymbol::Layer>();
 		dst_layer->name = layer_val["name"].asString().c_str();
 		int frame_n = layer_val["frame"].size();
 		dst_layer->frames.reserve(frame_n);
 		for (int frame = 0; frame < frame_n; ++frame)
 		{
 			const Json::Value& frame_val = layer_val["frame"][frame];
-			auto dst_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
+			auto dst_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 			dst_frame->index = frame_val["time"].asInt();
 			dst_frame->tween = frame_val["tween"].asBool();
 			LoadActors(frame_val, *dst_frame, dir);

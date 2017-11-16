@@ -7,6 +7,8 @@
 
 #include <json/json.h>
 
+#include <memory>
+
 namespace s2 { class SkeletonSymbol; class Joint; class Sprite; class JointPose; }
 
 namespace gum

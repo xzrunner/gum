@@ -140,10 +140,10 @@ void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_a
 		s_spr->SetName(spr_name);
 		e_spr->SetName(spr_name);
 
-		auto dst = mm::allocate_unique<s2::AnimSymbol::Layer>();
+		auto dst = CU_MAKE_UNIQUE<s2::AnimSymbol::Layer>();
 
-		auto s_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
-		auto e_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
+		auto s_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
+		auto e_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 		dst->frames.push_back(std::move(s_frame));
 		dst->frames.push_back(std::move(e_frame));
 
@@ -167,7 +167,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_a
 		if (src.start_frame < src.in_frame) 
 		{
 			// start frame
-			auto s_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
+			auto s_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 			dst->frames.insert(dst->frames.begin(), std::move(s_frame));
 			int s_time = (int)(std::ceil((float)(src.start_frame) / frame_rate * FPS)) + 1;
 			s_frame->index = s_time;
@@ -177,7 +177,7 @@ void BodymovinAnimLoader::LoadLayersPrev(const CU_MAP<CU_STR, s2::SprPtr>& map_a
 			s_frame->sprs.push_back(start_null);
 			
 			// pre in frame
-			auto p_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
+			auto p_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 			dst->frames.insert(dst->frames.begin() + 1, std::move(p_frame));
 			int p_time = (int)(std::ceil((float)(src.in_frame) / frame_rate * FPS)) + 1 - 1;
 			p_frame->index = p_time;
@@ -381,7 +381,7 @@ void BodymovinAnimLoader::InsertKeyframe(CU_VEC<s2::AnimSymbol::FramePtr>& frame
 				clone_frame = &frames[i + 1];
 				assert(!(*clone_frame)->sprs.empty());
 			}
-			auto new_frame = mm::allocate_unique<s2::AnimSymbol::Frame>();
+			auto new_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 			new_frame->index = time;
 			new_frame->sprs.reserve((*clone_frame)->sprs.size());
 			for (int j = 0, bm = (*clone_frame)->sprs.size(); j < bm; ++j) {

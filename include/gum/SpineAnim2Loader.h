@@ -8,6 +8,8 @@
 
 #include <json/value.h>
 
+#include <memory>
+
 namespace s2 { class Anim2Symbol; class Symbol; }
 
 struct rg_joint;

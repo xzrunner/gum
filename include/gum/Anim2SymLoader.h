@@ -7,6 +7,8 @@
 
 #include <json/json.h>
 
+#include <memory>
+
 namespace s2 { class Anim2Symbol; }
 namespace simp { class NodeAnim2; }
 

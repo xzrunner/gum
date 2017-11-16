@@ -4,6 +4,8 @@
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>
 
+#include <memory>
+
 namespace s2 { class AnimSymbol; }
 namespace simp { class NodeAnimation; }
 

@@ -28,10 +28,14 @@ P3dSymLoader::P3dSymLoader()
 void P3dSymLoader::Store(const std::shared_ptr<s2::Particle3dSymbol>& sym) const
 {
 	int sz = SIZEOF_P3D_EMITTER_CFG + SIZEOF_P3D_SYMBOL * components.size();
+#ifdef USE_MM_ALLOCATOR
 	p3d_emitter_cfg* cfg_impl = static_cast<p3d_emitter_cfg*>(mm::AllocHelper::Allocate(sz));
+#else
+	p3d_emitter_cfg* cfg_impl = reinterpret_cast<p3d_emitter_cfg*>(new uint8_t[sz]);
+#endif // USE_MM_ALLOCATOR
 	memset(cfg_impl, 0, sz);
 
-	auto cfg = mm::allocate_shared<s2::P3dEmitterCfg>(cfg_impl);
+	auto cfg = CU_MAKE_SHARED<s2::P3dEmitterCfg>(cfg_impl);
 	Store(cfg);
 
 	sym->SetEmitterCfg(cfg);

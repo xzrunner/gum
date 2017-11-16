@@ -6,6 +6,8 @@
 
 #include <json/json.h>
 
+#include <memory>
+
 #include <stdint.h>
 
 namespace s2 { class Scale9Symbol; class Sprite; }

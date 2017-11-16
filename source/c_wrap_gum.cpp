@@ -373,13 +373,13 @@ bool gum_create_pkg(const char* name, int id, const char* spr_path, const char* 
 	CU_STR gbk_spr_path = StringHelper::UTF8ToGBK(spr_path);
 	CU_STR gbk_tex_path = StringHelper::UTF8ToGBK(tex_path);
 
-	simp::PackagePtr s_pkg(mm::allocate_unique<simp::Package>(gbk_spr_path, id));
+	simp::PackagePtr s_pkg(CU_MAKE_UNIQUE<simp::Package>(gbk_spr_path, id));
 	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, gbk_name, id);
 	if (!success) {
 		return success;
 	}
 
-	timp::PackagePtr t_pkg(mm::allocate_unique<timp::Package>(gbk_tex_path));
+	timp::PackagePtr t_pkg(CU_MAKE_UNIQUE<timp::Package>(gbk_tex_path));
 	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
 	assert(success);
 
@@ -400,14 +400,14 @@ bool gum_create_pkg2(const char* name, int id, const char* pkg_path)
 	}
 
 	int epe_off = PkgFileParser::GetEpeIdxOffset(file);		
-	simp::PackagePtr s_pkg(mm::allocate_unique<simp::Package>(file, epe_off, id));
+	simp::PackagePtr s_pkg(CU_MAKE_UNIQUE<simp::Package>(file, epe_off, id));
  	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, gbk_name, id);
  	if (!success) {
  		return success;
  	}
 
 	int ept_off = PkgFileParser::GetEptIdxOffset(file);	
-	timp::PackagePtr t_pkg(mm::allocate_unique<timp::Package>(file, ept_off));
+	timp::PackagePtr t_pkg(CU_MAKE_UNIQUE<timp::Package>(file, ept_off));
 	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
 	assert(success);
 
