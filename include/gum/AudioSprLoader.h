@@ -7,6 +7,7 @@
 #include <memory>
 
 namespace s2 { class AudioSprite; }
+namespace simp { class NodeAudioSpr; }
 
 namespace gum
 {
@@ -16,7 +17,7 @@ class AudioSprLoader : private cu::Uncopyable
 public:
 	AudioSprLoader(s2::AudioSprite& spr);
 
-	void Load(const CU_STR& filepath);
+	void LoadBin(const CU_STR& filepath, const simp::NodeAudioSpr* node);
 
 private:
 	s2::AudioSprite& m_spr;

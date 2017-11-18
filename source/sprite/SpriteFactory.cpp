@@ -468,7 +468,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 			{
 				auto audio_spr = S2_VI_PTR_DOWN_CAST<s2::AudioSprite>(SpriteFactory::Instance()->Create(filepath));
 				AudioSprLoader loader(*audio_spr);
-				loader.Load(filepath);
+				loader.LoadBin(filepath, node);
 				spr = audio_spr;
 			}
 		}
