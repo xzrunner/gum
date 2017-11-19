@@ -60,6 +60,8 @@ private:
 	void LoadTimelineDeforms(const SpineParser::Animation& anim);
 	void LoadTimelineDeforms(const SpineParser::AnimDeform* deform);
 
+	void LoadCurves(const CU_VEC<SpineParser::Curve>& src, struct rg_animation* dst);
+
 private:
 	struct JointData
 	{
@@ -96,9 +98,9 @@ private:
 	int m_num;
 
 	// middle
-	CU_VEC<JointData>     m_joints_data;
-	CU_VEC<SlotData>      m_slots_data;
-	CU_VEC<SkinData>      m_skins_data;
+	CU_VEC<JointData>   m_joints_data;
+	CU_VEC<SlotData>    m_slots_data;
+	CU_VEC<SkinData>    m_skins_data;
 	CU_MAP<CU_STR, int> m_bone2joint;
 	CU_MAP<CU_STR, int> m_map2skin;
 
@@ -106,14 +108,14 @@ private:
 	CU_VEC<rg_ik>   m_iks;
 	CU_VEC<rg_skin> m_skins;
 	CU_VEC<rg_slot> m_slots;
-	int            m_joint_count;
-	rg_joint**     m_joints;
-	rg_skeleton*   m_sk;
-	rg_joint*      m_root;
-	rg_tl_joint**  m_tl_joints;
-	rg_tl_skin**   m_tl_skins;
-	rg_tl_deform** m_tl_deforms;
-	int            m_max_frame;
+	int             m_joint_count;
+	rg_joint**      m_joints;
+	rg_skeleton*    m_sk;
+	rg_joint*       m_root;
+	rg_tl_joint**   m_tl_joints;
+	rg_tl_skin**    m_tl_skins;
+	rg_tl_deform**  m_tl_deforms;
+	int             m_max_frame;
 
 }; // SpineAnim2Loader
 

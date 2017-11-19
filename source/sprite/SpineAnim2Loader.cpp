@@ -76,13 +76,16 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 	LoadTimelineSkins(parser.anims[ANIM_IDX]);
 	LoadTimelineDeforms(parser.anims[ANIM_IDX]);
 
-	rg_animation* anim = (rg_animation*)malloc(SIZEOF_RG_ANIM);
+	rg_animation* anim = (rg_animation*)malloc(SIZEOF_RG_ANIM + SIZEOF_RG_CURVE * parser.curves.size());
 	anim->sk = m_sk;
 
 	anim->timeline.joints  = m_tl_joints;
 	anim->timeline.skins   = m_tl_skins;
 	anim->timeline.deforms = m_tl_deforms;
 	anim->max_frame        = m_max_frame;
+
+	LoadCurves(parser.curves, anim);
+
 	m_sym.SetAnim(anim);
 }
 
@@ -476,6 +479,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 			frame[i].time = (int)(bone->translates[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
 			frame[i].data = bone->translates[i].trans.x;
+			frame[i].curve = bone->translates[i].curve;
 		}
 		frame_ptr += bone->translates.size();
 
@@ -484,6 +488,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 			frame[i].time = (int)(bone->translates[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
 			frame[i].data = bone->translates[i].trans.y;
+			frame[i].curve = bone->translates[i].curve;
 		}
 		frame_ptr += bone->translates.size();
 	}
@@ -502,6 +507,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 			frame[i].time = (int)(bone->rotates[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
 			frame[i].data = bone->rotates[i].rot;
+			frame[i].curve = bone->rotates[i].curve;
 		}
 		frame_ptr += bone->rotates.size();
 	}
@@ -522,6 +528,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 			frame[i].time = (int)(bone->scales[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
 			frame[i].data = bone->scales[i].scale.x;
+			frame[i].curve = bone->scales[i].curve;
 		}
 		frame_ptr += bone->scales.size();
 
@@ -530,6 +537,7 @@ void SpineAnim2Loader::LoadTimelineJoints(const SpineParser::AnimBone* bone, str
 			frame[i].time = (int)(bone->scales[i].time * 30 + 0.5f);
 			frame[i].lerp = 0;
 			frame[i].data = bone->scales[i].scale.y;
+			frame[i].curve = bone->scales[i].curve;
 		}
 		frame_ptr += bone->scales.size();
 	}
@@ -605,6 +613,7 @@ void SpineAnim2Loader::LoadTimelineDeforms(const SpineParser::AnimDeform* deform
 		sample.time   = (int)(src.time * 30 + 0.5f);
 		sample.offset = src.offset;
 		sample.count  = static_cast<uint16_t>(src.vertices.size());
+		sample.curve  = src.curve;
 		sample.data   = (float*)malloc(sizeof(float) * 2 * sample.count);
 		int ptr = 0;
 		for (int j = 0, m = sample.count; j < m; ++j) {
@@ -624,6 +633,17 @@ void SpineAnim2Loader::LoadTimelineDeforms(const SpineParser::AnimDeform* deform
 	}
 	assert(idx != -1);
 	m_tl_deforms[idx] = ret;
+}
+
+void SpineAnim2Loader::LoadCurves(const CU_VEC<SpineParser::Curve>& src, struct rg_animation* dst)
+{
+	dst->curve_count = src.size();
+	for (int i = 0, n = src.size(); i < n; ++i) {
+		dst->curves[i].x0 = src[i].x0;
+		dst->curves[i].y0 = src[i].y0;
+		dst->curves[i].x1 = src[i].x1;
+		dst->curves[i].y1 = src[i].y1;
+	}
 }
 
 }

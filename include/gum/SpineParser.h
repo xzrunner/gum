@@ -92,28 +92,39 @@ public:
 		CU_VEC<SkinItem> items;
 	};
 
+	struct Curve
+	{
+		bool operator == (const Curve& curve) const;
+
+		float x0, y0;
+		float x1, y1;
+	};
+
 	struct Rotate
 	{
 		float time;
 		float rot;
+		int   curve;
 
-		Rotate() : time(0), rot(0) {}
+		Rotate() : time(0), rot(0), curve(-1) {}
 	};
 
 	struct Translate
 	{
-		float time;
+		float    time;
 		sm::vec2 trans;
+		int      curve;
 
-		Translate() : time(0) {}
+		Translate() : time(0), curve(-1) {}
 	};
 
 	struct Scale
 	{
-		float time;
+		float    time;
 		sm::vec2 scale;
+		int      curve;
 
-		Scale() : time(0), scale(1, 1) {}
+		Scale() : time(0), scale(1, 1), curve(-1) {}
 	};
 
 	struct AnimBone
@@ -133,7 +144,8 @@ public:
 	struct Deform
 	{
 		float time;
-		int offset;
+		int   offset;
+		int   curve;
 		CU_VEC<sm::vec2> vertices;
 	};
 
@@ -172,6 +184,8 @@ private:
 	void ParseAnimDeforms(const Json::Value& val, CU_VEC<AnimDeform>& deforms);
 	void ParseAnimDeform(const Json::Value& val, AnimDeform& deform);
 
+	int ParseCurve(const Json::Value& val);
+
 public:
 	bool m_parse_anim;
 
@@ -186,6 +200,8 @@ public:
 	CU_VEC<Skin> skins;
 
 	CU_VEC<Animation> anims;
+
+	CU_VEC<Curve> curves;
 
 }; // SpineParser
 

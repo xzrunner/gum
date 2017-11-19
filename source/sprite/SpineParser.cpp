@@ -296,8 +296,9 @@ void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
 		{
 			const Json::Value& src = val["rotate"][i];
 			Rotate dst;
-			dst.time = static_cast<float>(src["time"].asDouble());
-			dst.rot = static_cast<float>(src["angle"].asDouble() * SM_DEG_TO_RAD);
+			dst.time  = static_cast<float>(src["time"].asDouble());
+			dst.rot   = static_cast<float>(src["angle"].asDouble() * SM_DEG_TO_RAD);
+			dst.curve = ParseCurve(src["curve"]);
 			bone.rotates.push_back(dst);
 		}
 	}
@@ -308,9 +309,10 @@ void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
 		{
 			const Json::Value& src = val["translate"][i];
 			Translate dst;
-			dst.time = static_cast<float>(src["time"].asDouble());
+			dst.time    = static_cast<float>(src["time"].asDouble());
 			dst.trans.x = static_cast<float>(src["x"].asDouble());
 			dst.trans.y = static_cast<float>(src["y"].asDouble());
+			dst.curve   = ParseCurve(src["curve"]);
 			bone.translates.push_back(dst);
 		}
 	}
@@ -321,9 +323,10 @@ void SpineParser::ParseAnimBond(const Json::Value& val, AnimBone& bone)
 		{
 			const Json::Value& src = val["scale"][i];
 			Scale dst;
-			dst.time = static_cast<float>(src["time"].asDouble());
+			dst.time    = static_cast<float>(src["time"].asDouble());
 			dst.scale.x = static_cast<float>(src["x"].asDouble());
 			dst.scale.y = static_cast<float>(src["y"].asDouble());
+			dst.curve   = ParseCurve(src["curve"]);
 			bone.scales.push_back(dst);
 		}
 	}
@@ -373,6 +376,8 @@ void SpineParser::ParseAnimDeform(const Json::Value& val, AnimDeform& deform)
 			dst.offset = 0;
 		}
 
+		dst.curve = ParseCurve(src["curve"]);
+
 		int ptr = 0;
 		int m = src["vertices"].size() / 2;
 		dst.vertices.reserve(m);
@@ -384,6 +389,35 @@ void SpineParser::ParseAnimDeform(const Json::Value& val, AnimDeform& deform)
 
 		deform.samples.push_back(dst);
 	}
+}
+
+int SpineParser::ParseCurve(const Json::Value& val)
+{
+	if (val.isNull() || !val.isArray() || val.size() != 4) {
+		return -1;
+	}
+	Curve curve;
+	curve.x0 = val[0].asFloat();
+	curve.y0 = val[1].asFloat();
+	curve.x1 = val[2].asFloat();
+	curve.y1 = val[3].asFloat();
+	
+	for (int i = 0, n = curves.size(); i < n; ++i) {
+		if (curves[i] == curve) {
+			return i;
+		}
+	}
+	curves.push_back(curve);
+	return curves.size() - 1;
+}
+
+bool SpineParser::Curve::operator == (const Curve& curve) const
+{
+	return
+		x0 == curve.x0 &&
+		y0 == curve.y0 &&
+		x1 == curve.x1 &&
+		y1 == curve.y1;
 }
 
 }
