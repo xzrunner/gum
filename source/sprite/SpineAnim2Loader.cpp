@@ -76,6 +76,8 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 	LoadTimelineSkins(parser.anims[ANIM_IDX]);
 	LoadTimelineDeforms(parser.anims[ANIM_IDX]);
 
+	LoadCurves(parser.curves);
+
 	rg_animation* anim = (rg_animation*)malloc(SIZEOF_RG_ANIM + SIZEOF_RG_CURVE * parser.curves.size());
 	anim->sk = m_sk;
 
@@ -83,8 +85,7 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 	anim->timeline.skins   = m_tl_skins;
 	anim->timeline.deforms = m_tl_deforms;
 	anim->max_frame        = m_max_frame;
-
-	LoadCurves(parser.curves, anim);
+	anim->curves           = m_curves;
 
 	m_sym.SetAnim(anim);
 }
@@ -635,14 +636,19 @@ void SpineAnim2Loader::LoadTimelineDeforms(const SpineParser::AnimDeform* deform
 	m_tl_deforms[idx] = ret;
 }
 
-void SpineAnim2Loader::LoadCurves(const CU_VEC<SpineParser::Curve>& src, struct rg_animation* dst)
+void SpineAnim2Loader::LoadCurves(const CU_VEC<SpineParser::Curve>& curves)
 {
-	dst->curve_count = src.size();
-	for (int i = 0, n = src.size(); i < n; ++i) {
-		dst->curves[i].x0 = src[i].x0;
-		dst->curves[i].y0 = src[i].y0;
-		dst->curves[i].x1 = src[i].x1;
-		dst->curves[i].y1 = src[i].y1;
+	int sz = sizeof(struct rg_curve*) * curves.size();
+	m_curves = (rg_curve**)malloc(sz);
+	memset(m_curves, 0, sz);
+	for (int i = 0, n = curves.size(); i < n; ++i) {
+		auto& src = curves[i];
+		m_curves[i] = (rg_curve*)(malloc(SIZEOF_RG_CURVE));
+		auto& dst = m_curves[i];
+		dst->x0 = src.x0;
+		dst->y0 = src.y0;
+		dst->x1 = src.x1;
+		dst->y1 = src.y1;
 	}
 }
 

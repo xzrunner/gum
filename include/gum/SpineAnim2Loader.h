@@ -60,7 +60,7 @@ private:
 	void LoadTimelineDeforms(const SpineParser::Animation& anim);
 	void LoadTimelineDeforms(const SpineParser::AnimDeform* deform);
 
-	void LoadCurves(const CU_VEC<SpineParser::Curve>& src, struct rg_animation* dst);
+	void LoadCurves(const CU_VEC<SpineParser::Curve>& curves);
 
 private:
 	struct JointData
@@ -116,6 +116,7 @@ private:
 	rg_tl_skin**    m_tl_skins;
 	rg_tl_deform**  m_tl_deforms;
 	int             m_max_frame;
+	rg_curve**      m_curves;
 
 }; // SpineAnim2Loader
 
