@@ -12,6 +12,7 @@
 #include <fstream>
 
 #include <string.h>
+#include <assert.h>
 
 namespace gum
 {
@@ -152,9 +153,10 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 		}
 		for (int j = 0; j < count; ++j) 
 		{
-			dst->samples[j].time = src.samples[j].time;
-			dst->samples[j].lerp = src.samples[j].lerp;
-			dst->samples[j].data = src.samples[j].data;
+			dst->samples[j].time  = src.samples[j].time;
+			dst->samples[j].lerp  = src.samples[j].lerp;
+			dst->samples[j].curve = src.samples[j].curve;
+			dst->samples[j].data  = src.samples[j].data;
 			if (dst->samples[j].time > anim->max_frame) {
 				anim->max_frame = dst->samples[j].time;
 			}
@@ -194,6 +196,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 		{
 			dst->samples[j].time   = src.samples[j]->time;
 			dst->samples[j].offset = src.samples[j]->offset;
+			dst->samples[j].curve  = src.samples[j]->curve;
 			dst->samples[j].count  = src.samples[j]->count;
 			dst->samples[j].data   = nullptr;
 		}
@@ -210,7 +213,24 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 				ptr += sz;
 			}
 		}
-	}	
+	}
+	//// curves
+	anim->curve_count = node->curve_count;
+	anim->curves = (rg_curve**)ptr;
+	ptr += sizeof(rg_curve*) * anim->curve_count;
+	for (int i = 0; i < anim->curve_count; ++i)
+	{
+		anim->curves[i] = (rg_curve*)ptr;
+		ptr += SIZEOF_RG_CURVE;
+		
+		auto& src = node->curves[i];
+		auto& dst = anim->curves[i];
+		dst->x0 = src.x0;
+		dst->y0 = src.y0;
+		dst->x1 = src.x1;
+		dst->y1 = src.y1;
+	}
+	assert(ptr - buf == sz);
 	m_sym.SetAnim(anim);
 }
 
@@ -262,6 +282,9 @@ int Anim2SymLoader::CalcNodeSize(const simp::NodeAnim2* node)
  			sz += sizeof(float) * 2 * node->tl_deforms[i]->samples[j]->count;
 		}
 	}
+	// curves
+	sz += sizeof(rg_curve*) * node->curve_count;
+	sz += SIZEOF_RG_CURVE * node->curve_count;
 	return sz;
 }
 
