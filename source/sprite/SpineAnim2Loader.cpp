@@ -86,6 +86,7 @@ void SpineAnim2Loader::LoadParser(const SpineParser& parser, const CU_STR& dir)
 	anim->timeline.deforms = m_tl_deforms;
 	anim->max_frame        = m_max_frame;
 	anim->curves           = m_curves;
+	anim->curve_count      = parser.curves.size();
 
 	m_sym.SetAnim(anim);
 }
