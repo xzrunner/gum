@@ -230,7 +230,7 @@ void Anim2SymLoader::LoadBin(const simp::NodeAnim2* node)
 		dst->x1 = src.x1;
 		dst->y1 = src.y1;
 	}
-	assert(ptr - buf == sz);
+	assert(ptr - static_cast<uint8_t*>(buf) == sz);
 	m_sym.SetAnim(anim);
 }
 
