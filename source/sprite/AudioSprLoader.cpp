@@ -24,8 +24,11 @@ void AudioSprLoader::LoadBin(const CU_STR& filepath, const simp::NodeAudioSpr* n
 	auto source = audio->GetContext()->CreateSource(filepath, true);
 	m_spr.SetSource(source);
 
+	m_spr.SetVolume(node->volume);
+
 	m_spr.SetAudioOffset(node->offset);
 	m_spr.SetAudioDuration(node->duration);
+
 	m_spr.SetFadeIn(node->fade_in);
 	m_spr.SetFadeOut(node->fade_out);
 }
