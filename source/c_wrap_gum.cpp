@@ -201,10 +201,10 @@ void gum_store_snapshot(const char* filepath)
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 
-	uint8_t* pixels = (uint8_t*)malloc(w * h * 3);
-	memset(pixels, 0, w * h * 3);
-	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 3, 0, 0, w, h);
-	gimg_export(gbk_filepath.c_str(), pixels, w, h, GPF_RGB, true);
+	uint8_t* pixels = (uint8_t*)malloc(w * h * 4);
+	memset(pixels, 0, w * h * 4);
+	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 4, 0, 0, w, h);
+	gimg_export(gbk_filepath.c_str(), pixels, w, h, GPF_RGBA8, true);
 	free(pixels);
 }
 
