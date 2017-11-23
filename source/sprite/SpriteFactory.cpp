@@ -133,9 +133,9 @@ s2::SprPtr SpriteFactory::Create(const s2::SymPtr& sym, uint32_t id, bool create
 	if (create_actors && spr) {
 		CreateSprActors(spr);
 	}
-	if (spr) {
-		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
-	}
+	//if (spr) {
+	//	spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
+	//}
 	return spr;
 }
 
@@ -148,7 +148,7 @@ s2::SprPtr SpriteFactory::Create(const CU_STR& filepath) const
 		auto spr = Create(sym, -1, false);
 		if (spr) {
 			CreateSprActors(spr);
-			spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
+//			spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
 		}
 		return spr;
 	}
@@ -244,7 +244,7 @@ s2::SprPtr SpriteFactory::Create(const Json::Value& val, const CU_STR& dir) cons
 
 	if (spr) {
 		CreateSprActors(spr);
-		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
+//		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
 	} else {
 		LOGW("Create spr fail: filepath %s", filepath.c_str());
 	}
@@ -484,7 +484,7 @@ s2::SprPtr SpriteFactory::Create(uint32_t id)
 
 	if (spr) {
 		CreateSprActors(spr);
-		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
+//		spr->OnMessage(s2::UpdateParams(), s2::MSG_START);
 	} else {
 		LOGW("Create spr fail: id %u", id);
 	}
