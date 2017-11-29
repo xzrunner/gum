@@ -66,6 +66,7 @@
 #include <shaderlab/Facade.h>
 #include <shaderlab/RenderTask.h>
 #include <SM_Matrix.h>
+#include <logger.h>
 #include <dtex2/PkgMgr.h>
 #include <gtxt_label.h>
 #include <c_wrap_dtex.h>
@@ -562,12 +563,16 @@ void* gum_create_actor(const char* pkg, const char* spr)
 extern "C"
 void* gum_create_actor_by_id(int id)
 {
-	auto spr = SpriteFactory::Instance()->CreateFromSym(id, true);
+	s2::ActorProxy* ret = nullptr;
 
-	auto actor = s2::ActorFactory::Create(nullptr, spr);
+	try {
+		auto spr = SpriteFactory::Instance()->CreateFromSym(id, true);
+		auto actor = s2::ActorFactory::Create(nullptr, spr);
+		s2::ActorProxyPool::Instance()->Create(actor, ret);
+	} catch (std::exception& e) {
+		LOGW("create actor fail %d\n", id);
+	}
 
-	s2::ActorProxy* ret;
-	s2::ActorProxyPool::Instance()->Create(actor, ret);
 	return ret;
 }
 
