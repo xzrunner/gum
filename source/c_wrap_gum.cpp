@@ -202,11 +202,29 @@ void gum_store_snapshot(const char* filepath)
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 
-	uint8_t* pixels = (uint8_t*)malloc(w * h * 4);
-	memset(pixels, 0, w * h * 4);
-	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 4, 0, 0, w, h);
-	gimg_export(gbk_filepath.c_str(), pixels, w, h, GPF_RGBA8, true);
-	free(pixels);
+	gum::StringHelper::ToLower(gbk_filepath);
+	if (gbk_filepath.find("jpg") != std::string::npos)
+	{
+		// channel 3 has some problem on ios
+		static int channel = 4;
+
+		uint8_t* rgba = (uint8_t*)malloc(w * h * channel);
+		memset(rgba, 0, w * h * channel);
+		RenderContext::Instance()->GetImpl()->ReadPixels(rgba, channel, 0, 0, w, h);
+
+		uint8_t* rgb = gimg_rgba2rgb(rgba, w, h);
+		free(rgba);
+		gimg_export(gbk_filepath.c_str(), rgb, w, h, GPF_RGB, true);
+		free(rgb);
+	}
+	else
+	{
+		uint8_t* pixels = (uint8_t*)malloc(w * h * 4);
+		memset(pixels, 0, w * h * 4);
+		RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 4, 0, 0, w, h);
+		gimg_export(gbk_filepath.c_str(), pixels, w, h, GPF_RGBA8, true);
+		free(pixels);
+	}
 }
 
 extern "C"
