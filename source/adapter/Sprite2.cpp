@@ -116,6 +116,12 @@ submit_task(mt::Task* task)
 	ThreadPool::Instance()->Run(task);
 }
 
+static int
+query_thread_idx(std::thread::id id)
+{
+	return ThreadPool::Instance()->QueryThreadIdx(id);
+}
+
 void Sprite2::Init()
 {
 	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
@@ -130,7 +136,8 @@ void Sprite2::Init()
 	}
 	{
 		s2::Callback::Funs funs;
-		funs.submit_task = submit_task;
+		funs.submit_task      = submit_task;
+		funs.query_thread_idx = query_thread_idx;
 		s2::Callback::RegisterCallback(funs);
 	}
 }

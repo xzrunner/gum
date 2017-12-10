@@ -14,8 +14,7 @@ ThreadPool::ThreadPool()
 
 	m_pool->SetMaxQueueSize(1024);
 
-	unsigned const thread_count = std::thread::hardware_concurrency();
-	m_pool->Start(thread_count);
+	m_pool->Start(GetThreadCount());
 
 	m_tick = new mt::TickThread(m_pool);
 }
@@ -46,6 +45,16 @@ void ThreadPool::Close()
 	delete m_pool;
 
 	delete m_tick;
+}
+
+int ThreadPool::GetThreadCount() const
+{
+	return std::thread::hardware_concurrency();
+}
+
+int ThreadPool::QueryThreadIdx(std::thread::id id) const
+{
+	return m_pool->QueryThreadIdx(id);
 }
 
 }

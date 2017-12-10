@@ -3,6 +3,8 @@
 
 #include <cu/cu_macro.h>
 
+#include <thread>
+
 namespace mt { class Task; class ThreadPool; class TickThread; }
 
 namespace gum
@@ -17,6 +19,9 @@ public:
 	void UnregisterUpdateCB(void (*update)(void* arg));
 
 	void Close();
+
+	int GetThreadCount() const;
+	int QueryThreadIdx(std::thread::id id) const;
 
 private:
 	mt::ThreadPool* m_pool;
