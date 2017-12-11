@@ -3,11 +3,18 @@
 #include "gum/RenderContext.h"
 #include "gum/DTex.h"
 #include "gum/ProxyImage.h"
+#ifdef S2_MULTITHREAD
 #include "gum/ThreadPool.h"
 #include "gum/UpdateDTexC2Task.h"
+#else
+#include "gum/DTexC2Strategy.h"
+#endif // S2_MULTITHREAD
 
 #include <sprite2/Texture.h>
 #include <sprite2/RenderParams.h>
+#ifndef S2_MULTITHREAD
+#include <shaderlab/ShaderMgr.h>
+#endif  // S2_MULTITHREAD
 
 #include <string.h>
 
@@ -92,8 +99,16 @@ void ImageSymbol::OnQueryTexcoordsFail(int thread_idx) const
 	}
 
 	sm::ivec2 sz = m_img->GetSize();
+#ifdef S2_MULTITHREAD
 	ThreadPool::Instance()->Run(UpdateDTexC2TaskMgr::Instance()->Fetch(
 		thread_idx, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region));
+#else
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderType type = mgr->GetShaderType();
+	if (DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), sz.x, sz.y, m_region)) {
+		mgr->SetShader(type);
+	}
+#endif // S2_MULTITHREAD
 }
 
 void ImageSymbol::SetImage(const std::shared_ptr<Image>& img)
