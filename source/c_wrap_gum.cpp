@@ -31,6 +31,7 @@
 #include "gum/Audio.h"
 #include "gum/Cooking.h"
 #include "gum/ShaderLab.h"
+#include "gum/UpdateDTexC2Task.h"
 
 #include <unirender/RenderContext.h>
 #include <uniaudio/AudioContext.h>
@@ -65,7 +66,6 @@
 #include <sprite2/Symbol.h>
 #include <sprite2/RenderTask.h>
 #include <shaderlab/Facade.h>
-#include <shaderlab/RenderTask.h>
 #include <SM_Matrix.h>
 #include <logger.h>
 #include <dtex2/PkgMgr.h>
@@ -185,6 +185,7 @@ void gum_flush()
 	DTex::Instance()->Flush();
 	LoadImageTaskMgr::Instance()->Flush();
 	Sprite2::Instance()->Flush();
+	UpdateDTexC2TaskMgr::Instance()->Flush();
 }
 
 extern "C"

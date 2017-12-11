@@ -2,10 +2,10 @@
 #include "gum/Image.h"
 #include "gum/RenderContext.h"
 #include "gum/DTex.h"
-#include "gum/DTexC2Strategy.h"
 #include "gum/ProxyImage.h"
+#include "gum/ThreadPool.h"
+#include "gum/UpdateDTexC2Task.h"
 
-#include <shaderlab/ShaderMgr.h>
 #include <sprite2/Texture.h>
 #include <sprite2/RenderParams.h>
 
@@ -85,23 +85,15 @@ bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) co
 	}
 }
 
-bool ImageSymbol::OnQueryTexcoordsFail() const
+void ImageSymbol::OnQueryTexcoordsFail(int thread_idx) const
 {
 	if (!DTex::Instance()->IsC2Enable()) {
-		return false;
+		return;
 	}
-
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	sl::ShaderType type = mgr->GetShaderType();
 
 	sm::ivec2 sz = m_img->GetSize();
-	bool loaded = DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
-
-	if (loaded) {
-		mgr->SetShader(type);
-	}
-
-	return loaded;
+	ThreadPool::Instance()->Run(UpdateDTexC2TaskMgr::Instance()->Fetch(
+		thread_idx, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region));
 }
 
 void ImageSymbol::SetImage(const std::shared_ptr<Image>& img)
