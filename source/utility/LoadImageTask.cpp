@@ -40,7 +40,7 @@ LoadImageTask::~LoadImageTask()
 class LoadImageTask::FileLoader : public bimp::FileLoader
 {
 public:
-	FileLoader(const std::string& filepath, bool use_cache, LoadImageTask* task)
+	FileLoader(const CU_STR& filepath, bool use_cache, LoadImageTask* task)
 		: bimp::FileLoader(filepath, use_cache)
 		, m_task(task)
 	{}

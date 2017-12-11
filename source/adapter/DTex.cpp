@@ -235,7 +235,7 @@ get_tex_filepath(int pkg_id, int tex_idx, int lod_layer, char* buf)
 class FileLoader : public bimp::FileLoader
 {
 public:
-	FileLoader(const std::string& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
+	FileLoader(const CU_STR& filepath, bool use_cache, void (*parser_cb)(const void* data, size_t size, void* ud), void* ud)
 		: bimp::FileLoader(filepath, use_cache)
 		, m_parser_cb(parser_cb)
 		, m_ud(ud)
