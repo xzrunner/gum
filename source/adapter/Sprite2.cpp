@@ -129,10 +129,6 @@ void Sprite2::Init()
 
 	s2::RenderTargetMgr::Instance()->InitScreenCB(fetch_screen, return_screen);
 
-#ifdef S2_MULTITHREAD
-	s2::RenderParamsPool::Instance()->Init(ThreadPool::Instance()->GetThreadCount());
-#endif // S2_MULTITHREAD
-
 	{
 		s2::AudioContext::Callback cb;
 		cb.is_enable = is_audio_enable;
