@@ -64,7 +64,7 @@
 #include <sprite2/ActorFactory.h>
 #include <sprite2/ActorProxy.h>
 #include <sprite2/Symbol.h>
-#include <sprite2/RenderTask.h>
+#include <sprite2/DrawTask.h>
 #include <shaderlab/Facade.h>
 #include <SM_Matrix.h>
 #include <logger.h>
@@ -191,13 +191,12 @@ void gum_flush()
 extern "C"
 void  gum_flush_deferred()
 {
-	s2::RenderTaskMgr* task_mgr = s2::RenderTaskMgr::Instance();
+	s2::DrawTaskMgr* task_mgr = s2::DrawTaskMgr::Instance();
 
 	// wait all task finished
 	while (!task_mgr->IsAllTaskFinished())
 		;
-
-	s2::RenderTaskMgr::Instance()->Flush();
+	s2::DrawTaskMgr::Instance()->Flush();
 
 //	sl::RenderTask::FlushShared();
 }
