@@ -14,7 +14,7 @@ public:
 	UpdateDTexC2Task(int thread_idx, uint32_t id, int tex_id, 
 		int tex_w, int tex_h, const sm::i16_rect& region);
 
-	virtual void Run() override;
+	virtual void Run() override {}
 
 	void Initialize(int thread_idx, uint32_t id, int tex_id, 
 		int tex_w, int tex_h, const sm::i16_rect& region);
@@ -36,10 +36,8 @@ private:
 class UpdateDTexC2TaskMgr
 {
 public:
-	UpdateDTexC2Task* Fetch(int thread_idx, uint32_t id, int tex_id, 
+	void Add(int thread_idx, uint32_t id, int tex_id, 
 		int tex_w, int tex_h, const sm::i16_rect& region);
-
-	void AddResult(UpdateDTexC2Task* task);
 
 	void Flush();
 

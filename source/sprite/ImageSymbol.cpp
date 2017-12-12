@@ -100,8 +100,7 @@ void ImageSymbol::OnQueryTexcoordsFail(int thread_idx) const
 
 	sm::ivec2 sz = m_img->GetSize();
 #ifdef S2_MULTITHREAD
-	ThreadPool::Instance()->Run(UpdateDTexC2TaskMgr::Instance()->Fetch(
-		thread_idx, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region));
+	UpdateDTexC2TaskMgr::Instance()->Add(thread_idx, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
 #else
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();

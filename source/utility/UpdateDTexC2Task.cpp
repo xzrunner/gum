@@ -20,11 +20,6 @@ UpdateDTexC2Task::UpdateDTexC2Task(int thread_idx, uint32_t id, int tex_id,
 {
 }
 
-void UpdateDTexC2Task::Run()
-{
-	UpdateDTexC2TaskMgr::Instance()->AddResult(this);
-}
-
 void UpdateDTexC2Task::Initialize(int thread_idx, uint32_t id, int tex_id, 
 	                              int tex_w, int tex_h, const sm::i16_rect& region)
 {
@@ -52,28 +47,24 @@ UpdateDTexC2TaskMgr::UpdateDTexC2TaskMgr()
 	m_results.resize(thread_count);
 }
 
-UpdateDTexC2Task* UpdateDTexC2TaskMgr::Fetch(int thread_idx, uint32_t id, int tex_id, 
-	                                         int tex_w, int tex_h, const sm::i16_rect& region)
+void UpdateDTexC2TaskMgr::Add(int thread_idx, uint32_t id, int tex_id, 
+	                          int tex_w, int tex_h, const sm::i16_rect& region)
 {
 	assert(thread_idx >= 0 && thread_idx < static_cast<int>(m_freelists.size()));
-	UpdateDTexC2Task* t = m_freelists[thread_idx];
-	if (!t) {
-		t = new UpdateDTexC2Task(thread_idx, id, tex_id, tex_w, tex_h, region);
+	UpdateDTexC2Task* task = m_freelists[thread_idx];
+	if (!task) {
+		task = new UpdateDTexC2Task(thread_idx, id, tex_id, tex_w, tex_h, region);
 	} else {
-		t = m_freelists[thread_idx];
-		t->SetNext(nullptr);
-		m_freelists[thread_idx] = static_cast<UpdateDTexC2Task*>(t->GetNext());
-		t->Initialize(thread_idx, id, tex_id, tex_w, tex_h, region);
-		t->RemoveReference();
+		task = m_freelists[thread_idx];
+		task->SetNext(nullptr);
+		m_freelists[thread_idx] = static_cast<UpdateDTexC2Task*>(task->GetNext());
+		task->Initialize(thread_idx, id, tex_id, tex_w, tex_h, region);
+		task->RemoveReference();
 	}
-	return t;
-}
 
-void UpdateDTexC2TaskMgr::AddResult(UpdateDTexC2Task* task)
-{
 	assert(task->m_thread_idx >= 0 && task->m_thread_idx < static_cast<int>(m_results.size()));
-	UpdateDTexC2Task* t = m_results[task->m_thread_idx];
-	task->SetNext(t);
+	UpdateDTexC2Task* last = m_results[task->m_thread_idx];
+	task->SetNext(last);
 	m_results[task->m_thread_idx] = task;
 	task->AddReference();
 }
