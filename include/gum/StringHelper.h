@@ -57,6 +57,8 @@ public:
 	static void Split(const CU_STR& src, const CU_STR& mid, 
 		CU_VEC<CU_STR>& dst);
 
+	static void Replace(CU_STR& str, const CU_STR& from, const CU_STR& to);
+
 //	static CU_STR ToUtf8(const CU_STR& str);
 
 	static CU_STR UTF8ToGBK(const CU_STR& str);

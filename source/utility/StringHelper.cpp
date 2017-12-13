@@ -43,6 +43,18 @@ void StringHelper::Split(const CU_STR& src, const CU_STR& mid,
 	delete[] cstr;
 }
 
+void StringHelper::Replace(CU_STR& str, const CU_STR& from, const CU_STR& to)
+{
+	if (from.empty()) {
+		return;
+	}
+	size_t start_pos = 0;
+	while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length();
+	}
+}
+
 #ifdef NO_BOOST
 
 static CU_STR code_convert(const char* source_charset, const char* to_charset, const CU_STR& str)
