@@ -386,6 +386,9 @@
     <ClCompile Include="..\..\..\source\sprite\AudioSprLoader.cpp">
       <Filter>sprite\16.audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprite\TextTableLoader.cpp">
+      <Filter>sprite\05.label</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\gum\RenderContext.h">
@@ -686,6 +689,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\AudioSprLoader.h">
       <Filter>sprite\16.audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\TextTableLoader.h">
+      <Filter>sprite\05.label</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

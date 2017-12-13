@@ -126,6 +126,7 @@
     <ClCompile Include="..\..\..\source\sprite\ImageSymbol.cpp" />
     <ClCompile Include="..\..\..\source\sprite\ShapeSaver.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TextboxSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprite\TextTableLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TexturePolygon.cpp" />
     <ClCompile Include="..\..\..\source\sprite\IconSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\IconSymLoader.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="..\..\..\include\gum\ShapeSaver.h" />
     <ClInclude Include="..\..\..\include\gum\Sprite2.h" />
     <ClInclude Include="..\..\..\include\gum\TextboxSymbol.h" />
+    <ClInclude Include="..\..\..\include\gum\TextTableLoader.h" />
     <ClInclude Include="..\..\..\include\gum\TexturePolygon.h" />
     <ClInclude Include="..\..\..\include\gum\IconSprLoader.h" />
     <ClInclude Include="..\..\..\include\gum\IconSymLoader.h" />
