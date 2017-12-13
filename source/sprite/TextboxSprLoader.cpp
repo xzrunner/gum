@@ -28,6 +28,9 @@ void TextboxSprLoader::LoadJson(const Json::Value& val)
 			Config::Instance()->GetLanguage(), text_val["tid"].asString().c_str());
 	}
 	m_spr.SetText(s2::UpdateParams(), text);
+
+	CU_STR tid = text_val["text"].asString().c_str();
+	m_spr.SetTID(tid);
 }
 
 void TextboxSprLoader::LoadBin(const simp::NodeLabel* node)
