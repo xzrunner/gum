@@ -32,6 +32,7 @@
 #include "gum/Cooking.h"
 #include "gum/ShaderLab.h"
 #include "gum/UpdateDTexC2Task.h"
+#include "gum/LoadGlyphTask.h"
 
 #include <unirender/RenderContext.h>
 #include <uniaudio/AudioContext.h>
@@ -185,7 +186,10 @@ void gum_flush()
 	DTex::Instance()->Flush();
 	LoadImageTaskMgr::Instance()->Flush();
 	Sprite2::Instance()->Flush();
+
+	// tasks
 	UpdateDTexC2TaskMgr::Instance()->Flush();
+	LoadGlyphTaskMgr::Instance()->Flush();
 }
 
 extern "C"
