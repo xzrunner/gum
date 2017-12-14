@@ -29,7 +29,7 @@ public:
 	 *    s2::ImageSymbol
 	 */
 	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& texid) const override;
-	virtual void OnQueryTexcoordsFail(int thread_idx) const override;
+	virtual void OnQueryTexcoordsFail(cooking::DisplayList* dlist) const override;
 
 	void SetImage(const std::shared_ptr<Image>& img);
 	const std::shared_ptr<Image>& GetImage() const { return m_img; }

@@ -5,7 +5,6 @@
 #include "gum/ProxyImage.h"
 #ifdef S2_MULTITHREAD
 #include "gum/ThreadPool.h"
-#include "gum/UpdateDTexC2Task.h"
 #else
 #include "gum/DTexC2Strategy.h"
 #endif // S2_MULTITHREAD
@@ -15,6 +14,7 @@
 #ifndef S2_MULTITHREAD
 #include <shaderlab/ShaderMgr.h>
 #endif  // S2_MULTITHREAD
+#include <cooking/Facade.h>
 
 #include <string.h>
 
@@ -92,7 +92,7 @@ bool ImageSymbol::QueryTexcoords(bool use_dtex, float* texcoords, int& texid) co
 	}
 }
 
-void ImageSymbol::OnQueryTexcoordsFail(int thread_idx) const
+void ImageSymbol::OnQueryTexcoordsFail(cooking::DisplayList* dlist) const
 {
 	if (!DTex::Instance()->IsC2Enable()) {
 		return;
@@ -100,7 +100,7 @@ void ImageSymbol::OnQueryTexcoordsFail(int thread_idx) const
 
 	sm::ivec2 sz = m_img->GetSize();
 #ifdef S2_MULTITHREAD
-	UpdateDTexC2TaskMgr::Instance()->Add(thread_idx, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
+	cooking::update_dtex_c2(dlist, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
 #else
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();

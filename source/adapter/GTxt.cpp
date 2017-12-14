@@ -6,7 +6,6 @@
 #include "gum/GlyphStyle.h"
 #include "gum/DTex.h"
 #include "gum/ResourceUID.h"
-#include "gum/LoadGlyphTask.h"
 
 #include <gtxt_util.h>
 #include <gtxt_richtext.h>
@@ -265,7 +264,7 @@ draw_glyph(int unicode, float x, float y, float w, float h,
 			{
 #ifdef S2_MULTITHREAD
 				cooking::DisplayList* dlist = static_cast<cooking::DisplayList*>(static_cast<render_params*>(ud)->ud);
-				LoadGlyphTaskMgr::Instance()->Add(dlist ? dlist->GetThreadIdx() : -1, unicode, gs, uid);
+				cooking::load_glyph(dlist, unicode, gs, uid);
 #else
 				struct gtxt_glyph_layout layout;
 				uint32_t* bmp = gtxt_glyph_get_bitmap(unicode, gs, &layout);
