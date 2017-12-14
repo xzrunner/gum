@@ -41,10 +41,8 @@ void ThreadPool::UnregisterUpdateCB(void (*update)(void* arg))
 
 void ThreadPool::Close()
 {
+	m_tick->Stop();
 	m_pool->Stop();
-	delete m_pool;
-
-	delete m_tick;
 }
 
 int ThreadPool::GetThreadCount() const
