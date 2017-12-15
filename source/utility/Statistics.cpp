@@ -1,6 +1,7 @@
 #include "gum/Statistics.h"
 #include "gum/StatFPS.h"
 #include "gum/StatTag.h"
+#include "gum/StatTasks.h"
 #include "gum/GTxt.h"
 #include "gum/SymbolPool.h"
 #include "gum/Image.h"
@@ -131,6 +132,8 @@ void Statistics::Print()
 	if (m_flags & FLAG_PRINT_FILE) {
 		PrintFile();
 	}
+
+	StatTasks::Instance()->Print();
 }
 
 void Statistics::Reset()

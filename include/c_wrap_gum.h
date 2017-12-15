@@ -166,6 +166,9 @@ void  gum_stat_flush();
 
 void  gum_stat_set_mem(float tot, float lua);
 
+void  gum_stat_task_clear();
+void  gum_stat_task_print();
+
 /************************************************************************/
 /* record screen                                                        */
 /************************************************************************/

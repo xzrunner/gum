@@ -22,6 +22,7 @@
 #include "gum/StatFPS.h"
 #include "gum/StatTag.h"
 #include "gum/StatScreen.h"
+#include "gum/StatTasks.h"
 #include "gum/PkgFileParser.h"
 #ifndef S2_DISABLE_MODEL
 #include "gum/Model3.h"
@@ -71,6 +72,7 @@
 #include <gtxt_label.h>
 #include <c_wrap_dtex.h>
 #include <c_wrap_cooking.h>
+#include <multitask/TaskStat.h>
 
 #include <queue>
 
@@ -980,6 +982,18 @@ extern "C"
 void gum_stat_set_mem(float tot, float lua)
 {
 	Statistics::Instance()->SetMem(tot, lua);
+}
+
+extern "C"
+void gum_stat_task_clear()
+{
+	mt::TaskStat::Instance()->Clear();
+}
+
+extern "C"
+void gum_stat_task_print()
+{
+	StatTasks::Instance()->Flush();
 }
 
 /************************************************************************/
