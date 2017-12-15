@@ -991,7 +991,7 @@ void gum_stat_task_clear()
 }
 
 extern "C"
-void gum_stat_task_print()
+void gum_stat_task()
 {
 	StatTasks::Instance()->Flush();
 }
