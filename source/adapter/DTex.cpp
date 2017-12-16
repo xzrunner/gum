@@ -88,7 +88,7 @@ clear_color_part(float xmin, float ymin, float xmax, float ymax)
 	triangles[2].Set(xmax, ymin);
 	triangles[3].Set(xmax, ymax);
 
-	s2::RVG::TriangleStrip(triangles);
+	s2::RVG::TriangleStrip(nullptr, triangles);
 
 	shader->Commit();
 // 	ShaderLab::Instance()->Flush();

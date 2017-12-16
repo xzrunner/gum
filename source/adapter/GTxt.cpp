@@ -82,24 +82,42 @@ render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, floa
 	*ptr_dst++ = vx;
 	*ptr_dst++ = vy;
 
-	s2::RenderColor color;
+	s2::RenderColor col;
 	if (rp->mul) {
 		s2::Color multi_col = *rp->mul;
 		multi_col.a = static_cast<int>(multi_col.a * ds->alpha);
-		color.SetMul(multi_col);
+		col.SetMul(multi_col);
 	}
 	if (rp->add) {
-		color.SetAdd(*rp->add);
+		col.SetAdd(*rp->add);
 	}
 
 	cooking::DisplayList* dlist = reinterpret_cast<cooking::DisplayList*>(rp->ud);
 	assert(dlist);
-	uint32_t col_mul = color.GetMulABGR(),
-		     col_add = color.GetAddABGR();
-	uint32_t col_rmap = color.GetRMapABGR(),
-		     col_gmap = color.GetGMapABGR(),
-			 col_bmap = color.GetBMapABGR();
-	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, vertices, texcoords, tex_id);
+
+	auto mgr = sl::ShaderMgr::Instance();
+	switch (mgr->GetShaderType())
+	{
+	case sl::SPRITE2:
+		{
+			uint32_t col_mul = col.GetMulABGR(), 
+			         col_add = col.GetAddABGR();
+			uint32_t col_rmap = col.GetRMapABGR(),
+		             col_gmap = col.GetGMapABGR(),
+			         col_bmap = col.GetBMapABGR();
+			cooking::set_color_sprite(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap);
+			cooking::draw_quad_sprite(dlist, vertices, texcoords, tex_id);
+		}
+		break;
+	case sl::FILTER:
+		{
+			uint32_t col_mul = col.GetMulABGR(), 
+			         col_add = col.GetAddABGR();
+			cooking::set_color_filter(dlist, col_mul, col_add);
+			cooking::draw_quad_filter(dlist, vertices, texcoords, tex_id);
+		}
+		break;
+	}
 }
 
 static void
@@ -187,22 +205,22 @@ render_decoration(const S2_MAT& mat, float x, float y, float w, float h, const g
 			left.y = right.y = ds->row_y + ds->row_h * 0.5f;
 			break;
 		}
-		s2::RVG::Line(mat * left, mat * right);
+		s2::RVG::Line(nullptr, mat * left, mat * right);
 	} else if (d->type == GRDT_BORDER || d->type == GRDT_BG) {
 		sm::vec2 min(x - hw, ds->row_y), 
 			max(x + hw, ds->row_y + ds->row_h);
 		min = mat * min;
 		max = mat * max;
 		if (d->type == GRDT_BG) {
-			s2::RVG::Rect(min, max, true);
+			s2::RVG::Rect(nullptr, min, max, true);
 		} else if (ds->pos_type != GRPT_NULL) {
-			s2::RVG::Line(min, sm::vec2(max.x, min.y));
-			s2::RVG::Line(sm::vec2(min.x, max.y), max);
+			s2::RVG::Line(nullptr, min, sm::vec2(max.x, min.y));
+			s2::RVG::Line(nullptr, sm::vec2(min.x, max.y), max);
 			if (ds->pos_type == GRPT_BEGIN) {
-				s2::RVG::Line(min, sm::vec2(min.x, max.y));
+				s2::RVG::Line(nullptr, min, sm::vec2(min.x, max.y));
 			}
 			if (ds->pos_type == GRPT_END) {
-				s2::RVG::Line(sm::vec2(max.x, min.y), max);
+				s2::RVG::Line(nullptr, sm::vec2(max.x, min.y), max);
 			}
 		}
 	}
