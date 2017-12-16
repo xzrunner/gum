@@ -191,14 +191,23 @@ void gum_flush()
 extern "C"
 void  gum_flush_deferred()
 {
-	s2::DrawTaskMgr* task_mgr = s2::DrawTaskMgr::Instance();
+#ifndef S2_DISABLE_DEFERRED
+	{
+		int type = mt::TaskStat::Instance()->RegisterTaskType("wait");
+		mt::TaskStat::Checkpoint cp(std::this_thread::get_id(), type);
 
-	// wait all task finished
-	while (!task_mgr->IsAllTaskFinished())
-		;
-	s2::DrawTaskMgr::Instance()->Flush();
+		// wait all task finished
+		s2::DrawTaskMgr* task_mgr = s2::DrawTaskMgr::Instance();
+		while (!task_mgr->IsAllTaskFinished())
+			;
+	}
+	{
+		int type = mt::TaskStat::Instance()->RegisterTaskType("commit");
+		mt::TaskStat::Checkpoint cp(std::this_thread::get_id(), type);
 
-//	sl::RenderTask::FlushShared();
+		s2::DrawTaskMgr::Instance()->Flush();
+	}
+#endif // S2_DISABLE_DEFERRED
 }
 
 extern "C"
@@ -991,9 +1000,15 @@ void gum_stat_task_clear()
 }
 
 extern "C"
-void gum_stat_task()
+void gum_stat_task_trigger_flush()
 {
-	StatTasks::Instance()->Flush();
+	StatTasks::Instance()->TriggerFlush();
+}
+
+extern "C"
+void gum_stat_task_try_flush()
+{
+	StatTasks::Instance()->TryFlush();
 }
 
 /************************************************************************/
