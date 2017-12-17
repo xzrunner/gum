@@ -105,14 +105,9 @@ void StatTasks::Print() const
 			float x0 = start_x + LENGTH * (task.begin - m_time_min) / (m_time_max - m_time_min);
 			float x1 = start_x + LENGTH * (task.end - m_time_min) / (m_time_max - m_time_min);
 			rvg_rect(x0, start_y - TILE_HEIGHT, x1, start_y, true);
-
-			mgr->FlushShader();
 		}
-				
 		start_y -= LINE_HEIGHT;
 	}
-
-	mgr->FlushShader();
 }
 
 }
