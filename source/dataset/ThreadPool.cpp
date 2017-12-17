@@ -47,7 +47,7 @@ void ThreadPool::Close()
 
 int ThreadPool::GetThreadCount() const
 {
-	return std::thread::hardware_concurrency();
+	return std::thread::hardware_concurrency() - 1;
 }
 
 int ThreadPool::QueryThreadIdx(std::thread::id id) const
