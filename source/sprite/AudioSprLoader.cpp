@@ -16,9 +16,11 @@ AudioSprLoader::AudioSprLoader(s2::AudioSprite& spr)
 
 void AudioSprLoader::LoadBin(const CU_STR& filepath, const simp::NodeAudioSpr* node)
 {
-	Audio* audio = Audio::Instance();
+	auto source = Audio::Instance()->GetContext()->CreateSource(filepath + ".e1e5b459735f95ed14465e002e0a8548", true);
+	if (!source) {
+		return;
+	}
 
-	auto source = audio->GetContext()->CreateSource(filepath, true);
 	m_spr.SetSource(source);
 
 	m_spr.SetVolume(node->volume);
