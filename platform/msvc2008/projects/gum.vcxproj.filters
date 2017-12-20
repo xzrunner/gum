@@ -25,9 +25,6 @@
     <Filter Include="utility\stat">
       <UniqueIdentifier>{6bb7e365-a035-4273-9be7-a366ada9e230}</UniqueIdentifier>
     </Filter>
-    <Filter Include="utility\task">
-      <UniqueIdentifier>{f9dca895-c7a2-445d-a638-3cb81de58123}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sprite">
       <UniqueIdentifier>{6139a7fa-171e-4b8c-89a8-c9eacd23dc93}</UniqueIdentifier>
     </Filter>
@@ -99,6 +96,9 @@
     </Filter>
     <Filter Include="adapter">
       <UniqueIdentifier>{64c18692-1c97-4353-b913-6d2f67574570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tasks">
+      <UniqueIdentifier>{7a759bf4-a3e4-4cbe-9c32-2c19b1e1fc81}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -179,9 +179,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\utility\StatTag.cpp">
       <Filter>utility\stat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\utility\LoadImageTask.cpp">
-      <Filter>utility\task</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprite\ExtendSymFile.cpp">
       <Filter>sprite</Filter>
@@ -389,6 +386,9 @@
     <ClCompile Include="..\..\..\source\sprite\TextTableLoader.cpp">
       <Filter>sprite\05.label</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\tasks\LoadImageTask.cpp">
+      <Filter>tasks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\gum\RenderContext.h">
@@ -474,9 +474,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\StatTag.h">
       <Filter>utility\stat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\gum\LoadImageTask.h">
-      <Filter>utility\task</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ExtendSymFile.h">
       <Filter>sprite</Filter>
@@ -692,6 +689,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\TextTableLoader.h">
       <Filter>sprite\05.label</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\LoadImageTask.h">
+      <Filter>tasks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

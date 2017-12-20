@@ -165,11 +165,11 @@
     <ClCompile Include="..\..\..\source\sprite\TextureSymLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TrailSprLoader.cpp" />
     <ClCompile Include="..\..\..\source\sprite\TrailSymLoader.cpp" />
+    <ClCompile Include="..\..\..\source\tasks\LoadImageTask.cpp" />
     <ClCompile Include="..\..\..\source\utility\Config.cpp" />
     <ClCompile Include="..\..\..\source\utility\Exception.cpp" />
     <ClCompile Include="..\..\..\source\utility\FilepathHelper.cpp" />
     <ClCompile Include="..\..\..\source\utility\JsonSerializer.cpp" />
-    <ClCompile Include="..\..\..\source\utility\LoadImageTask.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatFPS.cpp" />
     <ClCompile Include="..\..\..\source\utility\Statistics.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatScreen.cpp" />
