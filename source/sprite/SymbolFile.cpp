@@ -41,6 +41,11 @@ int SymbolFile::Type(const CU_STR& filepath) const
 	}
 
 	CU_STR ext = filepath.substr(pos + 1);
+	// not ext, md5
+	if (ext.size() > 10) {
+		ext = filepath.substr(0, pos);
+		ext = ext.substr(ext.find_last_of('.') + 1);
+	}
 	StringHelper::ToLower(ext);
 	if (ext == "png" || ext == "jpg" || ext == "bmp" || ext == "ppm" || ext == "pvr" || ext == "pkm") 
 	{
