@@ -148,6 +148,21 @@ lstop(lua_State* L)
 	return 0;
 }
 
+static int
+lset_volume(lua_State* L)
+{
+	float volume = luaL_optnumber(L, 1, 1.0f);
+	try {
+		auto ctx = Audio::Instance()->GetContext();
+		if (ctx) {
+			ctx->SetVolume(volume);
+		}
+	} catch (std::exception& e) {
+		luaL_error(L, e.what());
+	}
+	return 0;
+}
+
 extern "C" int luaopen_gum_audio(lua_State* L)
 {
 	luaL_Reg l[] = 
@@ -164,6 +179,8 @@ extern "C" int luaopen_gum_audio(lua_State* L)
 
 		{ "play", lplay },
 		{ "stop", lstop },
+
+		{ "set_volume", lset_volume },
 
 		{ nullptr, nullptr },		
 	};
