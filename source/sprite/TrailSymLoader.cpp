@@ -11,7 +11,7 @@
 #include <sprite2/TrailSymbol.h>
 #include <sprite2/TrailEmitterCfg.h>
 #include <simp/NodeTrail.h>
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 #include <fstream>
 
@@ -132,10 +132,10 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 
 	count			= node->count;
 
-	life_begin		= simp::int2float(node->life_begin, 100);
-	life_offset		= simp::int2float(node->life_offset, 100);
+	life_begin		= bs::int2float(node->life_begin, 100);
+	life_offset		= bs::int2float(node->life_offset, 100);
 
-	fadeout_time	= simp::int2float(node->fadeout_time, 100);
+	fadeout_time	= bs::int2float(node->fadeout_time, 100);
 
 	int n = node->n;
 	if (mode == T2D_MODE_IMAGE)
@@ -146,8 +146,8 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 			const simp::NodeTrail::Component& src = node->components[i];
 			CompImage dst;
 			dst.sym_id      = src.mode.A.sym_id;
-			dst.scale_begin	= simp::int2float(src.mode.A.scale_begin, 100);
-			dst.scale_end   = simp::int2float(src.mode.A.scale_end, 100);
+			dst.scale_begin	= bs::int2float(src.mode.A.scale_begin, 100);
+			dst.scale_end   = bs::int2float(src.mode.A.scale_end, 100);
 			dst.mul_col_begin.FromRGBA(src.col_begin);
 			dst.mul_col_end.FromRGBA(src.col_end);
 			dst.add_col_begin.FromRGBA(src.mode.A.add_col_begin);
@@ -163,8 +163,8 @@ void TrailSymLoader::LoadBin(const simp::NodeTrail* node)
 		{
 			const simp::NodeTrail::Component& src = node->components[i];
 			CompShape dst;
-			dst.linewidth = simp::int2float(src.mode.B.size, 100);
-			dst.acuity	  = simp::int2float(src.mode.B.acuity, 100);
+			dst.linewidth = bs::int2float(src.mode.B.size, 100);
+			dst.acuity	  = bs::int2float(src.mode.B.acuity, 100);
 			dst.col_begin.FromRGBA(src.col_begin);
 			dst.col_end.FromRGBA(src.col_end);
 			comp_shapes.push_back(dst);

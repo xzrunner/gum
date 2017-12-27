@@ -2,8 +2,8 @@
 
 #include <sprite2/AnimSprite.h>
 #include <sprite2/UpdateParams.h>
-#include <simp/from_int.h>
 #include <simp/NodeAnimationSpr.h>
+#include <bs/FixedPointNum.h>
 
 namespace gum
 {
@@ -35,10 +35,10 @@ void AnimSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 
 void AnimSprLoader::LoadBin(const simp::NodeAnimationSpr* node)
 {
-	m_spr.SetLoop(simp::int2bool(node->loop));
-	m_spr.SetInterval(simp::int2float(node->interval, 1024));
+	m_spr.SetLoop(bs::int2bool(node->loop));
+	m_spr.SetInterval(bs::int2float(node->interval, 1024));
 
-	m_spr.SetStartRandom(s2::UpdateParams(), simp::int2bool(node->start_random));
+	m_spr.SetStartRandom(s2::UpdateParams(), bs::int2bool(node->start_random));
 
 	m_spr.SetFPS(node->fps);
 }

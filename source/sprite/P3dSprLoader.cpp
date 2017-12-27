@@ -2,7 +2,7 @@
 
 #include <sprite2/Particle3dSprite.h>
 #include <simp/NodeParticle3dSpr.h>
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 namespace gum
 {
@@ -56,9 +56,9 @@ void P3dSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 
 void P3dSprLoader::LoadBin(const simp::NodeParticle3dSpr* node)
 {
-	m_spr.SetLoop(simp::int2bool(node->loop));
-	m_spr.SetLocal(simp::int2bool(node->local));
-	m_spr.SetAlone(simp::int2bool(node->alone));
+	m_spr.SetLoop(bs::int2bool(node->loop));
+	m_spr.SetLocal(bs::int2bool(node->local));
+	m_spr.SetAlone(bs::int2bool(node->alone));
 	m_spr.SetReuse(s2::Particle3dSprite::ReuseType(node->reuse));
 
 	m_spr.SetStartRadius(node->radius);

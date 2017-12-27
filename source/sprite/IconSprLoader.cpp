@@ -2,7 +2,7 @@
 
 #include <sprite2/IconSprite.h>
 #include <simp/NodeIconSpr.h>
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 namespace gum
 {
@@ -18,7 +18,7 @@ void IconSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 
 void IconSprLoader::LoadBin(const simp::NodeIconSpr* node)
 {
-	m_spr.SetProcess(simp::int2float(node->process, 1024));
+	m_spr.SetProcess(bs::int2float(node->process, 1024));
 }
 
 }

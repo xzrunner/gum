@@ -2,7 +2,6 @@
 
 #include <sprite2/Anim2Sprite.h>
 #include <sprite2/UpdateParams.h>
-#include <simp/from_int.h>
 #include <simp/NodeAnim2Spr.h>
 
 namespace gum

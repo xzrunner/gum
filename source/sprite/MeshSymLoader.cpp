@@ -6,17 +6,16 @@
 #include "gum/ArrayLoader.h"
 
 #include <simp/NodeMesh.h>
-#include <simp/from_int.h>
 #include <simp/PointsMesh.h>
 #include <simp/TrianglesMesh.h>
 #include <simp/Skin2Mesh.h>
-#include <simp/from_int.h>
 #include <polymesh/PointsMesh.h>
 #include <polymesh/TrianglesMesh.h>
 #include <polymesh/Skin2Mesh.h>
 #include <polymesh/MeshTransform.h>
 #include <sprite2/MeshSymbol.h>
 #include <sprite2/Mesh.h>
+#include <bs/FixedPointNum.h>
 
 #include <json/json.h>
 
@@ -140,10 +139,10 @@ std::unique_ptr<s2::Mesh> MeshSymLoader::LoadSkin2Mesh(const s2::SymConstPtr& ba
 		const simp::Skin2Mesh::Joint& src = node->joints[i];
 		pm::Skin2Joint dst;
 		dst.joint = src.joint;
-		dst.vertex.x = simp::int2float(src.vx, 16);
-		dst.vertex.y = simp::int2float(src.vy, 16);
+		dst.vertex.x = bs::int2float(src.vx, 16);
+		dst.vertex.y = bs::int2float(src.vy, 16);
 		dst.offset.Set(0, 0);
-		dst.weight = simp::int2float(src.weight, 2048) + 0.5f;
+		dst.weight = bs::int2float(src.weight, 2048) + 0.5f;
 		joints.push_back(dst);
 	}
 

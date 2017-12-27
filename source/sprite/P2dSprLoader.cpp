@@ -1,8 +1,8 @@
 #include "gum/P2dSprLoader.h"
 
 #include <sprite2/Particle2dSprite.h>
-#include <simp/from_int.h>
 #include <simp/NodeParticle2dSpr.h>
+#include <bs/FixedPointNum.h>
 
 namespace gum
 {
@@ -26,8 +26,8 @@ void P2dSprLoader::LoadJson(const Json::Value& val, const CU_STR& dir)
 
 void P2dSprLoader::LoadBin(const simp::NodeParticle2dSpr* node)
 {
-	m_spr.SetLoop(simp::int2bool(node->loop));
-	m_spr.SetLocal(simp::int2bool(node->local));
+	m_spr.SetLoop(bs::int2bool(node->loop));
+	m_spr.SetLocal(bs::int2bool(node->local));
 }
 
 }

@@ -11,7 +11,6 @@
 #include <sprite2/DynamicSectorIcon.h>
 #include <sprite2/ImageSymbol.h>
 #include <simp/NodeIcon.h>
-#include <simp/from_int.h>
 
 #include <sprite2/SymType.h>
 

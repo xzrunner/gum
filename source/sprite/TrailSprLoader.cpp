@@ -2,7 +2,6 @@
 
 #include <sprite2/TrailSprite.h>
 #include <simp/NodeTrailSpr.h>
-#include <simp/from_int.h>
 
 namespace gum
 {

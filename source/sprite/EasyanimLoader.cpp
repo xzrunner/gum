@@ -9,7 +9,7 @@
 #include <sprite2/LerpWiggle.h>
 #include <sprite2/LerpEase.h>
 #include <sprite2/AnimLerp.h>
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 #include <assert.h>
 
@@ -47,7 +47,7 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 			const simp::NodeAnimation::Frame* src_frame = src_layer->frames[frame];
 			auto dst_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
 			dst_frame->index = src_frame->index;
-			dst_frame->tween = simp::int2bool(src_frame->tween);
+			dst_frame->tween = bs::int2bool(src_frame->tween);
 			LoadActors(src_frame, *dst_frame);
 			LoadLerps(src_frame, *dst_frame);
 			dst_layer->frames.push_back(std::move(dst_frame));

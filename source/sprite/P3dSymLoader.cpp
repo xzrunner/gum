@@ -12,7 +12,7 @@
 #include <sprite2/Particle3dSymbol.h>
 #include <sprite2/P3dEmitterCfg.h>
 #include <simp/NodeParticle3d.h>
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 #include <fstream>
 
@@ -244,25 +244,25 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 {
 	name.clear();
 
-	static_mode			= simp::int2bool(node->static_mode);
+	static_mode			= bs::int2bool(node->static_mode);
 
 	count				= node->count;
-	emission_time		= simp::int2float(node->emission_time, 100);
+	emission_time		= bs::int2float(node->emission_time, 100);
 
-	life				= simp::int2float(node->life, 100) * 1000;
-	life_var			= simp::int2float(node->life_var, 100) * 1000;
+	life				= bs::int2float(node->life, 100) * 1000;
+	life_var			= bs::int2float(node->life_var, 100) * 1000;
 
-	hori				= simp::int2radian((int16_t)(node->hori));
-	hori_var			= simp::int2radian(node->hori_var);
-	vert				= simp::int2radian((int16_t)(node->vert));
-	vert_var			= simp::int2radian(node->vert_var);
+	hori				= bs::int2radian((int16_t)(node->hori));
+	hori_var			= bs::int2radian(node->hori_var);
+	vert				= bs::int2radian((int16_t)(node->vert));
+	vert_var			= bs::int2radian(node->vert_var);
 
 	radial_spd			= (int16_t)(node->radial_spd);
 	radial_spd_var		= node->radial_spd_var;
 	tangential_spd		= (int16_t)(node->tangential_spd);
 	tangential_spd_var	= node->tangential_spd_var;
-	angular_spd			= simp::int2radian((int16_t)(node->angular_spd));
-	angular_spd_var		= simp::int2radian(node->angular_spd_var);
+	angular_spd			= bs::int2radian((int16_t)(node->angular_spd));
+	angular_spd_var		= bs::int2radian(node->angular_spd_var);
 
 	dis_region			= node->dis_region;
 	dis_region_var		= node->dis_region_var;
@@ -276,18 +276,18 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 
 	inertia				= 0;
 
-	fadeout_time		= simp::int2float(node->fadeout_time, 100);
+	fadeout_time		= bs::int2float(node->fadeout_time, 100);
 
 	ground				= node->ground;
 
 	start_radius		= node->start_radius;
 	start_height		= (int16_t)(node->start_height);
 
-	orient_to_movement	= simp::int2bool(node->orient_to_movement);
+	orient_to_movement	= bs::int2bool(node->orient_to_movement);
 	orient_to_parent	= false;
 
-	loop                = simp::int2bool(node->loop);
-	local               = simp::int2bool(node->local);
+	loop                = bs::int2bool(node->loop);
+	local               = bs::int2bool(node->local);
 
 	blend				= node->blend;
 
@@ -299,8 +299,8 @@ void P3dSymLoader::LoadBin(const simp::NodeParticle3d* node)
 		Component dst;
 		dst.sym_id			= src.sym_id;
 		dst.count			= src.count;
-		dst.scale_start		= simp::int2float(src.scale_start, 100) * 100;
-		dst.scale_end		= simp::int2float(src.scale_end, 100) * 100;
+		dst.scale_start		= bs::int2float(src.scale_start, 100) * 100;
+		dst.scale_end		= bs::int2float(src.scale_end, 100) * 100;
 		dst.angle			= (int16_t)(src.angle);
 		dst.angle_var		= src.angle_var;
 		dst.mul_col_begin.FromRGBA(src.mul_col_begin);

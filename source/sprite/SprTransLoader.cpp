@@ -1,13 +1,12 @@
 #include "gum/SprTransLoader.h"
 
+#include <bsn/ColorParser.h>
 #include <sprite2/Sprite.h>
 #include <sprite2/RenderColor.h>
 #include <sprite2/RenderShader.h>
 #include <sprite2/RenderCamera.h>
-#include <sprite2/trans_color.h>
-#include <simp/NodeTrans.h>
-
 #include <sprite2/Symbol.h>
+#include <simp/NodeTrans.h>
 
 namespace gum
 {
@@ -46,19 +45,19 @@ void SprTransLoader::Load(const s2::SprPtr& spr, const simp::NodeTrans* trans)
 
 	s2::RenderColor rc;
 	if (trans->type & simp::NodeTrans::COL_MUL_MASK) {
-		rc.SetMulABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
+		rc.SetMulABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_ADD_MASK) {
-		rc.SetAddABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
+		rc.SetAddABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_R_MASK) {
-		rc.SetRMapABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
+		rc.SetRMapABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_G_MASK) {
-		rc.SetGMapABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
+		rc.SetGMapABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_B_MASK) {
-		rc.SetBMapABGR(s2::trans_color(trans->data[idx++], s2::RGBA, s2::ABGR));
+		rc.SetBMapABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
 	}
 	spr->SetColor(rc);
 

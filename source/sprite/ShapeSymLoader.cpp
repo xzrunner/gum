@@ -13,7 +13,6 @@
 #include <sprite2/TexturePolygon.h>
 #include <sprite2/SymType.h>
 #include <simp/NodeShape.h>
-#include <simp/from_int.h>
 
 #include <fstream>
 

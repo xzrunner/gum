@@ -8,7 +8,7 @@
 #include <sprite2/MeshSprite.h>
 #include <sprite2/MeshSymbol.h>
 #include <simp/NodeMeshSpr.h>
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 #include <assert.h>
 
@@ -61,8 +61,8 @@ void MeshSprLoader::LoadBin(const simp::NodeMeshSpr* node)
 	for (uint32_t i = 0; i < node->n; ++i) 
 	{
 		int idx = node->trans[ptr++];
-		float x = simp::int2float(int16_t(node->trans[ptr++]), 16),
-			  y = simp::int2float(int16_t(node->trans[ptr++]), 16);
+		float x = bs::int2float(int16_t(node->trans[ptr++]), 16),
+			  y = bs::int2float(int16_t(node->trans[ptr++]), 16);
 		trans.push_back(std::make_pair(idx, sm::vec2(x, y)));
 	}
 	m_spr.GetMeshTrans().SetTrans(trans);

@@ -1,6 +1,6 @@
 #include "gum/ArrayLoader.h"
 
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 #include <string.h>
 
@@ -12,8 +12,8 @@ void ArrayLoader::Load(CU_VEC<sm::vec2>& dst, const uint16_t* src, int src_n, in
 	dst.reserve(src_n);
 	int idx = 0;
 	for (int i = 0; i < src_n; ++i) {
-		float x = simp::int2float(int16_t(src[idx++]), precision),
-			  y = simp::int2float(int16_t(src[idx++]), precision);
+		float x = bs::int2float(int16_t(src[idx++]), precision),
+			  y = bs::int2float(int16_t(src[idx++]), precision);
 		dst.push_back(sm::vec2(x, y));
 	}	
 }

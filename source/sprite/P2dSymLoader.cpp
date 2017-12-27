@@ -11,7 +11,7 @@
 #include <ps_2d.h>
 #include <sprite2/Particle2dSymbol.h>
 #include <simp/NodeParticle2d.h>
-#include <simp/from_int.h>
+#include <bs/FixedPointNum.h>
 
 #include <fstream>
 
@@ -217,7 +217,7 @@ void P2dSymLoader::LoadBin(const simp::NodeParticle2d* node)
 		A.radial_accel			= node->mode.A.radial_accel;
 		A.radial_accel_var		= node->mode.A.radial_accel_var;
 
-		A.rotation_is_dir		= simp::int2bool(node->mode.A.rotation_is_dir);
+		A.rotation_is_dir		= bs::int2bool(node->mode.A.rotation_is_dir);
 	}
 	else if (mode_type == P2D_MODE_RADIUS) 
 	{
@@ -246,20 +246,20 @@ void P2dSymLoader::LoadBin(const simp::NodeParticle2d* node)
 		throw Exception("P2dSymLoader::LoadJson unknown mode type.");
 	}
 
-	emission_time		= simp::int2float(node->emission_time, 100);
+	emission_time		= bs::int2float(node->emission_time, 100);
 
 	count				= node->count;
 
-	life				= simp::int2float(node->life, 100);
-	life_var			= simp::int2float(node->life_var, 100);
+	life				= bs::int2float(node->life, 100);
+	life_var			= bs::int2float(node->life_var, 100);
 
 	position.x			= node->position[0];
 	position_var.x		= node->position_var[0];
 	position.y			= node->position[1];
 	position_var.y		= node->position_var[1];
 
-	direction			= simp::int2radian(node->direction);
-	direction_var		= simp::int2radian(node->direction_var);
+	direction			= bs::int2radian(node->direction);
+	direction_var		= bs::int2radian(node->direction_var);
 
 	components.clear();
 	components.reserve(node->n);
