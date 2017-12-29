@@ -1,6 +1,6 @@
 #include "gum/ImageLoader.h"
 #include "gum/RenderContext.h"
-#include <gum/Config.h>
+#include "gum/Config.h"
 #include "gum/Image.h"
 #include "gum/LoadImageTask.h"
 #include "gum/ThreadPool.h"
@@ -12,6 +12,7 @@
 #include <timp/TextureFormat.h>
 #include <timp/TextureLoader.h>
 #include <unirender/RenderContext.h>
+#include <fs_file.h>
 
 #include <stdlib.h>
 

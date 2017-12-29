@@ -397,10 +397,11 @@ int SpineParser::ParseCurve(const Json::Value& val)
 		return -1;
 	}
 	Curve curve;
-	curve.x0 = val[0].asFloat();
-	curve.y0 = val[1].asFloat();
-	curve.x1 = val[2].asFloat();
-	curve.y1 = val[3].asFloat();
+	int idx0 = 0;
+	curve.x0 = val[idx0].asDouble();
+	curve.y0 = val[1].asDouble();
+	curve.x1 = val[2].asDouble();
+	curve.y1 = val[3].asDouble();
 	
 	for (int i = 0, n = curves.size(); i < n; ++i) {
 		if (curves[i] == curve) {

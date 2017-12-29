@@ -2,8 +2,10 @@
 #define _GUM_TEXT_TABLE_LOADER_H_
 
 #include <cu/cu_stl.h>
+#include <sprite2/config.h>
+#ifndef S2_TEXT_TABLE_DB
 #include <bimp/FileLoader.h>
-#include <sprite2/s2_config.h>
+#endif // S2_TEXT_TABLE_DB
 
 #include <string>
 

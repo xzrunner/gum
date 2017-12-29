@@ -9,6 +9,7 @@
 #include "gum/ImageSymbol.h"
 
 #include <logger.h>
+#include <fs_file.h>
 #include <bimp/ImportStream.h>
 #include <timp/Package.h>
 #include <timp/PkgMgr.h>

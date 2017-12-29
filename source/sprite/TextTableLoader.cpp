@@ -2,6 +2,7 @@
 #include "gum/StringHelper.h"
 
 #include <sprite2/TextTable.h>
+#include <bimp/ImportStream.h>
 
 #include <fstream>
 
@@ -70,7 +71,7 @@ void TextTableLoader::LanguagesLoader::OnLoad(bimp::ImportStream& is)
 	int items_count = is.UInt16();
 	int types_count = is.UInt16();
 
-	std::vector<CU_STR> header;
+	CU_VEC<CU_STR> header;
 	header.reserve(items_count);
 	for (int i = 0; i < types_count; ++i) {
 		header.push_back(is.String());
@@ -81,7 +82,7 @@ void TextTableLoader::LanguagesLoader::OnLoad(bimp::ImportStream& is)
 	{
 		CU_STR tid = is.LongString();
 
-		std::vector<CU_STR> langs;
+		CU_VEC<CU_STR> langs;
 		langs.reserve(types_count);
 		for (int j = 0; j < types_count; ++j) {
 			langs.push_back(is.LongString());

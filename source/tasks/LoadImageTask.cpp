@@ -11,6 +11,7 @@
 #include <timp/TextureFormat.h>
 #include <timp/TextureLoader.h>
 #include <unirender/RenderContext.h>
+#include <fs_file.h>
 
 #include <stdlib.h>
 #include <assert.h>

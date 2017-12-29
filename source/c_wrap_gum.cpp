@@ -32,6 +32,8 @@
 #include "gum/Audio.h"
 #include "gum/Cooking.h"
 #include "gum/ShaderLab.h"
+#include "gum/TextTableLoader.h"
+#include "gum/Config.h"
 
 #include <unirender/RenderContext.h>
 #include <uniaudio/AudioContext.h>
@@ -74,6 +76,7 @@
 #include <c_wrap_dtex.h>
 #include <c_wrap_cooking.h>
 #include <multitask/TaskStat.h>
+#include <fs_file.h>
 
 #include <queue>
 
