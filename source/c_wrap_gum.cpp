@@ -66,6 +66,7 @@
 #include <sprite2/Symbol.h>
 #include <sprite2/DrawTask.h>
 #include <shaderlab/Facade.h>
+#include <sprite2/TextTable.h>
 #include <SM_Matrix.h>
 #include <logger.h>
 #include <dtex2/PkgMgr.h>
@@ -389,6 +390,29 @@ void gum_audio_set_path(const char* name, const char* filepath)
 	if (name && filepath) {
 		simp::AudioIDMgr::Instance()->SetAudioPath(name, filepath);
 	}
+}
+
+/************************************************************************/
+/* table                                                                */
+/************************************************************************/
+
+//extern "C"
+//void gum_load_languages(const char* index_path, const char* data_path)
+//{
+//	TextTableLoader::LoadFromDB(index_path, data_path);
+//}
+
+extern "C"
+void gum_load_languages(const char* filepath)
+{
+	TextTableLoader::LoadFromBin(filepath);
+}
+
+extern "C"
+void gum_set_language(const char* lang)
+{
+	int lang_idx = s2::TextTable::Instance()->QueryType(lang);
+	Config::Instance()->SetLanguage(lang_idx);
 }
 
 /************************************************************************/

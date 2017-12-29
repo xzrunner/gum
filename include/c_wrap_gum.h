@@ -63,6 +63,14 @@ void  gum_get_all_audio_names(const char* names[]);
 void  gum_audio_set_path(const char* name, const char* filepath);
 
 /************************************************************************/
+/* table                                                                */
+/************************************************************************/
+
+//void  gum_load_languages(const char* index_path, const char* data_path);
+void  gum_load_languages(const char* filepath);
+void  gum_set_language(const char* lang);
+
+/************************************************************************/
 /* pkg                                                                  */
 /************************************************************************/
 

@@ -9,7 +9,7 @@ Config::Config()
 {
 	m_pre_mul_alpha = true;
 
-	m_lang = s2::TextTable::LANG_SIMPLIFIED;
+	m_lang = 0;
 }
 
 }
