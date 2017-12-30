@@ -10,6 +10,7 @@
 #include <sprite2/typedef.h>
 #include <sprite2/config.h>
 #include <cu/cu_stl.h>
+#include <bsn/NodeSprBase.h>
 
 #include <json/json.h>
 
@@ -28,6 +29,9 @@ public:
 
 	void Load(const Json::Value& val, const CU_STR& dir);
 	void Store(Json::Value& val, const CU_STR& dir);
+
+	void Load(const bsn::NodeSprBase& node_spr, const s2::SprPtr& spr);
+	void Load(const bsn::NodeSprBase& node_spr);
 
 protected:
 	// geometry

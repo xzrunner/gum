@@ -20,6 +20,7 @@
 #include <sprite2/RenderShader.h>
 #include <sprite2/RenderCamera.h>
 #include <sprite2/StatImages.h>
+#include <bs/FixedPointNum.h>
 
 namespace gum
 {
@@ -37,7 +38,8 @@ SpriteIO::SpriteIO(bool m_compress, bool render_open)
 	m_angle			= 0;
 	m_scale			= sm::vec2(1, 1);
 	m_shear			= sm::vec2(0, 0);
-	m_offset.MakeInvalid();
+//	m_offset.MakeInvalid();
+	m_offset        = sm::vec2(0, 0);
 
 	m_blend			= s2::BM_NULL;
 	m_fast_blend	= s2::FBM_NULL;
@@ -85,6 +87,30 @@ void SpriteIO::Store(Json::Value& val, const CU_STR& dir)
 	StoreRender(val, dir);
 	StoreInfo(val);
 	StoreEdit(val);
+}
+
+void SpriteIO::Load(const bsn::NodeSprBase& node_spr, const s2::SprPtr& spr)
+{
+	Load(node_spr);
+
+	LoadGeometry(spr);
+	LoadRender(spr);
+	LoadInfo(spr);
+	LoadEdit(spr);
+}
+
+void SpriteIO::Load(const bsn::NodeSprBase& node_spr)
+{
+	uint32_t type = node_spr.GetType();
+	const uint32_t* data = node_spr.GetData();
+	
+	int idx = 0;
+	if (type & bsn::NodeSprBase::POSITION_MASK) {
+		m_position.x = bs::int2float(data[idx++], bsn::NodeSprBase::HIGH_FIXED_TRANS_PRECISION);
+		m_position.y = bs::int2float(data[idx++], bsn::NodeSprBase::HIGH_FIXED_TRANS_PRECISION);
+	}
+
+	// todo
 }
 
 /************************************************************************/
