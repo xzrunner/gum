@@ -17,12 +17,15 @@ public:
 
 	static CU_STR Format(const CU_STR& path);
 
-	//////////////////////////////////////////////////////////////////////////
+	template<typename T>
+	static T Extension(const T& path);
 
 	static bool Exists(const CU_STR& path);
 
 }; // FilepathHelper
 
 }
+
+#include "gum/FilepathHelper.inl"
 
 #endif // _GUM_FILEPATH_HELPER_H_

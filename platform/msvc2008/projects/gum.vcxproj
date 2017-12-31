@@ -282,6 +282,9 @@
     <ClInclude Include="..\..\..\include\gum\TrailSymLoader.h" />
     <ClInclude Include="..\..\..\include\gum\trans_color.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\gum\FilepathHelper.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

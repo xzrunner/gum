@@ -694,4 +694,9 @@
       <Filter>tasks</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\gum\FilepathHelper.inl">
+      <Filter>utility</Filter>
+    </None>
+  </ItemGroup>
 </Project>
