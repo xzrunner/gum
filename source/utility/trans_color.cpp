@@ -34,7 +34,7 @@ char* itoa(int i, char *a, int r)
 s2::Color str2color(const CU_STR& str, sns::PIXEL_TYPE type)
 {
 	s2::Color ret;
-	ret.FromRGBA(sns::ColorParser::StringToRGBA(str.c_str(), type));
+	ret.FromRGBA(sns::ColorParser::StringToRGBA(str.c_str(), str.size(), type));
 	return ret;
 }
 
