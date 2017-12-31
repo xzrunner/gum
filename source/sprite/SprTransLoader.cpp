@@ -1,6 +1,6 @@
 #include "gum/SprTransLoader.h"
 
-#include <bsn/ColorParser.h>
+#include <sns/ColorParser.h>
 #include <sprite2/Sprite.h>
 #include <sprite2/RenderColor.h>
 #include <sprite2/RenderShader.h>
@@ -45,19 +45,19 @@ void SprTransLoader::Load(const s2::SprPtr& spr, const simp::NodeTrans* trans)
 
 	s2::RenderColor rc;
 	if (trans->type & simp::NodeTrans::COL_MUL_MASK) {
-		rc.SetMulABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
+		rc.SetMulABGR(sns::ColorParser::Trans(trans->data[idx++], sns::RGBA, sns::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_ADD_MASK) {
-		rc.SetAddABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
+		rc.SetAddABGR(sns::ColorParser::Trans(trans->data[idx++], sns::RGBA, sns::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_R_MASK) {
-		rc.SetRMapABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
+		rc.SetRMapABGR(sns::ColorParser::Trans(trans->data[idx++], sns::RGBA, sns::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_G_MASK) {
-		rc.SetGMapABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
+		rc.SetGMapABGR(sns::ColorParser::Trans(trans->data[idx++], sns::RGBA, sns::ABGR));
 	}
 	if (trans->type & simp::NodeTrans::COL_B_MASK) {
-		rc.SetBMapABGR(bsn::ColorParser::Trans(trans->data[idx++], bsn::RGBA, bsn::ABGR));
+		rc.SetBMapABGR(sns::ColorParser::Trans(trans->data[idx++], sns::RGBA, sns::ABGR));
 	}
 	spr->SetColor(rc);
 

@@ -31,10 +31,10 @@ char* itoa(int i, char *a, int r)
 
 //#endif // __APPLE__
 
-s2::Color str2color(const CU_STR& str, bsn::PIXEL_TYPE type)
+s2::Color str2color(const CU_STR& str, sns::PIXEL_TYPE type)
 {
 	s2::Color ret;
-	ret.FromRGBA(bsn::ColorParser::StringToRGBA(str.c_str(), type));
+	ret.FromRGBA(sns::ColorParser::StringToRGBA(str.c_str(), type));
 	return ret;
 }
 
@@ -67,25 +67,25 @@ CU_STR channel2char(int col)
 	return ret;
 }
 
-CU_STR color2str(const s2::Color& col, bsn::PIXEL_TYPE type)
+CU_STR color2str(const s2::Color& col, sns::PIXEL_TYPE type)
 {
 	CU_STR ret = "0x";
-	if (type == bsn::RGBA) {
+	if (type == sns::RGBA) {
 		ret += channel2char(col.r);
 		ret += channel2char(col.g);
 		ret += channel2char(col.b);
 		ret += channel2char(col.a);
-	} else if (type == bsn::ARGB) {
+	} else if (type == sns::ARGB) {
 		ret += channel2char(col.a);
 		ret += channel2char(col.r);
 		ret += channel2char(col.g);
 		ret += channel2char(col.b);
-	} else if (type == bsn::ABGR) {
+	} else if (type == sns::ABGR) {
 		ret += channel2char(col.a);
 		ret += channel2char(col.b);
 		ret += channel2char(col.g);
 		ret += channel2char(col.r);
-	} else if (type == bsn::BGRA) {
+	} else if (type == sns::BGRA) {
 		ret += channel2char(col.b);
 		ret += channel2char(col.g);
 		ret += channel2char(col.r);
@@ -94,21 +94,21 @@ CU_STR color2str(const s2::Color& col, bsn::PIXEL_TYPE type)
 	return ret;
 }
 
-s2::Color int2color(uint32_t i, bsn::PIXEL_TYPE type)
+s2::Color int2color(uint32_t i, sns::PIXEL_TYPE type)
 {
 	s2::Color col;
-	col.FromRGBA(bsn::ColorParser::Trans(i, type, bsn::RGBA));
+	col.FromRGBA(sns::ColorParser::Trans(i, type, sns::RGBA));
 	return col;
 }
 
-uint32_t color2int(const s2::Color& col, bsn::PIXEL_TYPE type)
+uint32_t color2int(const s2::Color& col, sns::PIXEL_TYPE type)
 {
-	return bsn::ColorParser::Trans(col.ToRGBA(), bsn::RGBA, type);
+	return sns::ColorParser::Trans(col.ToRGBA(), sns::RGBA, type);
 }
 
-uint32_t color2int(const uint8_t rgba[4], bsn::PIXEL_TYPE type)
+uint32_t color2int(const uint8_t rgba[4], sns::PIXEL_TYPE type)
 {
-	return bsn::ColorParser::Trans(s2::Color(rgba[0], rgba[1], rgba[2], rgba[3]).ToRGBA(), bsn::RGBA, type);
+	return sns::ColorParser::Trans(s2::Color(rgba[0], rgba[1], rgba[2], rgba[3]).ToRGBA(), sns::RGBA, type);
 }
 
 }
