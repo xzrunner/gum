@@ -3,8 +3,10 @@
 
 #include "gum/Model3.h"
 #include "gum/Image.h"
+#include "gum/ImagePool.h"
 
-//#include <model3/ResourceAPI.h>
+#include <sprite2/StatImages.h>
+#include <model3/ResourceAPI.h>
 
 namespace gum
 {
@@ -12,17 +14,18 @@ namespace gum
 CU_SINGLETON_DEFINITION(Model3);
 
 static void* 
-create_img(const CU_STR& filepath)
+create_img(const std::string& filepath)
 {
-//	return ImageMgr::Instance()->Create(filepath);
-	return nullptr;
+	auto img = ImagePool::Instance()->Create(
+		s2::StatImages::UNKNOWN_IMG_ID, bimp::FilePath(filepath.c_str()));
+	return img.get();
 }
 
 static void 
 release_img(void* img)
 {
-	Image* gum_img = static_cast<Image*>(img);
-	gum_img->RemoveReference();
+	ImagePool::Instance()->Delete(
+		static_cast<Image*>(img)->GetResPath());
 }
 
 static int 
