@@ -13,17 +13,28 @@ namespace gum
 
 CU_SINGLETON_DEFINITION(Model3);
 
+static std::map<std::string, std::shared_ptr<Image>> CACHE;
+
 static void* 
 create_img(const std::string& filepath)
 {
-	auto img = ImagePool::Instance()->Create(
-		s2::StatImages::UNKNOWN_IMG_ID, bimp::FilePath(filepath.c_str()));
-	return img.get();
+	auto itr = CACHE.find(filepath);
+	if (itr != CACHE.end()) {
+		return itr->second.get();
+	} else {
+		auto img = ImagePool::Instance()->Create(
+			s2::StatImages::UNKNOWN_IMG_ID, bimp::FilePath(filepath.c_str()));
+		CACHE.insert(std::make_pair(filepath, img));
+		return img.get();
+	}
 }
 
 static void 
 release_img(void* img)
 {
+	auto& filepath = static_cast<Image*>(img)->GetResPath().GetFilepath();
+	CACHE.erase(filepath.c_str());
+
 	ImagePool::Instance()->Delete(
 		static_cast<Image*>(img)->GetResPath());
 }
