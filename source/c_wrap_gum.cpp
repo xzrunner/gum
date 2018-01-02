@@ -77,6 +77,10 @@
 #include <c_wrap_cooking.h>
 #include <multitask/TaskStat.h>
 #include <fs_file.h>
+#ifndef S2_DISABLE_MODEL
+#include <model3/Model.h>
+#include <model3/ObjectModel.h>
+#endif // S2_DISABLE_MODEL
 
 #include <queue>
 
@@ -590,8 +594,14 @@ void* gum_create_sym_model(const void* model)
 {
 #ifndef S2_DISABLE_MODEL
 	const m3::Model* m3_model = static_cast<const m3::Model*>(model);
-	s2::ModelSymbol* sym = new s2::ModelSymbol();
-	sym->SetModel(const_cast<m3::Model*>(m3_model));
+	auto obj_model = std::make_shared<m3::ObjectModel>();
+	// fix me
+	obj_model->SetModel(std::unique_ptr<m3::Model>(
+		const_cast<m3::Model*>(m3_model)));
+
+	auto sym = new s2::ModelSymbol;
+	sym->SetModel(obj_model);
+
 	return sym;	
 #else
 	return nullptr;
