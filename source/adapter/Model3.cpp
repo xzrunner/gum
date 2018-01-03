@@ -6,7 +6,7 @@
 #include "gum/ImagePool.h"
 
 #include <sprite2/StatImages.h>
-#include <model3/ResourceAPI.h>
+#include <node3/ResourceAPI.h>
 
 namespace gum
 {
@@ -51,11 +51,11 @@ get_tex_id(const void* img)
 
 Model3::Model3()
 {
-	m3::ResourceAPI::Callback cb;
+	n3::ResourceAPI::Callback cb;
 	cb.create_img  = create_img;
 	cb.release_img = release_img;
 	cb.get_tex_id  = get_tex_id;
-	m3::ResourceAPI::InitCallback(cb);
+	n3::ResourceAPI::InitCallback(cb);
 }
 
 }
