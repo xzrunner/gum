@@ -13,8 +13,6 @@ namespace gum
 class RenderContext
 {
 public:
-	void Init();
-
 	void OnSize(int w, int h);
 
 	int GetWidth() const { return m_width; }

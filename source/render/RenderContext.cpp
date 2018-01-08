@@ -34,7 +34,8 @@ RenderContext::RenderContext()
 	m_rc = new ur::gl::RenderContext(cb, 4096);
 #else
 	m_rc = new ur::gl::RenderContext(cb, 1024);
-#endif // EASY_EDITOR
+#endif // S2_EDITOR
+	m_rc->Init();
 
 	sl::ShaderMgr::Instance()->SetContext(m_rc);
 }
@@ -42,11 +43,6 @@ RenderContext::RenderContext()
 RenderContext::~RenderContext() 
 {
 	delete m_rc;
-}
-
-void RenderContext::Init()
-{
-	// dummy
 }
 
 void RenderContext::OnSize(int w, int h)
