@@ -35,7 +35,6 @@ RenderContext::RenderContext()
 #else
 	m_rc = new ur::gl::RenderContext(cb, 1024);
 #endif // S2_EDITOR
-	m_rc->Init();
 
 	sl::ShaderMgr::Instance()->SetContext(m_rc);
 }
