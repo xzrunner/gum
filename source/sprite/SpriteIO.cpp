@@ -89,7 +89,7 @@ void SpriteIO::Store(Json::Value& val, const CU_STR& dir)
 	StoreEdit(val);
 }
 
-void SpriteIO::Load(const sns::NodeSprBase& node_spr, const s2::SprPtr& spr)
+void SpriteIO::Load(const sns::NodeSprCommon& node_spr, const s2::SprPtr& spr)
 {
 	Load(node_spr);
 
@@ -99,18 +99,52 @@ void SpriteIO::Load(const sns::NodeSprBase& node_spr, const s2::SprPtr& spr)
 	LoadEdit(spr);
 }
 
-void SpriteIO::Load(const sns::NodeSprBase& node_spr)
+void SpriteIO::Load(const sns::NodeSprCommon& node_spr)
 {
+	m_name = node_spr.GetName();
+
 	uint32_t type = node_spr.GetType();
 	const uint32_t* data = node_spr.GetData();
 	
 	int idx = 0;
-	if (type & sns::NodeSprBase::POSITION_MASK) {
-		m_position.x = bs::int2float(data[idx++], sns::NodeSprBase::HIGH_FIXED_TRANS_PRECISION);
-		m_position.y = bs::int2float(data[idx++], sns::NodeSprBase::HIGH_FIXED_TRANS_PRECISION);
+	if (type & sns::NodeSprCommon::SCALE_MASK) {
+		m_scale.x = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
+		m_scale.y = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
+	} else if (type & sns::NodeSprCommon::SHEAR_MASK) {
+		m_shear.x = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
+		m_shear.y = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
+	} else if (type & sns::NodeSprCommon::OFFSET_MASK) {
+		m_offset.x = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
+		m_offset.y = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
+	} else if (type & sns::NodeSprCommon::POSITION_MASK) {
+		m_position.x = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
+		m_position.y = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
+	} else if (type & sns::NodeSprCommon::POSITION_MASK) {
+		m_position.x = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
+		m_position.y = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
+	} else if (type & sns::NodeSprCommon::ANGLE_MASK) {
+		m_angle = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
+	} else if (type & sns::NodeSprCommon::COL_MUL_MASK) {
+		s2::Color col;
+		col.FromRGBA(data[idx++]);
+		m_col.SetMul(col);
+	} else if (type & sns::NodeSprCommon::COL_ADD_MASK) {
+		s2::Color col;
+		col.FromRGBA(data[idx++]);
+		m_col.SetAdd(col);
+	} else if (type & sns::NodeSprCommon::COL_R_MASK) {
+		s2::Color col;
+		col.FromRGBA(data[idx++]);
+		m_col.SetRMap(col);
+	} else if (type & sns::NodeSprCommon::COL_G_MASK) {
+		s2::Color col;
+		col.FromRGBA(data[idx++]);
+		m_col.SetGMap(col);
+	} else if (type & sns::NodeSprCommon::COL_B_MASK) {
+		s2::Color col;
+		col.FromRGBA(data[idx++]);
+		m_col.SetBMap(col);
 	}
-
-	// todo
 }
 
 /************************************************************************/

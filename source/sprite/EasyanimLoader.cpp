@@ -10,6 +10,7 @@
 #include <sprite2/LerpEase.h>
 #include <sprite2/AnimLerp.h>
 #include <bs/FixedPointNum.h>
+#include <sns/NodeSpr.h>
 
 #include <assert.h>
 
@@ -49,6 +50,27 @@ void EasyAnimLoader::LoadBin(const simp::NodeAnimation* node)
 			dst_frame->index = src_frame->index;
 			dst_frame->tween = bs::int2bool(src_frame->tween);
 			LoadActors(src_frame, *dst_frame);
+			LoadLerps(src_frame, *dst_frame);
+			dst_layer->frames.push_back(std::move(dst_frame));
+		}
+		m_sym.AddLayer(dst_layer);
+	}
+}
+
+void EasyAnimLoader::LoadSns(const sns::AnimSym* sym, const CU_STR& dir)
+{
+	for (int layer = 0; layer < sym->m_layers_n; ++layer)
+	{
+		auto& src_layer = sym->m_layers[layer];
+		auto dst_layer = CU_MAKE_UNIQUE<s2::AnimSymbol::Layer>();
+		dst_layer->frames.reserve(src_layer.frames_n);
+		for (int frame = 0; frame < src_layer.frames_n; ++frame)
+		{
+			auto& src_frame = src_layer.frames[frame];
+			auto dst_frame = CU_MAKE_UNIQUE<s2::AnimSymbol::Frame>();
+			dst_frame->index = src_frame.index;
+			dst_frame->tween = bs::int2bool(src_frame.tween);
+			LoadActors(src_frame, *dst_frame, dir);
 			LoadLerps(src_frame, *dst_frame);
 			dst_layer->frames.push_back(std::move(dst_frame));
 		}
@@ -150,6 +172,72 @@ void EasyAnimLoader::LoadLerps(const simp::NodeAnimation::Frame* src, s2::AnimSy
 	for (int i = 0; i < src->lerps_n; ++i)
 	{
 		const simp::NodeAnimation::Lerp* s = src->lerps[i];
+		std::unique_ptr<s2::ILerp> lerp = nullptr;
+		switch (s->type)
+		{
+		case s2::LERP_CIRCLE:
+			{
+				assert(s->data_n == 1);
+				float scale = 0;
+				memcpy(&scale, &s->data[0], sizeof(float));
+				lerp = std::make_unique<s2::LerpCircle>(scale);
+				break;
+			}
+		case s2::LERP_SPIRAL:
+			{
+				assert(s->data_n == 3);
+				float begin = 0, end = 0;
+				float scale = 0;
+				memcpy(&begin, &s->data[0], sizeof(float));
+				memcpy(&end, &s->data[1], sizeof(float));
+				memcpy(&scale, &s->data[2], sizeof(float));
+				lerp = std::make_unique<s2::LerpSpiral>(begin, end, scale);
+				break;
+			}
+		case s2::LERP_WIGGLE:
+			{
+				assert(s->data_n == 2);
+				float freq = 0, amp = 0;
+				memcpy(&freq, &s->data[0], sizeof(float));
+				memcpy(&amp, &s->data[1], sizeof(float));
+				lerp = std::make_unique<s2::LerpWiggle>(freq, amp);
+				break;
+			}
+		case s2::LERP_EASE:
+			{
+				assert(s->data_n == 1);
+				lerp = std::make_unique<s2::LerpEase>(s->data[0]);
+				break;
+			}
+		}
+		if (lerp) {
+			s2::AnimLerp::SprData key = static_cast<s2::AnimLerp::SprData>(s->spr_data);
+			dst.lerps.push_back(std::make_pair(key, std::move(lerp)));
+		}
+	}
+}
+
+void EasyAnimLoader::LoadActors(const sns::AnimSym::Frame& src, s2::AnimSymbol::Frame& dst, const CU_STR& dir)
+{
+	dst.sprs.reserve(src.actors_n);
+	for (int i = 0; i < src.actors_n; ++i)
+	{
+		auto src_actor = src.actors[i];
+		CU_STR filepath = dir + "\\" + src_actor->GetCommon().GetFilepath();
+		auto spr = SpriteFactory::Instance()->Create(filepath);
+		if (spr) {
+			SprTransLoader::Load(spr, src_actor->GetCommon());
+			dst.sprs.push_back(spr);
+		}
+	}
+}
+
+void EasyAnimLoader::LoadLerps(const sns::AnimSym::Frame& src, s2::AnimSymbol::Frame& dst)
+{
+	dst.lerps.reserve(src.lerps_n);
+	for (int i = 0; i < src.lerps_n; ++i)
+	{
+		auto s = src.lerps[i];
 		std::unique_ptr<s2::ILerp> lerp = nullptr;
 		switch (s->type)
 		{

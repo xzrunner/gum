@@ -24,6 +24,7 @@ public:
 
 	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeAnimation* node);
+	void LoadSns(const CU_STR& filepath);
 
 private:
 	s2::AnimSymbol& m_sym;

@@ -10,7 +10,7 @@
 #include <sprite2/typedef.h>
 #include <sprite2/config.h>
 #include <cu/cu_stl.h>
-#include <sns/NodeSprBase.h>
+#include <sns/NodeSprCommon.h>
 
 #include <json/json.h>
 
@@ -30,8 +30,8 @@ public:
 	void Load(const Json::Value& val, const CU_STR& dir);
 	void Store(Json::Value& val, const CU_STR& dir);
 
-	void Load(const sns::NodeSprBase& node_spr, const s2::SprPtr& spr);
-	void Load(const sns::NodeSprBase& node_spr);
+	void Load(const sns::NodeSprCommon& node_spr, const s2::SprPtr& spr);
+	void Load(const sns::NodeSprCommon& node_spr);
 
 protected:
 	// geometry
@@ -95,7 +95,7 @@ public:
 	s2::CameraMode		m_camera;
 	
 	// info
-	CU_STR			m_name;
+	CU_STR			    m_name;
 	bool                m_need_actor;
 	bool                m_integrate;
 
