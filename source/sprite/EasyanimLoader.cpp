@@ -223,8 +223,7 @@ void EasyAnimLoader::LoadActors(const sns::AnimSym::Frame& src, s2::AnimSymbol::
 	for (int i = 0; i < src.actors_n; ++i)
 	{
 		auto src_actor = src.actors[i];
-		CU_STR filepath = dir + "\\" + src_actor->GetCommon().GetFilepath();
-		auto spr = SpriteFactory::Instance()->Create(filepath);
+		auto spr = SpriteFactory::Instance()->Create(src_actor->GetCommon().GetFilepath());
 		if (spr) {
 			SprTransLoader::Load(spr, src_actor->GetCommon());
 			dst.sprs.push_back(spr);

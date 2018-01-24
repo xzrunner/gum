@@ -12,6 +12,7 @@
 
 namespace s2 { class Scale9Symbol; class Sprite; }
 namespace simp { class NodeScale9; }
+namespace sns { class NodeSprCommon; }
 
 namespace gum
 {
@@ -26,9 +27,11 @@ public:
 
 	void LoadJson(const CU_STR& filepath);
 	void LoadBin(const simp::NodeScale9* node);
+	void LoadSns(const CU_STR& filepath);
 
 private:
 	std::shared_ptr<s2::Sprite> LoadSprite(uint32_t sym_id, uint16_t dir, uint16_t mirror);
+	std::shared_ptr<s2::Sprite> LoadSprite(const sns::NodeSprCommon& spr_common);
 
 private:
 	s2::Scale9Symbol& m_sym;

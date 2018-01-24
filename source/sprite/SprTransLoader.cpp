@@ -123,7 +123,7 @@ void SprTransLoader::Load(const s2::SprPtr& spr, const sns::NodeSprCommon& commo
 		spr->SetPosition(sm::vec2(x, y));
 	}
 	if (type & sns::NodeSprCommon::ANGLE_MASK) {
-		float angle = ToFloat(data[idx++]);
+		float angle = ToFloat(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
 		spr->SetAngle(angle);
 	} 
 

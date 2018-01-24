@@ -107,40 +107,48 @@ void SpriteIO::Load(const sns::NodeSprCommon& node_spr)
 	const uint32_t* data = node_spr.GetData();
 	
 	int idx = 0;
+
 	if (type & sns::NodeSprCommon::SCALE_MASK) {
 		m_scale.x = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
 		m_scale.y = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
-	} else if (type & sns::NodeSprCommon::SHEAR_MASK) {
+	}
+	if (type & sns::NodeSprCommon::SHEAR_MASK) {
 		m_shear.x = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
 		m_shear.y = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
-	} else if (type & sns::NodeSprCommon::OFFSET_MASK) {
+	}
+	if (type & sns::NodeSprCommon::OFFSET_MASK) {
 		m_offset.x = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
 		m_offset.y = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
-	} else if (type & sns::NodeSprCommon::POSITION_MASK) {
+	} 
+	if (type & sns::NodeSprCommon::POSITION_MASK) {
 		m_position.x = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
 		m_position.y = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
-	} else if (type & sns::NodeSprCommon::POSITION_MASK) {
-		m_position.x = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
-		m_position.y = bs::int2float(data[idx++], sns::NodeSprCommon::LOW_FIXED_TRANS_PRECISION);
-	} else if (type & sns::NodeSprCommon::ANGLE_MASK) {
+	} 
+	if (type & sns::NodeSprCommon::ANGLE_MASK) {
 		m_angle = bs::int2float(data[idx++], sns::NodeSprCommon::HIGH_FIXED_TRANS_PRECISION);
-	} else if (type & sns::NodeSprCommon::COL_MUL_MASK) {
+	} 
+
+	if (type & sns::NodeSprCommon::COL_MUL_MASK) {
 		s2::Color col;
 		col.FromRGBA(data[idx++]);
 		m_col.SetMul(col);
-	} else if (type & sns::NodeSprCommon::COL_ADD_MASK) {
+	} 
+	if (type & sns::NodeSprCommon::COL_ADD_MASK) {
 		s2::Color col;
 		col.FromRGBA(data[idx++]);
 		m_col.SetAdd(col);
-	} else if (type & sns::NodeSprCommon::COL_R_MASK) {
+	} 
+	if (type & sns::NodeSprCommon::COL_R_MASK) {
 		s2::Color col;
 		col.FromRGBA(data[idx++]);
 		m_col.SetRMap(col);
-	} else if (type & sns::NodeSprCommon::COL_G_MASK) {
+	} 
+	if (type & sns::NodeSprCommon::COL_G_MASK) {
 		s2::Color col;
 		col.FromRGBA(data[idx++]);
 		m_col.SetGMap(col);
-	} else if (type & sns::NodeSprCommon::COL_B_MASK) {
+	} 
+	if (type & sns::NodeSprCommon::COL_B_MASK) {
 		s2::Color col;
 		col.FromRGBA(data[idx++]);
 		m_col.SetBMap(col);
