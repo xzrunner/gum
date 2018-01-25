@@ -4,6 +4,7 @@
 #include <sprite2/UpdateParams.h>
 #include <simp/NodeAnimationSpr.h>
 #include <bs/FixedPointNum.h>
+#include <sns/AnimSpr.h>
 
 namespace gum
 {
@@ -41,6 +42,18 @@ void AnimSprLoader::LoadBin(const simp::NodeAnimationSpr* node)
 	m_spr.SetStartRandom(s2::UpdateParams(), bs::int2bool(node->start_random));
 
 	m_spr.SetFPS(node->fps);
+}
+
+void AnimSprLoader::LoadSns(const sns::NodeSpr* spr)
+{
+	auto anim_spr = dynamic_cast<const sns::AnimSpr*>(spr);
+
+	m_spr.SetLoop(anim_spr->IsLoop());
+	m_spr.SetInterval(anim_spr->GetInterval());
+
+	m_spr.SetFPS(anim_spr->GetFPS());
+
+	m_spr.SetStartRandom(s2::UpdateParams(), anim_spr->IsStartRandom());
 }
 
 }
