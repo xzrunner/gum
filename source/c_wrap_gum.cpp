@@ -79,7 +79,6 @@
 #include <fs_file.h>
 #ifndef S2_DISABLE_MODEL
 #include <node3/Model.h>
-#include <node3/ObjectModel.h>
 #endif // S2_DISABLE_MODEL
 
 #include <queue>
@@ -593,16 +592,18 @@ extern "C"
 void* gum_create_sym_model(const void* model)
 {
 #ifndef S2_DISABLE_MODEL
-	const n3::Model* m3_model = static_cast<const n3::Model*>(model);
-	auto obj_model = std::make_shared<n3::ObjectModel>();
-	// fix me
-	obj_model->SetModel(std::unique_ptr<n3::Model>(
-		const_cast<n3::Model*>(m3_model)));
+	//const n3::Model* m3_model = static_cast<const n3::Model*>(model);
+	//auto obj_model = std::make_shared<n3::ObjectModel>();
+	//// fix me
+	//obj_model->SetModel(std::unique_ptr<n3::Model>(
+	//	const_cast<n3::Model*>(m3_model)));
 
-	auto sym = new s2::ModelSymbol;
-	sym->SetModel(obj_model);
+	//auto sym = new s2::ModelSymbol;
+	//sym->SetModel(obj_model);
 
-	return sym;	
+	//return sym;	
+
+	return nullptr;
 #else
 	return nullptr;
 #endif // S2_DISABLE_MODEL
