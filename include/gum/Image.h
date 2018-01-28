@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-namespace s2 { class Texture; }
+namespace pt2 { class Texture; }
 
 namespace gum
 {
@@ -32,7 +32,7 @@ public:
 
 	uint32_t GetTexID() const { return m_id; }
 
-	const std::shared_ptr<s2::Texture>& GetS2Tex() const { return m_s2_tex; }
+	const std::shared_ptr<pt2::Texture>& GetS2Tex() const { return m_s2_tex; }
 	
 	bool IsLoadFinished() const;
 	void SetLoadFinished(bool finished);
@@ -54,7 +54,7 @@ protected:
 
 	uint32_t m_id;
 
-	std::shared_ptr<s2::Texture> m_s2_tex;
+	std::shared_ptr<pt2::Texture> m_s2_tex;
 
 }; // Image
 

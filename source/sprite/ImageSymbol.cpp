@@ -9,7 +9,7 @@
 #include "gum/DTexC2Strategy.h"
 #endif // S2_MULTITHREAD
 
-#include <sprite2/Texture.h>
+#include <painting2/Texture.h>
 #include <sprite2/RenderParams.h>
 #ifndef S2_MULTITHREAD
 #include <shaderlab/ShaderMgr.h>

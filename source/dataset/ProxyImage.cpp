@@ -1,7 +1,7 @@
 #include "gum/ProxyImage.h"
 #include "gum/StringHelper.h"
 
-#include <sprite2/Texture.h>
+#include <painting2/Texture.h>
 
 namespace gum
 {

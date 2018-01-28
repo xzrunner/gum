@@ -2,7 +2,7 @@
 #include "gum/ImageLoader.h"
 #include "gum/RenderContext.h"
 
-#include <sprite2/Texture.h>
+#include <painting2/Texture.h>
 #include <sprite2/StatImages.h>
 #include <unirender/RenderContext.h>
 
@@ -19,7 +19,7 @@ Image::Image()
 	, m_height(0)
 	, m_format(-1)
 	, m_id(0)
-	, m_s2_tex(std::make_shared<s2::Texture>(0, 0, 0))
+	, m_s2_tex(std::make_shared<pt2::Texture>(0, 0, 0))
 {
 	++ALL_IMG_COUNT;
 }
@@ -31,7 +31,7 @@ Image::Image(int pkg_id, const bimp::FilePath& res_path, bool async)
 	, m_height(0)
 	, m_format(-1)
 	, m_id(0)
-	, m_s2_tex(std::make_shared<s2::Texture>(0, 0, 0))
+	, m_s2_tex(std::make_shared<pt2::Texture>(0, 0, 0))
 {
 	++ALL_IMG_COUNT;
 
