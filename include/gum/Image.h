@@ -10,12 +10,12 @@
 #include <stdint.h>
 
 namespace pt2 { class Texture; }
+namespace s2loader { class ImageLoader; }
 
 namespace gum
 {
 
 class Image;
-class ImageLoader;
 
 class Image : public std::enable_shared_from_this<Image>
 {
@@ -40,7 +40,7 @@ public:
 	const bimp::FilePath& GetResPath() const { return m_res_path; }
 
 //private:
-	void LoadFromLoader(const ImageLoader& loader);
+	void LoadFromLoader(const s2loader::ImageLoader& loader);
 
 	static int GetAllImgCount();
 

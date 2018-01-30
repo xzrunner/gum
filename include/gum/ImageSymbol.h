@@ -1,8 +1,6 @@
 #ifndef _GUM_IMAGE_SYMBOL_H_
 #define _GUM_IMAGE_SYMBOL_H_
 
-#include "gum/gum_config.h"
-
 #include <sprite2/ImageSymbol.h>
 
 namespace simp { class NodePicture; }

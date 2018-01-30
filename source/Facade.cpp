@@ -1,6 +1,5 @@
 #include "gum/Facade.h"
 #include "gum/DTexC2Strategy.h"
-#include "gum/SymbolPool.h"
 #include "gum/GTxt.h"
 #ifndef S2_DISABLE_MODEL
 // todo
@@ -8,6 +7,7 @@
 #endif // S2_DISABLE_MODEL
 #include "gum/ThreadPool.h"
 #include "gum/Audio.h"
+#include "gum/SymbolPool.h"
 
 namespace gum
 {

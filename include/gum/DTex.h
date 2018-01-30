@@ -1,11 +1,10 @@
 #ifndef _GUM_DTEX_H_
 #define _GUM_DTEX_H_
 
-#include "gum/ResourceUID.h"
-
 #include <SM_Rect.h>
 #include <cu/cu_macro.h>
 #include <dtex2/CacheGlyph.h>
+#include <s2loader/ResourceUID.h>
 
 #include <stdint.h>
 
@@ -26,10 +25,10 @@ public:
 	void SetC2Enable(bool enable) { m_c2_enable = enable; }
 	bool IsC2Enable() const { return m_c2_enable; }
 	void LoadSymStart();
-	void LoadSymbol(UID sym_id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region,
+	void LoadSymbol(s2loader::UID sym_id, int tex_id, int tex_w, int tex_h, const sm::i16_rect& region,
 		int padding = 0, int extrude = 0, int src_extrude = 0);
 	void LoadSymFinish();
-	const float* QuerySymbol(UID sym_id, int& tex_id, int& block_id) const;
+	const float* QuerySymbol(s2loader::UID sym_id, int& tex_id, int& block_id) const;
 	void ClearSymbolCache();
 
 	// CG

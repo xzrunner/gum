@@ -2,10 +2,6 @@
 
 #include "c_wrap_gum.h"
 
-#include "gum/SpriteFactory.h"
-#include "gum/SymbolPool.h"
-#include "gum/Image.h"
-#include "gum/ImagePool.h"
 #include "gum/GTxt.h"
 #include "gum/DTex.h"
 #include "gum/Sprite2.h"
@@ -15,25 +11,25 @@
 #include "gum/RenderTarget.h"
 #include "gum/DTexC2Strategy.h"
 #include "gum/Facade.h"
-#include "gum/ActorPool.h"
-#include "gum/SpritePool.h"
 #include "gum/StringHelper.h"
 #include "gum/Statistics.h"
 #include "gum/StatFPS.h"
 #include "gum/StatTag.h"
 #include "gum/StatScreen.h"
 #include "gum/StatTasks.h"
-#include "gum/PkgFileParser.h"
 #ifndef S2_DISABLE_MODEL
 #include "gum/Model3.h"
 #endif // S2_DISABLE_MODEL
 #include "gum/Audio.h"
-#include "gum/LoadImageTask.h"
 #include "gum/Audio.h"
 #include "gum/Cooking.h"
 #include "gum/ShaderLab.h"
-#include "gum/TextTableLoader.h"
 #include "gum/Config.h"
+#include "gum/Image.h"
+#include "gum/SymbolPool.h"
+#include "gum/ImagePool.h"
+#include "gum/ActorPool.h"
+#include "gum/SpritePool.h"
 
 #include <unirender/RenderContext.h>
 #include <uniaudio/AudioContext.h>
@@ -80,6 +76,10 @@
 #ifndef S2_DISABLE_MODEL
 #include <node3/Model.h>
 #endif // S2_DISABLE_MODEL
+#include <s2loader/LoadImageTask.h>
+#include <s2loader/SpriteFactory.h>
+#include <s2loader/PkgFileParser.h>
+#include <s2loader/TextTableLoader.h>
 
 #include <queue>
 
@@ -191,7 +191,7 @@ void gum_flush()
 {
 	dtex::Facade::Flush();
 	DTex::Instance()->Flush();
-	LoadImageTaskMgr::Instance()->Flush();
+	s2loader::LoadImageTaskMgr::Instance()->Flush();
 	Sprite2::Instance()->Flush();
 }
 
@@ -328,7 +328,7 @@ extern "C"
 bool gum_is_async_task_empty()
 {
 	return dtex::LoadResTaskMgr::Instance()->IsEmpty()
-		&& LoadImageTaskMgr::Instance()->IsEmpty();
+		&& s2loader::LoadImageTaskMgr::Instance()->IsEmpty();
 }
 
 extern "C"
@@ -405,13 +405,13 @@ void gum_audio_set_path(const char* name, const char* filepath)
 //extern "C"
 //void gum_load_languages(const char* index_path, const char* data_path)
 //{
-//	TextTableLoader::LoadFromDB(index_path, data_path);
+//	s2loader::LoadImageTaskMgr::LoadFromDB(index_path, data_path);
 //}
 
 extern "C"
 void gum_load_languages(const char* filepath)
 {
-	TextTableLoader::LoadFromBin(filepath);
+	s2loader::TextTableLoader::LoadFromBin(filepath);
 }
 
 extern "C"
@@ -465,14 +465,14 @@ bool gum_create_pkg2(const char* name, int id, const char* pkg_path)
 		fault("Can't open pkg file: %s\n", gbk_pkg_path.c_str());
 	}
 
-	int epe_off = PkgFileParser::GetEpeIdxOffset(file);		
+	int epe_off = s2loader::PkgFileParser::GetEpeIdxOffset(file);		
 	simp::PackagePtr s_pkg(CU_MAKE_UNIQUE<simp::Package>(file, epe_off, id));
  	bool success = simp::NodeFactory::Instance()->AddPkg(s_pkg, gbk_name, id);
  	if (!success) {
  		return success;
  	}
 
-	int ept_off = PkgFileParser::GetEptIdxOffset(file);	
+	int ept_off = s2loader::PkgFileParser::GetEptIdxOffset(file);	
 	timp::PackagePtr t_pkg(CU_MAKE_UNIQUE<timp::Package>(file, ept_off));
 	success = timp::PkgMgr::Instance()->Add(t_pkg, id);
 	assert(success);
@@ -480,7 +480,7 @@ bool gum_create_pkg2(const char* name, int id, const char* pkg_path)
 	DTex::Instance()->CreatePkg(id);
 
 	// set epe path
-	PkgFileParser::SetEPPath(file, gbk_pkg_path, id);
+	s2loader::PkgFileParser::SetEPPath(file, gbk_pkg_path, id);
 
 	fs_close(file);
 
@@ -639,7 +639,7 @@ void* gum_create_actor_by_id(int id)
 	s2::ActorProxy* ret = nullptr;
 
 	try {
-		auto spr = SpriteFactory::Instance()->CreateFromSym(id, true);
+		auto spr = s2loader::SpriteFactory::Instance()->CreateFromSym(id, true);
 		auto actor = s2::ActorFactory::Create(nullptr, spr);
 		s2::ActorProxyPool::Instance()->Create(actor, ret);
 	} catch (std::exception& e) {
@@ -653,7 +653,7 @@ extern "C"
 void* gum_create_actor_from_file(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
-	auto spr = SpriteFactory::Instance()->Create(gbk_filepath);
+	auto spr = s2loader::SpriteFactory::Instance()->Create(gbk_filepath);
 
 	auto actor = s2::ActorFactory::Create(nullptr, spr);
 
@@ -671,7 +671,7 @@ void* gum_fetch_actor_cached(const char* pkg, const char* spr, bool* is_new)
 	if (id == 0xffffffff) {
 		return nullptr;
 	} else {
-		auto actor = gum::ActorPool::Instance()->Fetch(id, *is_new);
+		auto actor = ActorPool::Instance()->Fetch(id, *is_new);
 		s2::ActorProxy* proxy;
 		s2::ActorProxyPool::Instance()->Create(actor, proxy);
 		return proxy;
