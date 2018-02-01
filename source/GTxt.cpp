@@ -16,7 +16,6 @@
 #include <simp/NodeFactory.h>
 
 #include <sprite2/RVG.h>
-#include <sprite2/RenderColor.h>
 #include <sprite2/Symbol.h>
 #include <sprite2/RenderParams.h>
 #include <sprite2/Symbol.h>
@@ -82,14 +81,14 @@ render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, floa
 	*ptr_dst++ = vx;
 	*ptr_dst++ = vy;
 
-	s2::RenderColor col;
+	pt2::RenderColorCommon col_common;
 	if (rp->mul) {
 		pt2::Color multi_col = *rp->mul;
 		multi_col.a = static_cast<int>(multi_col.a * ds->alpha);
-		col.SetMul(multi_col);
+		col_common.mul = multi_col;
 	}
 	if (rp->add) {
-		col.SetAdd(*rp->add);
+		col_common.add = *rp->add;
 	}
 
 	cooking::DisplayList* dlist = reinterpret_cast<cooking::DisplayList*>(rp->ud);
@@ -100,20 +99,14 @@ render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, floa
 	{
 	case sl::SPRITE2:
 		{
-			uint32_t col_mul = col.GetMulABGR(), 
-			         col_add = col.GetAddABGR();
-			uint32_t col_rmap = col.GetRMapABGR(),
-		             col_gmap = col.GetGMapABGR(),
-			         col_bmap = col.GetBMapABGR();
-			cooking::set_color_sprite(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap);
+			cooking::set_color_sprite(dlist, col_common.mul.ToABGR(), col_common.add.ToABGR(), 
+				0x000000ff, 0x0000ff00, 0x00ff0000);
 			cooking::draw_quad_sprite(dlist, vertices, texcoords, tex_id);
 		}
 		break;
 	case sl::FILTER:
 		{
-			uint32_t col_mul = col.GetMulABGR(), 
-			         col_add = col.GetAddABGR();
-			cooking::set_color_filter(dlist, col_mul, col_add);
+			cooking::set_color_filter(dlist, col_common.mul.ToABGR(), col_common.add.ToABGR());
 			cooking::draw_quad_filter(dlist, vertices, texcoords, tex_id);
 		}
 		break;
@@ -142,26 +135,26 @@ render_glyph_forward(int id, const float* _texcoords, float x, float y, float w,
 	texcoords[2].Set(_texcoords[4], _texcoords[5]);
 	texcoords[3].Set(_texcoords[6], _texcoords[7]);
 
-	s2::RenderColor color;
+	pt2::RenderColorCommon col_common;
 	if (rp->mul) {
 		pt2::Color multi_col = *rp->mul;
 		multi_col.a = static_cast<int>(multi_col.a * ds->alpha);
-		color.SetMul(multi_col);
+		col_common.mul = multi_col;
 	} 
 	if (rp->add) {
-		color.SetAdd(*rp->add);
+		col_common.add = *rp->add;
 	}
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
 	if (sl_mgr->GetShaderType() == sl::FILTER) {
 		sl::FilterShader* filter = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
-		filter->SetColor(color.GetMulABGR(), color.GetAddABGR());
+		filter->SetColor(col_common.mul.ToABGR(), col_common.add.ToABGR());
 		filter->Draw(&vertices[0].x, &texcoords[0].x, id);
 	} else {
 		sl_mgr->SetShader(sl::SPRITE2);
 	 	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
-	 	sl_shader->SetColor(color.GetMulABGR(), color.GetAddABGR());
-	 	sl_shader->SetColorMap(color.GetRMapABGR(), color.GetGMapABGR(), color.GetBMapABGR());
+	 	sl_shader->SetColor(col_common.mul.ToABGR(), col_common.add.ToABGR());
+	 	sl_shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	 	sl_shader->DrawQuad(&vertices[0].x, &texcoords[0].x, id);
 	}
 }
@@ -364,10 +357,10 @@ ext_sym_render(void* ext_sym, float x, float y, void* ud) {
 		rp.mt = *_rp->mt;
 	}
 	if (_rp->mul) {
-		rp.color.SetMul(*_rp->mul);
+		rp.col_common.mul = *_rp->mul;
 	}
 	if (_rp->add) {
-		rp.color.SetAdd(*_rp->add);
+		rp.col_common.add = *_rp->add;
 	}
 
 	s2::SymPtr sym(*static_cast<s2::SymPtr*>(ext_sym));
@@ -599,10 +592,10 @@ void GTxt::DrawUFChar(int unicode, int font, float x, float y, void* ud) const
 		rp.mt = *_rp->mt;
 	}
 	if (_rp->mul) {
-		rp.color.SetMul(*_rp->mul);
+		rp.col_common.mul = *_rp->mul;
 	}
 	if (_rp->add) {
-		rp.color.SetAdd(*_rp->add);
+		rp.col_common.add = *_rp->add;
 	}
 	s2::DrawNode::Draw(*itr->second, rp, sm::vec2(x, y));
 }
