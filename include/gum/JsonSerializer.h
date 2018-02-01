@@ -3,7 +3,7 @@
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
-#include <sprite2/Color.h>
+#include <painting2/Color.h>
 #include <cu/cu_stl.h>
 
 #include <json/value.h>
@@ -17,14 +17,14 @@ public:
 	static void Store(const CU_VEC<sm::vec2>& points, Json::Value& value);
 	static void Load(const Json::Value& value, CU_VEC<sm::vec2>& points);
 
-	static void Store(const CU_VEC<s2::Color>& colors, Json::Value& value);
-	static void Load(const Json::Value& value, CU_VEC<s2::Color>& colors);
+	static void Store(const CU_VEC<pt2::Color>& colors, Json::Value& value);
+	static void Load(const Json::Value& value, CU_VEC<pt2::Color>& colors);
 
 	static void Store(const sm::rect& r, Json::Value& value);
 	static void Load(const Json::Value& value, sm::rect& r);
 
-	static void Store(const s2::Color& col, Json::Value& value);
-	static void Load(const Json::Value& value, s2::Color& col);
+	static void Store(const pt2::Color& col, Json::Value& value);
+	static void Load(const Json::Value& value, pt2::Color& col);
 
 	static void Store(const uint8_t rgba[4], Json::Value& value);
 	static void Load(const Json::Value& value, uint8_t rgba[4]);

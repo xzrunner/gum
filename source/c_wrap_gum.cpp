@@ -55,7 +55,7 @@
 #include <sprite2/Sprite.h>
 #include <sprite2/Actor.h>
 #include <sprite2/SprVisitorParams.h>
-#include <sprite2/Color.h>
+#include <painting2/Color.h>
 #include <sprite2/ModelSymbol.h>
 #include <sprite2/StatImages.h>
 #include <sprite2/Blackboard.h>
@@ -872,7 +872,7 @@ void gum_gtxt_print(const char* str, float x, float y, int font_size, uint32_t f
 	S2_MAT mt;
 	mt.Translate(x, y);
 	CU_STR std_str = StringHelper::FromChar(str);
-	GTxt::Instance()->Draw(nullptr, s, mt, s2::Color(255, 255, 255, 255), s2::Color(0, 0, 0, 0), std_str.c_str(), 0, false);
+	GTxt::Instance()->Draw(nullptr, s, mt, pt2::Color(255, 255, 255, 255), pt2::Color(0, 0, 0, 0), std_str.c_str(), 0, false);
 }
 
 extern "C"

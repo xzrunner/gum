@@ -50,7 +50,7 @@ void JsonSerializer::Load(const Json::Value& value, CU_VEC<sm::vec2>& points)
 	}
 }
 
-void JsonSerializer::Store(const CU_VEC<s2::Color>& colors, Json::Value& value)
+void JsonSerializer::Store(const CU_VEC<pt2::Color>& colors, Json::Value& value)
 {
 	for (int i = 0, n = colors.size(); i < n; ++i)
 	{
@@ -61,7 +61,7 @@ void JsonSerializer::Store(const CU_VEC<s2::Color>& colors, Json::Value& value)
 	}
 }
 
-void JsonSerializer::Load(const Json::Value& value, CU_VEC<s2::Color>& colors)
+void JsonSerializer::Load(const Json::Value& value, CU_VEC<pt2::Color>& colors)
 {
 	colors.reserve(value["r"].size());
 
@@ -74,7 +74,7 @@ void JsonSerializer::Load(const Json::Value& value, CU_VEC<s2::Color>& colors)
 
 	++i;
 	while (!rval.isNull() && !gval.isNull() && !bval.isNull() && !aval.isNull()) {
-		s2::Color col;
+		pt2::Color col;
 		col.r = static_cast<int>(rval.asDouble() * 255);
 		col.g = static_cast<int>(gval.asDouble() * 255);
 		col.b = static_cast<int>(bval.asDouble() * 255);
@@ -106,7 +106,7 @@ void JsonSerializer::Load(const Json::Value& value, sm::rect& r)
 	r.ymax = static_cast<float>(value["ymax"].asDouble());
 }
 
-void JsonSerializer::Store(const s2::Color& col, Json::Value& value)
+void JsonSerializer::Store(const pt2::Color& col, Json::Value& value)
 {
 	value["r"] = col.r;
 	value["g"] = col.g;
@@ -114,7 +114,7 @@ void JsonSerializer::Store(const s2::Color& col, Json::Value& value)
 	value["a"] = col.a;
 }
 
-void JsonSerializer::Load(const Json::Value& value, s2::Color& col)
+void JsonSerializer::Load(const Json::Value& value, pt2::Color& col)
 {
 	col.r = value["r"].asUInt();
 	col.g = value["g"].asUInt();

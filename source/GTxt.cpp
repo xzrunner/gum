@@ -45,8 +45,8 @@ int GTxt::m_cap_layout = 500;
 struct render_params
 {
 	const S2_MAT* mt = nullptr;
-	const s2::Color* mul = nullptr;
-	const s2::Color* add = nullptr;
+	const pt2::Color* mul = nullptr;
+	const pt2::Color* add = nullptr;
 	void* ud = nullptr;
 };
 
@@ -84,7 +84,7 @@ render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, floa
 
 	s2::RenderColor col;
 	if (rp->mul) {
-		s2::Color multi_col = *rp->mul;
+		pt2::Color multi_col = *rp->mul;
 		multi_col.a = static_cast<int>(multi_col.a * ds->alpha);
 		col.SetMul(multi_col);
 	}
@@ -144,7 +144,7 @@ render_glyph_forward(int id, const float* _texcoords, float x, float y, float w,
 
 	s2::RenderColor color;
 	if (rp->mul) {
-		s2::Color multi_col = *rp->mul;
+		pt2::Color multi_col = *rp->mul;
 		multi_col.a = static_cast<int>(multi_col.a * ds->alpha);
 		color.SetMul(multi_col);
 	} 
@@ -484,8 +484,8 @@ void GTxt::AddColor(const CU_STR& name, unsigned int color)
 	m_colors.insert(name);
 }
 
-void GTxt::Draw(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const s2::Color& mul,
-				const s2::Color& add, const char* text, int time, bool richtext) const
+void GTxt::Draw(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const pt2::Color& mul,
+				const pt2::Color& add, const char* text, int time, bool richtext) const
 {
 	render_params rp;
 	rp.mt = &mt;
