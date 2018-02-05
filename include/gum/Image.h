@@ -9,13 +9,13 @@
 
 #include <stdint.h>
 
-namespace pt2 { class Texture; }
 namespace s2loader { class ImageLoader; }
 
 namespace gum
 {
 
 class Image;
+class Texture;
 
 class Image : public std::enable_shared_from_this<Image>
 {
@@ -26,13 +26,11 @@ public:
 
 	void AsyncLoad(int pkg_id, int format, int width, int height);
 
-	sm::ivec2 GetSize() const {
-		return sm::ivec2(m_width, m_height);
-	}
+	sm::ivec2 GetSize() const;
 
-	uint32_t GetTexID() const { return m_id; }
+	uint32_t GetTexID() const;
 
-	const std::shared_ptr<pt2::Texture>& GetS2Tex() const { return m_s2_tex; }
+	const std::shared_ptr<Texture>& GetTexture() const { return m_texture; }
 	
 	bool IsLoadFinished() const;
 	void SetLoadFinished(bool finished);
@@ -49,12 +47,7 @@ protected:
 
 	bimp::FilePath m_res_path;
 
-	int m_width, m_height;
-	int m_format;
-
-	uint32_t m_id;
-
-	std::shared_ptr<pt2::Texture> m_s2_tex;
+	std::shared_ptr<Texture> m_texture;
 
 }; // Image
 

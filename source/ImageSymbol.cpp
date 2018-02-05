@@ -8,6 +8,7 @@
 #include "gum/DTexC2Strategy.h"
 #endif // S2_MULTITHREAD
 #include "gum/DTex.h"
+#include "gum/Texture.h"
 
 #include <painting2/Texture.h>
 #include <sprite2/RenderParams.h>
@@ -120,7 +121,7 @@ void ImageSymbol::SetImage(const std::shared_ptr<Image>& img)
 	q.xmax = sz.x;
 	q.ymax = sz.y;
 
-	InitTex(m_img->GetS2Tex(), q);	
+	InitTex(m_img->GetTexture(), q);
 }
 
 void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max, 
