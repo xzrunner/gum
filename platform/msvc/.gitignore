@@ -1,0 +1,5 @@
+gum/
+projects/*
+
+!projects/gum.vcxproj
+!projects/gum.vcxproj.filters
