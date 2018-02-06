@@ -151,7 +151,7 @@ lstop(lua_State* L)
 static int
 lset_volume(lua_State* L)
 {
-	float volume = luaL_optnumber(L, 1, 1.0f);
+	float volume = static_cast<float>(luaL_optnumber(L, 1, 1.0f));
 	try {
 		auto ctx = Audio::Instance()->GetContext();
 		if (ctx) {

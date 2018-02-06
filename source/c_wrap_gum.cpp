@@ -642,7 +642,7 @@ void* gum_create_actor_by_id(int id)
 		auto spr = s2loader::SpriteFactory::Instance()->CreateFromSym(id, true);
 		auto actor = s2::ActorFactory::Create(nullptr, spr);
 		s2::ActorProxyPool::Instance()->Create(actor, ret);
-	} catch (std::exception& e) {
+	} catch (std::exception&) {
 		LOGW("create actor fail %d\n", id);
 	}
 
