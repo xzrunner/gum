@@ -64,10 +64,14 @@ void Image::AsyncLoad(int pkg_id, int format, int width, int height)
 	s2::StatImages::Instance()->Add(pkg_id, width, height, format);
 }
 
-sm::ivec2 Image::GetSize() const 
+uint16_t Image::GetWidth() const
 {
-	auto sz = m_texture->GetSize();
-	return sm::ivec2(sz.x, sz.y);
+	return m_texture->GetWidth();
+}
+
+uint16_t Image::GetHeight() const
+{
+	return m_texture->GetHeight();
 }
 
 uint32_t Image::GetTexID() const 

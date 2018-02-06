@@ -26,9 +26,10 @@ public:
 
 	void AsyncLoad(int pkg_id, int format, int width, int height);
 
-	sm::ivec2 GetSize() const;
-
 	uint32_t GetTexID() const;
+
+	uint16_t GetWidth() const;
+	uint16_t GetHeight() const;
 
 	const std::shared_ptr<Texture>& GetTexture() const { return m_texture; }
 	

@@ -99,13 +99,12 @@ void ImageSymbol::OnQueryTexcoordsFail(cooking::DisplayList* dlist) const
 		return;
 	}
 
-	sm::ivec2 sz = m_img->GetSize();
 #ifdef S2_MULTITHREAD
 	cooking::update_dtex_c2(dlist, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
 #else
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();
-	if (gum::DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), sz.x, sz.y, m_region)) {
+	if (gum::DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), m_img->GetWidth(), m_img->GetHeight(), m_region)) {
 		mgr->SetShader(type);
 	}
 #endif // S2_MULTITHREAD
@@ -117,9 +116,8 @@ void ImageSymbol::SetImage(const std::shared_ptr<Image>& img)
 
 	sm::i16_rect q;
 	q.xmin = q.ymin = 0;
-	sm::ivec2 sz = m_img->GetSize();
-	q.xmax = sz.x;
-	q.ymax = sz.y;
+	q.xmax = m_img->GetWidth();
+	q.ymax = m_img->GetHeight();
 
 	InitTex(m_img->GetTexture(), q);
 }
@@ -135,12 +133,13 @@ void ImageSymbol::SetRegion(const sm::ivec2& min, const sm::ivec2& max,
 	}
 
 	float hw, hh;
-	sm::ivec2 sz = m_img->GetSize();
+	auto w = m_img->GetWidth();
+	auto h = m_img->GetHeight();
 	float txmin, tymin, txmax, tymax;
-	txmin = (float)min.x / sz.x;
-	tymin = (float)min.y / sz.y;
-	txmax = (float)max.x / sz.x;
-	tymax = (float)max.y / sz.y;
+	txmin = (float)min.x / w;
+	tymin = (float)min.y / h;
+	txmax = (float)max.x / w;
+	tymax = (float)max.y / h;
 	if (m_rotate) 
 	{
 		hw = (min.y - max.y) * 0.5f;
