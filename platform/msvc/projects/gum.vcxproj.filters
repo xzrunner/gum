@@ -128,6 +128,9 @@
     <ClCompile Include="..\..\..\source\ThreadPool.cpp">
       <Filter>pool</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\ResPool.cpp">
+      <Filter>pool</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\gum\RenderContext.h">
@@ -234,10 +237,16 @@
     <ClInclude Include="..\..\..\include\gum\ThreadPool.h">
       <Filter>pool</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\ResPool.h">
+      <Filter>pool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\gum\FilepathHelper.inl">
       <Filter>utility</Filter>
+    </None>
+    <None Include="..\..\..\include\gum\ResPool.inl">
+      <Filter>pool</Filter>
     </None>
   </ItemGroup>
 </Project>
