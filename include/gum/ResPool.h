@@ -16,7 +16,7 @@ public:
 	~ResPool();
 
 	template <typename T, typename... Arguments>
-	T& Fetch(const std::string& filepath, Arguments... parameters);
+	std::shared_ptr<T> Fetch(const std::string& filepath, Arguments... parameters);
 
 	static ResPool& Instance();
 
