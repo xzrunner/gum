@@ -20,8 +20,10 @@
 #include <sprite2/RenderParams.h>
 #include <sprite2/Symbol.h>
 #include <sprite2/DrawNode.h>
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 #include <s2loader/ResourceUID.h>
 #include <s2loader/GlyphStyle.h>
 
@@ -48,6 +50,8 @@ struct render_params
 	const pt2::Color* add = nullptr;
 	void* ud = nullptr;
 };
+
+#ifndef S2_DISABLE_DEFERRED
 
 static void
 render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp)
@@ -113,6 +117,8 @@ render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, floa
 	}
 }
 
+#endif // S2_DISABLE_DEFERRED
+
 static void
 render_glyph_forward(int id, const float* _texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp)
 {
@@ -162,11 +168,15 @@ render_glyph_forward(int id, const float* _texcoords, float x, float y, float w,
 static void
 render_glyph(int id, const float* texcoords, float x, float y, float w, float h, const gtxt_draw_style* ds, render_params* rp)
 {
+#ifndef S2_DISABLE_DEFERRED
 	if (rp->ud) {
 		render_glyph_deferred(id, texcoords, x, y, w, h, ds, rp);
 	} else {
 		render_glyph_forward(id, texcoords, x, y, w, h, ds, rp);
 	}
+#else
+	render_glyph_forward(id, texcoords, x, y, w, h, ds, rp);
+#endif // S2_DISABLE_DEFERRED
 }
 
 static void 

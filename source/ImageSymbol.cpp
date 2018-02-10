@@ -15,7 +15,9 @@
 #ifndef S2_MULTITHREAD
 #include <shaderlab/ShaderMgr.h>
 #endif  // S2_MULTITHREAD
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <string.h>
 
