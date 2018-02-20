@@ -8,6 +8,7 @@
 #include "gum/ThreadPool.h"
 #include "gum/Audio.h"
 #include "gum/SymbolPool.h"
+#include "gum/Painting2.h"
 
 namespace gum
 {
@@ -20,6 +21,8 @@ void Facade::Initialize()
 #endif // S2_DISABLE_MODEL
 
 	Audio::Instance()->Initialize(nullptr, nullptr);
+
+	Painting2::Instance()->Init();
 }
 
 void Facade::Terminate()

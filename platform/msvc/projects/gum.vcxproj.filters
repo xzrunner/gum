@@ -131,6 +131,9 @@
     <ClCompile Include="..\..\..\source\ResPool.cpp">
       <Filter>pool</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\Painting2.cpp">
+      <Filter>adapter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\gum\RenderContext.h">
@@ -239,6 +242,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\ResPool.h">
       <Filter>pool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\Painting2.h">
+      <Filter>adapter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

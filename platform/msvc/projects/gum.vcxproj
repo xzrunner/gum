@@ -90,6 +90,7 @@
     <ClCompile Include="..\..\..\source\ImagePool.cpp" />
     <ClCompile Include="..\..\..\source\ImageSymbol.cpp" />
     <ClCompile Include="..\..\..\source\Model3.cpp" />
+    <ClCompile Include="..\..\..\source\Painting2.cpp" />
     <ClCompile Include="..\..\..\source\ProxyImage.cpp" />
     <ClCompile Include="..\..\..\source\ResPool.cpp" />
     <ClCompile Include="..\..\..\source\ShaderLab.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="..\..\..\include\gum\ImagePool.h" />
     <ClInclude Include="..\..\..\include\gum\ImageSymbol.h" />
     <ClInclude Include="..\..\..\include\gum\Model3.h" />
+    <ClInclude Include="..\..\..\include\gum\Painting2.h" />
     <ClInclude Include="..\..\..\include\gum\ProxyImage.h" />
     <ClInclude Include="..\..\..\include\gum\ResPool.h" />
     <ClInclude Include="..\..\..\include\gum\ShaderLab.h" />
