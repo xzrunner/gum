@@ -50,6 +50,24 @@ Image::~Image()
 	}
 }
 
+bool Image::LoadFromFile(const std::string& filepath)
+{
+	m_pkg_id = 0xffff;
+	m_res_path.SetFilepath(filepath.c_str());
+
+	s2loader::ImageLoader loader(m_res_path);
+	bool ret = loader.Load();
+	if (!ret) {
+		return false;
+	}
+
+	LoadFromLoader(loader);
+	s2::StatImages::Instance()->Add(
+		m_pkg_id, m_texture->GetWidth(), m_texture->GetHeight(), m_texture->GetFormat());
+
+	return true;
+}
+
 void Image::AsyncLoad(int pkg_id, int format, int width, int height)
 {
 	if (m_texture->GetTexID() != 0) {

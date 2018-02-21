@@ -24,6 +24,9 @@ public:
 	Image(int pkg_id, const bimp::FilePath& res_path, bool async);
 	virtual ~Image();
 
+	// for ResPool
+	bool LoadFromFile(const std::string& filepath);
+
 	void AsyncLoad(int pkg_id, int format, int width, int height);
 
 	uint32_t GetTexID() const;
