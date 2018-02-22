@@ -5,8 +5,8 @@
 #include "gum/Audio.h"
 #include "gum/ThreadPool.h"
 
-#include <sprite2/RenderTargetMgr.h>
-#include <sprite2/RenderTarget.h>
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
 #include <sprite2/Sprite.h>
 #include <sprite2/Symbol.h>
 #include <sprite2/RenderParams.h>
@@ -32,7 +32,7 @@ Sprite2::Sprite2()
 
 void Sprite2::DebugDraw() const
 {
-	s2::RenderTargetMgr* RT = s2::RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 	for (int i = 0; i < 4; ++i) {
 		int texid = RT->GetTexID(i);
 		if (texid < 0) {
@@ -92,14 +92,14 @@ get_actor_uid(const s2::Actor* actor)
 	return s2loader::ResourceUID::Actor(actor);
 }
 
-static s2::RenderTarget* 
+static pt2::RenderTarget* 
 fetch_screen()
 {
 	return RenderTargetMgr::Instance()->Fetch();
 }
 
 static void 
-return_screen(s2::RenderTarget* rt)
+return_screen(pt2::RenderTarget* rt)
 {
 	RenderTargetMgr::Instance()->Return(static_cast<RenderTarget*>(rt));
 }
@@ -127,7 +127,7 @@ void Sprite2::Init()
 	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
 	s2::DrawNode::InitUIDCB(get_sym_uid, get_spr_uid, get_actor_uid);
 
-	s2::RenderTargetMgr::Instance()->InitScreenCB(fetch_screen, return_screen);
+	pt2::RenderTargetMgr::Instance()->InitScreenCB(fetch_screen, return_screen);
 
 	{
 		s2::AudioContext::Callback cb;

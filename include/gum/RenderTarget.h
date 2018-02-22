@@ -2,12 +2,12 @@
 #define _GUM_RENDER_TARGET_H_
 
 #include <SM_Rect.h>
-#include <sprite2/RenderTarget.h>
+#include <painting2/RenderTarget.h>
 
 namespace gum
 {
 
-class RenderTarget : public s2::RenderTarget
+class RenderTarget : public pt2::RenderTarget
 {
 public:
 	RenderTarget(int width, int height);

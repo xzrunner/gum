@@ -47,17 +47,17 @@
 #include <timp/Facade.h>
 #include <dtex2/Facade.h>
 #include <dtex2/LoadResTask.h>
+#include <stat/StatImages.h>
+#include <painting2/Color.h>
+#include <painting2/RenderCtxStack.h>
 #include <sprite2/SprTimer.h>
-#include <sprite2/RenderCtxStack.h>
 #include <sprite2/Facade.h>
 #include <sprite2/ResetActorFlagVisitor.h>
 #include <sprite2/CreateActorsVisitor.h>
 #include <sprite2/Sprite.h>
 #include <sprite2/Actor.h>
 #include <sprite2/SprVisitorParams.h>
-#include <painting2/Color.h>
 #include <sprite2/ModelSymbol.h>
-#include <sprite2/StatImages.h>
 #include <sprite2/Blackboard.h>
 #include <sprite2/ActorFactory.h>
 #include <sprite2/ActorProxy.h>
@@ -222,7 +222,7 @@ void gum_store_snapshot(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
-	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
+	const pt2::RenderContext* ctx = pt2::RenderCtxStack::Instance()->Top();
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 
@@ -256,7 +256,7 @@ int gum_compare_snapshot(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
-	const s2::RenderContext* ctx = s2::RenderCtxStack::Instance()->Top();
+	const pt2::RenderContext* ctx = pt2::RenderCtxStack::Instance()->Top();
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 
@@ -288,7 +288,7 @@ extern "C"
 void* gum_create_img(const char* filepath)
 {
 	bimp::FilePath res_path(filepath);
-	auto img = ImagePool::Instance()->Create(s2::StatImages::UNKNOWN_IMG_ID, res_path);
+	auto img = ImagePool::Instance()->Create(st::StatImages::UNKNOWN_IMG_ID, res_path);
 	IMAGE_CACHE.push_back(img);
 	return static_cast<void*>(img.get());
 }

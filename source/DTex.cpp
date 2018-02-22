@@ -32,12 +32,12 @@
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
+#include <stat/StatImages.h>
+#include <painting2/RenderContext.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 #include <sprite2/RVG.h>
-#include <sprite2/RenderContext.h>
-#include <sprite2/RenderCtxStack.h>
-#include <sprite2/RenderScissor.h>
 #include <sprite2/DrawNode.h>
-#include <sprite2/StatImages.h>
 #include <sprite2/Symbol.h>
 #include <unirender/RenderContext.h>
 #include <s2loader/ImageLoader.h>
@@ -125,7 +125,7 @@ draw_begin()
 	if (DRAW_BEGIN) {
 		DRAW_BEGIN();
 	} else {
-		s2::RenderCtxStack::Instance()->Push(s2::RenderContext(2, 2, 0, 0));
+		pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
 	}
 
 	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
@@ -174,7 +174,7 @@ draw_end()
 	if (DRAW_END) {
 		DRAW_END();
 	} else {
-		s2::RenderCtxStack::Instance()->Pop();
+		pt2::RenderCtxStack::Instance()->Pop();
 	}
 }
 
@@ -190,26 +190,26 @@ draw_flush()
 static void
 scissor_push(int x, int y, int w, int h)
 {
-	s2::RenderScissor::Instance()->Push(
+	pt2::RenderScissor::Instance()->Push(
 		static_cast<float>(x), static_cast<float>(y), static_cast<float>(w), static_cast<float>(h), false, true);
 }
 
 static void 
 scissor_pop()
 {
-	s2::RenderScissor::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Pop();
 }
 
 static void 
 scissor_disable()
 {
-	s2::RenderScissor::Instance()->Disable();
+	pt2::RenderScissor::Instance()->Disable();
 }
 
 static void 
 scissor_enable()
 {
-	s2::RenderScissor::Instance()->Enable();
+	pt2::RenderScissor::Instance()->Enable();
 }
 
 /************************************************************************/
@@ -296,7 +296,7 @@ load_texture(int pkg_id, int tex_idx, int lod)
 	raw_tex->SetSize(loader.GetWidth(), loader.GetHeight());
 	raw_tex->SetFormat(loader.GetFormat());
 
-	s2::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
+	st::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
 }
 
 static void 
@@ -309,7 +309,7 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 	{
 		timp::TextureLoader loader(filepath.GetFilepath().c_str());
 		loader.Load();
-		s2::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
+		st::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
 		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
 	}
 	else
@@ -318,7 +318,7 @@ load_texture_cb(int pkg_id, int tex_idx, void (*cb)(int format, int w, int h, co
 		timp::TextureLoader loader(file, filepath.GetOffset());
 		loader.Load();
 		fs_close(file);
-		s2::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
+		st::StatImages::Instance()->Add(pkg_id, loader.GetWidth(), loader.GetHeight(), loader.GetFormat());
 		cb(loader.GetFormat(), loader.GetWidth(), loader.GetHeight(), loader.GetData(), ud);
 	}
 }
@@ -347,13 +347,13 @@ submit_task(mt::Task* task)
 static void
 stat_tex_add(int width, int height, int format)
 {
-	s2::StatImages::Instance()->Add(IMG_ID, width, height, format);
+	st::StatImages::Instance()->Add(IMG_ID, width, height, format);
 }
 
 static void
 stat_tex_remove(int width, int height, int format)
 {
-	s2::StatImages::Instance()->Remove(IMG_ID, width, height, format);
+	st::StatImages::Instance()->Remove(IMG_ID, width, height, format);
 }
 
 /************************************************************************/

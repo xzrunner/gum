@@ -10,15 +10,15 @@
 #include <logger.h>
 #include <glp_loop.h>
 #include <ps_3d.h>
+#include <stat/StatImages.h>
+#include <stat/StatPingPong.h>
 #include <sprite2/pre_defined.h>
 #include S2_MAT_HEADER
 #include <sprite2/StatDrawCall.h>
-#include <sprite2/StatPingPong.h>
 #include <sprite2/StatTopNodes.h>
 #include <sprite2/StatSymDraw.h>
 #include <sprite2/StatSymCount.h>
 #include <sprite2/StatSprCount.h>
-#include <sprite2/StatImages.h>
 #include <sprite2/Sprite.h>
 #include <sprite2/Actor.h>
 #include <sprite2/Symbol.h>
@@ -144,7 +144,7 @@ void Statistics::Reset()
 	sl::StatDrawCall::Instance()->Reset();
 
 	s2::StatDrawCall::Instance()->Reset();
-	s2::StatPingPong::Instance()->Reset();
+	st::StatPingPong::Instance()->Reset();
 	s2::StatTopNodes::Instance()->Reset();
 	s2::StatSymDraw::Instance()->Reset();
 }
@@ -213,7 +213,7 @@ void Statistics::PrintScreen() const
 	buf_str.clear();
 
 	mt.Translate(0, -40);
-	s2::StatPingPong::Instance()->Print(buf_str);
+	st::StatPingPong::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
@@ -236,13 +236,13 @@ void Statistics::PrintScreen() const
 	buf_str.clear();
 
 	mt.Translate(0, -30);
-	s2::StatImages::Instance()->Print(buf_str);
+	st::StatImages::Instance()->Print(buf_str);
 	GTxt::Instance()->Draw(mt, buf_str, w);	
 	buf_str.clear();
 
 	// memory detail
 	{
-		const CU_MAP<int, float>& pkg2mem = s2::StatImages::Instance()->GetID2Mem();
+		const CU_MAP<int, float>& pkg2mem = st::StatImages::Instance()->GetID2Mem();
 		CU_MAP<float, int> mem2pkg;
 		CU_MAP<int, float>::const_iterator itr = pkg2mem.begin();
 		for ( ; itr != pkg2mem.end(); ++itr) {

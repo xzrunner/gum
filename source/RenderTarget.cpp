@@ -5,40 +5,40 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/ShaderMgr.h>
-#include <sprite2/RenderScissor.h>
-#include <sprite2/RenderCtxStack.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 namespace gum
 {
 
 RenderTarget::RenderTarget(int width, int height)
-	: s2::RenderTarget(width, height)
+	: pt2::RenderTarget(width, height)
 {
 }
 
 void RenderTarget::Bind()
 {
-	s2::RenderScissor::Instance()->Disable();
+	pt2::RenderScissor::Instance()->Disable();
 
 	int w = Width(),
 		h = Height();
-	s2::RenderContext ctx(static_cast<float>(w), static_cast<float>(h), w, h);
+	pt2::RenderContext ctx(static_cast<float>(w), static_cast<float>(h), w, h);
 	// use last model view
-	const s2::RenderContext* last = s2::RenderCtxStack::Instance()->Top();
+	const pt2::RenderContext* last = pt2::RenderCtxStack::Instance()->Top();
 	if (last) {
 		ctx.SetModelView(last->GetMVOffset(), last->GetMVScale());
 	}
-	s2::RenderCtxStack::Instance()->Push(ctx);
+	pt2::RenderCtxStack::Instance()->Push(ctx);
 
-	s2::RenderTarget::Bind();
+	pt2::RenderTarget::Bind();
 }
 
 void RenderTarget::Unbind()
 {
-	s2::RenderCtxStack::Instance()->Pop();
-	s2::RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 
-	s2::RenderTarget::Unbind();
+	pt2::RenderTarget::Unbind();
 }
 
 void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int dst_h) const
@@ -56,17 +56,17 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		h = Height();
 	}
 
-	const s2::RenderContext* last = s2::RenderCtxStack::Instance()->Top();
+	const pt2::RenderContext* last = pt2::RenderCtxStack::Instance()->Top();
 	int vp_x, vp_y, vp_w, vp_h;
 	if (last) {
 		last->GetViewport(vp_x, vp_y, vp_w, vp_h);
 	}
 
-	s2::RenderScissor::Instance()->Disable();
-	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	if (last) {
-		const s2::RenderContext* curr = s2::RenderCtxStack::Instance()->Top();
-		const_cast<s2::RenderContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);
+		const pt2::RenderContext* curr = pt2::RenderCtxStack::Instance()->Top();
+		const_cast<pt2::RenderContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);
 	}
 
 	float hw = w * 0.5f,
@@ -103,8 +103,8 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		break;
 	}
 
-	s2::RenderCtxStack::Instance()->Pop();
-	s2::RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 }
 
 void RenderTarget::Clear()

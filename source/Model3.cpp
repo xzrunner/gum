@@ -5,7 +5,7 @@
 #include "gum/Image.h"
 #include "gum/ImagePool.h"
 
-#include <sprite2/StatImages.h>
+#include <stat/StatImages.h>
 #include <node3/ResourceAPI.h>
 
 namespace gum
@@ -23,7 +23,7 @@ create_img(const std::string& filepath)
 		return itr->second.get();
 	} else {
 		auto img = ImagePool::Instance()->Create(
-			s2::StatImages::UNKNOWN_IMG_ID, bimp::FilePath(filepath.c_str()));
+			st::StatImages::UNKNOWN_IMG_ID, bimp::FilePath(filepath.c_str()));
 		CACHE.insert(std::make_pair(filepath, img));
 		return img.get();
 	}

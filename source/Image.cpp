@@ -3,7 +3,7 @@
 #include "gum/Texture.h"
 
 #include <painting2/Texture.h>
-#include <sprite2/StatImages.h>
+#include <stat/StatImages.h>
 #include <unirender/RenderContext.h>
 #include <s2loader/ImageLoader.h>
 
@@ -15,7 +15,7 @@ namespace gum
 static int ALL_IMG_COUNT = 0;
 
 Image::Image()
-	: m_pkg_id(s2::StatImages::UNKNOWN_IMG_ID)
+	: m_pkg_id(st::StatImages::UNKNOWN_IMG_ID)
 	, m_texture(std::make_shared<Texture>(0, 0, 0, 0))
 {
 	++ALL_IMG_COUNT;
@@ -34,7 +34,7 @@ Image::Image(int pkg_id, const bimp::FilePath& res_path, bool async)
 		bool ret = loader.Load();
 		if (ret) {
 			LoadFromLoader(loader);
-			s2::StatImages::Instance()->Add(
+			st::StatImages::Instance()->Add(
 				pkg_id, m_texture->GetWidth(), m_texture->GetHeight(), m_texture->GetFormat());
 		}
 	}
@@ -45,7 +45,7 @@ Image::~Image()
 	--ALL_IMG_COUNT;
 
 	if (m_texture->GetTexID() != 0) {
-		s2::StatImages::Instance()->Remove(
+		st::StatImages::Instance()->Remove(
 			m_pkg_id, m_texture->GetWidth(), m_texture->GetHeight(), m_texture->GetFormat());
 	}
 }
@@ -62,7 +62,7 @@ bool Image::LoadFromFile(const std::string& filepath)
 	}
 
 	LoadFromLoader(loader);
-	s2::StatImages::Instance()->Add(
+	st::StatImages::Instance()->Add(
 		m_pkg_id, m_texture->GetWidth(), m_texture->GetHeight(), m_texture->GetFormat());
 
 	return true;
@@ -79,7 +79,7 @@ void Image::AsyncLoad(int pkg_id, int format, int width, int height)
 	s2loader::ImageLoader loader(m_res_path);
 	loader.AsyncLoad(format, width, height, shared_from_this());
 
-	s2::StatImages::Instance()->Add(pkg_id, width, height, format);
+	st::StatImages::Instance()->Add(pkg_id, width, height, format);
 }
 
 uint16_t Image::GetWidth() const
