@@ -15,7 +15,7 @@
 #include <shaderlab/Shape2Shader.h>
 #include <simp/NodeFactory.h>
 
-#include <sprite2/RVG.h>
+#include <painting2/PrimitiveDraw.h>
 #include <sprite2/Symbol.h>
 #include <sprite2/RenderParams.h>
 #include <sprite2/Symbol.h>
@@ -208,22 +208,22 @@ render_decoration(const S2_MAT& mat, float x, float y, float w, float h, const g
 			left.y = right.y = ds->row_y + ds->row_h * 0.5f;
 			break;
 		}
-		s2::RVG::Line(nullptr, mat * left, mat * right);
+		pt2::PrimitiveDraw::Line(nullptr, mat * left, mat * right);
 	} else if (d->type == GRDT_BORDER || d->type == GRDT_BG) {
 		sm::vec2 min(x - hw, ds->row_y), 
 			max(x + hw, ds->row_y + ds->row_h);
 		min = mat * min;
 		max = mat * max;
 		if (d->type == GRDT_BG) {
-			s2::RVG::Rect(nullptr, min, max, true);
+			pt2::PrimitiveDraw::Rect(nullptr, min, max, true);
 		} else if (ds->pos_type != GRPT_NULL) {
-			s2::RVG::Line(nullptr, min, sm::vec2(max.x, min.y));
-			s2::RVG::Line(nullptr, sm::vec2(min.x, max.y), max);
+			pt2::PrimitiveDraw::Line(nullptr, min, sm::vec2(max.x, min.y));
+			pt2::PrimitiveDraw::Line(nullptr, sm::vec2(min.x, max.y), max);
 			if (ds->pos_type == GRPT_BEGIN) {
-				s2::RVG::Line(nullptr, min, sm::vec2(min.x, max.y));
+				pt2::PrimitiveDraw::Line(nullptr, min, sm::vec2(min.x, max.y));
 			}
 			if (ds->pos_type == GRPT_END) {
-				s2::RVG::Line(nullptr, sm::vec2(max.x, min.y), max);
+				pt2::PrimitiveDraw::Line(nullptr, sm::vec2(max.x, min.y), max);
 			}
 		}
 	}

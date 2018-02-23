@@ -36,7 +36,7 @@
 #include <painting2/RenderContext.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
-#include <sprite2/RVG.h>
+#include <painting2/PrimitiveDraw.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/Symbol.h>
 #include <unirender/RenderContext.h>
@@ -89,7 +89,7 @@ clear_color_part(float xmin, float ymin, float xmax, float ymax)
 	triangles[2].Set(xmax, ymin);
 	triangles[3].Set(xmax, ymax);
 
-	s2::RVG::TriangleStrip(nullptr, triangles);
+	pt2::PrimitiveDraw::TriangleStrip(nullptr, triangles);
 
 	shader->Commit();
 // 	ShaderLab::Instance()->Flush();
