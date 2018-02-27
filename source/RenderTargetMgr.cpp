@@ -8,8 +8,6 @@
 namespace gum
 {
 
-CU_SINGLETON_DEFINITION(RenderTargetMgr);
-
 RenderTargetMgr::RenderTargetMgr()
 	: m_size(0, 0)
 {

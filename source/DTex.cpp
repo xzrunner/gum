@@ -40,6 +40,8 @@
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/PrimitiveDraw.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/Symbol.h>
 #include <unirender/RenderContext.h>
@@ -130,7 +132,8 @@ draw_begin()
 	if (DRAW_BEGIN) {
 		DRAW_BEGIN();
 	} else {
-		pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
+		auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+		pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, 0, 0));
 	}
 
 	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
@@ -179,7 +182,8 @@ draw_end()
 	if (DRAW_END) {
 		DRAW_END();
 	} else {
-		pt2::RenderCtxStack::Instance()->Pop();
+		auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+		pt2_ctx.GetCtxStack().Pop();
 	}
 }
 
@@ -195,26 +199,30 @@ draw_flush()
 static void
 scissor_push(int x, int y, int w, int h)
 {
-	pt2::RenderScissor::Instance()->Push(
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetScissor().Push(
 		static_cast<float>(x), static_cast<float>(y), static_cast<float>(w), static_cast<float>(h), false, true);
 }
 
 static void 
 scissor_pop()
 {
-	pt2::RenderScissor::Instance()->Pop();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetScissor().Pop();
 }
 
 static void 
 scissor_disable()
 {
-	pt2::RenderScissor::Instance()->Disable();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetScissor().Disable();
 }
 
 static void 
 scissor_enable()
 {
-	pt2::RenderScissor::Instance()->Enable();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetScissor().Enable();
 }
 
 /************************************************************************/

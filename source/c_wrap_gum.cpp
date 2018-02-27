@@ -51,6 +51,8 @@
 #include <stat/StatImages.h>
 #include <painting2/Color.h>
 #include <painting2/RenderCtxStack.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/Facade.h>
 #include <sprite2/ResetActorFlagVisitor.h>
@@ -227,7 +229,8 @@ void gum_store_snapshot(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
-	const pt2::RenderContext* ctx = pt2::RenderCtxStack::Instance()->Top();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	const pt2::RenderContext* ctx = pt2_ctx.GetCtxStack().Top();
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 
@@ -263,7 +266,8 @@ int gum_compare_snapshot(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
-	const pt2::RenderContext* ctx = pt2::RenderCtxStack::Instance()->Top();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	const pt2::RenderContext* ctx = pt2_ctx.GetCtxStack().Top();
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 
@@ -711,14 +715,14 @@ void gum_draw_text(const char* str, int x, int y, int w)
 extern "C"
 void* gum_rt_fetch()
 {
-	return RenderTargetMgr::Instance()->Fetch();
+	return Blackboard::Instance()->GetRenderContext()->GetRTMgr().Fetch();
 }
 
 extern "C"
 void gum_rt_return(void* rt)
 {
 	RenderTarget* gum_rt = static_cast<RenderTarget*>(rt);
-	RenderTargetMgr::Instance()->Return(gum_rt);
+	Blackboard::Instance()->GetRenderContext()->GetRTMgr().Return(gum_rt);
 }
 
 extern "C"

@@ -9,6 +9,8 @@
 #include <shaderlab/Blackboard.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace gum
 {
@@ -20,25 +22,27 @@ RenderTarget::RenderTarget(int width, int height)
 
 void RenderTarget::Bind()
 {
-	pt2::RenderScissor::Instance()->Disable();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetScissor().Disable();
 
 	int w = Width(),
 		h = Height();
 	pt2::RenderContext ctx(static_cast<float>(w), static_cast<float>(h), w, h);
 	// use last model view
-	const pt2::RenderContext* last = pt2::RenderCtxStack::Instance()->Top();
+	const pt2::RenderContext* last = pt2_ctx.GetCtxStack().Top();
 	if (last) {
 		ctx.SetModelView(last->GetMVOffset(), last->GetMVScale());
 	}
-	pt2::RenderCtxStack::Instance()->Push(ctx);
+	pt2_ctx.GetCtxStack().Push(ctx);
 
 	pt2::RenderTarget::Bind();
 }
 
 void RenderTarget::Unbind()
 {
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 
 	pt2::RenderTarget::Unbind();
 }
@@ -59,16 +63,17 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		h = Height();
 	}
 
-	const pt2::RenderContext* last = pt2::RenderCtxStack::Instance()->Top();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	const pt2::RenderContext* last = pt2_ctx.GetCtxStack().Top();
 	int vp_x, vp_y, vp_w, vp_h;
 	if (last) {
 		last->GetViewport(vp_x, vp_y, vp_w, vp_h);
 	}
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	if (last) {
-		const pt2::RenderContext* curr = pt2::RenderCtxStack::Instance()->Top();
+		const pt2::RenderContext* curr = pt2_ctx.GetCtxStack().Top();
 		const_cast<pt2::RenderContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);
 	}
 
@@ -105,8 +110,8 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		break;
 	}
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 }
 
 void RenderTarget::Clear()

@@ -4,6 +4,8 @@
 #include <unirender/gl/RenderContext.h>
 #include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
+#include <painting2/Context.h>
+#include <painting2/Blackboard.h>
 #include <sprite2/Blackboard.h>
 
 #include <stddef.h>
@@ -35,6 +37,8 @@ RenderContext::RenderContext()
 	ur_rc->RegistCB(cb);
 
 	m_ur_rc = ur_rc;
+
+	m_pt2_ctx = std::make_shared<pt2::Context>();
 }
 
 void RenderContext::OnSize(int w, int h)
@@ -46,7 +50,7 @@ void RenderContext::OnSize(int w, int h)
 	m_width = w;
 	m_height = h;
 
-	RenderTargetMgr::Instance()->OnSize(w, h);
+	m_rt_mgr.OnSize(w, h);
 
 	s2::Blackboard::Instance()->SetScreenSize(w, h);
 }
@@ -54,6 +58,7 @@ void RenderContext::OnSize(int w, int h)
 void RenderContext::Bind()
 {
 	sl::Blackboard::Instance()->SetRenderContext(m_sl_rc);
+	pt2::Blackboard::Instance()->SetContext(m_pt2_ctx);
 }
 
 }

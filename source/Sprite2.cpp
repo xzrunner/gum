@@ -7,6 +7,8 @@
 
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 #include <sprite2/Sprite.h>
 #include <sprite2/Symbol.h>
 #include <sprite2/RenderParams.h>
@@ -32,9 +34,9 @@ Sprite2::Sprite2()
 
 void Sprite2::DebugDraw() const
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
 	for (int i = 0; i < 4; ++i) {
-		int texid = RT->GetTexID(i);
+		int texid = rt_mgr.GetTexID(i);
 		if (texid < 0) {
 			continue;
 		}
@@ -95,13 +97,15 @@ get_actor_uid(const s2::Actor* actor)
 static pt2::RenderTarget* 
 fetch_screen()
 {
-	return RenderTargetMgr::Instance()->Fetch();
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
+	return rt_mgr.Fetch();
 }
 
 static void 
 return_screen(pt2::RenderTarget* rt)
 {
-	RenderTargetMgr::Instance()->Return(static_cast<RenderTarget*>(rt));
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
+	rt_mgr.Return(static_cast<RenderTarget*>(rt));
 }
 
 static bool
@@ -127,7 +131,8 @@ void Sprite2::Init()
 	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
 	s2::DrawNode::InitUIDCB(get_sym_uid, get_spr_uid, get_actor_uid);
 
-	pt2::RenderTargetMgr::Instance()->InitScreenCB(fetch_screen, return_screen);
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
+	rt_mgr.InitScreenCB(fetch_screen, return_screen);
 
 	{
 		s2::AudioContext::Callback cb;

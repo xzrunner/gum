@@ -1,7 +1,6 @@
 #ifndef _GUM_RENDER_TARGET_MGR_H_
 #define _GUM_RENDER_TARGET_MGR_H_
 
-#include <cu/cu_macro.h>
 #include <cu/cu_stl.h>
 #include <SM_Vector.h>
 
@@ -13,6 +12,8 @@ class RenderTarget;
 class RenderTargetMgr
 {
 public:
+	RenderTargetMgr();
+
 	RenderTarget* Fetch();
 	void Return(RenderTarget* rt);
 
@@ -33,8 +34,6 @@ private:
 	sm::ivec2 m_size;
 	
 	CU_VEC<Item> m_items;
-
-	CU_SINGLETON_DECLARATION(RenderTargetMgr);
 
 }; // RenderTargetMgr
 
