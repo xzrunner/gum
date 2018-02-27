@@ -67,6 +67,7 @@
 #include <shaderlab/Facade.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <sprite2/TextTable.h>
 #include <SM_Matrix.h>
 #include <logger.h>
@@ -133,7 +134,7 @@ void gum_on_resume() {
 extern "C"
 void* gum_get_render_context()
 {
-	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext();
 	return &ur_rc;
 }
 
@@ -238,7 +239,7 @@ void gum_store_snapshot(const char* filepath)
 
 		uint8_t* rgba = (uint8_t*)malloc(w * h * channel);
 		memset(rgba, 0, w * h * channel);
-		auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+		auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 		ur_rc.ReadPixels(rgba, channel, 0, 0, w, h);
 
 		uint8_t* rgb = gimg_rgba2rgb(rgba, w, h);
@@ -250,7 +251,7 @@ void gum_store_snapshot(const char* filepath)
 	{
 		uint8_t* pixels = (uint8_t*)malloc(w * h * 4);
 		memset(pixels, 0, w * h * 4);
-		auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+		auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 		ur_rc.ReadPixels(pixels, 4, 0, 0, w, h);
 		gimg_export(gbk_filepath.c_str(), pixels, w, h, GPF_RGBA8, true);
 		free(pixels);
@@ -269,7 +270,7 @@ int gum_compare_snapshot(const char* filepath)
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
 	memset(now, 0, sz);
-	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 	ur_rc.ReadPixels(now, 3, 0, 0, w, h);
 
 	int _w, _h;
@@ -341,14 +342,14 @@ bool gum_is_async_task_empty()
 extern "C"
 bool gum_is_support_etc2()
 {
-	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 	return ur_rc.IsSupportETC2();
 }
 
 extern "C"
 bool gum_avaliable_memory(int need_texture_area)
 {
-	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 	return ur_rc.CheckAvailableMemory(need_texture_area);
 }
 

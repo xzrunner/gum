@@ -2,6 +2,7 @@
 #include "gum/GTxt.h"
 
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <sprite2/pre_defined.h>
 #include S2_MAT_HEADER
@@ -54,8 +55,8 @@ void StatTag::Print(const CU_STR& type, const CU_STR& msg) const
 
 void StatTag::PrintScreen() const
 {
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->SetShader(sl::SPRITE2);
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
 
 	static char buf[512];
 
@@ -68,7 +69,7 @@ void StatTag::PrintScreen() const
 	sprintf(buf, "%s", m_msg.c_str());
 	GTxt::Instance()->Draw(mt, buf, w);	
 
-	mgr->FlushShader();
+	shader_mgr.FlushShader();
 }
 
 void StatTag::Flush()

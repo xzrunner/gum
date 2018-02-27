@@ -3,6 +3,7 @@
 #include "gum/ThreadPool.h"
 
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Callback.h>
 #include <shaderlab/Blackboard.h>
@@ -31,8 +32,8 @@ void ShaderLab::Init()
 
 void ShaderLab::Update(float dt)
 {
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader(sl::FILTER));
 	shader->UpdateTime(dt);
 }
 

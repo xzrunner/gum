@@ -14,6 +14,7 @@
 #include <sprite2/RenderParams.h>
 #ifndef S2_MULTITHREAD
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #endif  // S2_MULTITHREAD
 #ifndef S2_DISABLE_DEFERRED
@@ -105,10 +106,10 @@ void ImageSymbol::OnQueryTexcoordsFail(cooking::DisplayList* dlist) const
 #ifdef S2_MULTITHREAD
 	cooking::update_dtex_c2(dlist, GetID(), m_img->GetTexID(), sz.x, sz.y, m_region);
 #else
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl::ShaderType type = mgr->GetShaderType();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	sl::ShaderType type = shader_mgr.GetShaderType();
 	if (gum::DTexC2Strategy::Instance()->OnC2QueryFail(GetID(), m_img->GetTexID(), m_img->GetWidth(), m_img->GetHeight(), m_region)) {
-		mgr->SetShader(type);
+		shader_mgr.SetShader(type);
 	}
 #endif // S2_MULTITHREAD
 }

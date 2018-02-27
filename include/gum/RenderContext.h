@@ -3,10 +3,12 @@
 
 #include <boost/noncopyable.hpp>
 
+#include <guard/check.h>
+
 #include <memory>
 
 namespace ur { class RenderContext; }
-namespace sl { class ShaderMgr; }
+namespace sl { class RenderContext; }
 
 namespace gum
 {
@@ -21,14 +23,20 @@ public:
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
 
-	const std::shared_ptr<ur::RenderContext>& GetContext() const { return m_rc; }
-	const std::shared_ptr<sl::ShaderMgr>& GetShaderMgr() const { return m_shader_mgr; }
+	ur::RenderContext& GetURRC() const {
+		GD_ASSERT(m_ur_rc, "null ur rc");
+		return *m_ur_rc;
+	}
+	sl::RenderContext& GetSLRC() const {
+		GD_ASSERT(m_sl_rc, "null sl rc");
+		return *m_sl_rc;
+	}
 
 	void Bind();
 
 private:
-	std::shared_ptr<ur::RenderContext> m_rc = nullptr;
-	std::shared_ptr<sl::ShaderMgr>     m_shader_mgr = nullptr;
+	std::shared_ptr<ur::RenderContext> m_ur_rc = nullptr;
+	std::shared_ptr<sl::RenderContext> m_sl_rc = nullptr;
 	
 	int m_width, m_height;
 	

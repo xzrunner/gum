@@ -26,6 +26,7 @@
 #include <shaderlab/Statistics.h>
 #include <shaderlab/StatDrawCall.h>
 #include <shaderlab/Blackboard.h>
+#include <shaderlab/RenderContext.h>
 
 #include <time.h>
 
@@ -178,8 +179,8 @@ void Statistics::SetMem(float tot, float lua)
 
 void Statistics::PrintScreen() const
 {
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->SetShader(sl::SPRITE2);
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
 
 	static char buf[512];
 
@@ -280,7 +281,7 @@ void Statistics::PrintScreen() const
 // 	GTxt::Instance()->Draw(mt, buf_str, w);	
 // 	buf_str.clear();
 
-	mgr->FlushShader();
+	shader_mgr.FlushShader();
 }
 
 void Statistics::PrintConsole() const

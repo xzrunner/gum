@@ -14,6 +14,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/Shape2Shader.h>
 #include <shaderlab/Blackboard.h>
+#include <shaderlab/RenderContext.h>
 #include <simp/NodeFactory.h>
 
 #include <painting2/PrimitiveDraw.h>
@@ -99,8 +100,8 @@ render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, floa
 	cooking::DisplayList* dlist = reinterpret_cast<cooking::DisplayList*>(rp->ud);
 	assert(dlist);
 
-	auto mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	switch (mgr->GetShaderType())
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	switch (shader_mgr.GetShaderType())
 	{
 	case sl::SPRITE2:
 		{
@@ -152,14 +153,14 @@ render_glyph_forward(int id, const float* _texcoords, float x, float y, float w,
 		col_common.add = *rp->add;
 	}
 
-	sl::ShaderMgr* sl_mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	if (sl_mgr->GetShaderType() == sl::FILTER) {
-		sl::FilterShader* filter = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	if (shader_mgr.GetShaderType() == sl::FILTER) {
+		sl::FilterShader* filter = static_cast<sl::FilterShader*>(shader_mgr.GetShader());
 		filter->SetColor(col_common.mul.ToABGR(), col_common.add.ToABGR());
 		filter->Draw(&vertices[0].x, &texcoords[0].x, id);
 	} else {
-		sl_mgr->SetShader(sl::SPRITE2);
-	 	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+		shader_mgr.SetShader(sl::SPRITE2);
+	 	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader());
 	 	sl_shader->SetColor(col_common.mul.ToABGR(), col_common.add.ToABGR());
 	 	sl_shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	 	sl_shader->DrawQuad(&vertices[0].x, &texcoords[0].x, id);
@@ -188,9 +189,9 @@ render_decoration(const S2_MAT& mat, float x, float y, float w, float h, const g
 		return;
 	}
 
-	sl::ShaderMgr* sl_mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl_mgr->SetShader(sl::SHAPE2);
-	sl::Shape2Shader* sl_shader = static_cast<sl::Shape2Shader*>(sl_mgr->GetShader());
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SHAPE2);
+	sl::Shape2Shader* sl_shader = static_cast<sl::Shape2Shader*>(shader_mgr.GetShader());
 	sl_shader->SetColor(d->color);
 
 	float hw = w * 0.5f,

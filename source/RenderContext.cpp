@@ -2,8 +2,7 @@
 #include "gum/RenderTargetMgr.h"
 
 #include <unirender/gl/RenderContext.h>
-#include <shaderlab/ShaderMgr.h>
-#include <shaderlab/SubjectMVP2.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <sprite2/Blackboard.h>
 
@@ -16,20 +15,26 @@ RenderContext::RenderContext()
 	: m_width(0)
 	, m_height(0)
 {
+	int max_texture;
+#ifdef EASY_EDITOR
+	max_texture = 4096;
+#else
+	max_texture = 1024;
+#endif // S2_EDITOR
+	auto ur_rc = std::make_shared<ur::gl::RenderContext>(max_texture);
+
+	m_sl_rc = std::make_shared<sl::RenderContext>(ur_rc);
+
 	ur::gl::RenderContext::Callback cb;
 	cb.flush_shader = [&]() {
-		m_shader_mgr->FlushShader();
+		m_sl_rc->GetShaderMgr().FlushShader();
 	};
 	cb.flush_render_shader = [&]() {
-		m_shader_mgr->FlushRenderShader();
+		m_sl_rc->GetShaderMgr().FlushRenderShader();
 	};
-#ifdef EASY_EDITOR
-	m_rc = std::make_unique<ur::gl::RenderContext>(cb, 4096);
-#else
-	m_rc = std::make_unique<ur::gl::RenderContext>(cb, 1024);
-#endif // S2_EDITOR
+	ur_rc->RegistCB(cb);
 
-	m_shader_mgr = std::make_unique<sl::ShaderMgr>(*m_rc);
+	m_ur_rc = ur_rc;
 }
 
 void RenderContext::OnSize(int w, int h)
@@ -48,7 +53,7 @@ void RenderContext::OnSize(int w, int h)
 
 void RenderContext::Bind()
 {
-	sl::Blackboard::Instance()->SetShaderMgr(m_shader_mgr);
+	sl::Blackboard::Instance()->SetRenderContext(m_sl_rc);
 }
 
 }

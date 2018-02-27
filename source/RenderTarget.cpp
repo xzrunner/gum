@@ -5,6 +5,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
@@ -44,7 +45,8 @@ void RenderTarget::Unbind()
 
 void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int dst_h) const
 {
-	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.FlushShader();
 
 	float vertices[8], texcoords[8];
 
@@ -82,12 +84,11 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 	texcoords[4] = src.xmax; texcoords[5] = src.ymax;
 	texcoords[6] = src.xmin; texcoords[7] = src.ymax;
 
-	sl::ShaderMgr* sl_mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	switch (sl_mgr->GetShaderType()) 
+	switch (shader_mgr.GetShaderType()) 
 	{
 	case sl::SPRITE2:
 		{
-			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader());
 			shader->SetColor(0xffffffff, 0);
 			shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 			shader->DrawQuad(vertices, texcoords, GetTexID());
@@ -95,7 +96,7 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		break;
 	case sl::FILTER:
 		{
-			sl::FilterShader* shader = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader());
 			shader->SetColor(0xffffffff, 0);
 			shader->Draw(vertices, texcoords, GetTexID());
 		}
@@ -112,8 +113,8 @@ void RenderTarget::Clear()
 {
 	Bind();
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->GetContext().Clear(0);
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	ur_rc.Clear(0);
 
 	Unbind();
 }
