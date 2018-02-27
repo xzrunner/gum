@@ -13,6 +13,7 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/Shape2Shader.h>
+#include <shaderlab/Blackboard.h>
 #include <simp/NodeFactory.h>
 
 #include <painting2/PrimitiveDraw.h>
@@ -98,7 +99,7 @@ render_glyph_deferred(int tex_id, const float* texcoords, float x, float y, floa
 	cooking::DisplayList* dlist = reinterpret_cast<cooking::DisplayList*>(rp->ud);
 	assert(dlist);
 
-	auto mgr = sl::ShaderMgr::Instance();
+	auto mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	switch (mgr->GetShaderType())
 	{
 	case sl::SPRITE2:
@@ -151,7 +152,7 @@ render_glyph_forward(int id, const float* _texcoords, float x, float y, float w,
 		col_common.add = *rp->add;
 	}
 
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* sl_mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	if (sl_mgr->GetShaderType() == sl::FILTER) {
 		sl::FilterShader* filter = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
 		filter->SetColor(col_common.mul.ToABGR(), col_common.add.ToABGR());
@@ -187,7 +188,7 @@ render_decoration(const S2_MAT& mat, float x, float y, float w, float h, const g
 		return;
 	}
 
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* sl_mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	sl_mgr->SetShader(sl::SHAPE2);
 	sl::Shape2Shader* sl_shader = static_cast<sl::Shape2Shader*>(sl_mgr->GetShader());
 	sl_shader->SetColor(d->color);

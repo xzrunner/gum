@@ -5,6 +5,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Blackboard.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
 
@@ -43,7 +44,7 @@ void RenderTarget::Unbind()
 
 void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int dst_h) const
 {
-	sl::ShaderMgr::Instance()->FlushShader();
+	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
 
 	float vertices[8], texcoords[8];
 
@@ -81,7 +82,7 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 	texcoords[4] = src.xmax; texcoords[5] = src.ymax;
 	texcoords[6] = src.xmin; texcoords[7] = src.ymax;
 
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* sl_mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	switch (sl_mgr->GetShaderType()) 
 	{
 	case sl::SPRITE2:
@@ -111,8 +112,8 @@ void RenderTarget::Clear()
 {
 	Bind();
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->GetContext()->Clear(0);
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	mgr->GetContext().Clear(0);
 
 	Unbind();
 }

@@ -25,6 +25,7 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Statistics.h>
 #include <shaderlab/StatDrawCall.h>
+#include <shaderlab/Blackboard.h>
 
 #include <time.h>
 
@@ -177,7 +178,7 @@ void Statistics::SetMem(float tot, float lua)
 
 void Statistics::PrintScreen() const
 {
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE2);
 
 	static char buf[512];

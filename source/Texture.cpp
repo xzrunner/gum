@@ -2,6 +2,8 @@
 #include "gum/RenderContext.h"
 
 #include <unirender/RenderContext.h>
+#include <shaderlab/Blackboard.h>
+#include <shaderlab/ShaderMgr.h>
 
 namespace gum
 {
@@ -13,7 +15,8 @@ Texture::Texture(uint16_t w, uint16_t h, uint32_t id, int format)
 
 Texture::~Texture()
 {
-	gum::RenderContext::Instance()->GetImpl()->ReleaseTexture(GetTexID());
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	ur_rc.ReleaseTexture(GetTexID());
 }
 
 }

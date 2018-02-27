@@ -6,6 +6,7 @@
 #include "gum/ImagePool.h"
 #include "gum/ImageSymbol.h"
 #include "gum/ProxyImage.h"
+#include "gum/Blackboard.h"
 
 #include <logger.h>
 #include <fs_file.h>
@@ -32,6 +33,7 @@
 #include <shaderlab/ShapeShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
+#include <shaderlab/Blackboard.h>
 #include <stat/StatImages.h>
 #include <painting2/RenderContext.h>
 #include <painting2/RenderCtxStack.h>
@@ -64,19 +66,21 @@ static void (*ERROR_RELOAD)() = nullptr;
 static void 
 clear_color_part(float xmin, float ymin, float xmax, float ymax)
 {
-	RenderContext::Instance()->GetImpl()->EnableBlend(false);
+	auto shader_mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& ur_rc = shader_mgr->GetContext();
+
+	ur_rc.EnableBlend(false);
 //	glBlendFunc(GL_ONE, GL_ZERO);
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-
-	mgr->SetShader(sl::SHAPE2);
-	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(mgr->GetShader());
+	shader_mgr->SetShader(sl::SHAPE2);
+	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(shader_mgr->GetShader());
 	
 	shader->SetColor(0);
 //	shader->SetColor(0xff0000ff);
 
-	int w = RenderContext::Instance()->GetWidth(),
-		h = RenderContext::Instance()->GetHeight();
+	auto& gum_rc = Blackboard::Instance()->GetRenderContext();
+	int w = gum_rc->GetWidth(),
+		h = gum_rc->GetHeight();
 	xmin = w * 0.5f * (xmin - 1);
 	xmax = w * 0.5f * (xmax - 1);
 	ymin = h * 0.5f * (ymin + 1);
@@ -95,7 +99,7 @@ clear_color_part(float xmin, float ymin, float xmax, float ymax)
 // 	ShaderLab::Instance()->Flush();
 
 //	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	RenderContext::Instance()->GetImpl()->EnableBlend(true);
+	ur_rc.EnableBlend(true);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -106,7 +110,7 @@ static void
 set_program()
 {
 	// todo
-	sl::ShaderMgr::Instance()->SetShader(sl::SPRITE2);
+	sl::Blackboard::Instance()->GetShaderMgr()->SetShader(sl::SPRITE2);
 }
 
 static void 
@@ -128,9 +132,9 @@ draw_begin()
 		pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
 	}
 
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
-	sl_mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+	auto shader_mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	shader_mgr->SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* sl_shader = static_cast<sl::Sprite2Shader*>(shader_mgr->GetShader());
 	sl_shader->SetColor(0xffffffff, 0);
 	sl_shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 }
@@ -146,18 +150,18 @@ draw(const float _vertices[8], const float _texcoords[8], int texid)
 		texcoords[i].y = _texcoords[i * 2 + 1];
 	}
 
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
-	switch (sl_mgr->GetShaderType()) 
+	auto shader_mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	switch (shader_mgr->GetShaderType())
 	{
 	case sl::SPRITE2:
 		{
-			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(sl_mgr->GetShader());
+			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr->GetShader());
 			shader->DrawQuad(&vertices[0].x, &texcoords[0].x, texid);
 		}
 		break;
 	case sl::FILTER:
 		{
-			sl::FilterShader* shader = static_cast<sl::FilterShader*>(sl_mgr->GetShader());
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr->GetShader());
 			shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
 		}
 		break;
@@ -169,7 +173,7 @@ draw(const float _vertices[8], const float _texcoords[8], int texid)
 static void 
 draw_end()
 {
-	sl::ShaderMgr::Instance()->FlushShader();
+	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
 
 	if (DRAW_END) {
 		DRAW_END();
@@ -181,7 +185,7 @@ draw_end()
 static void 
 draw_flush()
 {
-	sl::Shader* shader = sl::ShaderMgr::Instance()->GetShader();
+	sl::Shader* shader = sl::Blackboard::Instance()->GetShaderMgr()->GetShader();
 	if (shader) {
 		shader->Commit();
 	}
@@ -479,7 +483,10 @@ DTex::DTex()
 	render_cb.scissor_enable   = scissor_enable;
 
 	dtex::RenderAPI::InitCallback(render_cb);
-	dtex::RenderAPI::InitRenderContext(RenderContext::Instance()->GetImpl());
+	auto shader_mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& ur_rc = shader_mgr->GetContext();
+	dtex::RenderAPI::InitRenderContext(
+		&sl::Blackboard::Instance()->GetShaderMgr()->GetContext());
 
 	dtex::ResourceAPI::Callback res_cb;
 	res_cb.error_reload            = error_reload;

@@ -80,6 +80,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\include\gum\Blackboard.cpp" />
     <ClCompile Include="..\..\..\source\ActorPool.cpp" />
     <ClCompile Include="..\..\..\source\DTexC2Strategy.cpp" />
     <ClCompile Include="..\..\..\source\Audio.cpp" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\c_wrap_gum.h" />
     <ClInclude Include="..\..\..\include\gum\ActorPool.h" />
+    <ClInclude Include="..\..\..\include\gum\Blackboard.h" />
     <ClInclude Include="..\..\..\include\gum\Config.h" />
     <ClInclude Include="..\..\..\include\gum\DTexC2Strategy.h" />
     <ClInclude Include="..\..\..\include\gum\Exception.h" />

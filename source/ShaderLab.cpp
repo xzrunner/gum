@@ -5,6 +5,7 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Callback.h>
+#include <shaderlab/Blackboard.h>
 
 namespace gum
 {
@@ -30,7 +31,7 @@ void ShaderLab::Init()
 
 void ShaderLab::Update(float dt)
 {
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
 	shader->UpdateTime(dt);
 }

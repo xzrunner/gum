@@ -4,6 +4,7 @@
 #include <unirender/gl/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/SubjectMVP2.h>
+#include <shaderlab/Blackboard.h>
 #include <sprite2/Blackboard.h>
 
 #include <stddef.h>
@@ -11,37 +12,24 @@
 namespace gum
 {
 
-CU_SINGLETON_DEFINITION(RenderContext)
-
-static void flush_shader()
-{
-	sl::ShaderMgr::Instance()->FlushShader();
-}
-
-static void flush_render_shader()
-{
-	sl::ShaderMgr::Instance()->FlushRenderShader();
-}
-
 RenderContext::RenderContext() 
 	: m_width(0)
 	, m_height(0)
 {
 	ur::gl::RenderContext::Callback cb;
-	cb.flush_shader = flush_shader;
-	cb.flush_render_shader = flush_render_shader;
+	cb.flush_shader = [&]() {
+		m_shader_mgr->FlushShader();
+	};
+	cb.flush_render_shader = [&]() {
+		m_shader_mgr->FlushRenderShader();
+	};
 #ifdef EASY_EDITOR
-	m_rc = new ur::gl::RenderContext(cb, 4096);
+	m_rc = std::make_unique<ur::gl::RenderContext>(cb, 4096);
 #else
-	m_rc = new ur::gl::RenderContext(cb, 1024);
+	m_rc = std::make_unique<ur::gl::RenderContext>(cb, 1024);
 #endif // S2_EDITOR
 
-	sl::ShaderMgr::Instance()->SetContext(m_rc);
-}
-
-RenderContext::~RenderContext() 
-{
-	delete m_rc;
+	m_shader_mgr = std::make_unique<sl::ShaderMgr>(*m_rc);
 }
 
 void RenderContext::OnSize(int w, int h)
@@ -56,6 +44,11 @@ void RenderContext::OnSize(int w, int h)
 	RenderTargetMgr::Instance()->OnSize(w, h);
 
 	s2::Blackboard::Instance()->SetScreenSize(w, h);
+}
+
+void RenderContext::Bind()
+{
+	sl::Blackboard::Instance()->SetShaderMgr(m_shader_mgr);
 }
 
 }

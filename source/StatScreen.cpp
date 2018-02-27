@@ -7,6 +7,8 @@
 #include <gimg_export.h>
 #include <unirender/RenderContext.h>
 #include <dtex2/DebugDraw.h>
+#include <shaderlab/Blackboard.h>
+#include <shaderlab/ShaderMgr.h>
 
 #include <time.h>
 #include <string.h>
@@ -113,7 +115,8 @@ void StatScreen::Flush()
 
 	uint8_t* pixels = new uint8_t[RT_EDGE * RT_EDGE * 3];
 	memset(pixels, 0, RT_EDGE * RT_EDGE * 3);
-	RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 3, 0, 0, RT_EDGE, RT_EDGE);
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	ur_rc.ReadPixels(pixels, 3, 0, 0, RT_EDGE, RT_EDGE);
 	CU_STR filepath = StringHelper::ToString(first_time) + ".png";
 	gimg_export(filepath.c_str(), pixels, RT_EDGE, RT_EDGE, GPF_RGB, true);
 	delete[] pixels;

@@ -134,6 +134,9 @@
     <ClCompile Include="..\..\..\source\Painting2.cpp">
       <Filter>adapter</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\include\gum\Blackboard.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\gum\RenderContext.h">
@@ -245,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\gum\Painting2.h">
       <Filter>adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\gum\Blackboard.h">
+      <Filter>utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

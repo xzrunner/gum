@@ -30,6 +30,7 @@
 #include "gum/ImagePool.h"
 #include "gum/ActorPool.h"
 #include "gum/SpritePool.h"
+#include "gum/Blackboard.h"
 
 #include <unirender/RenderContext.h>
 #include <uniaudio/AudioContext.h>
@@ -64,6 +65,8 @@
 #include <sprite2/Symbol.h>
 #include <sprite2/DrawTask.h>
 #include <shaderlab/Facade.h>
+#include <shaderlab/Blackboard.h>
+#include <shaderlab/ShaderMgr.h>
 #include <sprite2/TextTable.h>
 #include <SM_Matrix.h>
 #include <logger.h>
@@ -130,21 +133,22 @@ void gum_on_resume() {
 extern "C"
 void* gum_get_render_context()
 {
-	return RenderContext::Instance()->GetImpl();
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	return &ur_rc;
 }
 
 extern "C"
 void gum_on_size(int w, int h)
 {
-	RenderContext::Instance()->OnSize(w, h);
+	Blackboard::Instance()->GetRenderContext()->OnSize(w, h);
 }
 
 extern "C"
 void gum_get_screen_size(int* w, int* h)
 {
-	RenderContext* ctx = RenderContext::Instance();
-	*w = ctx->GetWidth();
-	*h = ctx->GetHeight();
+	auto& rc = Blackboard::Instance()->GetRenderContext();
+	*w = rc->GetWidth();
+	*h = rc->GetHeight();
 }
 
 extern "C"
@@ -234,7 +238,8 @@ void gum_store_snapshot(const char* filepath)
 
 		uint8_t* rgba = (uint8_t*)malloc(w * h * channel);
 		memset(rgba, 0, w * h * channel);
-		RenderContext::Instance()->GetImpl()->ReadPixels(rgba, channel, 0, 0, w, h);
+		auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+		ur_rc.ReadPixels(rgba, channel, 0, 0, w, h);
 
 		uint8_t* rgb = gimg_rgba2rgb(rgba, w, h);
 		free(rgba);
@@ -245,7 +250,8 @@ void gum_store_snapshot(const char* filepath)
 	{
 		uint8_t* pixels = (uint8_t*)malloc(w * h * 4);
 		memset(pixels, 0, w * h * 4);
-		RenderContext::Instance()->GetImpl()->ReadPixels(pixels, 4, 0, 0, w, h);
+		auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+		ur_rc.ReadPixels(pixels, 4, 0, 0, w, h);
 		gimg_export(gbk_filepath.c_str(), pixels, w, h, GPF_RGBA8, true);
 		free(pixels);
 	}
@@ -263,7 +269,8 @@ int gum_compare_snapshot(const char* filepath)
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
 	memset(now, 0, sz);
-	RenderContext::Instance()->GetImpl()->ReadPixels(now, 3, 0, 0, w, h);
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	ur_rc.ReadPixels(now, 3, 0, 0, w, h);
 
 	int _w, _h;
 	int _fmt;
@@ -334,13 +341,15 @@ bool gum_is_async_task_empty()
 extern "C"
 bool gum_is_support_etc2()
 {
-	return RenderContext::Instance()->GetImpl()->IsSupportETC2();
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	return ur_rc.IsSupportETC2();
 }
 
 extern "C"
 bool gum_avaliable_memory(int need_texture_area)
 {
-	return RenderContext::Instance()->GetImpl()->CheckAvailableMemory(need_texture_area);
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	return ur_rc.CheckAvailableMemory(need_texture_area);
 }
 
 /************************************************************************/
