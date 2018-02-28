@@ -45,6 +45,7 @@
 #include <sprite2/DrawNode.h>
 #include <sprite2/Symbol.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <s2loader/ImageLoader.h>
 
 #include <assert.h>
@@ -69,14 +70,13 @@ static void (*ERROR_RELOAD)() = nullptr;
 static void 
 clear_color_part(float xmin, float ymin, float xmax, float ymax)
 {
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	auto& ur_rc = rc.GetContext();
-
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	ur_rc.EnableBlend(false);
 //	glBlendFunc(GL_ONE, GL_ZERO);
 
-	rc.GetShaderMgr().SetShader(sl::SHAPE2);
-	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(rc.GetShaderMgr().GetShader());
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SHAPE2);
+	sl::ShapeShader* shader = static_cast<sl::ShapeShader*>(shader_mgr.GetShader());
 	
 	shader->SetColor(0);
 //	shader->SetColor(0xff0000ff);
@@ -493,7 +493,7 @@ DTex::DTex()
 
 	dtex::RenderAPI::InitCallback(render_cb);
 	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	auto& ur_rc = rc.GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	dtex::RenderAPI::InitRenderContext(&ur_rc);
 
 	dtex::ResourceAPI::Callback res_cb;

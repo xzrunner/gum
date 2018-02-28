@@ -33,6 +33,7 @@
 #include "gum/Blackboard.h"
 
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <uniaudio/AudioContext.h>
 #include <gimg_typedef.h>
 #include <gimg_export.h>
@@ -242,7 +243,7 @@ void gum_store_snapshot(const char* filepath)
 
 		uint8_t* rgba = (uint8_t*)malloc(w * h * channel);
 		memset(rgba, 0, w * h * channel);
-		auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+		auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 		ur_rc.ReadPixels(rgba, channel, 0, 0, w, h);
 
 		uint8_t* rgb = gimg_rgba2rgb(rgba, w, h);
@@ -254,7 +255,7 @@ void gum_store_snapshot(const char* filepath)
 	{
 		uint8_t* pixels = (uint8_t*)malloc(w * h * 4);
 		memset(pixels, 0, w * h * 4);
-		auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+		auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 		ur_rc.ReadPixels(pixels, 4, 0, 0, w, h);
 		gimg_export(gbk_filepath.c_str(), pixels, w, h, GPF_RGBA8, true);
 		free(pixels);
@@ -274,7 +275,7 @@ int gum_compare_snapshot(const char* filepath)
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
 	memset(now, 0, sz);
-	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	ur_rc.ReadPixels(now, 3, 0, 0, w, h);
 
 	int _w, _h;
@@ -346,14 +347,14 @@ bool gum_is_async_task_empty()
 extern "C"
 bool gum_is_support_etc2()
 {
-	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	return ur_rc.IsSupportETC2();
 }
 
 extern "C"
 bool gum_avaliable_memory(int need_texture_area)
 {
-	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	return ur_rc.CheckAvailableMemory(need_texture_area);
 }
 

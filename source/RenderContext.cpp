@@ -2,6 +2,7 @@
 #include "gum/RenderTargetMgr.h"
 
 #include <unirender/gl/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <painting2/Context.h>
@@ -24,8 +25,10 @@ RenderContext::RenderContext()
 	max_texture = 1024;
 #endif // S2_EDITOR
 	auto ur_rc = std::make_shared<ur::gl::RenderContext>(max_texture);
-
-	m_sl_rc = std::make_shared<sl::RenderContext>(ur_rc);
+	ur::Blackboard::Instance()->SetRenderContext(ur_rc);
+	
+	m_sl_rc = std::make_shared<sl::RenderContext>();
+	sl::Blackboard::Instance()->SetRenderContext(m_sl_rc);
 
 	ur::gl::RenderContext::Callback cb;
 	cb.flush_shader = [&]() {
@@ -39,6 +42,7 @@ RenderContext::RenderContext()
 	m_ur_rc = ur_rc;
 
 	m_pt2_ctx = std::make_shared<pt2::Context>();
+	pt2::Blackboard::Instance()->SetContext(m_pt2_ctx);
 }
 
 void RenderContext::OnSize(int w, int h)
@@ -57,6 +61,7 @@ void RenderContext::OnSize(int w, int h)
 
 void RenderContext::Bind()
 {
+	ur::Blackboard::Instance()->SetRenderContext(m_ur_rc);
 	sl::Blackboard::Instance()->SetRenderContext(m_sl_rc);
 	pt2::Blackboard::Instance()->SetContext(m_pt2_ctx);
 }

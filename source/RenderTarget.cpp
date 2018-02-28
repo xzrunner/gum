@@ -1,6 +1,7 @@
 #include "gum/RenderTarget.h"
 
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
@@ -118,7 +119,7 @@ void RenderTarget::Clear()
 {
 	Bind();
 
-	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	ur_rc.Clear(0);
 
 	Unbind();

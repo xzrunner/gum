@@ -5,6 +5,7 @@
 #include <painting2/Texture.h>
 #include <stat/StatImages.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <s2loader/ImageLoader.h>
 
 #include <assert.h>
