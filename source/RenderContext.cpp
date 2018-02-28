@@ -66,4 +66,15 @@ void RenderContext::Bind()
 	pt2::Blackboard::Instance()->SetContext(m_pt2_ctx);
 }
 
+void RenderContext::Unbind()
+{
+	m_pt2_ctx.reset();
+	m_sl_rc.reset();
+	m_ur_rc.reset();
+
+	pt2::Blackboard::Instance()->SetContext(nullptr);
+	sl::Blackboard::Instance()->SetRenderContext(nullptr);
+	ur::Blackboard::Instance()->SetRenderContext(nullptr);
+}
+
 }

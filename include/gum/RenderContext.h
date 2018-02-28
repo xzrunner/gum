@@ -42,6 +42,7 @@ public:
 	RenderTargetMgr& GetRTMgr() { return m_rt_mgr; }
 
 	void Bind();
+	void Unbind();
 
 private:
 	std::shared_ptr<ur::RenderContext> m_ur_rc = nullptr;
