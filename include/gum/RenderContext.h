@@ -11,7 +11,7 @@
 
 namespace ur { class RenderContext; }
 namespace sl { class RenderContext; }
-namespace pt2 { class Context; }
+namespace pt2 { class RenderContext; }
 
 namespace gum
 {
@@ -26,17 +26,17 @@ public:
 	int GetWidth() const { return m_width; }
 	int GetHeight() const { return m_height; }
 
-	ur::RenderContext& GetURRC() const {
+	ur::RenderContext& GetUrRc() const {
 		GD_ASSERT(m_ur_rc, "null ur rc");
 		return *m_ur_rc;
 	}
-	sl::RenderContext& GetSLRC() const {
+	sl::RenderContext& GetSlRc() const {
 		GD_ASSERT(m_sl_rc, "null sl rc");
 		return *m_sl_rc;
 	}
-	pt2::Context& GetPt2Ctx() const {
-		GD_ASSERT(m_pt2_ctx, "null pt2 ctx");
-		return *m_pt2_ctx;
+	pt2::RenderContext& GetPt2Rc() const {
+		GD_ASSERT(m_pt2_rc, "null pt2 ctx");
+		return *m_pt2_rc;
 	}
 
 	RenderTargetMgr& GetRTMgr() { return m_rt_mgr; }
@@ -45,9 +45,9 @@ public:
 	void Unbind();
 
 private:
-	std::shared_ptr<ur::RenderContext> m_ur_rc = nullptr;
-	std::shared_ptr<sl::RenderContext> m_sl_rc = nullptr;
-	std::shared_ptr<pt2::Context>      m_pt2_ctx = nullptr;
+	std::shared_ptr<ur::RenderContext>  m_ur_rc  = nullptr;
+	std::shared_ptr<sl::RenderContext>  m_sl_rc  = nullptr;
+	std::shared_ptr<pt2::RenderContext> m_pt2_rc = nullptr;
 	
 	RenderTargetMgr m_rt_mgr;
 

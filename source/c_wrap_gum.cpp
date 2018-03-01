@@ -51,9 +51,9 @@
 #include <dtex2/LoadResTask.h>
 #include <stat/StatImages.h>
 #include <painting2/Color.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/Facade.h>
 #include <sprite2/ResetActorFlagVisitor.h>
@@ -231,7 +231,7 @@ void gum_store_snapshot(const char* filepath)
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	const pt2::RenderContext* ctx = pt2_ctx.GetCtxStack().Top();
+	auto ctx = pt2_ctx.GetCtxStack().Top();
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 
@@ -268,7 +268,7 @@ int gum_compare_snapshot(const char* filepath)
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	const pt2::RenderContext* ctx = pt2_ctx.GetCtxStack().Top();
+	auto ctx = pt2_ctx.GetCtxStack().Top();
 	int w = ctx->GetScreenWidth();
 	int h = ctx->GetScreenHeight();
 

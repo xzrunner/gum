@@ -36,12 +36,12 @@
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/RenderContext.h>
 #include <stat/StatImages.h>
-#include <painting2/RenderContext.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WindowContext.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/PrimitiveDraw.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 #include <sprite2/DrawNode.h>
 #include <sprite2/Symbol.h>
 #include <unirender/RenderContext.h>
@@ -133,7 +133,7 @@ draw_begin()
 		DRAW_BEGIN();
 	} else {
 		auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-		pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, 0, 0));
+		pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, 0, 0));
 	}
 
 	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();

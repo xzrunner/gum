@@ -8,7 +8,7 @@
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 #include <sprite2/Sprite.h>
 #include <sprite2/Symbol.h>
 #include <sprite2/RenderParams.h>

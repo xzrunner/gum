@@ -8,10 +8,10 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 
 namespace gum
 {
@@ -28,9 +28,9 @@ void RenderTarget::Bind()
 
 	int w = Width(),
 		h = Height();
-	pt2::RenderContext ctx(static_cast<float>(w), static_cast<float>(h), w, h);
+	pt2::WindowContext ctx(static_cast<float>(w), static_cast<float>(h), w, h);
 	// use last model view
-	const pt2::RenderContext* last = pt2_ctx.GetCtxStack().Top();
+	auto last = pt2_ctx.GetCtxStack().Top();
 	if (last) {
 		ctx.SetModelView(last->GetMVOffset(), last->GetMVScale());
 	}
@@ -65,17 +65,17 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 	}
 
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	const pt2::RenderContext* last = pt2_ctx.GetCtxStack().Top();
+	auto last = pt2_ctx.GetCtxStack().Top();
 	int vp_x, vp_y, vp_w, vp_h;
 	if (last) {
 		last->GetViewport(vp_x, vp_y, vp_w, vp_h);
 	}
 
 	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	if (last) {
-		const pt2::RenderContext* curr = pt2_ctx.GetCtxStack().Top();
-		const_cast<pt2::RenderContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);
+		auto curr = pt2_ctx.GetCtxStack().Top();
+		const_cast<pt2::WindowContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);
 	}
 
 	float hw = w * 0.5f,

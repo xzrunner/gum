@@ -5,7 +5,7 @@
 #include <unirender/Blackboard.h>
 #include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 #include <painting2/Blackboard.h>
 #include <sprite2/Blackboard.h>
 
@@ -41,8 +41,8 @@ RenderContext::RenderContext()
 
 	m_ur_rc = ur_rc;
 
-	m_pt2_ctx = std::make_shared<pt2::Context>();
-	pt2::Blackboard::Instance()->SetContext(m_pt2_ctx);
+	m_pt2_rc = std::make_shared<pt2::RenderContext>();
+	pt2::Blackboard::Instance()->SetContext(m_pt2_rc);
 }
 
 void RenderContext::OnSize(int w, int h)
@@ -63,12 +63,12 @@ void RenderContext::Bind()
 {
 	ur::Blackboard::Instance()->SetRenderContext(m_ur_rc);
 	sl::Blackboard::Instance()->SetRenderContext(m_sl_rc);
-	pt2::Blackboard::Instance()->SetContext(m_pt2_ctx);
+	pt2::Blackboard::Instance()->SetContext(m_pt2_rc);
 }
 
 void RenderContext::Unbind()
 {
-	m_pt2_ctx.reset();
+	m_pt2_rc.reset();
 	m_sl_rc.reset();
 	m_ur_rc.reset();
 
