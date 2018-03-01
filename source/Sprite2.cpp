@@ -34,7 +34,7 @@ Sprite2::Sprite2()
 
 void Sprite2::DebugDraw() const
 {
-	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr();
 	for (int i = 0; i < 4; ++i) {
 		int texid = rt_mgr.GetTexID(i);
 		if (texid < 0) {
@@ -97,14 +97,14 @@ get_actor_uid(const s2::Actor* actor)
 static pt2::RenderTarget* 
 fetch_screen()
 {
-	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr();
 	return rt_mgr.Fetch();
 }
 
 static void 
 return_screen(pt2::RenderTarget* rt)
 {
-	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr();
 	rt_mgr.Return(static_cast<RenderTarget*>(rt));
 }
 
@@ -131,7 +131,7 @@ void Sprite2::Init()
 	s2::DrawNode::InitDTexCB(prepare_render_params, dtex_sym_insert, dtex_sym_query);
 	s2::DrawNode::InitUIDCB(get_sym_uid, get_spr_uid, get_actor_uid);
 
-	auto& rt_mgr = pt2::Blackboard::Instance()->GetContext().GetRTMgr();
+	auto& rt_mgr = pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr();
 	rt_mgr.InitScreenCB(fetch_screen, return_screen);
 
 	{

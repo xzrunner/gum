@@ -42,7 +42,7 @@ RenderContext::RenderContext()
 	m_ur_rc = ur_rc;
 
 	m_pt2_rc = std::make_shared<pt2::RenderContext>();
-	pt2::Blackboard::Instance()->SetContext(m_pt2_rc);
+	pt2::Blackboard::Instance()->SetRenderContext(m_pt2_rc);
 }
 
 void RenderContext::OnSize(int w, int h)
@@ -63,7 +63,7 @@ void RenderContext::Bind()
 {
 	ur::Blackboard::Instance()->SetRenderContext(m_ur_rc);
 	sl::Blackboard::Instance()->SetRenderContext(m_sl_rc);
-	pt2::Blackboard::Instance()->SetContext(m_pt2_rc);
+	pt2::Blackboard::Instance()->SetRenderContext(m_pt2_rc);
 }
 
 void RenderContext::Unbind()
@@ -72,7 +72,7 @@ void RenderContext::Unbind()
 	m_sl_rc.reset();
 	m_ur_rc.reset();
 
-	pt2::Blackboard::Instance()->SetContext(nullptr);
+	pt2::Blackboard::Instance()->SetRenderContext(nullptr);
 	sl::Blackboard::Instance()->SetRenderContext(nullptr);
 	ur::Blackboard::Instance()->SetRenderContext(nullptr);
 }
