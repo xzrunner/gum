@@ -37,7 +37,6 @@
 #include <shaderlab/RenderContext.h>
 #include <stat/StatImages.h>
 #include <painting2/WindowContext.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/PrimitiveDraw.h>
 #include <painting2/Blackboard.h>
@@ -47,6 +46,9 @@
 #include <unirender/RenderContext.h>
 #include <unirender/Blackboard.h>
 #include <s2loader/ImageLoader.h>
+
+#include <stack>
+#include <memory>
 
 #include <assert.h>
 
@@ -126,14 +128,21 @@ set_blend(int mode)
 //	ShaderMgr::Instance()->SetBlendMode(0);
 }
 
+static std::stack<std::shared_ptr<pt2::WindowContext>> wc_stack;
+
 static void 
 draw_begin()
 {
-	if (DRAW_BEGIN) {
+	if (DRAW_BEGIN) 
+	{
 		DRAW_BEGIN();
-	} else {
-		auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-		pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, 0, 0));
+	} 
+	else 
+	{
+		wc_stack.push(pt2::Blackboard::Instance()->GetWindowContext());
+		auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, 0, 0);
+		new_wc->Bind();
+		wc_stack.push(new_wc);
 	}
 
 	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
@@ -147,7 +156,8 @@ static void
 draw(const float _vertices[8], const float _texcoords[8], int texid)
 {
 	sm::vec2 vertices[4], texcoords[4];
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 4; ++i) 
+	{
 		vertices[i].x  = _vertices[i * 2];
 		vertices[i].y  = _vertices[i * 2 + 1];
 		texcoords[i].x = _texcoords[i * 2];
@@ -179,11 +189,14 @@ draw_end()
 {
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
-	if (DRAW_END) {
+	if (DRAW_END) 
+	{
 		DRAW_END();
-	} else {
-		auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-		pt2_ctx.GetCtxStack().Pop();
+	} 
+	else 
+	{
+		wc_stack.pop();
+		wc_stack.top()->Bind();
 	}
 }
 
@@ -199,30 +212,30 @@ draw_flush()
 static void
 scissor_push(int x, int y, int w, int h)
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetScissor().Push(
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Push(
 		static_cast<float>(x), static_cast<float>(y), static_cast<float>(w), static_cast<float>(h), false, true);
 }
 
 static void 
 scissor_pop()
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetScissor().Pop();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Pop();
 }
 
 static void 
 scissor_disable()
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetScissor().Disable();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Disable();
 }
 
 static void 
 scissor_enable()
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetScissor().Enable();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Enable();
 }
 
 /************************************************************************/

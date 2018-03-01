@@ -4,6 +4,10 @@
 #include <SM_Rect.h>
 #include <painting2/RenderTarget.h>
 
+#include <memory>
+
+namespace pt2 { class WindowContext; }
+
 namespace gum
 {
 
@@ -18,6 +22,9 @@ public:
 	void Draw(const sm::rect& src, const sm::rect& dst, int dst_w = 0, int dst_h = 0) const;
 
 	void Clear();
+
+private:
+	std::shared_ptr<pt2::WindowContext> m_old_wc = nullptr;
 
 }; // RenderTarget
 

@@ -8,10 +8,10 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/RenderContext.h>
 #include <shaderlab/Blackboard.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 
 namespace gum
 {
@@ -23,27 +23,30 @@ RenderTarget::RenderTarget(int width, int height)
 
 void RenderTarget::Bind()
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetScissor().Disable();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Disable();
 
 	int w = Width(),
 		h = Height();
-	pt2::WindowContext ctx(static_cast<float>(w), static_cast<float>(h), w, h);
+
+	m_old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(w), static_cast<float>(h), w, h);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 	// use last model view
-	auto last = pt2_ctx.GetCtxStack().Top();
-	if (last) {
-		ctx.SetModelView(last->GetMVOffset(), last->GetMVScale());
-	}
-	pt2_ctx.GetCtxStack().Push(ctx);
+	new_wc->SetModelView(m_old_wc->GetMVOffset(), m_old_wc->GetMVScale());
 
 	pt2::RenderTarget::Bind();
 }
 
 void RenderTarget::Unbind()
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Pop();
-	pt2_ctx.GetScissor().Enable();
+	m_old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(m_old_wc);
+
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Enable();
 
 	pt2::RenderTarget::Unbind();
 }
@@ -64,19 +67,16 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		h = Height();
 	}
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto last = pt2_ctx.GetCtxStack().Top();
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(static_cast<float>(w), static_cast<float>(h), w, h);
 	int vp_x, vp_y, vp_w, vp_h;
-	if (last) {
-		last->GetViewport(vp_x, vp_y, vp_w, vp_h);
-	}
+	old_wc->GetViewport(vp_x, vp_y, vp_w, vp_h);
+	new_wc->SetViewport(vp_x, vp_y, vp_w, vp_h);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
-	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(static_cast<float>(w), static_cast<float>(h), w, h));
-	if (last) {
-		auto curr = pt2_ctx.GetCtxStack().Top();
-		const_cast<pt2::WindowContext*>(curr)->SetViewport(vp_x, vp_y, vp_w, vp_h);
-	}
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Disable();
 
 	float hw = w * 0.5f,
 		  hh = h * 0.5f;
@@ -111,8 +111,10 @@ void RenderTarget::Draw(const sm::rect& src, const sm::rect& dst, int dst_w, int
 		break;
 	}
 
-	pt2_ctx.GetCtxStack().Pop();
-	pt2_ctx.GetScissor().Enable();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+	pt2_rc.GetScissor().Enable();
 }
 
 void RenderTarget::Clear()

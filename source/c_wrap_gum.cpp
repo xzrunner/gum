@@ -51,9 +51,9 @@
 #include <dtex2/LoadResTask.h>
 #include <stat/StatImages.h>
 #include <painting2/Color.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 #include <sprite2/SprTimer.h>
 #include <sprite2/Facade.h>
 #include <sprite2/ResetActorFlagVisitor.h>
@@ -230,10 +230,9 @@ void gum_store_snapshot(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto ctx = pt2_ctx.GetCtxStack().Top();
-	int w = ctx->GetScreenWidth();
-	int h = ctx->GetScreenHeight();
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	int w = wc->GetScreenWidth();
+	int h = wc->GetScreenHeight();
 
 	gum::StringHelper::ToLower(gbk_filepath);
 	if (gbk_filepath.find("jpg") != std::string::npos)
@@ -267,10 +266,9 @@ int gum_compare_snapshot(const char* filepath)
 {
 	CU_STR gbk_filepath = StringHelper::UTF8ToGBK(filepath);
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto ctx = pt2_ctx.GetCtxStack().Top();
-	int w = ctx->GetScreenWidth();
-	int h = ctx->GetScreenHeight();
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	int w = wc->GetScreenWidth();
+	int h = wc->GetScreenHeight();
 
 	int sz = w * h * 3;
 	uint8_t* now = (uint8_t*)malloc(sz);
