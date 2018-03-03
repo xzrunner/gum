@@ -83,9 +83,9 @@ clear_color_part(float xmin, float ymin, float xmax, float ymax)
 	shader->SetColor(0);
 //	shader->SetColor(0xff0000ff);
 
-	auto& gum_rc = Blackboard::Instance()->GetRenderContext();
-	int w = gum_rc->GetWidth(),
-		h = gum_rc->GetHeight();
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	int w = wc->GetScreenWidth(),
+		h = wc->GetScreenHeight();
 	xmin = w * 0.5f * (xmin - 1);
 	xmax = w * 0.5f * (xmax - 1);
 	ymin = h * 0.5f * (ymin + 1);

@@ -15,8 +15,6 @@ namespace gum
 {
 
 RenderContext::RenderContext() 
-	: m_width(0)
-	, m_height(0)
 {
 	int max_texture;
 #ifdef EASY_EDITOR
@@ -47,13 +45,6 @@ RenderContext::RenderContext()
 
 void RenderContext::OnSize(int w, int h)
 {
-	if (m_width == w && m_height == h) {
-		return;
-	}
-
-	m_width = w;
-	m_height = h;
-
 	m_rt_mgr.OnSize(w, h);
 
 	s2::Blackboard::Instance()->SetScreenSize(w, h);

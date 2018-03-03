@@ -150,9 +150,9 @@ void gum_on_size(int w, int h)
 extern "C"
 void gum_get_screen_size(int* w, int* h)
 {
-	auto& rc = Blackboard::Instance()->GetRenderContext();
-	*w = rc->GetWidth();
-	*h = rc->GetHeight();
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	*w = wc->GetScreenWidth();
+	*h = wc->GetScreenHeight();
 }
 
 extern "C"

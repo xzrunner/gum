@@ -23,9 +23,6 @@ public:
 
 	void OnSize(int w, int h);
 
-	int GetWidth() const { return m_width; }
-	int GetHeight() const { return m_height; }
-
 	ur::RenderContext& GetUrRc() const {
 		GD_ASSERT(m_ur_rc, "null ur rc");
 		return *m_ur_rc;
@@ -50,8 +47,6 @@ private:
 	std::shared_ptr<pt2::RenderContext> m_pt2_rc = nullptr;
 	
 	RenderTargetMgr m_rt_mgr;
-
-	int m_width, m_height;
 	
 }; // RenderContext
 
