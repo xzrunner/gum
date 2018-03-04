@@ -18,6 +18,9 @@ public:
 	template <typename T, typename... Arguments>
 	std::shared_ptr<T> Fetch(const std::string& filepath, Arguments... parameters);
 
+	template <typename T, typename... Arguments>
+	std::pair<std::shared_ptr<T>, bool> FetchNoLoad(const std::string& filepath, Arguments... parameters);
+
 	static ResPool& Instance();
 
 private:
