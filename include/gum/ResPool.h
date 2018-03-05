@@ -21,6 +21,12 @@ public:
 	template <typename T, typename... Arguments>
 	std::pair<std::shared_ptr<T>, bool> FetchNoLoad(const std::string& filepath, Arguments... parameters);
 
+	template <typename T>
+	std::shared_ptr<T> Query(const std::string& filepath);
+
+	template <typename T>
+	bool Insert(const std::string& filepath, const std::shared_ptr<T>& res);
+
 	static ResPool& Instance();
 
 private:
