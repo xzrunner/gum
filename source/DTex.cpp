@@ -140,7 +140,7 @@ draw_begin()
 	else 
 	{
 		wc_stack.push(pt2::Blackboard::Instance()->GetWindowContext());
-		auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, 0, 0);
+		auto new_wc = std::make_shared<pt2::WindowContext>(2.0f, 2.0f, 0, 0);
 		new_wc->Bind();
 		wc_stack.push(new_wc);
 	}
