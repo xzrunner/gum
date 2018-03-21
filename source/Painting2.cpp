@@ -32,7 +32,7 @@ void draw_text(const pt2::Text& text, const sm::Matrix2D& mat)
 	ls.gs.edge_color.integer = tb.edge_color.ToRGBA();
 
 	gum::GTxt::Instance()->Draw(nullptr, ls, mat, 
-		pt2::Color(1, 1, 1), pt2::Color(0, 0, 0), text.text.c_str(), 0, false);
+		pt2::Color(255, 255, 255), pt2::Color(0, 0, 0, 0), text.text.c_str(), 0, false);
 }
 
 }
