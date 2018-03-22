@@ -863,24 +863,26 @@ void gum_gtxt_print(const char* str, float x, float y, int font_size, uint32_t f
 {
 	gtxt_label_style s;
 
-	s.width					= 200;
-	s.height				= 200;
+	s.width			= 200;
+	s.height		= 200;
 
-	s.gs.font				= 0;
-	s.gs.font_size			= font_size;
-	s.gs.font_color.integer = font_color;
+	s.gs.font		= 0;
+	s.gs.font_size	= font_size;
+	s.gs.font_color.mode_type              = 0;
+	s.gs.font_color.mode.ONE.color.integer = font_color;
 
-	s.gs.edge				= false;
-	s.gs.edge_size			= 0;
-	s.gs.edge_color.integer = 0xffffffff;
+	s.gs.edge		= false;
+	s.gs.edge_size	= 0;
+	s.gs.edge_color.mode_type              = 0;
+	s.gs.edge_color.mode.ONE.color.integer = 0xffffffff;
 
-	s.align_h				= HA_CENTER;
-	s.align_v				= VA_CENTER;
+	s.align_h		= HA_CENTER;
+	s.align_v		= VA_CENTER;
 
-	s.space_h				= 1;
-	s.space_v				= 1;
+	s.space_h		= 1;
+	s.space_v		= 1;
 
-	s.overflow				= true;
+	s.overflow		= true;
 
 	S2_MAT mt;
 	mt.Translate(x, y);
@@ -893,24 +895,26 @@ void gum_gtxt_size(const char* str, int font_size, float* w, float* h)
 {
 	gtxt_label_style s;
 
-	s.width					= 200;
-	s.height				= 200;
+	s.width        = 200;
+	s.height       = 200;
 
-	s.gs.font				= 0;
-	s.gs.font_size			= font_size;
-	s.gs.font_color.integer = 0xffffffff;
+	s.gs.font      = 0;
+	s.gs.font_size = font_size;
+	s.gs.font_color.mode_type              = 0;
+	s.gs.font_color.mode.ONE.color.integer = 0xffffffff;
 
-	s.gs.edge				= false;
-	s.gs.edge_size			= 0;
-	s.gs.edge_color.integer = 0xffffffff;
+	s.gs.edge      = false;
+	s.gs.edge_size = 0;
+	s.gs.edge_color.mode_type              = 0;
+	s.gs.edge_color.mode.ONE.color.integer = 0xffffffff;
 
-	s.align_h				= HA_CENTER;
-	s.align_v				= VA_CENTER;
+	s.align_h      = HA_CENTER;
+	s.align_v      = VA_CENTER;
 
-	s.space_h				= 1;
-	s.space_v				= 1;
+	s.space_h      = 1;
+	s.space_v      = 1;
 
-	s.overflow				= true;
+	s.overflow     = true;
 
 	sm::vec2 sz = GTxt::Instance()->GetSize(s, StringHelper::FromChar(str));
 	*w = sz.x;

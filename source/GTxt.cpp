@@ -525,11 +525,13 @@ void GTxt::Draw(const S2_MAT& mt, const CU_STR& str, int width) const
 
 	style.gs.font = 0;
 	style.gs.font_size = 16;
-	style.gs.font_color.integer = 0xffffffff;
+	style.gs.font_color.mode_type = 0;
+	style.gs.font_color.mode.ONE.color.integer = 0xffffffff;
 
 	style.gs.edge = true;
 	style.gs.edge_size = 1;
-	style.gs.edge_color.integer = 0x000000ff;
+	style.gs.edge_color.mode_type = 0;
+	style.gs.edge_color.mode.ONE.color.integer = 0x000000ff;
 
 	render_params rp;
 	rp.mt = &mt;
