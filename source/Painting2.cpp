@@ -22,7 +22,7 @@ void copy_color(gtxt_glyph_color& dst, const pt2::GradientColor& src)
 		dst.mode.THREE.begin_pos = src.items[0].pos;
 		dst.mode.THREE.mid_pos = src.items[1].pos;
 		dst.mode.THREE.end_pos = src.items[2].pos;
-		dst.mode.THREE.angle = src.angle * SM_DEG_TO_RAD;
+		dst.mode.THREE.angle = src.angle;
 	}
 	else if (src.items.size() == 2)
 	{
@@ -31,7 +31,7 @@ void copy_color(gtxt_glyph_color& dst, const pt2::GradientColor& src)
 		dst.mode.TWO.end_col.integer = src.items[1].col.ToRGBA();
 		dst.mode.TWO.begin_pos = src.items[0].pos;
 		dst.mode.TWO.end_pos = src.items[1].pos;
-		dst.mode.TWO.angle = src.angle * SM_DEG_TO_RAD;
+		dst.mode.TWO.angle = src.angle;
 	}
 	else
 	{
