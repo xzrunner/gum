@@ -1,5 +1,6 @@
 #include "gum/Painting2.h"
 #include "gum/GTxt.h"
+#include "gum/StringHelper.h"
 
 #include <gtxt_label.h>
 #include <painting2/Callback.h>
@@ -63,8 +64,9 @@ void draw_text(const pt2::Text& text, const sm::Matrix2D& mat)
 	ls.gs.edge_size = tb.edge_size;
 	copy_color(ls.gs.edge_color, tb.edge_color);
 
+	auto str = gum::StringHelper::GBKToUTF8(text.text.c_str());
 	gum::GTxt::Instance()->Draw(nullptr, ls, mat, 
-		pt2::Color(255, 255, 255), pt2::Color(0, 0, 0, 0), text.text.c_str(), 0, false);
+		pt2::Color(255, 255, 255), pt2::Color(0, 0, 0, 0), str.c_str(), 0, false);
 }
 
 }
