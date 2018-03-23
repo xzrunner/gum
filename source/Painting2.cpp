@@ -6,8 +6,40 @@
 #include <painting2/Color.h>
 #include <painting2/Text.h>
 
+#include <sm_const.h>
+
 namespace
 {
+
+void copy_color(gtxt_glyph_color& dst, const pt2::GradientColor& src)
+{
+	if (src.items.size() == 3)
+	{
+		dst.mode_type = 2;
+		dst.mode.THREE.begin_col.integer = src.items[0].col.ToRGBA();
+		dst.mode.THREE.mid_col.integer = src.items[1].col.ToRGBA();
+		dst.mode.THREE.end_col.integer = src.items[2].col.ToRGBA();
+		dst.mode.THREE.begin_pos = src.items[0].pos;
+		dst.mode.THREE.mid_pos = src.items[1].pos;
+		dst.mode.THREE.end_pos = src.items[2].pos;
+		dst.mode.THREE.angle = src.angle * SM_DEG_TO_RAD;
+	}
+	else if (src.items.size() == 2)
+	{
+		dst.mode_type = 1;
+		dst.mode.TWO.begin_col.integer = src.items[0].col.ToRGBA();
+		dst.mode.TWO.end_col.integer = src.items[1].col.ToRGBA();
+		dst.mode.TWO.begin_pos = src.items[0].pos;
+		dst.mode.TWO.end_pos = src.items[1].pos;
+		dst.mode.TWO.angle = src.angle * SM_DEG_TO_RAD;
+	}
+	else
+	{
+		assert(src.items.size() == 1);
+		dst.mode_type = 0;
+		dst.mode.ONE.color.integer = src.items[0].col.ToRGBA();
+	}
+}
 
 void draw_text(const pt2::Text& text, const sm::Matrix2D& mat)
 {
@@ -25,33 +57,11 @@ void draw_text(const pt2::Text& text, const sm::Matrix2D& mat)
 
 	ls.gs.font = tb.font_type;
 	ls.gs.font_size = tb.font_size;
-	if (tb.font_color_gradient.begin.pos >= 0 &&
-		tb.font_color_gradient.mid.pos >= 0 &&
-		tb.font_color_gradient.end.pos >= 0) 
-	{
-		ls.gs.font_color.mode_type = 2;
-		ls.gs.font_color.mode.THREE.begin_col.integer = tb.font_color_gradient.begin.col.ToRGBA();
-		ls.gs.font_color.mode.THREE.mid_col.integer = tb.font_color_gradient.mid.col.ToRGBA();
-		ls.gs.font_color.mode.THREE.end_col.integer = tb.font_color_gradient.end.col.ToRGBA();
-		ls.gs.font_color.mode.THREE.mid_pos = tb.font_color_gradient.mid.pos;
-	}
-	else if (tb.font_color_gradient.begin.pos >= 0 &&
-		     tb.font_color_gradient.end.pos >= 0)
-	{
-		ls.gs.font_color.mode_type = 1;
-		ls.gs.font_color.mode.TWO.begin_col.integer = tb.font_color_gradient.begin.col.ToRGBA();
-		ls.gs.font_color.mode.TWO.end_col.integer = tb.font_color_gradient.end.col.ToRGBA();
-	}
-	else
-	{
-		ls.gs.font_color.mode_type = 0;
-		ls.gs.font_color.mode.ONE.color.integer = tb.font_color.ToRGBA();
-	}
+	copy_color(ls.gs.font_color, tb.font_color);
 
 	ls.gs.edge      = tb.has_edge;
 	ls.gs.edge_size = tb.edge_size;
-	ls.gs.edge_color.mode_type = 0;
-	ls.gs.edge_color.mode.ONE.color.integer = tb.edge_color.ToRGBA();
+	copy_color(ls.gs.edge_color, tb.edge_color);
 
 	gum::GTxt::Instance()->Draw(nullptr, ls, mat, 
 		pt2::Color(255, 255, 255), pt2::Color(0, 0, 0, 0), text.text.c_str(), 0, false);
